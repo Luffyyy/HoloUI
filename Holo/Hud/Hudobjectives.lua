@@ -5,8 +5,7 @@ function HUDBGBox_create( panel, params, config )
 	local blend_mode = config and config.blend_mode
 	FrameColor = color == Color(1, 1, 1, 0) and Holo.options.HoxHud_support and  color or HudFrame_color
 	box_panel:rect( { name = "bg", halign="grow", valign="grow", blend_mode = blend_mode , alpha = 0.25 , color = Color(1, 0, 0, 0), layer = -1 } )
-	local lowerline = box_panel:bitmap( { name = "lowerline", halign="grow", valign="bottom", blend_mode = "normal" , alpha = 1 , color = SpringGreen, layer = 6, h = 3} )
-	lowerline:set_bottom( box_panel:h())
+	
 	local left_top = box_panel:bitmap( { halign="left", valign="top", name = "left_top", color = FrameColor, blend_mode = blend_mode, visible = Holo.options.Frame_enable, layer = 1, texture = "guis/textures/pd2/hud_corner", x = 0, y = 0 } )
 	
 	local left_bottom = box_panel:bitmap( { halign="left", valign="bottom", color = FrameColor, rotation = -90, name = "left_bottom", blend_mode = blend_mode, visible = Holo.options.Frame_enable, layer = 1, texture = "guis/textures/pd2/hud_corner", x = 0, y = 20 } )

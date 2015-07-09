@@ -1,0 +1,110 @@
+--Big thanks to Matthelorz for translating :D
+{
+	"Options_title" : "Opcje HoloHuda",
+	"Options_desc" : "Zoorganizuj swoj HoloHud jak lubisz!",
+	"Options_colors_title" : "Zmien kolor HoloHuda",
+	"Options_colors_desc" : "Wprowadzi cie do menu zmiany kolorow, stamtad mozesz zmienic kolory dla kilka czesci Huda.",
+
+	"Options_text_title" : "Zmień kolor tekstu",
+	"Options_text_desc" : "wprowadza cię do menu zmiany koloru tekstu, tam możesz wybrać kolor dla kilka tekstów.",
+	
+	"Menu_enable_title" : "Menu HoloHuda",
+	"Menu_enable_desc" : ": Włącz lub wyłącz menu HoloHuda",
+	
+	"Frame_color_title" : "Kolor ramki HUDBoxa", 
+	"Frame_color_desc" : "Zmień kolor ramki huda",
+	
+	"Assault_enable_title" : "Włącz szturm HoloHuda",
+	"Assault_enable_desc" : "szturm",
+	 
+	"Reset_button_title" : "Opcja zresetowania dodatkow",
+	"Reset_button_desc"  : "To zresetuje dodatki HoloHuda na domyslne",
+	"Reset_colors_title" : "Zresetuj kolory",
+	"Reset_colors_desc"  : "To zresetuje wszystkie kolory na domyslne",
+	"Select_language_title"  : "Jezyk",
+	"Select_language_desc"  : "Zmien swoje ustawienia HoloHuda w menu jezykowym",
+    "en" : "English"
+    "pl" : "Polski"
+	"Health_Color_title" : "Kolor kółka zdrowia",
+	"Health_Color_desc" : "Zmień kolor kółka zdrowia(Kiedy jesteś w grze miej pewność, aby zminimalizować i powrócić do gry i poczekać aż się zaktualizuje)",
+	"Shield_Color_title" : "Kolor kółka pancerza",
+	"Shield_Color_desc" : "Zmień kolor kółka pancerza(Kiedy jesteś w grze miej pewność, aby zminimalizować i powrócić do gry i poczekać aż się zaktualizuje)",
+	
+	"Stamina_enable_title" : "Wlacz wytrzymalosc  kólko"
+	"Stamina_enable_desc" : "Jesli zaznaczone to doda kolo z odsetek swojej wytrzymalosci (jesli uzywasz pocohuda odznacz to.)"
+	"StaminaNum_color_title" : "Tekst wytrzymalosci  kólko"
+	"StaminaNum_color_desc" : "Zmien kolor tekstowy koloru tekstu wytrzymalosci"
+    "HealthNum_title" : "Zdrowie w liczbach",
+    "HealthNum_desc" : "Jesli zaznaczone to bedzie pokazywane twoje zdrowie w liczbach.",  
+    "HealthNumTM_title" : "Zdrowie twoich kolegow w liczbach",
+    "HealthNumTM_desc" : "Jesli zaznaczone to bedzie dodany tekst pokazujacy zdrowie twoich kolegow w liczbach.",
+    "Hostage_enable_title" : "Zawsze pokazuj zakladnikow",
+    "Hostage_enable_desc" : "Jesli zaznaczone to bedzie pokazywany panel dla zakladnikow w szturmie i obudowie.",
+	"Timerbg_enable_title" : "tlo dla czasomierza?",
+    "Timerbg_enable_desc" : "Jesli odznaczone to usunie tlo z czasomierza.",
+    "HudBox_enable_title" : "HoloHud top hud",
+    "HudBox_enable_desc" : "Jesli odznaczone to wtedy cel,szturm,punkt bez powrotu,zakladnicy beda normalni i nie bedzie mogl w stanie zmienic ich koloru",
+	"Frame_enable_title" : "Ramka HUDBoxa",
+	"Frame_enable_desc" : "Jesli odznaczone to usunie ramki we wszystkich HUDBoxach.",
+	"Baganim_disable_title" : "Wylacz animacje torby",
+	"Baganim_disable_desc" : "Jesli zaznaczone to animacja torby zostanie wylaczona zamiast poczawszy od srodka do dolu bedzie sie pojawiac.",
+	"Selectwep_enable_title" : "Kolor wybranej broni",	
+	"Selectwep_enable_desc" : "Jesli zaznaczone to wybrana bron zmieni kolor natomiast zmieniajac alfe",
+    
+	 
+	"Holo_Color_title" : "Kolor Holohuda",
+	"Holo_Color_desc" : "Zmien swoj styl koloru HoloHuda, kazdy ma inna opcja, ktora bedzie podozac wybranym kolorem.",
+	"Assault_color_title" : "Kolor ramki szturmu",
+	"Assault_color_desc"  : "To zmieni kolor ramki szturmu",
+	"Obj_color_title"   : "Kolor ramki celu",
+	"Obj_color_desc"     : "To zmieni kolor ramki celu.",
+	"Casing_color_title" : "Kolor ramki obudowy",
+	"Casing_color_desc"  : "To zmieni kolor ramki obudowy", 
+    "Timerbg_color_title" : "Kolor tla czasomierza",
+    "Timerbg_color_desc" : "To zmieni kolor tla czasomierza",
+	"Hostage_color_title" : "Kolor ramki zakladnika",
+	"Hostage_color_desc"  : "To zmieni kolor ramki zakladnika",
+	"Noreturn_color_title"  : "Kolor ramki punktu bez powrotu ",
+	"Noreturn_color_desc"  : "To zmieni kolor ramki punktu bez powrotu",
+	"Selectwep_color_desc" : "To zmieni kolor wybranej broni",
+	"Selectwep_color_title" : "Wybrany kolor broni",
+	"Equipments_color_desc" : "Kolor sprzetu(na przyklad granaty,apteczek i opasek)",
+	"Equipments_color_title" : "Kolor sprzetu",
+	"Pickups_color_title" : "Kolor przetwornikow",
+	"Pickups_color_desc" : "Kolor przetwornikow(na przyklad karta dostepu)",
+	"HealthNum_color_title" : "Zdrowie w kolorze numeru",
+    "HealthNum_color_desc" : "Kolor tekstu zdrowia, jesli niebieski jest zaznaczony to tekst zdrowia bedzie niebieski(wymaga zaznaczonej opcji liczby zdrowia)",
+	
+    "Assault_text_title" : "Kolor tekstowy ramki szturmu",
+	"Assault_text_desc" : "Kolor tekstowy ramki szturmu",
+   	"Casing_text_title" : "Kolor ramki tekstu obudowy",
+	"Casing_text_desc" : "Kolor tekstu w oknie obudowy",
+	"Noreturn_text_title" : "Kolor tekstowy ramki punktu bez powrotu",			
+	"Noreturn_text_desc" : "Kolor tekstowy punktu bez powrotu",		
+	"Objective_text_title" : "Kolor ramki celu",
+	"Objective_text_desc" : "Kolor tekstowy celu",
+    "Timer_text_title" : "Kolor ramki czasomierza ",		
+	"Timer_text_desc" : "Kolor czasomierza",	
+    "Hostage_text_title" : "Kolor tekstu zakladnika",
+	"Hostage_text_desc" : "Kolor tekstu ramki zakladnika",
+
+
+	"MainAlpha_title" : "HoloHud alfa",
+	"MainAlpha_desc" : "Zmien alfe(przezroczystosc) swojego HoloHuda podobnie do swojego koloru HoloHuda",
+
+	"Holo_Color" : "Kolor HoloHuda",
+	"Holo_Color1" : "Niebieski",
+	"Holo_Color2" : "Pomaranczowy",
+	"Holo_Color3" : "Zielony",
+	"Holo_Color4" : "Rozowy",
+    "Holo_Color5" : "Czarny",
+    "Holo_Color6" : "Szary",	   
+    "Holo_Color7" : "Ciemno Niebieski", 
+    "Holo_Color8" : "Czerwony",	  
+    "Holo_Color9" : "Zolty"
+    "Holo_Color10" : "Bialy"
+    "Holo_Color11" : "turkusowy"
+    "Holo_Color12" : "Fioletowy"
+    "Holo_Color13" : "Wiosenny zielony"
+    "Holo_Color14" : "Jasno Niebieski"
+}

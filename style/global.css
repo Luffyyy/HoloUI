@@ -20,6 +20,45 @@ a.logo {
     z-index: 2;
 }
 
+#container{
+  height: 450;
+  width: 650;
+  margin: 20px auto;
+  position: relative;
+}
+#slide-img{
+	height: 450px;
+	width: 650px;
+	position: absolute;
+}
+#left-holder{
+	height: 450;
+	width: 100;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+#right--holder{
+	height: : 450;
+	width: 100;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+.left-arrow{
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	top:40%;
+	left:0px;
+}
+.right-arrow{
+   	height: 50px;
+	width: 50px;
+	position: absolute;
+	top: 40%;
+	right: 0px;
+}
 
 div.footer {
     background: #EDEDED;

@@ -39,10 +39,6 @@ a.logo {
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	background-color : rgba(0,0,0,0);
-}
-#left-holder:hover{
-      background-color : rgba(0,0,0,100);
 }
 #right-holder{
 	height: : 853;
@@ -50,10 +46,6 @@ a.logo {
 	position: absolute;
 	right: 0px;
 	top: 0px;
-        background-color : rgba(0,0,0,0);
-}
-#left-holder:hover{
-       background-color : rgba(0,0,0,100);
 }
 .left-arrow{
     height: 32px;
@@ -61,7 +53,8 @@ a.logo {
     position: absolute;
     top: 280px;
     left: 0px;
-    opacity: 0.8;
+    opacity: 0.5;
+    transition: opacity 2s
 }
 .left-arrow:hover{
 	opacity : 1;
@@ -72,7 +65,8 @@ a.logo {
     position: absolute;
     top: 280px;
     right: 0px;
-    opacity: 0.8;
+    opacity: 0.5;
+    transition: opacity 2s
 }
 .right-arrow:hover{
 	opacity : 1;

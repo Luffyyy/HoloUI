@@ -12,6 +12,7 @@ body {
 }
 div.logo{
  text-indent : -99999999px;
+ text-align : center;
  background : url(../img/logo.png) no-repeat 0 0;
  width : 512px;
  height : 102px;

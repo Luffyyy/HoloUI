@@ -10,6 +10,6 @@ function slider(x) {
 	if(imgcount < 1){
 	    imgcount = total;
 	}
-  	image.src = "img/img"+ imageCount +".png";
+  	image.src = "img/img"+ imageCount +".jpg";
 }
 	

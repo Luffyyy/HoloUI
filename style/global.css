@@ -39,12 +39,14 @@ a.logo {
 	position: absolute;
 	left: 0px;
 	top: 0px;
+	background : rgba(0,0,0,0.5);
 }
 #right-holder{
 	height: : 853;
 	width: 480;
 	position: absolute;
 	right: 0px;
+	    background : rgba(0,0,0,0.5);
 	top: 0px;
 }
 .left-arrow{
@@ -54,7 +56,7 @@ a.logo {
     top: 280px;
     left: 0px;
     opacity: 0;
-    background : rgba(0,0,0,0.5);
+ 
     transition: opacity 1.5s;
 }
 .left-arrow:hover{
@@ -67,7 +69,6 @@ a.logo {
     top: 280px;
     right: 0px;
     opacity: 0;
-    background : rgba(0,0,0,0.5);
     transition: opacity 1.5s;
 }
 .right-arrow:hover{

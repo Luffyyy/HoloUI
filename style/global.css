@@ -15,3 +15,7 @@ body {
    background-color: #fff;
    border-radius : 2px;
 }
+.btn:hover{
+   background-color: #8b8b8b;
+   border-radius : 2px;
+}

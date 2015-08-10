@@ -1,11 +1,15 @@
-var imageCount = 1;
-var total = 6;
+var imgcount = 1;
+var tot_imgs = 3;
 
 function slider(x) {
 	var image = document.getElementById('slide-img');
-	imageCount = imageCount + x;
-	if(imageCount > total){imageCount = 1;}
-	if(imageCount < 1){imageCount = total;}	
-	image.src = "img/img"+ imageCount +".png";
+	imgcount = imgcount + x;
+	if(imgcount > total){
+            imgcount = 1;
 	}
+	if(imgcount < 1){
+	    imgcount = total;
+	}
+  	image.src = "img/img"+ imageCount +".png";
+}
 	

@@ -53,7 +53,8 @@ a.logo {
     position: absolute;
     top: 280px;
     left: 0px;
-    opacity: 0.7;
+    opacity: 0;
+    background : rgba(0,0,0,0.5);
     transition: opacity 1.5s;
 }
 .left-arrow:hover{
@@ -65,12 +66,11 @@ a.logo {
     position: absolute;
     top: 280px;
     right: 0px;
-    opacity: 0.7;
-    background : rgba(0,0,0,0);
+    opacity: 0;
+    background : rgba(0,0,0,0.5);
     transition: opacity 1.5s;
 }
 .right-arrow:hover{
-	background : rgba(0,0,0,100);
 	opacity : 1;
 }
 div.footer {

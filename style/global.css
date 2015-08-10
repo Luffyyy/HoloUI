@@ -11,6 +11,7 @@ body {
 .footer{
 background : 6f6f6f;
 padding: 50px 20px;
+text-align : center;
 }
 a {
   color: #1e6bb8;

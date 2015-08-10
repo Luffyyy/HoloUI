@@ -10,6 +10,10 @@ body {
   color: #606c71; 
   background-color: #EDEDED;
 }
+div.logo{
+ background : ("../img/logo.png"); 
+
+}
 div.footer {
     background: #EDEDED;
     text-align: center;

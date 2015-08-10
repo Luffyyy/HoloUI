@@ -10,7 +10,7 @@ body {
   color: #606c71; 
   background-color: #EDEDED;
 }
-a.logo {
+ header a.logo {
     background: transparent url("../img/logo.png") no-repeat scroll 0px 0px;
     height: 128px;
     width: 512px;

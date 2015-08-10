@@ -26,11 +26,10 @@ a.logo {
     height: 720px;
     left: 250px;
 }
-#slide-img{
-	height: 450px;
-	width: 650px;
-	position: absolute;
-}
+#slide-img {
+    position: absolute;
+    width: 853px;
+    height: 480px;
 #left-holder{
 	height: 450;
 	width: 100;

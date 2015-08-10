@@ -10,7 +10,7 @@ body {
   color: #606c71; 
   background-color: #EDEDED;
 }
-.logo-container.logo{
+a.logo{
  text-indent : -99999999px;
  text-align : center;
  background : url(../img/logo.png) no-repeat 0 0;

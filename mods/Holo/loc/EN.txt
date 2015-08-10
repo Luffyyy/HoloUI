@@ -1,0 +1,133 @@
+{
+	"Options_title" : "HoloHud options",
+	"Options_desc" : "Customize your HoloHud to how you like!",
+	"Options_colors_title" : "Change hud colors",
+
+	"Options_colors_desc" : "Brings you to the hud color change menu there you can choose color for some hud parts.",
+	
+	"Options_text_title" : "Change text colors",
+	"Options_text_desc" : "Brings you to the text color change menu there you can choose color for some texts.",
+	
+	"Menu_enable_title" : "HoloHud Menu",
+	"Menu_enable_desc" : "HoloHud menu changes the menu colors",
+	
+	"Assault_enable_title" : "Enable HoloHud assault",
+	"Assault_enable_desc" : "This option will turn on HoloHud assault",
+	
+	"Progress_active_title" : "Progress positive color",
+	"Progress_active_desc" : "Change your progress circle color after you change to take changes press your windows key and then return to the game or restart the game.",
+	"Progress_invalid_title" : "Progress negative color",
+	"Progress_invalid_desc" : "Change your negative progress circle color after you change to take changes press your windows key and then return to the game or restart the game.",
+	 
+	"Line_color_title" : "HUDBox line color", 
+	"Line_color_desc" : "Change the color of the hud line", 
+
+	"Frame_color_title" : "HUDBox frame color", 
+	"Frame_color_desc" : "Change the color of the hud frame",
+	"totalammo_enable_title" : "Total ammo changer", 
+	"totalammo_enable_desc" : "Changes the total ammo to be like in every other game(Warning : doesn't work with saw) ",
+
+	"hudline_enable_title" : "Hudbox lower line",
+	"hudline_enable_desc" : "Adds a lower line to the assault,hostage,casing,objective, no return box.",
+    
+    "Old_radial_title" : "Old radial health",
+    "Old_radial_desc" : "If ticked this will return the old radial health from v2.3!(Not recommended if you use hoxhud)",
+	"Reset_button_title" : "Reset extras options",
+	"Reset_button_desc"  : "This will reset HoloHud extras to default",
+	"Reset_colors_title" : "Reset colors",
+	"Reset_colors_desc"  : "This will reset all changed colors to default",
+	"Select_language_title"  : "Language",
+	"Select_language_desc"  : "Change your HoloHud options menu language",
+    "en" : "English"
+    "pl" : "Polish"
+	"Health_Color_title" : "Health circle color",
+	"Health_Color_desc" : "Change your health circle color after you change to take changes press your windows key and then return to the game or restart the game.",
+	"Shield_Color_title" : "Armor circle color",
+	"Shield_Color_desc" : "Change your armor circle color after you change to take changes press your windows key and then return to the game or restart the game.",
+	"Stamina_enable_title" : "Enable stamina circle",
+	"Stamina_enable_desc" : "If ticked this will add a circle with percentage of your stamina(if you use pocohud untick this.)",
+	"StaminaNum_color_title" : "Stamina text color",
+	"StaminaNum_color_desc" : "Change the text color of the stamina text color",
+    "HealthNum_title" : "Health in number",
+    "HealthNum_desc" : "If ticked this will add a text showing your Health in number.",  
+    "HealthNumTM_title" : "Teammates health in number",
+    "HealthNumTM_desc" : "If ticked this will add a text showing your teammates health in number.",
+    "Hostage_enable_title" : "Show hostages always",
+    "Hostage_enable_desc" : "If ticked this will Show the hosatges panel in casing and assault.",
+	"Timerbg_enable_title" : "background for timer?",
+    "Timerbg_enable_desc" : "If unticked this will remove the background of the timer",
+    "HudBox_enable_title" : "HoloHud top hud",
+    "HudBox_enable_desc" : "If unticked the objective,assault,no point of return,hostage will turn back to normal and you won't be able to change their color ",
+	"Frame_enable_title" : "HUDBox frame",
+	"Frame_enable_desc" : "If unticked this will remove the frame of all of the hud boxes.",
+	"Baganim_disable_title" : "Bag animation disable",
+	"Baganim_disable_desc" : "If ticked this will disable the bag animation instead of going from center to down it will appear there.",
+	"Selectwep_enable_title" : "Color Selected weapon",	
+	"Selectwep_enable_desc" : "If ticked the selected weapon will change color instead of changing alpha",
+	
+	"Holo_Color_title" : "HoloHud color",
+
+
+	"HealthNum_style_title" : "Health in numbers style",
+	"HealthNum_style_desc" : "Your health in numbers style new one can tell if player is downed or in custody old one is inside the health circle and shows only health.",
+	"NewHP" : "New(Above name)",
+	"OldHP" : "Old(inside hp circle)",
+
+	"Holo_Color_desc" : "Change your HoloHud color style, every other option that will select HoloHud color will follow the color selected here.",
+	"Assault_color_title" : "Assault box color",
+	"Assault_color_desc"  : "This will change the color of the assault box",
+	"Obj_color_title"   : "Objective box color",
+	"Obj_color_desc"     : "This will change the color of the objective box.",
+	"Casing_color_title" : "casing box color",
+	"Casing_color_desc"  : "This will change the color of the casing box", 
+    "Timerbg_color_title" : "Timer bg color",
+    "Timerbg_color_desc" : "This will change the color of the timer background",
+	"Hostage_color_title" : "hostage box color",
+	"Hostage_color_desc"  : "This will change the color of the hostage box",
+	"Noreturn_color_title"  : "Noreturn box color",
+	"Noreturn_color_desc"  : "This will change the color of the no point of return box",
+	"Selectwep_color_desc" : "This will change the color of the selected weapon",
+	"Selectwep_color_title" : "Selected weapon color",
+	"Equipments_color_desc" : "The color of the equipments(for example grenades,health bag and cable ties)",
+	"Equipments_color_title" : "Equipments color",
+	"Pickups_color_title" : "Pickups color",
+	"Pickups_color_desc" : "The color of the pickups(for example the key card)",
+	"HealthNum_color_title" : "Healthnum positive color",
+    "HealthNum_color_desc" : "The health in number positive color when health is full.",
+	"HealthNum_negative_title" : "Healthnum negative color",
+	"HealthNum_negative_desc" : "The health in number negative color when health is low.",
+    "Assault_text_title" : "Assault box text color",
+	"Assault_text_desc" : "The text color of the assault box",
+   	"Casing_text_title" : "Casing box text color",
+	"Casing_text_desc" : "The text color of the casing box",
+	"Noreturn_text_title" : "Noreturn box text color",			
+	"Noreturn_text_desc" : "The text color of the No point of return box",		
+	"Objective_text_title" : "Objective box text color",
+	"Objective_text_desc" : "The text color of the Objective box",
+    "Timer_text_title" : "Timer text color",		
+	"Timer_text_desc" : "The text color of the timer",	
+    "Hostage_text_title" : "Hostage text color",
+	"Hostage_text_desc" : "The text color of the hostage box",
+
+
+	"MainAlpha_title" : "HoloHud alpha",
+	"MainAlpha_desc" : "Change the alpha(transparency) of your HoloHud similar to your HoloHud color",
+
+	"Holo_Color" : "HoloHud color",
+	"Holo_Color1" : "Blue",
+	"Holo_Color2" : "Orange",
+	"Holo_Color3" : "Green",
+	"Holo_Color4" : "Pink",
+    "Holo_Color5" : "Black",
+    "Holo_Color6" : "Grey",	   
+    "Holo_Color7" : "Dark Blue", 
+    "Holo_Color8" : "Red",	  
+    "Holo_Color9" : "Yellow"
+    "Holo_Color10" : "White"
+    "Holo_Color11" : "Cyan"
+    "Holo_Color12" : "Purple"
+    "Holo_Color13" : "Spring Green"
+    "Holo_Color14" : "Light Blue"
+    "Holo_Color15" : "Crimson"
+    "Holo_Color16" : "Brown"
+}

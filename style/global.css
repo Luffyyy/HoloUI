@@ -11,11 +11,7 @@ body {
   background-color: #EDEDED;
 }
  header a.logo {
-    background: transparent url("../img/logo.png") no-repeat scroll 0px 0px;
-    height: 128px;
-    width: 512px;
     display: block;
-    margin: 0px 330px;
 }
 div.logo:hover{
  cursor:url;

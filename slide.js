@@ -2,7 +2,7 @@ var imgnum = 1;
 var tot_imgs = 5;
 
 function slider(x){
-	var Image = document.getElemetsById('screen');
+	var Image = Document.getElementById()('screen');
 	imgnum = imgnum + x;
 	if(imgnum > tot_imgs){
     imagecount = 1;

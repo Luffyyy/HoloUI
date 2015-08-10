@@ -55,7 +55,7 @@ a.logo {
     left: 0px;
     opacity: 0;
     background : rgba(30,30,30,0.4);
-    transition: opacity 1.5s;
+    transition: opacity 1s;
 }
 .left-arrow:hover{
 	opacity : 1;
@@ -68,7 +68,7 @@ a.logo {
     right: 0px;
     opacity: 0;
     background : rgba(30,30,30,0.4);
-    transition: opacity 1.5s;
+    transition: opacity 1s;
 }
 .right-arrow:hover{
 	opacity : 1;

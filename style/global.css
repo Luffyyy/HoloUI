@@ -9,7 +9,8 @@ body {
   line-height: 1.5;
   color: #606c71; }
 .footer{
-padding: 20px;
+background : 6f6f6f;
+padding: 50px 20px;
 }
 a {
   color: #1e6bb8;

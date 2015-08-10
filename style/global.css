@@ -20,11 +20,11 @@ a.logo {
     z-index: 2;
 }
 
-#container{
-  height: 450;
-  width: 650;
-  margin: 20px auto;
-  position: relative;
+#container {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    left: 250px;
 }
 #slide-img{
 	height: 450px;

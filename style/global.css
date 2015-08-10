@@ -10,8 +10,9 @@ body {
   color: #606c71; 
   background-color: #EDEDED;
 }
- header a.logo {
+a.logo {
     display: block;
+    font-size: 26pt;
 }
 div.logo:hover{
  cursor:url;

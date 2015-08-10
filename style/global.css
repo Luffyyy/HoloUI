@@ -23,7 +23,12 @@ a {
 a:hover {
 text-decoration: underline; 
 }
-
+div.content {
+    font-size: 16px;
+    background: #F2F2F2;
+    text-align: center;
+}
+}
 .btn {
   display: inline-block;
   color: rgba(255, 255, 255, 0.7);
@@ -208,24 +213,6 @@ text-decoration: underline;
   margin: 1rem 0;
   background-color: #eff0f1;
   border: 0; }
-
-@media screen and (min-width: 64em) {
-  .content {
-    max-width: 64rem;
-    padding: 2rem 6rem;
-    margin: 0 auto;
-    font-size: 1.1rem; } }
-
-@media screen and (min-width: 42em) and (max-width: 64em) {
-  .content {
-    padding: 2rem 4rem;
-    font-size: 1.1rem; } }
-
-@media screen and (max-width: 42em) {
-  .content {
-    padding: 2rem 1rem;
-    font-size: 1rem; 
-  }}
 
 .site-footer {
   padding-top: 2rem;

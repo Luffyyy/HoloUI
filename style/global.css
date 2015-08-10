@@ -5,7 +5,10 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: #606c71; }
-
+a{
+ text-decoration: none;
+ color : #6b6b6b;
+}
 .page-header {
     color: #FFF;
     text-align: center;
@@ -15,9 +18,8 @@ body {
    background-color: #fff;
    border-radius : 2px;
    font-size : 24px;
-   color : #000;
 }
 .btn:hover{
-   background-color: #8b8b8b;
+   background-color: #4ebaff;
    border-radius : 2px;
 }

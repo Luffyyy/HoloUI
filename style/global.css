@@ -21,12 +21,11 @@ a.logo {
 }
 
 #container {
-position: absolute;
-margin-left: auto;
-margin-right: auto;
-left: 0;
-right: 0;
+   position: absolute;
+    top: 50%;  
+    left: 50%; 
 
+    transform: translate(-50%, -50%); 
 }
 #slide-img {
     position: absolute;

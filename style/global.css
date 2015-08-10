@@ -54,7 +54,7 @@ a.logo {
     top: 280px;
     left: 0px;
     opacity: 0.7;
-    transition: opacity 1.5s
+    transition: opacity 1.5s;
 }
 .left-arrow:hover{
 	opacity : 1;
@@ -66,10 +66,11 @@ a.logo {
     top: 280px;
     right: 0px;
     opacity: 0.7;
-    background : rgba(0,0,0,0)
-    transition: opacity 1.5s
+    background : rgba(0,0,0,0);
+    transition: opacity 1.5s;
 }
 .right-arrow:hover{
+	background : rgba(0,0,0,100);
 	opacity : 1;
 }
 div.footer {

@@ -1,5 +1,5 @@
 var imgnum = 1;
-var tot_imgs 5;
+var tot_imgs = 5;
 
 function slider(x){
 	var Image = document.getElemetsById('screen');

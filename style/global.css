@@ -34,15 +34,15 @@ a.logo {
     height: 480px;
 }
 #left-holder{
-	height: 853;
-	width: 480;
+	height: 853px;
+	width: 480px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
 }
 #right-holder{
-	height: : 853;
-	width: 480;
+	height: 853px;
+	width: 480px;
 	position: absolute;
 	right: 0px;
 	top: 0px;
@@ -74,9 +74,9 @@ a.logo {
 	opacity : 1;
 }
 div.footer {
-    background: #EDEDED;
+    background: #e3e3e3;
     text-align: center;
-    padding: 0;
+    padding: 32px 0;
     margin: 0;
 }
 a {
@@ -130,7 +130,7 @@ text-decoration: underline;
 }
 @media screen and (min-width: 64em) {
   .page-header {
-    padding: 5rem 6rem; } }
+    padding: 3rem 6rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .page-header {

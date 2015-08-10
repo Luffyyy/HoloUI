@@ -19,9 +19,10 @@ a.logo {
     text-align: center;
     text-shadow: 0px 3px 7px rgba(0, 0, 0, 0.35);
     z-index: 2;
+}
+a.logo:hover{
 	text-decoration: none;
 }
-
 
 #container {
 	height:535px;

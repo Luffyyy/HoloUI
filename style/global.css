@@ -11,8 +11,8 @@ body {
   background-color: #EDEDED;
 }
 div.logo{
+ text-indent : -99999999px;
  background : url(../img/logo.png) no-repeat 0 0;
-
 }
 div.footer {
     background: #EDEDED;

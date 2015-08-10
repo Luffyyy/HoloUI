@@ -39,10 +39,10 @@ a.logo {
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	background : rgba(0,0,0,0);
+	background-color : rgba(0,0,0,0);
 }
 #left-holder:hover{
-      background : rgba(0,0,0,100);
+      background-color : rgba(0,0,0,100);
 }
 #right-holder{
 	height: : 853;
@@ -50,10 +50,10 @@ a.logo {
 	position: absolute;
 	right: 0px;
 	top: 0px;
-        background : rgba(0,0,0,0);
+        background-color : rgba(0,0,0,0);
 }
 #left-holder:hover{
-       background : rgba(0,0,0,100);
+       background-color : rgba(0,0,0,100);
 }
 .left-arrow{
     height: 32px;

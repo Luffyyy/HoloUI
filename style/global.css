@@ -48,36 +48,26 @@ a.logo {
 	top: 0px;
 }
 .left-arrow{
-	height: 50px;
-	width: 50px;
-	position: absolute;
-	top:40%;
-	left:0px;
-	opacity : 0%;
+    height: 32px;
+    width: 36px;
+    position: absolute;
+    top: 280px;
+    left: 0px;
+    opacity: 0.8;
 }
 .left-arrow:hover{
-	height: 50px;
-	width: 50px;
-	position: absolute;
-	top:40%;
-	left:0px;
-	opacity : 100%;
+	opacity : 1;
 }
-.right-arrow{
-   	height: 50px;
-	width: 50px;
-	position: absolute;
-	top: 40%;
-	right: 0px;
-	opacity : 100%;
+.right-arrow {
+    height: 32px;
+    width: 36px;
+    position: absolute;
+    top: 280px;
+    right: 0px;
+    opacity: 0.8;
 }
 .right-arrow:hover{
-	height: 50px;
-	width: 50px;
-	position: absolute;
-	top:40%;
-	left:0px;
-	opacity : 100%;
+	opacity : 1;
 }
 div.footer {
     background: #EDEDED;

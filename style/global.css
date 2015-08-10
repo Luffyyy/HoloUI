@@ -44,7 +44,7 @@ text-decoration: underline;
   border-width: 1px;
   border-radius: 2px;
   padding: 5px 30px;
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+  transition: color 0.3s, rgba(200, 200, 200, 0.70) 0.2s, border-color 0.2s;
   }
   .btn + .btn {
     margin-left: 1rem; }

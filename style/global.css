@@ -20,9 +20,7 @@ a.logo {
     z-index: 2;
 }
 
-div.logo:hover{
- cursor:url;
-}
+
 div.footer {
     background: #EDEDED;
     text-align: center;

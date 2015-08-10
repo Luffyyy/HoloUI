@@ -21,10 +21,12 @@ a.logo {
 }
 
 #container {
-    position: relative;
-    width: 1280px;
-    height: 720px;
-    left: 250px;
+position: absolute;
+margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+
 }
 #slide-img {
     position: absolute;

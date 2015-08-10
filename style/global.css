@@ -51,6 +51,27 @@ a.logo:hover{
 	right: 0px;
 	top: 0px;
 }
+@media screen and (max-width: 64em) {
+#left-holder{
+	height:360px;
+	width:640px;
+}}
+@media screen and (max-width: 64em) {
+#right-holder{
+	height:360px;
+	width:640px;
+}}
+@media screen and (max-width: 64em) {
+#container {
+	height:450px;
+	width:640px;
+}}
+@media screen and (max-width: 64em) {
+#slide-img {
+	height:360px;
+	width:640px;
+}}
+
 .left-arrow{
     height: 32px;
     width: 36px;

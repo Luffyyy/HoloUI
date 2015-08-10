@@ -11,3 +11,7 @@ body {
     text-align: center;
     background-color: #0e52b8;
 }
+.btn{
+   background-color: #fff;
+   border-radius : 2px;
+}

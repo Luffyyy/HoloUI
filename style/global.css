@@ -15,11 +15,27 @@ a{
     background-color: #0e52b8;
 }
 .btn{
+   display: inline-block;
    background-color: #fff;
    border-radius : 2px;
-   font-size : 24px;
+   font-size : 18px;
 }
 .btn:hover{
    background-color: #4ebaff;
    border-radius : 2px;
+}
+.content{
+ text-align : center;  
+
+
+}
+.footer{
+ text-align : center;  
+}
+.footer-owner{
+
+}
+.footer-credits{
+
+}
 }

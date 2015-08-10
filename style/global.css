@@ -39,6 +39,11 @@ a.logo {
 	position: absolute;
 	left: 0px;
 	top: 0px;
+	opacity : 0;
+	background : #000;
+}
+#left-holder:hover{
+       opacity : 0.5;
 }
 #right-holder{
 	height: : 853;
@@ -46,6 +51,11 @@ a.logo {
 	position: absolute;
 	right: 0px;
 	top: 0px;
+	opacity :0;
+        background : #000;
+}
+#left-holder:hover{
+       opacity : 0.5;
 }
 .left-arrow{
     height: 32px;

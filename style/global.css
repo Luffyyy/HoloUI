@@ -11,16 +11,13 @@ body {
   background-color: #EDEDED;
 }
 a.logo {
-  font-size: 108.333px;
-  font-family: "Open Sans";
-  color: rgba(255, 255, 255, 0.58);
-  line-height: 1.2;
-  text-align: center;
-  text-shadow: 0px 3px 7px rgba(0, 0, 0, 0.35);
-  position: absolute;
-  left: 9.828px;
-  top: -12px;
-  z-index: 2;
+    font-size: 108.333px;
+    font-family: "Open Sans";
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 0px 3px 7px rgba(0, 0, 0, 0.35);
+    z-index: 2;
 }
 
 div.logo:hover{

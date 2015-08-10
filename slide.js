@@ -1,14 +1,8 @@
-var imgnum = 1;
+var img_count = 1;
 var tot_imgs = 5;
 
 function slider(x){
     var Image = document.getElementById('screen');
-    imgnum = imgnum + x;
-    if(imgnum > tot_imgs){
-    imgnum = 1;
-    }
-    if(imgnum < tot_imgs){
-    imgnum = tot_imgs;
-    }
-    Image.src = "img/screen" + imgnum + ".png";
+    img_count = img_count + x;
+    Image.src = "img/screen"+ img_count +".png";
 }

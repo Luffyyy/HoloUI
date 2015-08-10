@@ -21,11 +21,12 @@ a.logo {
 }
 
 #container {
-   position: absolute;
-    top: 50%;  
-    left: 50%; 
-
-    transform: translate(-50%, -50%); 
+	height:400px;
+	width:650px;
+	margin: 50px auto;
+	position:relative;
+	border-radius:2px;
+	overflow:hidden;
 }
 #slide-img {
     position: absolute;
@@ -52,6 +53,15 @@ a.logo {
 	position: absolute;
 	top:40%;
 	left:0px;
+	opacity : 0;
+}
+.left-arrow:hover{
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	top:40%;
+	left:0px;
+	opacity : 100;
 }
 .right-arrow{
    	height: 50px;
@@ -60,7 +70,14 @@ a.logo {
 	top: 40%;
 	right: 0px;
 }
-
+.right-arrow:hover{
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	top:40%;
+	left:0px;
+	opacity : 100;
+}
 div.footer {
     background: #EDEDED;
     text-align: center;

@@ -129,7 +129,7 @@
 	margin-top: -18px;
 	cursor: pointer;
 	z-index: 8040;
-	opacity: 1;
+	opacity: 0;
     transition: opacity 1s;
 }
 

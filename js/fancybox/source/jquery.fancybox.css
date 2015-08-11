@@ -71,7 +71,7 @@
 }
 
 #fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
-	background-image: url('fancybox_sprite.png');
+	background-image: url('fancybox_loading@2x');
 }
 
 #fancybox-loading {
@@ -83,7 +83,7 @@
 	background-position: 0 -108px;
 	opacity: 0.8;
 	cursor: pointer;
-	z-index: 8060;
+	z-index: 9060;
 }
 
 #fancybox-loading div {

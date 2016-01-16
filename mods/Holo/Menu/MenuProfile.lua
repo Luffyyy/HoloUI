@@ -1,4 +1,5 @@
-CloneClass(PlayerProfileGuiObject)
+if Holo.options.Menu_enable then
+
 function PlayerProfileGuiObject:init(ws)
 	local panel = ws:panel():panel()
 	managers.menu_component:close_contract_gui()
@@ -35,9 +36,12 @@ function PlayerProfileGuiObject:init(ws)
 		font = tweak_data.menu.pd2_medium_font,
 		font_size = tweak_data.menu.pd2_medium_font_size + (is_infamous and -5 or 0),
 		text = level_string,
-		color = tweak_data.screen_colors.text
+		color = tweak_data.screen_colors.text,
+		align = "center",
+		vertical = "center"
 	})
 	self:_make_fine_text(level_text)
+	level_text:set_font_size(level_text:font_size() * math.min(font_size * 2 / level_text:w(), 1))
 	level_text:set_center(exp_ring:center())
 	max_left_len = math.max(max_left_len, level_text:w())
 	local player_text = panel:text({
@@ -68,25 +72,10 @@ function PlayerProfileGuiObject:init(ws)
 		font = font,
 		color = tweak_data.screen_colors.text
 	})
-
 	self:_make_fine_text(total_money_text)
 	total_money_text:set_left(math.round(exp_ring:right()))
 	total_money_text:set_top(math.round(money_text:bottom()))
 	max_left_len = math.max(max_left_len, total_money_text:w())
-	
-	local current_xp = math.floor(next_level_data.current_points)
-	local total_xp = math.floor(next_level_data.points)
-		local xp_text = panel:text({
-		text = "EXP:" .. current_xp .. "/" .. total_xp,
-		font_size = font_size,
-		font = font,
-		color = tweak_data.screen_colors.text
-	})
-	self:_make_fine_text(xp_text)
-	xp_text:set_left(math.round(exp_ring:right()))
-	xp_text:set_top(math.round(total_money_text:bottom()))
-	max_left_len = math.max(max_left_len, xp_text:w())
-	
 	local skillpoints = managers.skilltree:points()
 	local skill_text, skill_glow
 	if skillpoints > 0 then
@@ -101,7 +90,7 @@ function PlayerProfileGuiObject:init(ws)
 		})
 		self:_make_fine_text(skill_text)
 		skill_text:set_left(math.round(exp_ring:right()))
-		skill_text:set_top(math.round(xp_text:bottom()))
+		skill_text:set_top(math.round(total_money_text:bottom()))
 		max_left_len = math.max(max_left_len, skill_text:w())
 		local skill_icon = panel:bitmap({
 			texture = "guis/textures/pd2/shared_skillpoint_symbol",
@@ -160,7 +149,7 @@ function PlayerProfileGuiObject:init(ws)
 			progress = technician_ponts,
 			num_skills = num_skills
 		}),
-		font_size = font_size,
+		font_size = font_size * font_scale,
 		font = font,
 		color = tweak_data.screen_colors.text
 	})
@@ -203,13 +192,17 @@ function PlayerProfileGuiObject:init(ws)
 	self._panel:set_size(exp_ring:w() + max_left_len + 15 + max_right_len + 10, math.max(total_money_text:bottom(), hoxton_text:bottom()) + 8)
 	self._panel:set_bottom(self._panel:parent():h() - 70)
 	BoxGuiObject:new(self._panel, {
+		name = "line",
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
 	})
+	BoxGuiObject:set_color(Holomenu_color_marker ,self._panel:child("line"))
+	self._panel:rect({color = Color.black, alpha = 0.3, layer = -2})
+
 	mastermind_text:set_right(self._panel:w() - 10)
 	enforcer_text:set_right(self._panel:w() - 10)
 	technician_text:set_right(self._panel:w() - 10)
@@ -223,15 +216,13 @@ function PlayerProfileGuiObject:init(ws)
 			while true do
 				over(1, function(p)
 					o:set_alpha(math.lerp(0.4, 0.85, math.sin(p * 180)))
-				end
-)
+				end)
 			end
 		end
-
 		skill_glow:set_w(self._panel:w())
 		skill_glow:set_center_x(skill_text and skill_text:center_x() or 0)
 		skill_glow:animate(animate_new_skillpoints)
 	end
 	self:_rec_round_object(panel)
 end
-
+end

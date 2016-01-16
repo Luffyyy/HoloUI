@@ -1,3 +1,5 @@
+if Holo.options.Menu_enable then
+
 CloneClass(TextBoxGui)
 NewsFeedGui.PRESENT_TIME = 0.5
 NewsFeedGui.SUSTAIN_TIME = 6
@@ -8,8 +10,8 @@ function NewsFeedGui:update(t, dt)
 		return
 	end
 	if self._news and #self._titles > 0 then
-		local color = Holo.options.Menu_enable == true and Color.white or tweak_data.screen_colors.button_stage_3
-		local Highlight = Holo.options.Menu_enable == true and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
+		local color = Holomenu_color_normal
+		local Highlight = Holomenu_color_marker
 		self._title_panel:child("title"):set_color(self._mouse_over and Highlight or color)
 		if self._next then
 			self._next = nil
@@ -49,3 +51,4 @@ function NewsFeedGui:update(t, dt)
 	end
 end
 
+end

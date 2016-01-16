@@ -1,3 +1,4 @@
+if Holo.options.Holomenu_crimenet then
 
 require("lib/managers/menu/renderers/MenuNodeBaseGui")
 local make_fine_text = function(text)
@@ -5,35 +6,154 @@ local make_fine_text = function(text)
 	text:set_size(w, h)
 	text:set_position(math.round(text:x()), math.round(text:y()))
 end
-
-CloneClass(MenuNodeGui)
+MenuNodeCrimenetGui = MenuNodeCrimenetGui or class(MenuNodeGui)
 function MenuNodeCrimenetGui:init(node, layer, parameters)
 	parameters.font = tweak_data.menu.pd2_small_font
 	parameters.font_size = tweak_data.menu.pd2_small_font_size
 	parameters.align = "left"
-	parameters.row_item_blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-	parameters.row_item_color = Holo.options.Menu_enable == true  and Color.white or tweak_data.screen_colors.button_stage_3
-	parameters.row_item_hightlight_color = Holo.options.Menu_enable == true  and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
-	parameters.marker_alpha = 0.6
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.marker_color = Holomenu_color_marker
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
 	parameters.to_upper = true
 	MenuNodeCrimenetGui.super.init(self, node, layer, parameters)
 end
-
+function MenuNodeCrimenetGui:_setup_item_panel(safe_rect, res)
+	MenuNodeCrimenetGui.super._setup_item_panel(self, safe_rect, res)
+	local width = 900
+	local height = 580
+	local is_nextgen = SystemInfo:platform() == Idstring("PS4") or SystemInfo:platform() == Idstring("XB1")
+	if SystemInfo:platform() ~= Idstring("WIN32") then
+		width = 900
+		height = is_nextgen and 550 or 525
+	end
+	self.item_panel:set_rightbottom(self.item_panel:parent():w() * 0.5 + width / 2 - 10, self.item_panel:parent():h() * 0.5 + height / 2 - 10)
+	self:_set_topic_position()
+end
 MenuNodeCrimenetFiltersGui = MenuNodeCrimenetFiltersGui or class(MenuNodeGui)
 function MenuNodeCrimenetFiltersGui:init(node, layer, parameters)
 	parameters.font = tweak_data.menu.pd2_small_font
 	parameters.font_size = tweak_data.menu.pd2_small_font_size
 	parameters.align = "left"
-	parameters.row_item_blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-	parameters.row_item_color = Holo.options.Menu_enable == true  and Color.white or tweak_data.screen_colors.button_stage_3
-	parameters.row_item_hightlight_color = Holo.options.Menu_enable == true  and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
-	parameters.marker_alpha = 0.6
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
+	parameters.marker_color = Holomenu_color_marker
 	parameters.to_upper = true
 	self.static_y = node:parameters().static_y
 	MenuNodeCrimenetFiltersGui.super.init(self, node, layer, parameters)
 end
-
-
+function MenuNodeCrimenetFiltersGui:close(...)
+	MenuNodeCrimenetFiltersGui.super.close(self, ...)
+end
+function MenuNodeCrimenetFiltersGui:_setup_item_panel(safe_rect, res)
+	MenuNodeCrimenetFiltersGui.super._setup_item_panel(self, safe_rect, res)
+	local max_layer = 10000
+	local min_layer = 0
+	local child_layer = 0
+	for _, child in ipairs(self.item_panel:children()) do
+		child:set_halign("right")
+		child_layer = child:layer()
+		if child_layer > 0 then
+			min_layer = math.min(min_layer, child_layer)
+		end
+		max_layer = math.max(max_layer, child_layer)
+	end
+	for _, child in ipairs(self.item_panel:children()) do
+	end
+	self.item_panel:set_w(safe_rect.width * (1 - self._align_line_proportions))
+	self.item_panel:set_center(self.item_panel:parent():w() / 2, self.item_panel:parent():h() / 2)
+	local static_y = self.static_y and safe_rect.height * self.static_y
+	if static_y and static_y < self.item_panel:y() then
+		self.item_panel:set_y(static_y)
+	end
+	self.item_panel:set_position(math.round(self.item_panel:x()), math.round(self.item_panel:y()))
+	self:_rec_round_object(self.item_panel)
+	if alive(self.box_panel) then
+		self.item_panel:parent():remove(self.box_panel)
+		self.box_panel = nil
+	end
+	self.box_panel = self.item_panel:parent():panel()
+	self.box_panel:set_x(self.item_panel:x())
+	self.box_panel:set_w(self.item_panel:w())
+	if self.item_panel:h() > self._align_data.panel:h() then
+		self.box_panel:set_y(0)
+		self.box_panel:set_h(self.item_panel:parent():h())
+	else
+		self.box_panel:set_y(self.item_panel:top())
+		self.box_panel:set_h(self.item_panel:h())
+	end
+	self.box_panel:grow(20, 20)
+	self.box_panel:move(-10, -10)
+	self.box_panel:set_layer(51)
+	self.boxgui = BoxGuiObject:new(self.box_panel, {
+		sides = {
+			0,
+			0,
+			0,
+			2
+		}
+	})
+	self.boxgui:set_clipping(false)
+	self.boxgui:set_color(Holomenu_color_marker)
+	self.boxgui:set_layer(1000)
+	self.box_panel:rect({
+		color = Color.black,
+		alpha = 0.6,
+		rotation = 360
+	})
+	self._align_data.panel:set_left(self.box_panel:left())
+	self._list_arrows.up:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.up:set_world_top(self._align_data.panel:world_top() - 10)
+	self._list_arrows.up:set_width(self.box_panel:width())
+	self._list_arrows.up:set_rotation(360)
+	self._list_arrows.up:set_layer(1050)
+	self._list_arrows.down:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.down:set_world_bottom(self._align_data.panel:world_bottom() + 10)
+	self._list_arrows.down:set_width(self.box_panel:width())
+	self._list_arrows.down:set_rotation(360)
+	self._list_arrows.down:set_layer(1050)
+	self:_set_topic_position()
+end
+function MenuNodeCrimenetFiltersGui:_setup_item_panel_parent(safe_rect, shape)
+	shape = shape or {}
+	shape.x = shape.x or safe_rect.x
+	shape.y = shape.y or safe_rect.y + 0
+	shape.w = shape.w or safe_rect.width
+	shape.h = shape.h or safe_rect.height - 0
+	MenuNodeCrimenetFiltersGui.super._setup_item_panel_parent(self, safe_rect, shape)
+end
+function MenuNodeCrimenetFiltersGui:_rec_round_object(object)
+	if object.children then
+		for i, d in ipairs(object:children()) do
+			self:_rec_round_object(d)
+		end
+	end
+	local x, y = object:position()
+	object:set_position(math.round(x), math.round(y))
+end
+function MenuNodeCrimenetFiltersGui:_setup_item_rows(node)
+	MenuNodeCrimenetFiltersGui.super._setup_item_rows(self, node)
+end
+function MenuNodeCrimenetFiltersGui:reload_item(item)
+	MenuNodeCrimenetFiltersGui.super.reload_item(self, item)
+	local row_item = self:row_item(item)
+	if row_item and alive(row_item.gui_panel) then
+		row_item.gui_panel:set_halign("right")
+		row_item.gui_panel:set_right(self.item_panel:w())
+	end
+end
+function MenuNodeCrimenetFiltersGui:_align_marker(row_item)
+	MenuNodeCrimenetFiltersGui.super._align_marker(self, row_item)
+	if row_item.item:parameters().pd2_corner then
+		self._marker_data.marker:set_world_right(row_item.gui_panel:world_right())
+		return
+	end
+	self._marker_data.marker:set_world_right(self.item_panel:world_right())
+end
+function MenuNodeCrimenetFiltersGui:_highlight_row_item(row_item, mouse_over)
+	MenuNodeCrimenetFiltersGui.super._highlight_row_item(self, row_item, mouse_over)
+end
 MenuNodeCrimenetSpecialGui = MenuNodeCrimenetSpecialGui or class(MenuNodeCrimenetFiltersGui)
 function MenuNodeCrimenetSpecialGui:_setup_item_panel(safe_rect, res)
 	MenuNodeCrimenetSpecialGui.super._setup_item_panel(self, safe_rect, res)
@@ -46,30 +166,121 @@ function MenuNodeCrimenetSpecialGui:_setup_item_panel(safe_rect, res)
 		font = tweak_data.menu.pd2_medium_font,
 		font_size = tweak_data.menu.pd2_medium_font_size,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+		blend_mode = "normal",
 		layer = 51
 	})
 	make_fine_text(title_text)
 	title_text:set_left(self.box_panel:left())
 	title_text:set_bottom(self.box_panel:top())
+	local active_menu = managers.menu:active_menu()
+	if active_menu then
+		active_menu.input:set_force_input(true)
+	end
 end
-
+function MenuNodeCrimenetSpecialGui:previous_page()
+	local item = self.node:item("contact_filter")
+	if managers.menu:active_menu() and managers.menu:active_menu().logic and item and item:previous() then
+		managers.menu_component:post_event("selection_previous")
+		managers.menu:active_menu().logic:trigger_item(true, item)
+	end
+end
+function MenuNodeCrimenetSpecialGui:next_page()
+	local item = self.node:item("contact_filter")
+	if managers.menu:active_menu() and managers.menu:active_menu().logic and item and item:next() then
+		managers.menu_component:post_event("selection_next")
+		managers.menu:active_menu().logic:trigger_item(true, item)
+	end
+end
+function MenuNodeCrimenetSpecialGui:input_focus()
+	return false
+end
+function MenuNodeCrimenetSpecialGui:close()
+	MenuNodeCrimenetSpecialGui.super.close(self)
+	local active_menu = managers.menu:active_menu()
+	if active_menu then
+		active_menu.input:set_force_input(false)
+	end
+end
 MenuNodeCrimenetCasinoGui = MenuNodeCrimenetCasinoGui or class(MenuNodeGui)
 function MenuNodeCrimenetCasinoGui:init(node, layer, parameters)
 	parameters.font = tweak_data.menu.pd2_small_font
 	parameters.font_size = tweak_data.menu.pd2_small_font_size
 	parameters.align = "left"
-	parameters.row_item_blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-	parameters.row_item_color = Holo.options.Menu_enable == true  and Color.white or tweak_data.screen_colors.button_stage_3
-	parameters.row_item_hightlight_color = Holo.options.Menu_enable == true  and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
-	parameters.marker_alpha = 0.6
+	parameters.row_item_blend_mode = "normal"
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
 	parameters.to_upper = true
 	MenuNodeCrimenetCasinoGui.super.init(self, node, layer, parameters)
 	self:_setup_layout()
 end
-
-
-
+function MenuNodeCrimenetCasinoGui:_setup_item_panel(safe_rect, res)
+	MenuNodeCrimenetCasinoGui.super._setup_item_panel(self, safe_rect, res)
+	local width, height, space_x, space_y, start_x = self:_get_sizes(safe_rect.width, safe_rect.height)
+	self.item_panel:set_right(start_x + width)
+	self.item_panel:set_bottom(self.item_panel:parent():h() - space_y - tweak_data.menu.pd2_large_font_size)
+end
+function MenuNodeCrimenetCasinoGui:_get_sizes(safe_width, safe_height)
+	local space_x = safe_width * 0.05
+	local space_y = safe_width * 0.05
+	local width = safe_width * 0.42
+	local height = safe_height - tweak_data.menu.pd2_large_font_size * 2 - space_y * 2
+	local start_x = safe_width - (width + space_x) * 2
+	return width, height, space_x, space_y, start_x
+end
+function MenuNodeCrimenetCasinoGui:_set_cards(amount, card)
+	local texture, rect, coords = tweak_data.hud_icons:get_icon_data(card or "downcard_overkill_deck")
+	local offset = 20
+	local count = amount == 0 and 3 or amount
+	local height
+	local width = math.round(0.7111111 * self._betting_cards_panel:h())
+	local x_offset = 0
+	local y_offset = 0
+	if amount == 0 then
+		height = self._betting_cards_panel:h() * 0.6
+		x_offset = math.round(0.7111111 * height / 2)
+		y_offset = (self._betting_cards_panel:h() - height) / 2
+	else
+		height = self._betting_cards_panel:h()
+	end
+	local x = self._betting_cards_panel:w() / 2 - count * (width + offset) / 2
+	local flip_cards
+	if amount > 0 or self._current_amount ~= amount then
+		self._current_amount = amount
+		flip_cards = true
+	end
+	for i = 1, 3 do
+		if coords then
+			self._betting_cards[i]:set_texture_coordinates(Vector3(coords[1][1], coords[1][2], 0), Vector3(coords[2][1], coords[2][2], 0), Vector3(coords[3][1], coords[3][2], 0), Vector3(coords[4][1], coords[4][2], 0))
+		else
+			self._betting_cards[i]:set_texture_rect(unpack(rect))
+		end
+		self._betting_cards[i]:set_alpha(amount > 0 and 1 or 0.25)
+		self._betting_cards[i]:set_w(math.round(0.7111111 * height))
+		self._betting_cards[i]:set_h(height)
+		self._betting_cards[i]:set_x(x + x_offset)
+		self._betting_cards[i]:set_y(y_offset)
+		x = x + width + offset
+		if flip_cards then
+			self._betting_cards[i]:set_rotation(math.random(14) - 7)
+			self._betting_cards[i]:animate(callback(self, self, "flipcard", self._betting_cards[i]), 1.5)
+		end
+		self._betting_cards[i]:set_visible(MenuCallbackHandler:casino_betting_visible() and count > 0)
+		count = count - 1
+	end
+end
+function MenuNodeCrimenetCasinoGui:flipcard(bitmap)
+	local start_w = bitmap:w()
+	local cx, cy = bitmap:center()
+	over(0.25, function(p)
+		bitmap:set_w(start_w * math.sin(p * 90))
+		bitmap:set_center(cx, cy)
+	end)
+end
+function MenuNodeCrimenetCasinoGui:_round_value(value)
+	local mult = 10
+	return math.floor(value * mult + 0.5) / mult
+end
 function MenuNodeCrimenetCasinoGui:_setup_layout()
 	local parent_layer = managers.menu:active_menu().renderer:selected_node():layer()
 	self._panel = self.ws:panel():panel({
@@ -89,7 +300,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font_size = large_font_size,
 		font = large_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	local _, _, w, h = text_title:text_rect()
 	self._main_panel = self._panel:panel({
@@ -103,7 +314,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font_size = medium_font_size,
 		font = medium_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	text_betting:set_position(start_x, 0)
 	local _, _, _, h = text_betting:text_rect()
@@ -117,12 +328,12 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 	self._betting_panel:set_x(text_betting:x())
 	BoxGuiObject:new(self._betting_panel, {
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
-	})
+	}):set_color(Holomenu_color_marker)
 	local text_options = self._main_panel:panel({
 		w = width - option_size,
 		h = self.item_panel:h(),
@@ -159,7 +370,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 					font_size = small_font_size,
 					font = small_font,
 					color = tweak_data.screen_colors.text,
-					blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+					blend_mode = "normal"
 				})
 			end
 			i = i + 1
@@ -191,7 +402,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 			texture = texture,
 			w = math.round(0.7111111 * self._betting_cards_panel:h()),
 			h = self._betting_cards_panel:h(),
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+			blend_mode = "normal",
 			layer = 1,
 			halign = "scale",
 			valign = "scale"
@@ -210,18 +421,18 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 	self._stats_panel:set_x(self._betting_panel:right() + space_x)
 	BoxGuiObject:new(self._stats_panel, {
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
-	})
+	}):set_color(Holomenu_color_marker)
 	local text_stats = self._main_panel:text({
 		text = managers.localization:to_upper_text("menu_casino_title_stats"),
 		font_size = medium_font_size,
 		font = medium_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	local _, _, _, h = text_stats:text_rect()
 	text_stats:set_h(h)
@@ -268,7 +479,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 			font_size = small_font_size,
 			font = small_font,
 			color = column.color or tweak_data.screen_colors.text,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+			blend_mode = "normal"
 		})
 		x = x + column_width
 	end
@@ -289,7 +500,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 				font_size = small_font_size,
 				font = small_font,
 				color = column.color or tweak_data.screen_colors.text,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+				blend_mode = "normal",
 				alpha = 1
 			})
 			x = x + column_width
@@ -311,7 +522,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 			font = small_font,
 			align = "right",
 			color = tweak_data.screen_colors.text,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+			blend_mode = "normal",
 			alpha = 1
 		})
 		y = y + small_font_size
@@ -331,7 +542,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font = small_font,
 		align = "right",
 		color = Color(1, 0.1, 1),
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	x = title_width
 	for _, column in pairs(stat_columns) do
@@ -347,7 +558,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 			font_size = small_font_size,
 			font = small_font,
 			color = column.color_inf or column.color or tweak_data.screen_colors.text,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+			blend_mode = "normal",
 			alpha = column.alpha or 1
 		})
 		x = x + column_width
@@ -405,18 +616,18 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 	self._breakdown_panel:set_top(self._stats_panel:bottom() + space_y)
 	BoxGuiObject:new(self._breakdown_panel, {
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
-	})
+	}):set_color(Holomenu_color_marker)
 	local text_breakdown = self._main_panel:text({
 		text = managers.localization:to_upper_text("menu_casino_title_breakdown"),
 		font_size = medium_font_size,
 		font = medium_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	local _, _, _, h = text_breakdown:text_rect()
 	text_breakdown:set_h(h)
@@ -428,7 +639,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font_size = small_font_size,
 		font = small_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	self._breakdown_costs = self._breakdown_panel:text({
 		x = self._breakdown_panel:w() * 0.4,
@@ -436,13 +647,13 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font_size = small_font_size,
 		font = small_font,
 		color = tweak_data.screen_colors.risk,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	self._offshore_text = self._main_panel:text({
 		font_size = small_font_size,
 		font = small_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	self:set_offshore_text()
 	local _, _, w, h = self._offshore_text:text_rect()
@@ -460,7 +671,7 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 		font_size = large_font_size,
 		font = large_font,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+		blend_mode = "normal",
 		align = "right"
 	})
 	local _, _, _, h = self._total_bet:text_rect()
@@ -469,7 +680,6 @@ function MenuNodeCrimenetCasinoGui:_setup_layout()
 	self._total_bet:set_y(self._betting_panel:bottom() + h + 16)
 	self:set_update_values(preferred_card, secured_cards, increase_infamous, false, false)
 end
-
 function MenuNodeCrimenetCasinoGui:set_update_values(preferred_card, secured_cards, increase_infamous, infamous_enabled, safecards_enabled)
 	local breakdown_titles = managers.localization:to_upper_text("menu_casino_cost_fee") .. ":"
 	local breakdown_costs = managers.experience:cash_string(managers.money:get_cost_of_casino_entrance())
@@ -545,8 +755,9 @@ function MenuNodeCrimenetCasinoGui:set_update_values(preferred_card, secured_car
 		self._betting_titles.infamous:set_alpha(infamous_enabled and 1 or 0.5)
 	end
 end
-
-
+function MenuNodeCrimenetCasinoGui:set_offshore_text()
+	self._offshore_text:set_text(managers.localization:to_upper_text("menu_offshore_account") .. ": " .. managers.experience:cash_string(managers.money:offshore()))
+end
 MenuNodeCrimenetContactInfoGui = MenuNodeCrimenetContactInfoGui or class(MenuNodeGui)
 MenuNodeCrimenetContactInfoGui.WIDTH = 600
 MenuNodeCrimenetContactInfoGui.HEIGHT = 465
@@ -558,10 +769,10 @@ function MenuNodeCrimenetContactInfoGui:init(node, layer, parameters)
 	parameters.font = tweak_data.menu.pd2_small_font
 	parameters.font_size = tweak_data.menu.pd2_small_font_size
 	parameters.align = "left"
-	parameters.row_item_blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-	parameters.row_item_color = Holo.options.Menu_enable == true  and Color.white or tweak_data.screen_colors.button_stage_3
-	parameters.row_item_hightlight_color = Holo.options.Menu_enable == true  and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
-	parameters.marker_alpha = 0.6
+	parameters.row_item_blend_mode = "normal"
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
 	parameters.to_upper = true
 	self._codex_text = managers.localization:to_upper_text(self.CODEX_TEXT_ID)
 	self._current_file = 0
@@ -596,7 +807,16 @@ function MenuNodeCrimenetContactInfoGui:init(node, layer, parameters)
 		managers.menu:active_menu().input:deactivate_controller_mouse()
 	end
 end
-
+function MenuNodeCrimenetContactInfoGui:_setup_item_panel_parent(safe_rect, shape)
+	local x = safe_rect.x + safe_rect.width / 2 - self.WIDTH / 2 + self.PADDING
+	local y = safe_rect.y + safe_rect.height / 2 - self.HEIGHT / 2 + self.PADDING
+	shape = shape or {}
+	shape.x = shape.x or x
+	shape.y = shape.y or y
+	shape.w = shape.w or self.MENU_WIDTH
+	shape.h = shape.h or self.HEIGHT - 2 * self.PADDING - tweak_data.menu.pd2_small_font_size
+	MenuNodeCrimenetContactInfoGui.super._setup_item_panel_parent(self, safe_rect, shape)
+end
 function MenuNodeCrimenetContactInfoGui:set_contact_info(id, name, files, override_file)
 	self._files = files
 	local files_menu = self._files_menu
@@ -631,7 +851,6 @@ function MenuNodeCrimenetContactInfoGui:set_contact_info(id, name, files, overri
 	self:set_file(override_file)
 	self._current_contact_info = id
 end
-
 function MenuNodeCrimenetContactInfoGui:set_empty()
 	local video_panel = self._panel:child("video_panel")
 	if video_panel and alive(video_panel:child("video")) then
@@ -640,7 +859,6 @@ function MenuNodeCrimenetContactInfoGui:set_empty()
 	local contact_desc_text = self._panel:child("contact_desc_text")
 	contact_desc_text:set_text("")
 end
-
 function MenuNodeCrimenetContactInfoGui:set_file(index)
 	self:set_empty()
 	if self._files[index] and self:is_file_locked(self._files[index].lock) then
@@ -657,7 +875,6 @@ function MenuNodeCrimenetContactInfoGui:set_file(index)
 	self._current_file = index or 1
 	self:_set_file()
 end
-
 function MenuNodeCrimenetContactInfoGui:_set_file()
 	local file = self._files[self._current_file]
 	local desc_id = file.desc_lozalized
@@ -677,9 +894,7 @@ function MenuNodeCrimenetContactInfoGui:_set_file()
 			video = "movies/codex/" .. video,
 			width = video_panel:w(),
 			height = video_panel:h(),
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
 			loop = true,
-			color = tweak_data.screen_colors.button_stage_2
 		})
 	end
 	local files_menu = self._files_menu
@@ -689,7 +904,312 @@ function MenuNodeCrimenetContactInfoGui:_set_file()
 		file:set_texture_rect(unpack(texture_rect))
 	end
 end
-
+function MenuNodeCrimenetContactInfoGui:is_file_locked(lock_callback)
+	if not lock_callback then
+		return
+	end
+	if type(lock_callback) == "string" then
+		local callback_handler = managers.menu:active_menu() and managers.menu:active_menu().callback_handler
+		if callback_handler then
+			local clbk = callback(callback_handler, callback_handler, lock_callback)
+			if clbk then
+				return clbk()
+			end
+		end
+	elseif type(lock_callback) == "boolean" then
+		return lock_callback
+	elseif type(lock_callback) == "function" then
+		return lock_callback()
+	end
+	return false
+end
+function MenuNodeCrimenetContactInfoGui:change_file(diff)
+	if not self._files or #self._files <= 1 then
+		return
+	end
+	local num_files = #self._files
+	local current_file = self._current_file or 0
+	local new_file = math.clamp(current_file + diff, 1, num_files)
+	local newer_file
+	while self:is_file_locked(self._files[new_file].lock) do
+		newer_file = math.clamp(new_file + diff, 1, num_files)
+		if newer_file == new_file then
+			new_file = current_file
+			break
+		else
+			new_file = newer_file
+		end
+	end
+	if new_file ~= self._current_file then
+		managers.menu_component:post_event("highlight")
+		self:set_file(new_file)
+	end
+end
+function MenuNodeCrimenetContactInfoGui:get_contact_info()
+	return self._current_contact_info or ""
+end
+function MenuNodeCrimenetContactInfoGui:mouse_moved(o, x, y)
+	local files_menu = self._files_menu
+	local is_inside = false
+	local highlighted_file
+	if alive(files_menu) then
+		for i, file in ipairs(files_menu:children()) do
+			local is_locked = self:is_file_locked(self._files[i] and self._files[i].lock)
+			local texture_rect = not self._file_icons or is_locked and self._file_icons.locked or i == self._current_file and self._file_icons.selected or file:inside(x, y) and self._file_icons.selected or self._file_icons.unselected
+			local texture_alpha = not self._file_alphas or is_locked and self._file_alphas.locked or i == self._current_file and self._file_alphas.selected or file:inside(x, y) and self._file_alphas.selected or self._file_alphas.unselected
+			if texture_rect then
+				file:set_texture_rect(unpack(texture_rect))
+			end
+			if texture_alpha then
+				file:set_alpha(texture_alpha)
+			end
+			if file:inside(x, y) then
+				is_inside = i
+				highlighted_file = self._current_file ~= i and i
+			end
+		end
+	end
+	if highlighted_file and self._highlighted_file ~= highlighted_file then
+		managers.menu_component:post_event("highlight")
+		self._highlighted_file = highlighted_file
+	elseif not highlighted_file then
+		self._highlighted_file = false
+	end
+	local is_locked = is_inside and self:is_file_locked(self._files[is_inside] and self._files[is_inside].lock)
+	return is_inside, self._file_pressed and (self._file_pressed == is_inside and "link" or "arrow") or is_inside and not is_locked and "link" or "arrow"
+end
+function MenuNodeCrimenetContactInfoGui:mouse_pressed(button, x, y)
+	local files_menu = self._files_menu
+	if alive(files_menu) then
+		for i, file in ipairs(files_menu:children()) do
+			if file:inside(x, y) and not self:is_file_locked(self._files[i].lock) then
+				self._file_pressed = i
+				return
+			end
+		end
+	end
+	self._file_pressed = false
+end
+function MenuNodeCrimenetContactInfoGui:mouse_released(button, x, y)
+	if self._file_pressed and self._file_pressed ~= self._current_file then
+		local files_menu = self._files_menu
+		if alive(files_menu) then
+			local file = files_menu:children()[self._file_pressed]
+			if file and file:inside(x, y) then
+				self:set_file(self._file_pressed)
+				managers.menu_component:post_event("menu_enter")
+			end
+		end
+	end
+	self._file_pressed = false
+end
+function MenuNodeCrimenetContactInfoGui:previous_page()
+	self:change_file(-1)
+end
+function MenuNodeCrimenetContactInfoGui:next_page()
+	self:change_file(1)
+end
+function MenuNodeCrimenetContactInfoGui:input_focus()
+	return false
+end
+function MenuNodeCrimenetContactInfoGui:_setup_item_panel(safe_rect, res)
+	MenuNodeCrimenetContactInfoGui.super._setup_item_panel(self, safe_rect, res)
+	self:_setup_menu()
+end
+function MenuNodeCrimenetContactInfoGui:_setup_menu()
+	if not self._init_finish then
+		return
+	end
+	local safe_rect = managers.gui_data:scaled_size()
+	for _, child in ipairs(self.item_panel:children()) do
+		child:set_halign("right")
+	end
+	self:_set_topic_position()
+	self.item_panel:set_w(safe_rect.width * (1 - self._align_line_proportions) + 4)
+	self.item_panel:set_world_position(self._panel:world_position())
+	self.item_panel:move(self.PADDING, self.PADDING)
+	for _, child in ipairs(self.item_panel:children()) do
+		child:set_halign("left")
+	end
+	self.item_panel:set_w(self.MENU_WIDTH)
+	self._align_data.panel:set_left(self.item_panel:left())
+	local row_x = 0
+	for _, row_item in pairs(self.row_items) do
+		if alive(row_item.icon) then
+			row_item.icon:set_left(0)
+		end
+		if alive(row_item.gui_panel) then
+			row_x = math.max(row_x, row_item.gui_panel:world_x())
+		end
+	end
+	if self._back_row_item and alive(self._back_row_item.gui_text) then
+		self._back_row_item.gui_text:set_w(self.MENU_WIDTH)
+		self._back_row_item.gui_text:set_world_left(math.round(self._panel:world_left() + self.PADDING * 2))
+		self._back_row_item.gui_text:set_world_bottom(math.round(self._panel:world_bottom() - self.PADDING))
+	end
+	for _, row_item in pairs(self.row_items) do
+		if alive(row_item.gui_panel) then
+			row_item.gui_panel:set_w(self.MENU_WIDTH)
+		end
+	end
+	for _, child in ipairs(self.item_panel:children()) do
+		child:set_world_y(math.round(child:world_y()))
+	end
+	self._list_arrows.up:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.up:set_world_top(self._align_data.panel:world_top() - 1)
+	self._list_arrows.up:set_width(self._item_panel_parent:w())
+	self._list_arrows.down:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.down:set_world_bottom(self._align_data.panel:world_bottom() + 1)
+	self._list_arrows.down:set_width(self._item_panel_parent:w())
+end
+function MenuNodeCrimenetContactInfoGui:_fade_row_item(row_item)
+	MenuNodeCrimenetContactInfoGui.super._fade_row_item(self, row_item)
+	if row_item.icon then
+		row_item.icon:set_left(0)
+	end
+end
+function MenuNodeCrimenetContactInfoGui:_highlight_row_item(row_item, mouse_over)
+	MenuNodeCrimenetContactInfoGui.super._highlight_row_item(self, row_item, mouse_over)
+	if row_item.icon then
+		row_item.icon:set_left(0)
+	end
+end
+function MenuNodeCrimenetContactInfoGui:refresh_gui(node)
+	self:update_item_icon_visibility()
+	local row_x = 0
+	for _, row_item in pairs(self.row_items) do
+		if alive(row_item.icon) then
+			row_item.icon:set_left(0)
+		end
+		if alive(row_item.gui_panel) then
+			row_x = math.max(row_x, row_item.gui_panel:world_x())
+		end
+	end
+end
+function MenuNodeCrimenetContactInfoGui:_setup_layout()
+	local safe_rect = managers.gui_data:scaled_size()
+	local mc_full_ws = managers.menu_component:fullscreen_ws()
+	local ws = self.ws
+	if alive(self._fullscreen_panel) then
+		mc_full_ws:panel():remove(self._fullscreen_panel)
+	end
+	if alive(ws:panel():child("main_panel")) then
+		ws:panel():remove(ws:panel():child("main_panel"))
+	end
+	local panel = ws:panel():panel({name = "main_panel"})
+	self._fullscreen_panel = mc_full_ws:panel():panel({layer = 50})
+	local blur = self._fullscreen_panel:bitmap({
+		texture = "guis/textures/test_blur_df",
+		w = self._fullscreen_panel:w(),
+		h = self._fullscreen_panel:h(),
+		render_template = "VertexColorTexturedBlur3D"
+	})
+	local func = function(o)
+		local start_blur = 0
+		over(0.6, function(p)
+			o:set_alpha(math.lerp(start_blur, 1, p))
+		end)
+	end
+	blur:animate(func)
+	local width = self.WIDTH
+	local height = self.HEIGHT
+	self._panel = panel:panel({
+		h = height,
+		w = width,
+		layer = 51
+	})
+	self._panel:set_center(panel:w() / 2, panel:h() / 2)
+	self._panel:rect({
+		color = Color.black,
+		alpha = 0.65,
+		layer = 0
+	})
+	BoxGuiObject:new(self._panel, {
+		sides = {
+			0,
+			0,
+			0,
+			2
+		}
+	}):set_color(Holomenu_color_marker)
+	local title_text = panel:text({
+		name = "title_text",
+		text = self._codex_text,
+		font = tweak_data.menu.pd2_medium_font,
+		font_size = tweak_data.menu.pd2_medium_font_size,
+		color = tweak_data.screen_colors.text,
+		layer = 51
+	})
+	make_fine_text(title_text)
+	title_text:set_left(self._panel:left())
+	title_text:set_bottom(self._panel:top() - 2)
+	local contact_title_text = self._panel:text({
+		name = "contact_title_text",
+		text = self._codex_text .. ": ",
+		font = tweak_data.menu.pd2_medium_font,
+		font_size = tweak_data.menu.pd2_medium_font_size,
+		color = tweak_data.screen_colors.text,
+		layer = 52
+	})
+	make_fine_text(contact_title_text)
+	contact_title_text:set_left(self.MENU_WIDTH + self.PADDING * 3)
+	contact_title_text:set_top(self.PADDING)
+	local video_panel = self._panel:panel({
+		name = "video_panel",
+		layer = 2,
+		w = self.WIDTH - self.MENU_WIDTH - self.PADDING * 5
+	})
+	video_panel:set_h(video_panel:w() / 1.7777778)
+	video_panel:set_top(contact_title_text:bottom() + self.PADDING)
+	video_panel:set_left(contact_title_text:left())
+	local box = BoxGuiObject:new(video_panel, {
+		sides = {
+			0,
+			0,
+			0,
+			2
+		}
+	})
+	box:set_color(Holomenu_color_marker)
+	box:set_blend_mode("normal")
+	local contact_desc_title_text = self._panel:text({
+		name = "contact_desc_title_text",
+		text = self._codex_text .. ": ",
+		font = tweak_data.menu.pd2_medium_font,
+		font_size = tweak_data.menu.pd2_medium_font_size,
+		color = tweak_data.screen_colors.text,
+		layer = 52
+	})
+	make_fine_text(contact_desc_title_text)
+	contact_desc_title_text:set_left(contact_title_text:left())
+	contact_desc_title_text:set_top(video_panel:bottom() + self.PADDING)
+	contact_desc_title_text:hide()
+	local files_menu = self._panel:panel({
+		name = "files_menu",
+		x = contact_desc_title_text:x(),
+		y = contact_desc_title_text:y(),
+		h = 26,
+		w = video_panel:w()
+	})
+	self._files_menu = files_menu
+	local contact_desc_text = self._panel:text({
+		name = "contact_desc_text",
+		text = "",
+		font = tweak_data.menu.pd2_small_font,
+		font_size = tweak_data.menu.pd2_small_font_size,
+		color = tweak_data.screen_colors.text,
+		layer = 52,
+		wrap = true,
+		word_wrap = true
+	})
+	make_fine_text(contact_desc_text)
+	contact_desc_text:set_left(files_menu:left())
+	contact_desc_text:set_top(files_menu:bottom())
+	contact_desc_text:set_w(video_panel:w())
+	contact_desc_text:set_h(self._panel:h() - self.PADDING - contact_desc_text:top())
+	self._init_finish = true
+	self:_setup_menu()
+end
 function MenuNodeCrimenetContactInfoGui:gui_node_custom(row_item)
 	row_item.gui_panel = self._item_panel_parent:panel({
 		layer = self.layers.items,
@@ -707,19 +1227,46 @@ function MenuNodeCrimenetContactInfoGui:gui_node_custom(row_item)
 		align = "left",
 		vertical = "bottom",
 		font = tweak_data.menu.pd2_small_font,
-		color = Color.white,
+		color = Holomenu_color_normal,
 		layer = 0,
 		text = utf8.to_upper(row_item.text),
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+		blend_mode = "normal",
 		render_template = Idstring("VertexColorTextured")
 	})
 	local _, _, w, h = row_item.gui_text:text_rect()
 	row_item.gui_text:set_size(math.round(w), math.round(h))
 	self._back_row_item = row_item
 end
-
-
-
+function MenuNodeCrimenetContactInfoGui:_align_marker(row_item)
+	MenuNodeCrimenetContactInfoGui.super._align_marker(self, row_item)
+	if row_item.item:parameters().pd2_corner then
+		self._marker_data.marker:set_visible(true)
+		self._marker_data.gradient:set_visible(true)
+		self._marker_data.gradient:set_rotation(360)
+		self._marker_data.marker:set_height(64 * row_item.gui_text:height() / 32)
+		self._marker_data.gradient:set_height(64 * row_item.gui_text:height() / 32)
+		self._marker_data.marker:set_w(self.MENU_WIDTH)
+		self._marker_data.gradient:set_w(self._marker_data.marker:w())
+		self._marker_data.marker:set_left(row_item.menu_unselected:x())
+		self._marker_data.marker:set_world_center_y(row_item.gui_text:world_center_y())
+		self._marker_data.marker:set_y(math.round(self._marker_data.marker:y()))
+		return
+	end
+end
+function MenuNodeCrimenetContactInfoGui:close()
+	self._fullscreen_panel:parent():remove(self._fullscreen_panel)
+	self._fullscreen_panel = nil
+	local active_menu = managers.menu:active_menu()
+	if active_menu then
+		active_menu.input:set_force_input(false)
+	end
+	self._sound_source:stop()
+	if not managers.menu:is_pc_controller() then
+		managers.menu:active_menu().input:activate_controller_mouse()
+	end
+	MenuNodeCrimenetContactInfoGui.super.close(self)
+	managers.menu_component:enable_crimenet()
+end
 MenuNodeCrimenetGageAssignmentGui = MenuNodeCrimenetGageAssignmentGui or class(MenuNodeCrimenetContactInfoGui)
 MenuNodeCrimenetGageAssignmentGui.WIDTH = 1000
 MenuNodeCrimenetGageAssignmentGui.HEIGHT = 530
@@ -860,18 +1407,18 @@ function MenuNodeCrimenetGageAssignmentGui:set_contact_info(id, name, files, ove
 		self:create_insigna(right_panel, id)
 		BoxGuiObject:new(left_panel, {
 			sides = {
-				1,
-				1,
-				1,
-				1
+				0,
+				0,
+				0,
+				2
 			}
 		})
 		BoxGuiObject:new(right_panel, {
 			sides = {
-				1,
-				1,
-				1,
-				1
+				0,
+				0,
+				0,
+				2
 			}
 		})
 	elseif ids == Idstring("_introduction") then
@@ -915,10 +1462,10 @@ function MenuNodeCrimenetGageAssignmentGui:set_contact_info(id, name, files, ove
 		summary_text:set_h(summary_panel:top() - self.PADDING)
 		BoxGuiObject:new(summary_panel, {
 			sides = {
-				1,
-				1,
-				1,
-				1
+				0,
+				0,
+				0,
+				2
 			}
 		})
 	else
@@ -932,7 +1479,7 @@ function MenuNodeCrimenetGageAssignmentGui:set_contact_info(id, name, files, ove
 			})
 			local video = video_panel:video({
 				video = "movies/tutorials/gage_assignment",
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+				blend_mode = "normal",
 				loop = true,
 				halign = "scale",
 				valign = "scale",
@@ -947,9 +1494,9 @@ function MenuNodeCrimenetGageAssignmentGui:set_contact_info(id, name, files, ove
 			video:play()
 			BoxGuiObject:new(video_panel, {
 				sides = {
-					2,
-					2,
-					2,
+					0,
+					0,
+					0,
 					2
 				}
 			})
@@ -961,7 +1508,6 @@ function MenuNodeCrimenetGageAssignmentGui:set_contact_info(id, name, files, ove
 	make_fine_text(contact_title_text)
 	self._current_contact_info = id
 end
-
 function MenuNodeCrimenetGageAssignmentGui:create_insigna(panel, assignment)
 	local assignment_insignia = panel:panel({
 		w = panel:w(),
@@ -975,7 +1521,7 @@ function MenuNodeCrimenetGageAssignmentGui:create_insigna(panel, assignment)
 		text = "",
 		font = tweak_data.menu.pd2_small_font,
 		font_size = tweak_data.menu.pd2_small_font_size,
-		color = Color.pink,
+		color = tweak_data.screen_colors.text,
 		wrap = true,
 		word_wrap = true,
 		align = "center"
@@ -1023,17 +1569,16 @@ function MenuNodeCrimenetGageAssignmentGui:create_insigna(panel, assignment)
 		local texture_count = managers.menu_component:request_texture(insignia, callback(self, self, "texture_done_clbk", {
 			assignment_insignia,
 			false,
-			Holo.options.Menu_enable == true  and "normal" or "add"
+			"normal"
 		}))
 		table.insert(self._requested_textures, {texture_count = texture_count, texture = insignia})
 	else
 		assignment_insignia:rect({
 			color = Color.red,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+			blend_mode = "normal"
 		})
 	end
 end
-
 function MenuNodeCrimenetGageAssignmentGui:populate_item_panel(item_panel, item_data)
 	local global_value, category, item_id = unpack(item_data)
 	if category == "weapon_mods" then
@@ -1099,7 +1644,6 @@ function MenuNodeCrimenetGageAssignmentGui:populate_item_panel(item_panel, item_
 		end
 	end
 end
-
 function MenuNodeCrimenetGageAssignmentGui:unretrieve_textures()
 	if self._requested_textures then
 		for i, data in pairs(self._requested_textures) do
@@ -1108,11 +1652,10 @@ function MenuNodeCrimenetGageAssignmentGui:unretrieve_textures()
 	end
 	self._requested_textures = nil
 end
-
 function MenuNodeCrimenetGageAssignmentGui:texture_done_clbk(params, texture_ids)
 	local panel = params[1]
 	local is_pattern = params[2]
-	local blend_mode = params[3] or Holo.options.Menu_enable == true  and "normal" or "add"
+	local blend_mode = params[3] or "normal"
 	local color = params[4]
 	local image = panel:bitmap({
 		name = "texture",
@@ -1143,7 +1686,6 @@ function MenuNodeCrimenetGageAssignmentGui:texture_done_clbk(params, texture_ids
 	image:set_size(math.round(sw), math.round(sh))
 	image:set_center(panel:w() * 0.5, panel:h() * 0.5)
 end
-
 function MenuNodeCrimenetGageAssignmentGui:_setup_layout()
 	local safe_rect = managers.gui_data:scaled_size()
 	local mc_full_ws = managers.menu_component:fullscreen_ws()
@@ -1166,10 +1708,8 @@ function MenuNodeCrimenetGageAssignmentGui:_setup_layout()
 		local start_blur = 0
 		over(0.6, function(p)
 			o:set_alpha(math.lerp(start_blur, 1, p))
-		end
-)
+		end)
 	end
-
 	blur:animate(func)
 	local width = self.WIDTH
 	local height = self.HEIGHT
@@ -1186,12 +1726,12 @@ function MenuNodeCrimenetGageAssignmentGui:_setup_layout()
 	})
 	BoxGuiObject:new(self._panel, {
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
-	})
+	}):set_color(Holomenu_color_marker)
 	local title_text = panel:text({
 		name = "title_text",
 		text = self._codex_text,
@@ -1224,18 +1764,15 @@ function MenuNodeCrimenetGageAssignmentGui:_setup_layout()
 	self._init_finish = true
 	self:_setup_menu()
 end
-
 function MenuNodeCrimenetGageAssignmentGui:set_file(index)
 end
-
 function MenuNodeCrimenetGageAssignmentGui:close()
 	self:unretrieve_textures()
 	MenuNodeCrimenetGageAssignmentGui.super.close(self)
 end
-
 MenuNodeCrimenetChallengeGui = MenuNodeCrimenetChallengeGui or class(MenuNodeCrimenetGageAssignmentGui)
-MenuNodeCrimenetChallengeGui.WIDTH = 840
-MenuNodeCrimenetChallengeGui.HEIGHT = 460
+MenuNodeCrimenetChallengeGui.WIDTH = 900
+MenuNodeCrimenetChallengeGui.HEIGHT = 500
 MenuNodeCrimenetChallengeGui.MENU_WIDTH = 315
 MenuNodeCrimenetChallengeGui.PADDING = 10
 MenuNodeCrimenetChallengeGui.CODEX_TEXT_ID = "menu_cn_challenge_title"
@@ -1251,7 +1788,6 @@ function MenuNodeCrimenetChallengeGui:init(node, layer, parameters)
 		mouse_over = 1
 	}
 end
-
 function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override_file)
 	self:unretrieve_textures()
 	self._requested_textures = {}
@@ -1276,25 +1812,26 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 			color = tweak_data.screen_colors.text,
 			wrap = true,
 			word_wrap = true,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+			blend_mode = "normal"
 		})
 		desc_text:grow(-desc_text:left(), 0)
 		local _, _, _, h = desc_text:text_rect()
 		desc_text:set_h(h)
 		local y = desc_text:bottom()
+		local objective_title_text = self._info_panel:text({
+			name = "objective_title_text",
+			text = managers.localization:to_upper_text("menu_challenge_objective_title"),
+			font = tweak_data.menu.pd2_small_font,
+			font_size = tweak_data.menu.pd2_small_font_size,
+			color = tweak_data.screen_colors.text,
+			wrap = true,
+			word_wrap = true,
+			blend_mode = "normal"
+		})
+		make_fine_text(objective_title_text)
+		objective_title_text:set_top(y + tweak_data.menu.pd2_small_font_size)
+		y = objective_title_text:bottom()
 		if challenge.objective_s or challenge.objective_id then
-			local objective_title_text = self._info_panel:text({
-				name = "objective_title_text",
-				text = managers.localization:to_upper_text("menu_challenge_objective_title"),
-				font = tweak_data.menu.pd2_small_font,
-				font_size = tweak_data.menu.pd2_small_font_size,
-				color = tweak_data.screen_colors.text,
-				wrap = true,
-				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-			})
-			make_fine_text(objective_title_text)
-			objective_title_text:set_top(y + tweak_data.menu.pd2_small_font_size)
 			local objective_text = self._info_panel:text({
 				name = "objectives_text",
 				text = challenge.objective_s or managers.localization:text(challenge.objective_id),
@@ -1303,14 +1840,53 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 				color = tweak_data.screen_colors.text,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 			objective_text:set_left(objective_title_text:left() + 15)
-			objective_text:set_top(objective_title_text:bottom())
+			objective_text:set_top(y)
 			objective_text:grow(-objective_text:left(), 0)
 			local _, _, _, h = objective_text:text_rect()
 			objective_text:set_h(h)
 			y = objective_text:bottom()
+		end
+		for _, objective in ipairs(challenge.objectives or {}) do
+			if objective.desc_s or objective.desc_id then
+				local name_text = self._info_panel:text({
+					name = "name_text_objective_" .. tostring(_),
+					text = objective.name_s or objective.name_id and managers.localization:text(objective.name_id) or "",
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					color = tweak_data.screen_colors.text,
+					wrap = true,
+					word_wrap = true,
+					blend_mode = "normal"
+				})
+				if not objective.desc_s then
+					if objective.desc_id then
+					else
+					end
+				end
+				local desc_text = self._info_panel:text({
+					name = "desc_text_objective_" .. tostring(_),
+					text = managers.localization:text(objective.desc_id, {
+						progress = objective.progress and managers.money:add_decimal_marks_to_string(tostring(objective.progress)),
+						max_progress = objective.max_progress and managers.money:add_decimal_marks_to_string(tostring(objective.max_progress))
+					}) or "",
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					color = tweak_data.screen_colors.text,
+					wrap = true,
+					word_wrap = true,
+					blend_mode = "normal"
+				})
+				make_fine_text(name_text)
+				make_fine_text(desc_text)
+				name_text:set_left(objective_title_text:left() + 15)
+				name_text:set_top(y)
+				desc_text:set_left(name_text:right())
+				desc_text:set_top(y)
+				y = math.max(name_text:bottom(), desc_text:bottom())
+			end
 		end
 		if challenge.reward_s or challenge.reward_id then
 			local reward_title_text = self._info_panel:text({
@@ -1321,7 +1897,7 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 				color = tweak_data.screen_colors.text,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 			make_fine_text(reward_title_text)
 			reward_title_text:set_top(y + tweak_data.menu.pd2_small_font_size)
@@ -1333,7 +1909,7 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 				color = tweak_data.screen_colors.text,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 			reward_text:set_left(reward_title_text:left() + 15)
 			reward_text:set_top(reward_title_text:bottom())
@@ -1360,7 +1936,7 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 				color = expire_time <= 4 and tweak_data.screen_colors.important_1 or tweak_data.screen_colors.important_2,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 			make_fine_text(expire_text)
 			expire_text:set_top(y + tweak_data.menu.pd2_small_font_size)
@@ -1368,10 +1944,12 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 		end
 		if challenge.rewards and 0 < #challenge.rewards then
 			local x = self.PADDING
-			local height = math.min(self._info_panel:h() - y - self.PADDING * 2 - tweak_data.menu.pd2_small_font_size, 128)
+			local min_height = 64
+			local height = math.clamp(self._info_panel:h() - y - self.PADDING * 2 - tweak_data.menu.pd2_small_font_size, min_height, 128)
 			local width = math.min((self._info_panel:w() - self.PADDING * (#challenge.rewards - 1)) / #challenge.rewards, height)
 			local rewards_panel = self._info_panel:panel({
-				name = "rewards_panel"
+				name = "rewards_panel",
+				layer = 10
 			})
 			rewards_panel:set_h(height)
 			rewards_panel:set_bottom(self._info_panel:h())
@@ -1396,25 +1974,37 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 			local color = false
 			local rewards_text = self._info_panel:text({
 				name = "rewards_text",
+				layer = 10,
 				text = managers.localization:to_upper_text(challenge.rewarded and "menu_cn_rewarded" or challenge.completed and "menu_cn_completed" or "menu_cn_not_completed"),
 				font = tweak_data.menu.pd2_small_font,
 				font_size = tweak_data.menu.pd2_small_font_size,
 				color = tweak_data.screen_colors.text,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 			make_fine_text(rewards_text)
 			rewards_text:set_bottom(rewards_panel:top())
 			if color then
 				rewards_text:set_color(color)
 			end
+			if height == min_height then
+				self._info_panel:rect({
+					w = rewards_panel:w(),
+					h = rewards_panel:bottom() - rewards_text:top(),
+					x = rewards_panel:x(),
+					y = rewards_text:top(),
+					color = Color.black,
+					layer = 9,
+					alpha = 0.5
+				})
+			end
 			BoxGuiObject:new(rewards_panel, {
 				sides = {
-					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0,
+					2
 				}
 			})
 		end
@@ -1427,7 +2017,7 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 			color = tweak_data.screen_colors.text,
 			wrap = true,
 			word_wrap = true,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+			blend_mode = "normal"
 		})
 	else
 		if ids == Idstring("_summary") then
@@ -1439,7 +2029,7 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 				color = tweak_data.screen_colors.text,
 				wrap = true,
 				word_wrap = true,
-				blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+				blend_mode = "normal"
 			})
 		else
 		end
@@ -1449,107 +2039,6 @@ function MenuNodeCrimenetChallengeGui:set_contact_info(id, name, files, override
 	make_fine_text(contact_title_text)
 	self._current_contact_info = id
 end
-
-function MenuNodeCrimenetChallengeGui:create_reward(panel, reward, challenge)
-	local texture, texture_path
-	local is_pattern = false
-	local reward_string = ""
-	reward_string = (reward.name_s or reward.name_id) and (reward.name_s or managers.localization:text(reward.name_id))
-	local reward_panel = panel:panel({
-		name = "reward_icon",
-		y = tweak_data.menu.pd2_small_font_size * 0,
-		h = panel:h() - tweak_data.menu.pd2_small_font_size * 1
-	})
-	if reward.choose_weapon_reward then
-		texture_path = "guis/textures/pd2/icon_modbox_df"
-		reward_string = managers.localization:text("menu_challenge_choose_weapon_mod")
-	else
-		local id = reward.item_entry
-		local category = reward.type_items
-		local td = tweak_data:get_raw_value("blackmarket", category, id)
-		if td then
-			local guis_catalog = "guis/"
-			local bundle_folder = td.texture_bundle_folder
-			if bundle_folder then
-				guis_catalog = guis_catalog .. "dlcs/" .. tostring(bundle_folder) .. "/"
-			end
-			if category == "textures" then
-				texture_path = td.texture
-				is_pattern = true
-			elseif category == "cash" then
-				texture_path = "guis/textures/pd2/blackmarket/cash_drop"
-				reward_string = managers.localization:text("menu_challenge_cash_drop")
-			elseif category == "xp" then
-				texture_path = "guis/textures/pd2/blackmarket/xp_drop"
-				reward_string = managers.localization:text("menu_challenge_xp_drop")
-			else
-				texture_path = guis_catalog .. "textures/pd2/blackmarket/icons/" .. category .. "/" .. id
-				reward_string = managers.localization:text(td.name_id)
-			end
-		end
-	end
-	local color = false
-	if challenge.completed and not reward.rewarded then
-		local glow = panel:bitmap({
-			texture = "guis/textures/pd2/hot_cold_glow",
-			layer = 0,
-			w = math.min(panel:w(), panel:h()) * 1.5,
-			h = math.min(panel:w(), panel:h()) * 1.5,
-			blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
-			color = tweak_data.screen_colors.challenge_completed_color,
-			alpha = 0,
-			layer = -1,
-			rotation = 360
-		})
-		glow:set_center(reward_panel:center())
-		local glow_anim = function(o)
-			local dt
-			while true do
-				over(5, function(p)
-					o:set_alpha(math.abs(math.sin(p * 360)) * 0.4)
-				end
-)
-			end
-		end
-
-		glow:animate(glow_anim)
-	end
-	local reward_text = panel:text({
-		name = "reward_text",
-		text = reward_string,
-		font = tweak_data.menu.pd2_small_font,
-		font_size = tweak_data.menu.pd2_small_font_size,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
-		rotation = 360
-	})
-	make_fine_text(reward_text)
-	reward_text:set_top(reward_panel:bottom() + tweak_data.menu.pd2_small_font_size * 0.5)
-	reward_text:set_center_x(reward_panel:center_x())
-	reward_text:set_visible(true)
-	if color then
-		reward_text:set_color(color)
-	end
-	if DB:has(Idstring("texture"), texture_path) then
-		local texture_count = managers.menu_component:request_texture(texture_path, callback(self, self, "texture_done_clbk", {
-			reward_panel,
-			is_pattern,
-			Holo.options.Menu_enable == true  and "normal" or "add",
-			color
-		}))
-		table.insert(self._requested_textures, {texture_count = texture_count, texture = texture_path})
-	end
-end
-
-function MenuNodeCrimenetChallengeGui:_highlight_row_item(row_item, mouse_over)
-	MenuNodeCrimenetChallengeGui.super._highlight_row_item(self, row_item, mouse_over)
-	self._highlighted_name = row_item.item and row_item.item:name()
-	self:_set_file()
-end
-
-function MenuNodeCrimenetChallengeGui:set_file(index)
-	MenuNodeCrimenetChallengeGui.super.super.set_file(self, index)
-end
-
 function MenuNodeCrimenetChallengeGui:_set_file()
 	local files_menu = self._files_menu
 	if alive(files_menu) then
@@ -1562,15 +2051,12 @@ function MenuNodeCrimenetChallengeGui:_set_file()
 		end
 	end
 end
-
 function MenuNodeCrimenetChallengeGui:set_empty()
 end
-
 function MenuNodeCrimenetChallengeGui:close()
 	MenuNodeCrimenetChallengeGui.super.close(self)
 	MenuCallbackHandler:save_progress()
 end
-
 function MenuNodeCrimenetChallengeGui:mouse_moved(o, x, y)
 	if not self._info_panel:inside(x, y) then
 		return
@@ -1628,7 +2114,6 @@ function MenuNodeCrimenetChallengeGui:mouse_moved(o, x, y)
 	local is_locked = is_inside and (self:is_file_locked(self._files[is_inside] and self._files[is_inside].lock) or self:is_file_locked(self._files[is_inside] and self._files[is_inside].unavailable))
 	return is_inside, self._file_pressed and (self._file_pressed == is_inside and not is_locked and "link" or "arrow") or is_inside and not is_locked and "link" or "arrow"
 end
-
 function MenuNodeCrimenetChallengeGui:mouse_pressed(button, x, y)
 	local files_menu = self._files_menu
 	if alive(files_menu) then
@@ -1643,7 +2128,6 @@ function MenuNodeCrimenetChallengeGui:mouse_pressed(button, x, y)
 	end
 	self._file_pressed = false
 end
-
 function MenuNodeCrimenetChallengeGui:mouse_released(button, x, y)
 	if self._file_pressed and self._file_pressed == self._current_file then
 		local files_menu = self._files_menu
@@ -1656,7 +2140,6 @@ function MenuNodeCrimenetChallengeGui:mouse_released(button, x, y)
 	end
 	self._file_pressed = false
 end
-
 function MenuNodeCrimenetChallengeGui:claim_reward(index)
 	local reward = managers.challenge:on_give_reward(self._current_contact_info, nil, index)
 	if reward then
@@ -1667,13 +2150,11 @@ function MenuNodeCrimenetChallengeGui:claim_reward(index)
 		end
 	end
 end
-
 function MenuNodeCrimenetChallengeGui:special_btn_pressed(button)
 	if button == Idstring("menu_challenge_claim") then
 		self:claim_reward(self._current_file)
 	end
 end
-
 function MenuNodeCrimenetChallengeGui:refresh_gui(node)
 	if not self._init_finish then
 		return
@@ -1727,7 +2208,6 @@ function MenuNodeCrimenetChallengeGui:refresh_gui(node)
 	self.item_panel:set_world_y(old_y)
 	managers.menu_component:disable_crimenet()
 end
-
 function MenuNodeCrimenetChallengeGui:_align_marker(row_item)
 	MenuNodeCrimenetChallengeGui.super._align_marker(self, row_item)
 	if row_item.item:parameters().pd2_corner then
@@ -1744,7 +2224,6 @@ function MenuNodeCrimenetChallengeGui:_align_marker(row_item)
 		return
 	end
 end
-
 function MenuNodeCrimenetChallengeGui:_clear_gui()
 	local to = #self.row_items
 	for i = 1, to do
@@ -1770,7 +2249,6 @@ function MenuNodeCrimenetChallengeGui:_clear_gui()
 	self.item_panel:clear()
 	self.row_items = {}
 end
-
 function MenuNodeCrimenetChallengeGui:_setup_item_panel_parent(safe_rect, shape)
 	local x = safe_rect.x + safe_rect.width / 2 - self.WIDTH / 2 + self.PADDING
 	local y = safe_rect.y + safe_rect.height / 2 - self.HEIGHT / 2 + self.PADDING
@@ -1781,7 +2259,6 @@ function MenuNodeCrimenetChallengeGui:_setup_item_panel_parent(safe_rect, shape)
 	shape.h = shape.h or self.HEIGHT - 2 * self.PADDING - tweak_data.menu.pd2_small_font_size
 	MenuNodeCrimenetChallengeGui.super._setup_item_panel_parent(self, safe_rect, shape)
 end
-
 function MenuNodeCrimenetChallengeGui:_setup_menu()
 	if not self._init_finish then
 		return
@@ -1829,16 +2306,15 @@ function MenuNodeCrimenetChallengeGui:_setup_menu()
 	self._list_arrows.down:set_world_bottom(self._align_data.panel:world_bottom())
 	self._list_arrows.down:set_width(self._item_panel_parent:w())
 end
-
 MenuNodeChooseWeaponRewardGui = MenuNodeChooseWeaponRewardGui or class(MenuNodeCrimenetFiltersGui)
 function MenuNodeChooseWeaponRewardGui:init(node, layer, parameters)
 	parameters.font = tweak_data.menu.pd2_small_font
 	parameters.font_size = tweak_data.menu.pd2_small_font_size
 	parameters.align = "left"
-	parameters.row_item_blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
-	parameters.row_item_color = Holo.options.Menu_enable == true  and Color.white or tweak_data.screen_colors.button_stage_3
-	parameters.row_item_hightlight_color = Holo.options.Menu_enable == true  and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2
-	parameters.marker_alpha = 0.6
+	parameters.row_item_blend_mode = "normal"
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
 	parameters.to_upper = true
 	self.static_y = node:parameters().static_y
 	MenuNodeChooseWeaponRewardGui.super.init(self, node, layer, parameters)
@@ -1851,14 +2327,13 @@ function MenuNodeChooseWeaponRewardGui:init(node, layer, parameters)
 		font = tweak_data.menu.pd2_medium_font,
 		font_size = tweak_data.menu.pd2_medium_font_size,
 		color = tweak_data.screen_colors.text,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+		blend_mode = "normal",
 		layer = 51
 	})
 	make_fine_text(title_text)
 	title_text:set_left(self.box_panel:left())
 	title_text:set_bottom(self.box_panel:top())
 end
-
 function MenuNodeChooseWeaponRewardGui:_setup_item_panel(safe_rect, res)
 	MenuNodeChooseWeaponRewardGui.super._setup_item_panel(self, safe_rect, res)
 	local max_layer = 10000
@@ -1901,14 +2376,15 @@ function MenuNodeChooseWeaponRewardGui:_setup_item_panel(safe_rect, res)
 	self.box_panel:set_layer(51)
 	self.boxgui = BoxGuiObject:new(self.box_panel, {
 		sides = {
-			1,
-			1,
-			1,
-			1
+			0,
+			0,
+			0,
+			2
 		}
 	})
 	self.boxgui:set_clipping(false)
 	self.boxgui:set_layer(1000)
+	self.boxgui:set_color(Holomenu_color_marker)
 	self.box_panel:rect({
 		color = Color.black,
 		alpha = 0.6,
@@ -1930,7 +2406,7 @@ function MenuNodeChooseWeaponRewardGui:_setup_item_panel(safe_rect, res)
 		texture = "guis/textures/pd2/icon_modbox_df",
 		w = 96,
 		h = 96,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add",
+		blend_mode = "normal",
 		layer = 1
 	})
 	icon:set_position(10, 10)
@@ -1950,7 +2426,137 @@ function MenuNodeChooseWeaponRewardGui:_setup_item_panel(safe_rect, res)
 		}),
 		font = tweak_data.menu.pd2_small_font,
 		font_size = tweak_data.menu.pd2_small_font_size,
-		blend_mode = Holo.options.Menu_enable == true  and "normal" or "add"
+		blend_mode = "normal"
 	})
 	make_fine_text(self._owned_text)
+end
+
+MenuNodeChooseWeaponCosmeticGui = MenuNodeChooseWeaponCosmeticGui or class(MenuNodeCrimenetFiltersGui)
+function MenuNodeChooseWeaponCosmeticGui:init(node, layer, parameters)
+	parameters.font = tweak_data.menu.pd2_small_font
+	parameters.font_size = tweak_data.menu.pd2_small_font_size
+	parameters.align = "left"
+	parameters.row_item_blend_mode = "normal"
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
+	parameters.to_upper = true
+	self.static_y = node:parameters().static_y
+	MenuNodeChooseWeaponCosmeticGui.super.init(self, node, layer, parameters)
+end
+function MenuNodeChooseWeaponCosmeticGui:_setup_item_panel(safe_rect, res)
+	MenuNodeChooseWeaponCosmeticGui.super._setup_item_panel(self, safe_rect, res)
+	local max_layer = 10000
+	local min_layer = 0
+	local child_layer = 0
+	for _, child in ipairs(self.item_panel:children()) do
+		child:set_halign("right")
+		child_layer = child:layer()
+		if child_layer > 0 then
+			min_layer = math.min(min_layer, child_layer)
+		end
+		max_layer = math.max(max_layer, child_layer)
+	end
+	for _, child in ipairs(self.item_panel:children()) do
+	end
+	self.item_panel:set_w(safe_rect.width * (1 - self._align_line_proportions))
+	self.item_panel:set_right(self.item_panel:parent():w() - 10)
+	self.item_panel:set_top(103)
+	local static_y = self.static_y and safe_rect.height * self.static_y
+	if static_y and static_y < self.item_panel:y() then
+		self.item_panel:set_y(static_y)
+	end
+	self.item_panel:set_position(math.round(self.item_panel:x()), math.round(self.item_panel:y()))
+	self:_rec_round_object(self.item_panel)
+	if alive(self.box_panel) then
+		self.item_panel:parent():remove(self.box_panel)
+		self.box_panel = nil
+	end
+	self.box_panel = self.item_panel:parent():panel()
+	self.box_panel:set_x(self.item_panel:x())
+	self.box_panel:set_w(self.item_panel:w())
+	if self.item_panel:h() > self._align_data.panel:h() then
+		self.box_panel:set_y(0)
+		self.box_panel:set_h(self.item_panel:parent():h())
+	else
+		self.box_panel:set_y(self.item_panel:top())
+		self.box_panel:set_h(self.item_panel:h())
+	end
+	self.box_panel:grow(20, 20)
+	self.box_panel:move(-10, -10)
+	self.box_panel:set_layer(51)
+	self.boxgui = BoxGuiObject:new(self.box_panel, {
+		sides = {
+			0,
+			0,
+			0,
+			2
+		}
+	})
+	self.boxgui:set_clipping(false)
+	self.boxgui:set_color(Holomenu_color_marker)
+	self.boxgui:set_layer(1000)
+	self.box_panel:rect({
+		color = Color.black,
+		alpha = 0.6,
+		rotation = 360
+	})
+	if alive(self.blur_panel) then
+		self.item_panel:parent():remove(self.blur_panel)
+		self.blur_panel = nil
+	end
+	self.blur_panel = self.item_panel:parent():panel()
+	local blur = self.blur_panel:bitmap({
+		texture = "guis/textures/test_blur_df",
+		w = self.box_panel:w(),
+		h = self.blur_panel:h() - 70 - self.box_panel:top(),
+		render_template = "VertexColorTexturedBlur3D"
+	})
+	blur:set_top(self.box_panel:top())
+	blur:set_left(self.box_panel:left())
+	local func = function(o)
+		local start_blur = 0
+		over(0.6, function(p)
+			o:set_alpha(math.lerp(start_blur, 1, p))
+		end)
+	end
+	blur:animate(func)
+	local blur2 = self.blur_panel:bitmap({
+		texture = "guis/textures/test_blur_df",
+		w = self.blur_panel:w() - blur:width(),
+		h = self.blur_panel:h() / 4,
+		render_template = "VertexColorTexturedBlur3D"
+	})
+	blur2:set_bottom(blur:bottom())
+	blur2:set_left(0)
+	blur2:animate(func)
+	self.blur_panel:set_layer(50)
+	self._align_data.panel:set_left(self.box_panel:left())
+	self._list_arrows.up:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.up:set_world_top(self._align_data.panel:world_top() - 10)
+	self._list_arrows.up:set_width(self.box_panel:width())
+	self._list_arrows.up:set_rotation(360)
+	self._list_arrows.up:set_layer(1050)
+	self._list_arrows.down:set_world_left(self._align_data.panel:world_left())
+	self._list_arrows.down:set_world_bottom(self._align_data.panel:world_bottom() + 10)
+	self._list_arrows.down:set_width(self.box_panel:width())
+	self._list_arrows.down:set_rotation(360)
+	self._list_arrows.down:set_layer(1050)
+	self:_set_topic_position()
+end
+
+MenuNodeOpenContainerGui = MenuNodeOpenContainerGui or class(MenuNodeBaseGui)
+function MenuNodeOpenContainerGui:init(node, layer, parameters)
+	parameters.font = tweak_data.menu.pd2_small_font
+	parameters.font_size = tweak_data.menu.pd2_small_font_size
+	parameters.align = "left"
+	parameters.halign = "left"
+	parameters.row_item_blend_mode = "normal"
+	parameters.row_item_color = Holomenu_color_normal
+	parameters.row_item_hightlight_color = Holomenu_color_highlight
+	parameters.marker_alpha = 1
+	parameters.to_upper = true
+	MenuNodeOpenContainerGui.super.init(self, node, layer, parameters)
+end
+
 end

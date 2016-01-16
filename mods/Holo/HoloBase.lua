@@ -1,133 +1,131 @@
-
-function ColorRGB(r ,g, b)
-return Color(r/255 ,g/255 ,b/255)
-end
-DownedTimes = "0" 
-HoloBlue = ColorRGB(0 ,150 ,255 )		  	 
-HoloOrange = ColorRGB(255,165 ,0 )
-HoloGreen = ColorRGB(0, 255, 20)	
-HoloPink = ColorRGB(255, 105, 180)				 
-HoloBlack = ColorRGB(0, 0, 0)		 		 
-HoloGrey = ColorRGB(60, 60, 60)	
-Darkblue = ColorRGB(10, 30, 125)	
-HoloRed = ColorRGB(250, 0, 0)	
-HoloYellow = ColorRGB(255, 200, 50)	
-HoloWhite = ColorRGB(255, 255, 255)
-HoloCyan = ColorRGB(0, 255, 240)
-HoloPurple = ColorRGB(150, 0, 255)
-SpringGreen = ColorRGB(0, 250, 154)
-LightBlue = ColorRGB(173,216,230)
-HoloCrimson = ColorRGB(255, 0, 63)
-HoloBrown = ColorRGB(160,82,45)
-
-
-local clr = {
-	HoloBlue,	  	 
-	HoloOrange,
-    HoloGreen,
-	HoloPink,			 
-	HoloBlack, 		 
-	HoloGrey,	
-	Darkblue,	
-	HoloRed,
-	HoloYellow, 
-	HoloWhite,
-	HoloCyan,
-	HoloPurple,
-	SpringGreen,
-	LightBlue,
-	HoloCrimson,
-	HoloBrown,
-} 
---HoloHud Main Color	
-Holo.options.Holo_color = Holo.options.Holo_color or 1
 _G.Holo = _G.Holo or {}
-HoloColor = clr[Holo.options.Holo_color] 
-local HoloColors = {
-    HoloColor,
-	HoloBlue,	  	 
-	HoloOrange,
-	HoloGreen,
-	HoloPink,			 
-	HoloBlack, 		 
-	HoloGrey,	
-	Darkblue,	
-	HoloRed,
-	HoloYellow, 
-	HoloWhite,
-	HoloCyan,
-	HoloPurple,
-	SpringGreen,
-	LightBlue,
-	HoloCrimson,
-	HoloBrown,
-} 
-local TextColors = {
-	HoloWhite,	
-	HoloBlack,	  	 	  
-} 
-HoloAlpha = Holo.options.MainAlpha
- --HUDBOX
-    --Objective box color
-	Holo.options.Obj_color = Holo.options.Obj_color or 1
-	objective_box_color = HoloColors[Holo.options.Obj_color]
-	--Timer box color
-	Holo.options.Timerbg_color = Holo.options.Timerbg_color or 1
-	Timerbg_color = HoloColors[Holo.options.Timerbg_color]
-    --Assault box color
-	Holo.options.Assault_color = Holo.options.Assault_color or 1
-	Assault_color = HoloColors[Holo.options.Assault_color]
-    --Hostage box color
-	Holo.options.Hostage_color = Holo.options.Hostage_color or 1
-	Hostage_color = HoloColors[Holo.options.Hostage_color]
-    --No point of return box color
-	Holo.options.Noreturn_color = Holo.options.Noreturn_color or 1
-	Noreturn_color = HoloColors[Holo.options.Noreturn_color]	
-    --Casing box color
-	Holo.options.Casing_color = Holo.options.Casing_color or 1
-	Casing_color = HoloColors[Holo.options.Casing_color]	
-  --Frame color
-	Holo.options.Frame_color = Holo.options.Frame_color or 1
-	HudFrame_color = HoloColors[Holo.options.Frame_color]
-	--Line color
-	Holo.options.Line_color = Holo.options.Line_color or 1
-	Line_color = HoloColors[Holo.options.Line_color]
---HudTeammate
-	--Selected weapon color
-	Holo.options.Selectwep_color = Holo.options.Selectwep_color or 1
-	Selectwep_color = HoloColors[Holo.options.Selectwep_color]
-	--Pickups color
-	Holo.options.Pickups_color = Holo.options.Pickups_color or 1
-	Pickups_color = HoloColors[Holo.options.Pickups_color]
-    --Equipments color
-	Holo.options.Equipments_color = Holo.options.Equipments_color or 1
-	Equipments_color = HoloColors[Holo.options.Equipments_color]
---Text colors
-	--Health text color
-	Holo.options.HealthNum_color = Holo.options.HealthNum_color or 1
-    HealthNum_color = HoloColors[Holo.options.HealthNum_color]
-    Holo.options.HealthNum_negative = Holo.options.HealthNum_negative or 1
-    HealthNum_negative = HoloColors[Holo.options.HealthNum_negative]	
-	--Stamina text color
-	Holo.options.StaminaNum_color = Holo.options.StaminaNum_color or 1
-	StaminaNum_color = HoloColors[Holo.options.StaminaNum_color]	
-	--Objective text color
-	Holo.options.Objective_text = Holo.options.Objective_text or 1
-	Objective_text_color = TextColors[Holo.options.Objective_text]
-	--Assault text color
-	Holo.options.Assault_text = Holo.options.Assault_text or 1
-	Assault_text_color = TextColors[Holo.options.Assault_text]
-	--Casing text color
-	Holo.options.Casing_text = Holo.options.Casing_text or 1
-	Casing_text_color = TextColors[Holo.options.Casing_text]
-	--Hostage text color
-	Holo.options.Hostage_text = Holo.options.Hostage_text or 1
-	Hostage_text_color = TextColors[Holo.options.Hostage_text]
-	--Hostage text color
-	Holo.options.Noreturn_text = Holo.options.Noreturn_text or 1
-	Noreturn_text_color = TextColors[Holo.options.Noreturn_text]
-	--Timer text color
-	Holo.options.Timer_text = Holo.options.Timer_text or 1
-	Timer_text_color = TextColors[Holo.options.Timer_text]
-	StaminaSize = 48
-	log("HoloHud : Colors are loaded.")
+Holo.dofiles = {
+	"menu/options.lua",
+	"menu/optionsmenu.lua"
+}
+Holo.hook_files = {
+ 	["lib/setups/setup"] = "setup.lua",
+ 	["lib/managers/menu/items/menuitemmultichoice"] = "menu/menuitemmultichoice.lua",
+    ["lib/managers/menu/blackmarketgui"] = "menu/blackmarketgui.lua",
+    ["lib/managers/menu/renderers/menunodebasegui"] = "menu/menunodebasegui.lua",
+    ["lib/managers/menu/renderers/menunodeskillswitchgui"] = "menu/menunodeskillswitchgui.lua",
+    ["lib/managers/menu/textboxgui"] = "menu/textboxgui.lua",
+    ["lib/managers/menu/imageboxgui"] = "menu/imageboxgui.lua",
+    ["lib/utils/levelloadingscreenguiscript"] = "menu/menuloading.lua",
+    ["lib/managers/menu/renderers/menunodepreplanninggui"] = "menu/menupreplanning.lua",
+    ["lib/managers/menu/playerprofileguiobject"] = "menu/menuprofile.lua", 
+    ["lib/managers/menu/renderers/menunodecrimenetgui"] = "menu/menucrimenet.lua",
+    ["lib/managers/menu/menurenderer"] = "menu/menurenderer.lua",
+    ["lib/managers/menu/newsfeedgui"] = "menu/newsfeedgui.lua",
+    ["lib/managers/menumanager"] = "menu/menumanager.lua",
+    
+    ["lib/managers/menu/menupauserenderer"] = "menu/menupause.lua", 
+    ["lib/units/enemies/cop/copbrain"] = "hud/copbrain.lua",
+    ["lib/managers/menu/menunodegui"] = "menu/menunodegui.lua",
+    ["lib/managers/mousepointermanager"] = "menu/mousepointermanager.lua",
+    ["lib/managers/menu/menukitrenderer"] = "menu/menukit.lua",
+    ["lib/managers/menu/renderers/menunodeupdatesgui"] = "menu/menunodeupdatesgui.lua",
+    ["lib/managers/menu/infamytreegui"] = "menu/infamytreegui.lua",
+    ["lib/managers/menu/boxguiobject"] = "menu/boxguiobject.lua",
+    ["lib/managers/crimenetmanager"] = "menu/crimenetmanager.lua",
+    ["lib/network/base/clientnetworksession"] = "hud/clientnetworksession.lua",
+    ["lib/network/handlers/unitnetworkhandler"] = "hud/unitnetworkhandler.lua",
+    ["lib/managers/menu/playerinventorygui"] = "menu/playerinventorygui.lua",
+    ["lib/managers/menu/stageendscreengui"] = "menu/stageendscreengui.lua",
+    ["lib/managers/menu/lootdropscreengui"] = "menu/lootdropscreengui.lua",
+    ["lib/managers/menu/menubackdropgui"] = "menu/menubackdropgui.lua",
+    ["lib/managers/menu/renderers/menunodejukeboxgui"] = "menu/menunodejukeboxgui.lua",
+    ["lib/managers/menu/items/menuitemcustomizecontroller"] = "menu/menuitemcustomizecontroller.lua",
+    ["lib/managers/menu/skilltreegui"] = "menu/skilltreegui.lua",
+    ["lib/managers/menu/missionbriefinggui"] = "menu/missionbriefinggui.lua", 
+
+    ["lib/units/props/digitalgui"] = "hud/digitalgui.lua",
+    ["lib/units/props/timergui"] = "hud/timergui.lua",
+    ["lib/units/equipment/ecm_jammer/ecmjammerbase"] = "hud/ecmjammerbase.lua",
+    ["lib/managers/hud/hudheisttimer"] = "hud/heisttimer.lua",
+    ["lib/managers/hud/hudstageendscreen"] = "hud/hudstageendscreen.lua",
+    ["lib/managers/hud/hudmissionbriefing"] = "hud/hudmissionbriefing.lua",
+    ["lib/managers/hud/hudlootscreen"] = "hud/hudlootscreen.lua", 
+    ["lib/managers/hud/hudplayerdowned"] = "hud/huddowned.lua", 
+    ["lib/managers/hud/hudplayercustody"] = "hud/hudcustody.lua",
+    ["lib/managers/hud/hudassaultcorner"] = "hud/assaultbox.lua", 
+    ["lib/managers/hud/hudstatsscreen"] = "hud/hudstatsscreen.lua", 
+    ["lib/managers/hud/hudobjectives"] = "hud/hudobjectives.lua",
+    ["lib/managers/hud/hudchat"] = "hud/hudchat.lua",
+    ["lib/managers/hud/hudteammate"] = "hud/hudteammate.lua",
+    ["lib/managers/hud/hudtemp"] = "hud/hudtemp.lua",
+    ["lib/managers/hud/hudhint"] = "hud/hudhint.lua",
+    ["lib/managers/hud/hudpresenter"] = "hud/hudpresenter.lua",
+    ["lib/managers/hudmanager"] = "hud/hudmanager.lua",
+    ["lib/managers/hudmanagerpd2"] = "hud/hudmanager.lua",
+}
+if not Holo.setup then
+	for p, d in pairs(Holo.dofiles) do
+		dofile("mods/holo/" .. d)
+	end
+	Holo:init()
+end
+if RequiredScript then
+	local requiredScript = RequiredScript:lower()
+	if Holo.hook_files[requiredScript] then
+ 		dofile( ModPath .. Holo.hook_files[requiredScript] )
+	end	
+end
+
+if Hooks then
+	Hooks:Add("LocalizationManagerPostInit", "LocalizationManagerPostInit_Holo", function( loc )
+		loc:load_localization_file( "mods/holo/loc/en.txt" )	
+		if Holo.options.Holo_lang == 2 and io.open("mods/holo/loc/ru.txt" ) then
+			loc:load_localization_file( "mods/holo/loc/ru.txt" )	
+		end
+	end)
+	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function( menu_manager, nodes )
+		keybinds_menu_id = LuaModManager.Constants._keybinds_menu_id
+	    lua_mod_options_menu_id = LuaModManager.Constants._lua_mod_options_menu_id
+		MenuHelper:NewMenu( keybinds_menu_id )
+		MenuHelper:NewMenu( lua_mod_options_menu_id )
+	end)
+	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "Voicekey_opt", function( menu_manager, nodes )
+		local key = LuaModManager:GetPlayerKeybind("Voice_key") or "q"
+		local key2 = LuaModManager:GetPlayerKeybind("holo_options_key") or "f3"
+		MenuCallbackHandler.openholohudoption = function(self)
+			Holo.menu:ShowOptions()
+		end	
+		_G.Holo.menu = Holomenu:new()
+		MenuHelper:AddKeybinding({
+			id = "Voice_key",
+			title = "HoloHud Voice commands",
+			connection_name = "Voice_key",
+			button = key,
+			binding = key,
+			menu_id = keybinds_menu_id,
+			localized = false,
+			priority = -13,
+		})		
+		MenuHelper:AddKeybinding({
+			id = "holo_options_key",
+			title = "HoloHud options menu",
+			desc = "Set a key to quickly show Holohud's options menu",
+			connection_name = "holo_options_key",
+			button = key2,
+			binding = key2,
+			menu_id = keybinds_menu_id,
+			localized = false,
+			priority = -14,
+		})	
+		MenuHelper:AddButton({
+			id = "HoloOptions",
+			title = "Holo_Options_title",
+			desc = "Holo_Options_desc",
+	 		callback = "openholohudoption",
+			menu_id = lua_mod_options_menu_id,
+			priority = -13,
+		})
+	end)
+	if LuaModManager:GetNumberOfJsonKeybinds() == 0 then
+		Hooks:Add("MenuManager_Base_BuildModOptionsMenu", "Voicekey_opt_build", function( menu_manager, nodes )
+			nodes[keybinds_menu_id] = MenuHelper:BuildMenu( keybinds_menu_id )
+			MenuHelper:AddMenuItem( nodes.options, keybinds_menu_id, "base_options_menu_keybinds", "base_options_menu_keybinds_desc", "lua_mod_options_menu", "after" )
+		end)
+	end
+end

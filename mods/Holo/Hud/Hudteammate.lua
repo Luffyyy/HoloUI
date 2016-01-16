@@ -1,235 +1,507 @@
-
-if Holo.options.PDTHHud_support == false then
-CloneClass(HUDTeammate)
-local bg_color = ColorRGB(58, 58, 58):with_alpha(0.5)
-
-Hooks:PostHook(HUDTeammate, "init", "NewInit", function(self)
-	local teammate_panel = self._panel:child("player")
-	local radial_health_panel = teammate_panel:child("radial_health_panel")
-	local radial_shield = radial_health_panel:child("radial_shield")
-	local radial_health = radial_health_panel:child("radial_health")	
-	local grenades_panel = self._player_panel:child("grenades_panel")
-	local cable_ties_panel = self._player_panel:child("cable_ties_panel")
-	local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
-	local grenades_bg = grenades_panel:child("grenades")
-	local HealthNumTM = Holo.options.HealthNumTM
-	local HP_style = Holo.options.HealthNum_style
+Holo:clone(HUDTeammate)
+if Holo.options.hudteammate_enable and (not Holo.options.PDTHHud_support or not pdth_hud.loaded_options.Ingame.MainHud) and not Holo.options.GageHud_support then 
+function HUDTeammate:init( ... )
+	self.old.init(self, ...)
+	local radial_health_panel = self._player_panel:child("radial_health_panel")
+	local weapons_panel = self._player_panel:child("weapons_panel")
 	local name = self._panel:child("name")
-	local callsign_bg = self._panel:child("callsign_bg")
-	local cable_ties_bg = cable_ties_panel:child("cable_ties")
-	local deployable_bg = deployable_equipment_panel:child("equipment")
-	radial_health:set_blend_mode("normal")
-	radial_shield:set_blend_mode("normal")
-	grenades_bg:set_color(Equipments_color)
-	cable_ties_bg:set_color(Equipments_color)
-	deployable_bg:set_color(Equipments_color)
-	local bg_rect = {
-		84,
-		0,
-		44,
-		32
-	}
-	local cs_rect = {
-		84,
-		34,
-		19,
-		19
-	}
-	local csbg_rect = {
-		105,
-		34,
-		19,
-		19
-	}
+	local name_bg = self._panel:child("name_bg")
+	local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
+ 	local cable_ties_panel = self._player_panel:child("cable_ties_panel")
+  	local grenades_panel = self._player_panel:child("grenades_panel")
+	local grenades = grenades_panel:child("grenades")
+	local grenades_bg = grenades_panel:child("bg")	
+	local cable_ties = cable_ties_panel:child("cable_ties")
+	local cable_ties_bg = cable_ties_panel:child("bg")	
+	local deployable = self._player_panel:child("deployable_equipment_panel"):child("equipment")
+	local deployable_bg = self._player_panel:child("deployable_equipment_panel"):child("bg")	
+	local amount_deployable = deployable_equipment_panel:child("amount")
+	local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
+	local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
+
+	self._player_panel:child("carry_panel"):set_alpha(0)
+	radial_health_panel:child("radial_health"):set_blend_mode("normal")
+	radial_health_panel:child("radial_health"):set_image("guis/textures/pd2/hud_health")
+	radial_health_panel:child("radial_shield"):set_blend_mode("normal")		
+	radial_health_panel:child("radial_shield"):set_image("guis/textures/pd2/hud_shield")
+	radial_health_panel:child("damage_indicator"):hide()
+	if self._main_player then	
+		radial_health_panel:child("radial_rip"):set_blend_mode("normal")	
+	end
     
-    local bg_color = ColorRGB(58, 58, 58):with_alpha(0.5)
-	local tabs_texture = "guis/textures/pd2/hud_tabs"
-	local HealthNum = teammate_panel:text({
+	grenades:set_color(Equipments_color)
+	cable_ties:set_color(Equipments_color)
+	deployable:set_color(Equipments_color)	
+
+	primary_weapon_panel:child("weapon_selection"):child("weapon_selection"):hide()
+	secondary_weapon_panel:child("weapon_selection"):child("weapon_selection"):hide()
+
+		
+	Holo:ApplySettings({name_bg,primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")},
+	{
+		color = teammatebg_color,
+		alpha = teammatebg_alpha, 
+		texture = "units/white_df"
+	})  
+	Holo:ApplySettings({secondary_weapon_panel:child("bg"),primary_weapon_panel:child("bg")},{w = 2, alpha = 0.4})
+	Holo:ApplySettings({self._panel:child("callsign_bg"),self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_bg,grenades_panel:child("bg")},{visible = false})
+
+	Holo:ApplySettings({name, secondary_weapon_panel:child("ammo_total"), secondary_weapon_panel:child("ammo_clip"),primary_weapon_panel:child("ammo_total"),
+	primary_weapon_panel:child("ammo_clip"),cable_ties_panel:child("amount"),grenades_panel:child("amount"),deployable_equipment_panel:child("amount")},{color = teammate_text_color
+	})
+	local HealthNum = radial_health_panel:text({
 		name = "HealthNum",
-		visible = HealthNumTM == false and self._main_player and Holo.options.HealthNum or Holo.options.HealthNum,
+		visible = (Holo.options.HealthNum and self._main_player) and true or (Holo.options.HealthNumTM and not self._main_player) and true or false,
 		text = "100",
 		color = HealthNum_color,
 		blend_mode = "normal",
 		layer = 3,
-		w = name:w(),
-		h = name:h(),
-		vertical = "bottom",
-		align = HP_style == 1 and "left" or "center",
-		font_size = HP_style == 1 and tweak_data.hud_players.name_size or self._main_player and 22 or 18,
-		font = HP_style == 1 and tweak_data.hud_players.name_font or "fonts/font_large_mf"
+		w = radial_health_panel:w(),
+		h = radial_health_panel:h(),
+		vertical = "center",
+		align = "center",
+		font_size = self._main_player and 22 or 18,
+		font = "fonts/font_large_mf"
 	})
-		local HPCircle = teammate_panel:bitmap({
-		name = "HPCircle",
-		texture = tabs_texture,
-		texture_rect = cs_rect,
-		layer = 0,
-		visible = Holo.options.HealthNum and (HP_style == 1 and true or false) or false,
-		color = HealthNum_color,
-		blend_mode = "normal",
-	    x = callsign_bg:x(),
-	    y = self._main_player and 10 or 15  + HealthNum:y(),
-		w = HealthNum:h() - 2,
-		h = HealthNum:h() - 2,
+	local teammate_line = self._panel:rect({
+		name = "teammate_line",
+		layer = 1,
+		w = 2,
 	})
+	if self._main_player then
+		name_bg:hide()
+		name:hide()
+		local Mainbg = self._player_panel:bitmap({
+			name = "Mainbg",
+			vertical = "bottom",
+			visible = true,
+			layer = 0,
+			color = teammatebg_color,
+			alpha = (not CompactHUD and not Fallout4hud) and teammatebg_alpha or 0,
+			w = 130,
+			h = 68,
+		})	
+	 	Mainbg:set_y(weapons_panel:y())
+	 	Mainbg:set_x(weapons_panel:x())
+	 	teammate_line:hide()
+	else
+		weapons_panel:set_alpha(0)
+		local EquipmentsBG = self._player_panel:bitmap({
+			name = "EquipmentsBG",
+			vertical = "bottom",
+			color = teammatebg_color,
+			layer = 0,
+			alpha = (not CompactHUD and not Fallout4hud) and teammatebg_alpha or 0,
+			w = deployable_bg:w() * 3,
+			h = deployable_bg:h(),
+		})		
+		EquipmentsBG:set_bottom(self._player_panel:bottom() - 6)
+		EquipmentsBG:set_left(radial_health_panel:right() + 2)
+		name_bg:set_left(radial_health_panel:right())
+		name_bg:set_bottom(EquipmentsBG:top())
+		name:set_bottom(EquipmentsBG:top())
+		name:set_left(name_bg:left())
+		teammate_line:set_h(name_bg:h() + EquipmentsBG:h())
+		teammate_line:set_right(EquipmentsBG:left())
+
+		deployable_equipment_panel:set_left(EquipmentsBG:left())
+ 		cable_ties_panel:set_left(deployable_equipment_panel:right())
+  		grenades_panel:set_left(cable_ties_panel:right())		
+
+  		deployable_equipment_panel:set_bottom(EquipmentsBG:bottom())
+ 		cable_ties_panel:set_bottom(EquipmentsBG:bottom())
+  		grenades_panel:set_bottom(EquipmentsBG:bottom())
+  		teammate_line:set_bottom( EquipmentsBG:bottom())
+
+  		self:layout_equipments()
+	end	 	
+ end
+
+function HUDTeammate:_create_primary_weapon_firemode()
+	local primary_weapon_panel = self._player_panel:child("weapons_panel"):child("primary_weapon_panel")
+	local weapon_selection_panel = primary_weapon_panel:child("weapon_selection")
+	local old_tick1 = weapon_selection_panel:child("tick1")
+	local old_tick2 = weapon_selection_panel:child("tick2")
+	local old_tick3 = weapon_selection_panel:child("tick3")
+	if alive(old_tick1) then
+		weapon_selection_panel:remove(old_tick1)
+	end
+	if alive(old_tick2) then
+		weapon_selection_panel:remove(old_tick2)
+	end	
+	if alive(old_tick3) then
+		weapon_selection_panel:remove(old_tick3)
+	end
+	if self._main_player then
+		local equipped_primary = managers.blackmarket:equipped_primary()
+		local weapon_tweak_data = tweak_data.weapon[equipped_primary.weapon_id]
+		local fire_mode = weapon_tweak_data.FIRE_MODE
+		local can_toggle_firemode = weapon_tweak_data.CAN_TOGGLE_FIREMODE
+		local locked_to_auto = managers.weapon_factory:has_perk("fire_mode_auto", equipped_primary.factory_id, equipped_primary.blueprint)
+		local locked_to_single = managers.weapon_factory:has_perk("fire_mode_single", equipped_primary.factory_id, equipped_primary.blueprint)
+		local tick1 = weapon_selection_panel:rect({
+			color = teammate_text_color,
+			name = "tick1",
+			w = 2,
+			h = 6,
+			x = 3,
+			layer = 1
+		})
+		tick1:set_bottom(weapon_selection_panel:h() - 2)
+		local tick2 = weapon_selection_panel:rect({
+			color = teammate_text_color,			
+			name = "tick2",
+			w = 2,
+			h = 6,
+			layer = 2
+		})
+		tick2:set_left(tick1:right())
+		tick2:set_bottom(weapon_selection_panel:h() - 2)
+		tick2:set_alpha(0.5)
+		tick2:move(0.5)
+		local tick3 = weapon_selection_panel:rect({
+			color = teammate_text_color,			
+			name = "tick3",
+			w = 2,
+			h = 6,
+			layer = 3
+		})
+		tick3:set_left(tick2:right())
+		tick3:move(0.5)
+		tick3:set_bottom(weapon_selection_panel:h() - 2)
+		tick3:set_alpha(0.5)
+		if locked_to_single or not locked_to_auto and fire_mode == "single" then
+		else
+			tick2:set_alpha(1)
+			tick3:set_alpha(1)
+		end
+	end
+end
+
+function HUDTeammate:_create_secondary_weapon_firemode()
+	local secondary_weapon_panel = self._player_panel:child("weapons_panel"):child("secondary_weapon_panel")
+	local weapon_selection_panel = secondary_weapon_panel:child("weapon_selection")
+	local old_tick1 = weapon_selection_panel:child("tick1")
+	local old_tick2 = weapon_selection_panel:child("tick2")
+	local old_tick3 = weapon_selection_panel:child("tick3")
+	if alive(old_tick1) then
+		weapon_selection_panel:remove(old_tick1)
+	end
+	if alive(old_tick2) then
+		weapon_selection_panel:remove(old_tick2)
+	end	
+	if alive(old_tick3) then
+		weapon_selection_panel:remove(old_tick3)
+	end
+	if self._main_player then
+		local equipped_secondary = managers.blackmarket:equipped_secondary()
+		local weapon_tweak_data = tweak_data.weapon[equipped_secondary.weapon_id]
+		local fire_mode = weapon_tweak_data.FIRE_MODE
+		local can_toggle_firemode = weapon_tweak_data.CAN_TOGGLE_FIREMODE
+		local locked_to_auto = managers.weapon_factory:has_perk("fire_mode_auto", equipped_secondary.factory_id, equipped_secondary.blueprint)
+		local locked_to_single = managers.weapon_factory:has_perk("fire_mode_single", equipped_secondary.factory_id, equipped_secondary.blueprint)
+		local tick1 = weapon_selection_panel:rect({
+			color = teammate_text_color,
+			name = "tick1",
+			w = 2,
+			h = 6,
+			x = 3,
+			layer = 1
+		})
+		tick1:set_bottom(weapon_selection_panel:h() - 2)
+		local tick2 = weapon_selection_panel:rect({
+			color = teammate_text_color,
+			name = "tick2",
+			w = 2,
+			h = 6,
+			layer = 2
+		})
+		tick2:set_left(tick1:right())
+		tick2:set_bottom(weapon_selection_panel:h() - 2)
+		tick2:set_alpha(0.5)
+		tick2:move(0.5)
+		local tick3 = weapon_selection_panel:rect({
+			color = teammate_text_color,
+			name = "tick3",
+			w = 2,
+			h = 6,
+			layer = 3
+		})
+		tick3:set_left(tick2:right())
+		tick3:move(0.5)
+		tick3:set_bottom(weapon_selection_panel:h() - 2)
+		tick3:set_alpha(0.5)
+		if locked_to_single or not locked_to_auto and fire_mode == "single" then
+		else
+			tick2:set_alpha(1)
+			tick3:set_alpha(1)
+		end
+	end
+end
+
+function HUDTeammate:set_weapon_firemode(id, firemode)
+	local is_secondary = id == 1
+	local secondary_weapon_panel = self._player_panel:child("weapons_panel"):child("secondary_weapon_panel")
+	local primary_weapon_panel = self._player_panel:child("weapons_panel"):child("primary_weapon_panel")
+	local weapon_selection = is_secondary and secondary_weapon_panel:child("weapon_selection") or primary_weapon_panel:child("weapon_selection")
+	if alive(weapon_selection) then
+		local tick2 = weapon_selection:child("tick2")
+		local tick3 = weapon_selection:child("tick3")
+		if alive(tick2) and alive(tick3) then
+			if firemode == "single" then
+				tick2:set_alpha(0.5)
+				tick3:set_alpha(0.5)
+			else
+				tick2:set_alpha(1)
+				tick3:set_alpha(1)
+			end
+		end
+	end
+end
+
+
+function HUDTeammate:update()
+	local radial_health_panel = self._player_panel:child("radial_health_panel")
+	local grenades = self._player_panel:child("grenades_panel"):child("grenades")
+	local cable_ties = self._player_panel:child("cable_ties_panel"):child("cable_ties")
+	local deployable = self._player_panel:child("deployable_equipment_panel"):child("equipment")
+	local secondary_weapon_panel = self._player_panel:child("weapons_panel"):child("secondary_weapon_panel")
+	local secondary_weapon_bg = secondary_weapon_panel:child("bg")		
+	local primary_weapon_panel = self._player_panel:child("weapons_panel"):child("primary_weapon_panel")	
+	local primary_weapon_bg = primary_weapon_panel:child("bg")	
+	local bg = self._main_player and self._player_panel:child("Mainbg") or self._player_panel:child("EquipmentsBG")
+	local name_bg = self._panel:child("name_bg")
+	local name = self._panel:child("name")
+	local sec_selection = secondary_weapon_panel:child("weapon_selection")
+	local prim_selection = primary_weapon_panel:child("weapon_selection")
+	local Healthnum_visible = (Holo.options.HealthNum and self._main_player) and true or (Holo.options.HealthNumTM and not self._main_player) and true or false
+    self:update_special_equipments()
+	grenades:set_color(Equipments_color)
+	cable_ties:set_color(Equipments_color)
+	deployable:set_color(Equipments_color)
+	secondary_weapon_bg:set_color(Selectwep_color)
+	primary_weapon_bg:set_color(Selectwep_color)
+	Holo:ApplySettings({name_bg, bg},
+	{
+		color = teammatebg_color,
+		alpha = teammatebg_alpha, 
+	})
+	Holo:ApplySettings({name, sec_selection:child("tick1"),sec_selection:child("tick2"),sec_selection:child("tick3"), prim_selection:child("tick1"), prim_selection:child("tick2"), prim_selection:child("tick3"),secondary_weapon_panel:child("ammo_total"), secondary_weapon_panel:child("ammo_clip"),primary_weapon_panel:child("ammo_total"),
+	primary_weapon_panel:child("ammo_clip"),self._player_panel:child("cable_ties_panel"):child("amount"),self._player_panel:child("grenades_panel"):child("amount"),
+	self._player_panel:child("deployable_equipment_panel"):child("amount")},{color = teammate_text_color})
+
+	radial_health_panel:child("HealthNum"):set_visible(Healthnum_visible)
+end
+
+function HUDTeammate:set_grenades_amount(data)
+	if not PlayerBase.USE_GRENADES then
+		return
+	end
+	local teammate_panel = self._panel:child("player")
+	local grenades_panel = self._player_panel:child("grenades_panel")
+	local amount = grenades_panel:child("amount")
+	grenades_panel:child("grenades"):set_visible(data.amount ~= 0)
+	self:_set_amount_string(amount, data.amount)
+	amount:set_visible(data.amount ~= 0)
+	self:layout_equipments()	
+end
+
+function HUDTeammate:set_cable_ties_amount(amount)
+	local visible = amount ~= 0
+	local cable_ties_panel = self._player_panel:child("cable_ties_panel")
+	local cable_ties_amount = cable_ties_panel:child("amount")
+	cable_ties_amount:set_visible(visible)
+	if amount == -1 then
+		cable_ties_amount:set_text("--")
+	else
+		self:_set_amount_string(cable_ties_amount, amount)
+	end
+	local cable_ties = cable_ties_panel:child("cable_ties")
+	cable_ties:set_visible(visible)
+	self:layout_equipments()	
+end
+
+function HUDTeammate:set_deployable_equipment_amount(index, data)
+	local teammate_panel = self._panel:child("player")
+	local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
+	local amount = deployable_equipment_panel:child("amount")
+	deployable_equipment_panel:child("equipment"):set_visible(data.amount ~= 0)
+	self:_set_amount_string(amount, data.amount)
+	amount:set_visible(data.amount ~= 0)
+	self:layout_equipments()
+end
+
+function HUDTeammate:layout_equipments()
+	local radial_health_panel = self._player_panel:child("radial_health_panel")
+	local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
+	local cable_ties_panel = self._player_panel:child("cable_ties_panel")
+	local grenades_panel = self._player_panel:child("grenades_panel")
+	local EquipmentsBG = self._player_panel:child("EquipmentsBG")
+	local name = self._panel:child("name")
+	local name_bg = self._panel:child("name_bg")
+	local teammate_line = self._panel:child("teammate_line")
+	local vis = 0
+	local deployable_visible = deployable_equipment_panel:child("amount"):visible()
+	local cable_ties_visible = cable_ties_panel:child("amount"):visible()
+	if self._main_player then
+
+	else
+		if deployable_visible then
+			deployable_equipment_panel:set_left(EquipmentsBG:left())
+			if cable_ties_visible then
+		 		cable_ties_panel:set_left(deployable_equipment_panel:right())
+		  		grenades_panel:set_left(cable_ties_panel:right())	
+		  	else
+		  		grenades_panel:set_left(deployable_equipment_panel:right())
+		  	end
+		else
+			if cable_ties_visible then
+		 		cable_ties_panel:set_left(EquipmentsBG:left())
+		  		grenades_panel:set_left(cable_ties_panel:right())	
+		  	else
+		  		grenades_panel:set_left(EquipmentsBG:left())
+		  	end
+	  	end
+	end
+end
+
+function HUDTeammate:set_state(state)
+	local is_player = state == "player"
+	self._panel:child("player"):set_alpha(is_player and 1 or 0)
+	local name = self._panel:child("name")
+	local radial_health_panel = self._player_panel:child("radial_health_panel")
+	local name_bg = self._panel:child("name_bg")
+	local teammate_line = self._panel:child("teammate_line")
+	local EquipmentsBG = self._player_panel:child("EquipmentsBG")
+	if not self._main_player then
+		if is_player then
+			name_bg:set_left(radial_health_panel:right())
+			name:set_left(name_bg:left())
+			name_bg:set_bottom(EquipmentsBG:top())
+			name:set_bottom(EquipmentsBG:top())
+			teammate_line:set_h(name_bg:h() + EquipmentsBG:h())
+			teammate_line:set_right(EquipmentsBG:left())
+	  		teammate_line:set_bottom(EquipmentsBG:bottom())
+		else
+			name:set_x(48 + name:h() + 4)
+			name:set_bottom(self._panel:h())		
+			name_bg:set_position(name:x(), name:y() - 1)
 		
-		local HPCircleBG = teammate_panel:bitmap({
-		name = "HPCircleBG",
-		texture = tabs_texture,
-		texture_rect = csbg_rect,
-		layer = -1,
-		visible = Holo.options.HealthNum and (HP_style == 1 and true or false) or false,
-		color = bg_color,
-		blend_mode = "normal",
-	    x = callsign_bg:x(),
-	    y = self._main_player and 10 or 15 + HealthNum:y(),
-		w = HealthNum:h() - 2,
-		h = HealthNum:h() - 2,
-	})
-    if HP_style == 1 then
-    HealthNum:set_bottom(name:top() - 2)
-	HealthNum:set_right(name:right() + 2)	
+			teammate_line:set_h(name_bg:h())
+			teammate_line:set_right(name_bg:left())
+			teammate_line:set_bottom(name_bg:bottom())
+		end
 
-    else
-   
-    HealthNum:set_size(radial_health:w(),radial_health:h())
-    HealthNum:set_left(radial_health_panel:left()) 
-    center = self._main_player and 4 or 10 
-    HealthNum:set_top(radial_health_panel:center() - center)
-    end
-
-	local HealthBG = teammate_panel:bitmap({
-		name = "HealthBG",
-		texture = tabs_texture,
-		texture_rect = bg_rect,
-		visible = Holo.options.HealthNum and (HP_style == 1 and true or false) or false,
-		layer = 0,
-		color = callsign_bg:color(),
-		x = HealthNum:x() - 2,
-		y = HealthNum:y(),
-		w = 25,
-		h = name:h()
-	})
-
-   if Holo.options.Old_radial == true then
-      self:set_old()
-   end
-end)
-
-function HUDTeammate:set_old()
-	local teammate_panel = self._panel:child("player")
-	local radial_health_panel = teammate_panel:child("radial_health_panel")
-	local radial_shield = radial_health_panel:child("radial_shield")
-	local radial_health = radial_health_panel:child("radial_health")	
-	radial_shield:set_layer(radial_health:layer() + 1)
+	end
 end
-function HUDTeammate:set_new()
-	local teammate_panel = self._panel:child("player")
-	local radial_health_panel = teammate_panel:child("radial_health_panel")
-	local radial_shield = radial_health_panel:child("radial_shield")
-	local radial_health = radial_health_panel:child("radial_health")	
-	radial_shield:set_layer(radial_health:layer() - 1)
-end
+
 function HUDTeammate:_set_weapon_selected(id, hud_icon)
 	local is_secondary = id == 1
 	local secondary_weapon_panel = self._player_panel:child("weapons_panel"):child("secondary_weapon_panel")
-	local secondary_weapon_BG = secondary_weapon_panel:child("bg")		
+	local secondary_weapon_bg = secondary_weapon_panel:child("bg")		
 	local primary_weapon_panel = self._player_panel:child("weapons_panel"):child("primary_weapon_panel")	
-	local primary_weapon_BG = primary_weapon_panel:child("bg")	
-	local Selectwep_color = Selectwep_color:with_alpha(0.5)
+	local primary_weapon_bg = primary_weapon_panel:child("bg")	
+	primary_weapon_bg:set_color(is_secondary and teammatebg_color or Selectwep_color)
+	secondary_weapon_bg:set_color(is_secondary and Selectwep_color or teammatebg_color)
+	primary_weapon_bg:set_alpha(is_secondary and 0 or 1)
+	secondary_weapon_bg:set_alpha(is_secondary and 1 or 0)
+end
 
-	if Holo.options.Selectwep_enable == true then
-	primary_weapon_BG:set_color(is_secondary and bg_color or Selectwep_color)
-	secondary_weapon_BG:set_color(is_secondary and Selectwep_color or bg_color)
-	primary_weapon_panel:set_alpha(is_secondary and 1 or 1)
-	secondary_weapon_panel:set_alpha(is_secondary and 1 or 1)
-	elseif Holo.options.Selectwep_enable == false then
-	primary_weapon_panel:set_alpha(is_secondary and 0.5 or 1)
-	secondary_weapon_panel:set_alpha(is_secondary and 1 or 0.5)
+function HUDTeammate:set_name(teammate_name)
+	local teammate_panel = self._panel
+	local name = teammate_panel:child("name")
+	local name_bg = teammate_panel:child("name_bg")
+	local callsign = teammate_panel:child("callsign")
+	name:set_text(" " .. string.upper(teammate_name))
+	local h = name:h()
+	managers.hud:make_fine_text(name)
+	name:set_h(h)
+	name_bg:set_w(name:w() + 4)
+end
+
+function HUDTeammate:_set_amount_string(text, amount)
+	if not PlayerBase.USE_GRENADES then
+		text:set_text(tostring(amount))
+		return
 	end
-
+	local zero = self._main_player and amount < 10 and "0" or ""
+	text:set_text(zero .. amount)
+	self:layout_equipments()
 end
-if Holo.options.totalammo_enable == true then
+
 function HUDTeammate:set_ammo_amount_by_type(type, max_clip, current_clip, current_left, max)
-	local weapon_panel = self._player_panel:child("weapons_panel"):child(type .. "_weapon_panel")
-	weapon_panel:set_visible(true)
-	local low_ammo = current_left <= math.round(max_clip / 2)
-	local low_ammo_clip = current_clip <= math.round(max_clip / 4)
-	local out_of_ammo_clip = current_clip <= 0
-	local out_of_ammo = current_left <= 0
-	local color_total = out_of_ammo and Holo.options.Selectwep_enable == false and Color(1, 0.9, 0.3, 0.3) or Color.white
-	color_total = color_total or low_ammo and Holo.options.Selectwep_enable == false and Color(1, 0.9, 0.9, 0.3) or Color.white
-	color_total = color_total or Color.white
-	local color_clip = out_of_ammo_clip and Holo.options.Selectwep_enable == false and Color(1, 0.9, 0.3, 0.3) or Color.white
-	color_clip = color_clip or low_ammo_clip and Holo.options.Selectwep_enable == false and Color(1, 0.9, 0.9, 0.3) or Color.white
-	color_clip = color_clip or Color.white
-	local ammo_clip = weapon_panel:child("ammo_clip")
-	local zero = current_clip < 10 and "00" or current_clip < 100 and "0" or ""
-	ammo_clip:set_text(zero .. tostring(current_clip))
-	ammo_clip:set_color(color_clip)
-	ammo_clip:set_range_color(0, string.len(zero), color_clip:with_alpha(0.5))
+	local weapon_panel = self._player_panel:child("weapons_panel"):child(type .. "_weapon_panel")	
+	weapon_panel:show()
+	if Holo.options.totalammo_enable and ((type == "primary" and managers.blackmarket:equipped_primary().weapon_id ~= "saw") or (type == "secondary" and managers.blackmarket:equipped_secondary().weapon_id ~= "saw_secondary") ) then
+		current_left = current_left - current_clip
+	end
+	local ammo_clip = weapon_panel:child("ammo_clip")	
 	local ammo_total = weapon_panel:child("ammo_total")
-	local total_ammo = current_left - current_clip 
-
-	local zero = total_ammo < 10 and "00" or total_ammo < 100 and "0" or ""
-	ammo_total:set_text(zero .. tostring(total_ammo))
-	ammo_total:set_color(color_total)
-	ammo_total:set_range_color(0, string.len(zero), color_total:with_alpha(0.5))
+	ammo_clip:set_text(tostring(current_clip))
+	ammo_total:set_text(tostring(current_left))
 end
 
-
-end
-
-
-Hooks:PostHook(HUDTeammate, "set_health", "set_hpvalue", function(self, data)
+function HUDTeammate:set_health(data)
 	local teammate_panel = self._panel:child("player")
 	local radial_health_panel = teammate_panel:child("radial_health_panel")
-	local HealthNum = teammate_panel:child("HealthNum")
-	local HPCircleBG = teammate_panel:child("HPCircleBG")
-	local HealthBG = teammate_panel:child("HealthBG")
-	local HPCircle = teammate_panel:child("HPCircle")
-	local condition_timer = teammate_panel:child("condition_timer")
- 
-	local red = data.current / data.total
-	local Value = math.floor(red * 100)	
-       HealthNum:set_color(HealthNum_color * (math.round(red * 100) / 100) + HealthNum_negative * (1 - math.round(red * 100) / 100))
-	   HPCircle:set_color(HealthNum_color * (math.round(red * 100) / 100) + HealthNum_negative * (1 - math.round(red * 100) / 100))
-
-	if red ~= 0 then  
-		HealthNum:set_text(Value)
+	local radial_health = radial_health_panel:child("radial_health")
+	local radial_rip = radial_health_panel:child("radial_rip")
+	local radial_rip_bg = radial_health_panel:child("radial_rip_bg")
+	local HealthNum = radial_health_panel:child("HealthNum")
+	local red = data.current / data.total	
+	self:_damage_taken()
+	radial_health:animate(callback(self, self, "animate_radial"), red)
+	HealthNum:set_color(HealthNum_color * (math.round(red * 100) / 100) + HealthNum_negative * (1 - math.round(red * 100) / 100))	
+	HealthNum:animate(callback(self, self, "animate_number"), red)
+	if alive(radial_rip) then
+		radial_rip:set_rotation((1 - radial_health:color().r) * 360)
+		radial_rip_bg:set_rotation((1 - radial_health:color().r) * 360)
 	end
-   
-	if Value < 40 and red ~= 0 then
-       HealthNum:animate(callback(self, self, "_animate_hp"))
+end
+
+function HUDTeammate:animate_number(text, red)
+	local t = 0
+	local oldvalue = tonumber(text:text())
+	local value = math.floor(red * 100)
+	while t < 0.5 do
+		t = t + coroutine.yield()
+		local n = 1 - math.sin(t * 180)
+		local health = math.floor(math.lerp(value, oldvalue, n))
+		text:set_text(tostring(math.clamp(health, 0, 100)))
 	end
-      
-	if Holo.options.HealthNum_style == 1 then
+	text:set_text(tostring(math.clamp(value, 0, 100)))
+end
 
-	  if red > 0 then
-       HealthBG:set_w(25)
-	  end
-  else
-  	HealthNum:set_text(Value)
-    end
+function HUDTeammate:animate_radial(radial, red)
+	local t = 0
+	local old_red = radial:color().r
+	while t < 0.5 do
+		t = t + coroutine.yield()
+		local n = 1 - math.sin(t * 180)
+		radial:set_color(Color(math.lerp(red, old_red, n), 0, 0))
+	end
+ 	radial:set_color(Color(red, 0, 0))
+end
 
-end)
+function HUDTeammate:set_talking(talking)
+	local callsign = self._panel:child("callsign")
+	callsign:set_alpha(talking and 0.6 or 1)
+end
+
 function HUDTeammate:set_downed()
-  if self._main_player then
-     self._panel:child("player"):child("HealthNum"):set_text("Downed")
-     self._panel:child("player"):child("HealthNum"):set_color(HealthNum_negative)
-     self._panel:child("player"):child("HealthBG"):set_w(52)
-  end
+	if self._main_player then
+		self._player_panel:child("radial_health_panel"):child("HealthNum"):set_text("0")
+		self._player_panel:child("radial_health_panel"):child("HealthNum"):set_color(HealthNum_negative)
+	end
 end
 
 function HUDTeammate:set_callsign(id)
-	local teammate_panel = self._panel
 	print("id", id)
 	Application:stack_dump()
-	local callsign = teammate_panel:child("callsign")
-	local name = teammate_panel:child("name")
-	local alpha = callsign:color().a
-	callsign:set_color(tweak_data.chat_colors[id]:with_alpha(alpha))
-	name:set_color(tweak_data.chat_colors[id]:with_alpha(alpha))
+	local callsign = self._panel:child("teammate_line")
+	callsign:set_color(tweak_data.chat_colors[id])
 end
+
 function HUDTeammate:add_special_equipment(data)
 	local teammate_panel = self._panel
 
@@ -306,87 +578,43 @@ function HUDTeammate:layout_special_equipments()
 	for i, panel in ipairs(special_equipment) do
 		if self._main_player then
 			panel:set_x(w - (panel:w() + 0) * i)
-			panel:set_y(0)
+			panel:set_y(20)
 		else
-			panel:set_x(120 + panel:w() * (i - 1))
-			panel:set_y(8)
+			if i == 1 then
+				panel:set_x(0)
+			else
+				panel:set_left(special_equipment[i - 1]:right())
+			end
+			panel:set_y(10)
 		end
 	end
 end
-
-if Holo.options.HealthNum_style == 1 then
-function HUDTeammate:set_condition(icon_data, text)
-	local condition_icon = self._panel:child("condition_icon")
-	local teammate_panel = self._panel:child("player")
-	local HealthNum = teammate_panel:child("HealthNum")
-	local HealthBG = teammate_panel:child("HealthBG")
-	local HPCircle = teammate_panel:child("HPCircle")
-	if icon_data == "mugshot_downed" then
-    HealthNum:set_text("Downed")
-    HealthBG:set_w(52)
-    HealthNum:set_color(HealthNum_negative)
-    HPCircle:set_color(HealthNum_negative)
-	end
-	if icon_data == "mugshot_in_custody" then
-     HealthNum:set_text("In custody")
-     HealthBG:set_w(65)
-     HealthNum:set_color(HealthNum_negative)
-     HPCircle:set_color(HealthNum_negative)
-	end 
-	if icon_data == "mugshot_normal" then
-
-		condition_icon:set_visible(false)
-	else
-		condition_icon:set_visible(true)
-		local icon, texture_rect = tweak_data.hud_icons:get_icon_data(icon_data)
-		condition_icon:set_image(icon, texture_rect[1], texture_rect[2], texture_rect[3], texture_rect[4])
+function HUDTeammate:update_special_equipments()
+	local special_equipment = self._special_equipment
+	for i, panel in ipairs(special_equipment) do
+		panel:child("bitmap"):set_color(Pickups_color)
 	end
 end
-end
+ 
 function HUDTeammate:teammate_progress(enabled, tweak_data_id, timer, success)
-	self._player_panel:child("radial_health_panel"):set_alpha(enabled and 0.2 or 1)
 	self._player_panel:child("interact_panel"):stop()
-	self._player_panel:child("interact_panel"):set_visible(enabled)
-	if enabled then
-		self._player_panel:child("interact_panel"):animate(callback(HUDManager, HUDManager, "_animate_label_interact"), self._interact, timer)
-	elseif success then
-		local panel = self._player_panel
-		local bitmap = panel:bitmap({
-			rotation = 360,
-			texture = "guis/textures/pd2/hud_progress_active",
-			blend_mode = "alpha",
-			align = "center",
-			valign = "center",
-			layer = 2
-		})
-		bitmap:set_size(self._interact:size())
-		bitmap:set_position(self._player_panel:child("interact_panel"):x() + 4, self._player_panel:child("interact_panel"):y() + 4)
-		local radius = self._interact:radius()
-		local circle = CircleBitmapGuiObject:new(panel, {
-			rotation = 360,
-			radius = radius,
-			color = Color.white:with_alpha(1),
-			blend_mode = "normal",
-			layer = 3
-		})
-		circle:set_position(bitmap:position())
-		bitmap:animate(callback(HUDInteraction, HUDInteraction, "_animate_interaction_complete"), circle)
-	end
+	self._player_panel:child("interact_panel"):set_visible(false)
 end
 
 
-function HUDTeammate:_animate_hp()
-	local t = 0
-	local teammate_panel = self._panel:child("player")
-	local radial_health_panel = teammate_panel:child("radial_health_panel")
-	local HealthNum = teammate_panel:child("HealthNum")
-	local Healthnum_size = Holo.options.HealthNum_style == 1 and tweak_data.hud_players.name_size or self._main_player and 22 or 18
-
-	while t < 0.5 do
-		t = t + coroutine.yield()
-		local n = 1 - math.sin(t * 180)
-		HealthNum:set_font_size(math.lerp(Healthnum_size + 1, Healthnum_size + 3, n))
-	end
-	HealthNum:set_font_size(Healthnum_size)
 end
+
+if Holo.options.GageHud_support or not Holo.options.hudteammate_enable then
+	function HUDTeammate:init(...)
+		self.old.init(self, ...)
+		if self._player_panel:child("radial_health_panel") then
+			local radial_health_panel = self._player_panel:child("radial_health_panel")
+			radial_health_panel:child("radial_shield"):set_blend_mode("normal")
+			radial_health_panel:child("radial_health"):set_blend_mode("normal")
+		end
+		if self._health_panel then
+			self._health_panel:child("radial_health"):set_blend_mode("normal")
+			self._health_panel:child("radial_shield"):set_blend_mode("normal")	
+		end
+	end
 end

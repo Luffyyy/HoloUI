@@ -1,6 +1,8 @@
+if Holo.options.Menu_enable then
 
 core:import("CoreMenuNodeGui")
 CloneClass(MenuRenderer)
+if Holo.options.Menu_enable then
 function MenuPauseRenderer:show_node(node)
 	local gui_class = MenuNodeGui
 	if node:parameters().gui_class then
@@ -11,14 +13,14 @@ function MenuPauseRenderer:show_node(node)
 	end
 	local parameters = {
 		font = tweak_data.menu.pd2_medium_font,
-		row_item_color = Holo.options.Menu_enable == true and Color.white or tweak_data.screen_colors.button_stage_3,
-		row_item_hightlight_color = Holo.options.Menu_enable == true and ColorRGB(0, 150, 255) or tweak_data.screen_colors.button_stage_2,
-		row_item_blend_mode = Holo.options.Menu_enable == true and "normal" or "add",
-		font_size = tweak_data.menu.pd2_medium_font_size,
+		row_item_color = Holomenu_color_normal,
+		row_item_hightlight_color = Holomenu_color_highlight,
+		row_item_blend_mode = "normal",
+		font_size = Holomenu_textsize,
 		node_gui_class = gui_class,
 		spacing = node:parameters().spacing,
-		marker_alpha = 0.6,
-		marker_color = Holo.options.Menu_enable == true and Color.white:with_alpha(0.2) or tweak_data.screen_colors.button_stage_3:with_alpha(0.2),
+		marker_alpha = 0.2,
+		marker_color = Holomenu_color_normal,
 		align = "right",
 		to_upper = true
 	}
@@ -51,8 +53,7 @@ function MenuPauseRenderer:open(...)
 		valign = "center",
 		y = -2,
 		w = self._fullscreen_panel:w(),
-		h = managers.gui_data:scaled_size().height + 200, 
-		color = Color.black:with_alpha(0.5),
+	    color = Color.black:with_alpha(0.3),
 		layer = -1
 	})
 	self._blur_bg = self._fullscreen_panel:bitmap({
@@ -92,7 +93,6 @@ function MenuPauseRenderer:update(t, dt)
 	local x, y = managers.mouse_pointer:modified_mouse_pos()
 	y = math.clamp(y, 0, managers.gui_data:scaled_size().height)
 	y = y / managers.gui_data:scaled_size().height
-	local Visible = Holo.options.Menu_enable == true and false or true
 	local button_stage_2 = tweak_data.screen_colors.button_stage_2 / 4
 	local button_stage_3 = tweak_data.screen_colors.button_stage_3 / 4
 	if Holo.options.Menu_enable == false then
@@ -119,8 +119,7 @@ function MenuPauseRenderer:update(t, dt)
 end
 
 function MenuPauseRenderer:set_bg_visible(visible)
-	--self._menu_bg:set_visible(visible)
-	--self._blur_bg:set_visible(visible)
+
 end
 
 function MenuPauseRenderer:set_bg_area(area)
@@ -138,4 +137,6 @@ function MenuPauseRenderer:set_bg_area(area)
 			self._blur_bg:set_shape(self._menu_bg:shape())
 		end
 	end
+end
+end
 end

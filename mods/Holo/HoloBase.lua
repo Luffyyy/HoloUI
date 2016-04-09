@@ -1,67 +1,67 @@
 _G.Holo = _G.Holo or {}
 Holo.dofiles = {
-	"menu/options.lua",
-	"menu/optionsmenu.lua"
+	"Menu/Options.lua",
+	"Menu/OptionsMenu.lua"
 }
 Holo.hook_files = {
  	["lib/setups/setup"] = "setup.lua",
- 	["lib/managers/menu/items/menuitemmultichoice"] = "menu/menuitemmultichoice.lua",
-    ["lib/managers/menu/blackmarketgui"] = "menu/blackmarketgui.lua",
-    ["lib/managers/menu/renderers/menunodebasegui"] = "menu/menunodebasegui.lua",
-    ["lib/managers/menu/renderers/menunodeskillswitchgui"] = "menu/menunodeskillswitchgui.lua",
-    ["lib/managers/menu/textboxgui"] = "menu/textboxgui.lua",
-    ["lib/managers/menu/imageboxgui"] = "menu/imageboxgui.lua",
-    ["lib/utils/levelloadingscreenguiscript"] = "menu/menuloading.lua",
-    ["lib/managers/menu/renderers/menunodepreplanninggui"] = "menu/menupreplanning.lua",
-    ["lib/managers/menu/playerprofileguiobject"] = "menu/menuprofile.lua", 
-    ["lib/managers/menu/renderers/menunodecrimenetgui"] = "menu/menucrimenet.lua",
-    ["lib/managers/menu/menurenderer"] = "menu/menurenderer.lua",
-    ["lib/managers/menu/newsfeedgui"] = "menu/newsfeedgui.lua",
-    ["lib/managers/menumanager"] = "menu/menumanager.lua",
+ 	["lib/managers/menu/items/menuitemmultichoice"] = "Menu/MenuItemmultichoice.lua",
+    ["lib/managers/menu/blackmarketgui"] = "Menu/BlackmarketGUI.lua",
+    ["lib/managers/menu/renderers/menunodebasegui"] = "Menu/MenuNodeBaseGUI.lua",
+    ["lib/managers/menu/renderers/menunodeskillswitchgui"] = "Menu/Menunodeskillswitchgui.lua",
+    ["lib/managers/menu/textboxgui"] = "Menu/TextBoxGUI.lua",
+    ["lib/managers/menu/imageboxgui"] = "Menu/ImageBoxGUI.lua",
+    ["lib/utils/levelloadingscreenguiscript"] = "Menu/MenuLoading.lua",
+    ["lib/managers/menu/renderers/menunodepreplanninggui"] = "Menu/MenuPreplanning.lua",
+    ["lib/managers/menu/playerprofileguiobject"] = "Menu/MenuProfile.lua", 
+    ["lib/managers/menu/renderers/menunodecrimenetgui"] = "Menu/MenuCrimenet.lua",
+    ["lib/managers/menu/menurenderer"] = "Menu/MenuRenderer.lua",
+    ["lib/managers/menu/newsfeedgui"] = "Menu/NewsfeedGUI.lua",
+    ["lib/managers/menumanager"] = "Menu/Menumanager.lua",
     
-    ["lib/managers/menu/menupauserenderer"] = "menu/menupause.lua", 
-    ["lib/units/enemies/cop/copbrain"] = "hud/copbrain.lua",
-    ["lib/managers/menu/menunodegui"] = "menu/menunodegui.lua",
-    ["lib/managers/mousepointermanager"] = "menu/mousepointermanager.lua",
-    ["lib/managers/menu/menukitrenderer"] = "menu/menukit.lua",
-    ["lib/managers/menu/renderers/menunodeupdatesgui"] = "menu/menunodeupdatesgui.lua",
-    ["lib/managers/menu/infamytreegui"] = "menu/infamytreegui.lua",
-    ["lib/managers/menu/boxguiobject"] = "menu/boxguiobject.lua",
-    ["lib/managers/crimenetmanager"] = "menu/crimenetmanager.lua",
-    ["lib/network/base/clientnetworksession"] = "hud/clientnetworksession.lua",
-    ["lib/network/handlers/unitnetworkhandler"] = "hud/unitnetworkhandler.lua",
-    ["lib/managers/menu/playerinventorygui"] = "menu/playerinventorygui.lua",
-    ["lib/managers/menu/stageendscreengui"] = "menu/stageendscreengui.lua",
-    ["lib/managers/menu/lootdropscreengui"] = "menu/lootdropscreengui.lua",
-    ["lib/managers/menu/menubackdropgui"] = "menu/menubackdropgui.lua",
-    ["lib/managers/menu/renderers/menunodejukeboxgui"] = "menu/menunodejukeboxgui.lua",
-    ["lib/managers/menu/items/menuitemcustomizecontroller"] = "menu/menuitemcustomizecontroller.lua",
-    ["lib/managers/menu/skilltreegui"] = "menu/skilltreegui.lua",
-    ["lib/managers/menu/missionbriefinggui"] = "menu/missionbriefinggui.lua", 
+    ["lib/managers/menu/menupauserenderer"] = "Menu/MenuPause.lua", 
+    -- ["lib/units/enemies/cop/copbrain"] = "Hud/copbrain.lua", -- missing
+    ["lib/managers/menu/menunodegui"] = "Menu/MenuNodeGUI.lua",
+    ["lib/managers/mousepointermanager"] = "Menu/MousePointerManager.lua",
+    ["lib/managers/menu/menukitrenderer"] = "Menu/MenuKit.lua",
+    ["lib/managers/menu/renderers/menunodeupdatesgui"] = "Menu/Menunodeupdatesgui.lua",
+    ["lib/managers/menu/infamytreegui"] = "Menu/InfamyTreeGUI.lua",
+    ["lib/managers/menu/boxguiobject"] = "Menu/Boxguiobject.lua",
+    ["lib/managers/crimenetmanager"] = "Menu/Crimenetmanager.lua",
+    ["lib/network/base/clientnetworksession"] = "Hud/Clientnetworksession.lua",
+    ["lib/network/handlers/unitnetworkhandler"] = "Hud/Unitnetworkhandler.lua",
+    ["lib/managers/menu/playerinventorygui"] = "Menu/PlayerInventoryGUI.lua",
+    ["lib/managers/menu/stageendscreengui"] = "Menu/stageendscreengui.lua",
+    ["lib/managers/menu/lootdropscreengui"] = "Menu/lootdropscreengui.lua",
+    ["lib/managers/menu/menubackdropgui"] = "Menu/MenuBackdropGUI.lua",
+    ["lib/managers/menu/renderers/menunodejukeboxgui"] = "Menu/Menunodejukeboxgui.lua",
+    ["lib/managers/menu/items/menuitemcustomizecontroller"] = "Menu/Menuitemcustomizecontroller.lua",
+    ["lib/managers/menu/skilltreegui"] = "Menu/SkillTreeGUI.lua",
+    ["lib/managers/menu/missionbriefinggui"] = "Menu/Missionbriefinggui.lua", 
 
-    ["lib/units/props/digitalgui"] = "hud/digitalgui.lua",
-    ["lib/units/props/timergui"] = "hud/timergui.lua",
-    ["lib/units/equipment/ecm_jammer/ecmjammerbase"] = "hud/ecmjammerbase.lua",
-    ["lib/managers/hud/hudheisttimer"] = "hud/heisttimer.lua",
-    ["lib/managers/hud/hudstageendscreen"] = "hud/hudstageendscreen.lua",
-    ["lib/managers/hud/hudmissionbriefing"] = "hud/hudmissionbriefing.lua",
-    ["lib/managers/hud/hudlootscreen"] = "hud/hudlootscreen.lua", 
-    ["lib/managers/hud/hudplayerdowned"] = "hud/huddowned.lua", 
-    ["lib/managers/hud/hudplayercustody"] = "hud/hudcustody.lua",
-    ["lib/managers/hud/hudassaultcorner"] = "hud/assaultbox.lua", 
-    ["lib/managers/hud/hudstatsscreen"] = "hud/hudstatsscreen.lua", 
-    ["lib/managers/hud/hudobjectives"] = "hud/hudobjectives.lua",
-    ["lib/managers/hud/hudchat"] = "hud/hudchat.lua",
-    ["lib/managers/hud/hudteammate"] = "hud/hudteammate.lua",
-    ["lib/managers/hud/hudtemp"] = "hud/hudtemp.lua",
-    ["lib/managers/hud/hudhint"] = "hud/hudhint.lua",
-    ["lib/managers/hud/hudpresenter"] = "hud/hudpresenter.lua",
-    ["lib/managers/hudmanager"] = "hud/hudmanager.lua",
-    ["lib/managers/hudmanagerpd2"] = "hud/hudmanager.lua",
+    ["lib/units/props/digitalgui"] = "Hud/DigitalGUI.lua",
+    ["lib/units/props/timergui"] = "Hud/TimerGUI.lua",
+    ["lib/units/equipment/ecm_jammer/ecmjammerbase"] = "Hud/ECMJammerBase.lua",
+    ["lib/managers/hud/hudheisttimer"] = "Hud/HeistTimer.lua",
+    ["lib/managers/hud/hudstageendscreen"] = "Hud/Hudstageendscreen.lua",
+    ["lib/managers/hud/hudmissionbriefing"] = "Hud/HudMissionBriefing.lua",
+    ["lib/managers/hud/hudlootscreen"] = "Hud/hudlootscreen.lua", 
+    ["lib/managers/hud/hudplayerdowned"] = "Hud/HudDowned.lua", 
+    ["lib/managers/hud/hudplayercustody"] = "Hud/HudCustody.lua",
+    ["lib/managers/hud/hudassaultcorner"] = "Hud/AssaultBox.lua", 
+    ["lib/managers/hud/hudstatsscreen"] = "Hud/Hudstatsscreen.lua", 
+    ["lib/managers/hud/hudobjectives"] = "Hud/Hudobjectives.lua",
+    ["lib/managers/hud/hudchat"] = "Hud/HudChat.lua",
+    ["lib/managers/hud/hudteammate"] = "Hud/Hudteammate.lua",
+    ["lib/managers/hud/hudtemp"] = "Hud/HudTemp.lua",
+    ["lib/managers/hud/hudhint"] = "Hud/HudHint.lua",
+    ["lib/managers/hud/hudpresenter"] = "Hud/HudPresenter.lua",
+    ["lib/managers/hudmanager"] = "Hud/HudManager.lua",
+    ["lib/managers/hudmanagerpd2"] = "Hud/HudManager.lua",
 }
 if not Holo.setup then
 	for p, d in pairs(Holo.dofiles) do
-		dofile("mods/holo/" .. d)
+		dofile("mods/Holo/" .. d)
 	end
 	Holo:init()
 end
@@ -74,9 +74,9 @@ end
 
 if Hooks then
 	Hooks:Add("LocalizationManagerPostInit", "LocalizationManagerPostInit_Holo", function( loc )
-		loc:load_localization_file( "mods/holo/loc/en.txt" )	
-		if Holo.options.Holo_lang == 2 and io.open("mods/holo/loc/ru.txt" ) then
-			loc:load_localization_file( "mods/holo/loc/ru.txt" )	
+		loc:load_localization_file( "mods/Holo/loc/EN.txt" )	
+		if Holo.options.Holo_lang == 2 and io.open("mods/Holo/loc/RU.txt" ) then
+			loc:load_localization_file( "mods/Holo/loc/EN.txt" )	
 		end
 	end)
 	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function( menu_manager, nodes )

@@ -1398,15 +1398,15 @@ function Holomenu:Health_Color(item)
 	Holo.options.Health_Color = item.value
 	Holo:Save()
 	Holomenu:Replace(Holo.mod_path.."Hud/Textures/Health"..HoloRadialColors[item.value]..".texture", "hud_health.texture")		
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/radial_bg.texture", "hud_radialbg.texture")		
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/radial_rim.texture", "hud_radial_rim.texture")		
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/swansong.texture", "hud_swansong.texture")				
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Radial_bg.texture", "hud_radialbg.texture")		
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Radial_rim.texture", "hud_radial_rim.texture")		
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Swansong.texture", "hud_swansong.texture")				
 end
 function Holomenu:Shield_Color(item)
 	Holo.options.Shield_Color = item.value
 	Holo:Save()
 	Holomenu:Replace(Holo.mod_path.."Hud/Textures/Shield"..HoloRadialColors[item.value]..".texture", "hud_shield.texture")			
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/radial_bg.texture", "hud_radialbg.texture")		
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/radial_rim.texture", "hud_radial_rim.texture")		
-    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/swansong.texture", "hud_swansong.texture")				
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Radial_bg.texture", "hud_radialbg.texture")		
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Radial_rim.texture", "hud_radial_rim.texture")		
+    Holomenu:Replace(Holo.mod_path.."Hud/Textures/other/Swansong.texture", "hud_swansong.texture")				
 end

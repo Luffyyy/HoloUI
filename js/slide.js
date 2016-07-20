@@ -3,11 +3,8 @@ var Imgs = 3;
 AutoSlide();
 function AutoSlide()
 {  
-    var SlideNextFunc = function(){
-        Slide(1);       
-        setTimeout("SlideNextFunc", 3000);   
-    }
-    SlideNextFunc();
+    Slide(1);       
+    setTimeout("AutoSlide", 3000);   
 }
 function Slide(x)
 {
@@ -29,5 +26,5 @@ function ImgHide()
 function ImgShow()
 {
     document.getElementsByClassName('slide-imgs')[0] = "img/img"+ CurrentImg +".jpg";
-    document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
+   // document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
 }

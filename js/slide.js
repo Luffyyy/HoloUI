@@ -28,6 +28,7 @@ function ImgHide()
 }
 function ImgShow()
 {
-    document.getElementById('#container > a:nth-child(4) > img').src = "img/img"+ CurrentImg +".jpg";
+    console.log(document.getElementById('img.slide-imgs'));
+    //document.getElementById('img.slide-imgs').src = "img/img"+ CurrentImg +".jpg";
     document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
 }

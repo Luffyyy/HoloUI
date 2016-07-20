@@ -22,8 +22,8 @@ function Slide(x)
 }
 function ImgSwitch()
 {
-    document.getElementsByClassName('slide-imgs')[OldImg - 1].style.left = "1000px";
-    document.getElementsByClassName('slide-imgs')[OldImg - 1].style.display = "block";
-    document.getElementsByClassName('slide-imgs')[CurrentImg - 1].style.display = "block";
+    document.getElementsByClassName('slide-imgs')[OldImg - 1].style.left = "200px";
+    document.getElementsByClassName('slide-imgs')[OldImg - 1].style.opacity = 0;
+    document.getElementsByClassName('slide-imgs')[CurrentImg - 1].style.opacity = 1;
     document.getElementsByClassName('slide-imgs')[CurrentImg - 1].style.left = "0px";
 }

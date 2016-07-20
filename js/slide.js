@@ -1,42 +1,32 @@
-var imgcount = 1;
-var tot_imgs = 3;
-/* exported slider */
+var CurrentImg = 1;
+var Imgs = 3;
 AutoSlide();
 function AutoSlide()
 {  
-
-
-
+    var SlideNextFunc = function(){
+        Slide(1);       
+        setTimeout("SlideNextFunc", 3000);   
+    }
 }
-function slider(x)
+function Slide(x)
 {
     "use strict";
-	imgcount = imgcount + x;
-	if(imgcount > tot_imgs){
-            imgcount = 1;
-	}
-	if(imgcount < 1){
-	    imgcount = tot_imgs;
-	}
-	ImgHide();
+    CurrentImg = CurrentImg + x;
+    if(CurrentImg > Imgs){
+        CurrentImg = 1;
+    }
+    if(CurrentImg < 1){
+        CurrentImg = Imgs;
+    }
+    ImgHide();
 }
-	
+    
 function ImgHide()
 {
-	//document.getElementById('slide-img').style.opacity = "0";
-	setTimeout('ImgShow()',300);
+    setTimeout("ImgShow()", 300);
 }
 function ImgShow()
 {
-	document.getElementById('slide-img').src = "img/img"+ imgcount +".jpg";
-	document.getElementsByClassName("fancybox")[0].href = "img/img"+ imgcount +".jpg";
-	//document.getElementById('slide-img').style.opacity = "1";
-}
-function ImgNext()
-{
-	imgcount = imgcount + 1
-	if(imgcount > tot_imgs){
-            imgcount = 1;
-	}
-	ImgHide();
+    document.getElementById('slide-img').src = "img/img"+ CurrentImg +".jpg";
+    document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
 }

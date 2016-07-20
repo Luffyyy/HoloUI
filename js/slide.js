@@ -25,6 +25,6 @@ function ImgHide()
 }
 function ImgShow()
 {
-    document.getElementsByClassName('slide-imgs')[0] = "img/img"+ CurrentImg +".jpg";
+    document.getElementsByClassName('slide-imgs')[0].src = "img/img"+ CurrentImg +".jpg";
    // document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
 }

@@ -42,7 +42,7 @@ a.logo:hover{
     position: absolute;
     width: 853px;
     height: 480px;
-	transition: opacity 1s 
+    transition: left 0.5s; 
 }
 @media screen and (max-width: 64em) {
 #container {

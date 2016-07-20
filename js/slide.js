@@ -1,4 +1,5 @@
 var CurrentImg = 1;
+var OldImg = 1
 var Imgs = 3;
 AutoSlide();
 function AutoSlide()
@@ -9,6 +10,7 @@ function AutoSlide()
 function Slide(x)
 {
     "use strict";
+    OldImg = CurrentImg
     CurrentImg = CurrentImg + x;
     if(CurrentImg > Imgs){
         CurrentImg = 1;
@@ -25,6 +27,6 @@ function ImgHide()
 }
 function ImgShow()
 {
-    document.getElementsByClassName('slide-imgs')[0].src = "img/img"+ CurrentImg +".jpg";
-   // document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
+    document.getElementsByClassName('slide-imgs')[OldImg].style.left = 0;
+    document.getElementsByClassName('slide-imgs')[CurrentImg].style.left = 1000;
 }

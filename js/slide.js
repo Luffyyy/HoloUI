@@ -7,6 +7,7 @@ function AutoSlide()
         Slide(1);       
         setTimeout("SlideNextFunc", 3000);   
     }
+    SlideNextFunc();
 }
 function Slide(x)
 {
@@ -27,6 +28,6 @@ function ImgHide()
 }
 function ImgShow()
 {
-    document.getElementById('img.slide-imgs').src = "img/img"+ CurrentImg +".jpg";
+    document.getElementById('slide-imgs').src = "";
     document.getElementsByClassName("fancybox")[0].href = "img/img"+ CurrentImg +".jpg";
 }

@@ -27,6 +27,6 @@ function ImgHide()
 }
 function ImgShow()
 {
-    document.getElementsByClassName('slide-imgs')[OldImg].style.left = 0;
-    document.getElementsByClassName('slide-imgs')[CurrentImg].style.left = 1000;
+    document.getElementsByClassName('slide-imgs')[OldImg - 1].style.left = 0;
+    document.getElementsByClassName('slide-imgs')[CurrentImg - 1].style.left = 1000;
 }

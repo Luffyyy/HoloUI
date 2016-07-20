@@ -5,7 +5,7 @@ AutoSlide();
 function AutoSlide()
 {  
     Slide(1);       
-    setTimeout("AutoSlide", 3000);   
+    setTimeout("AutoSlide()", 3000);   
 }
 function Slide(x)
 {

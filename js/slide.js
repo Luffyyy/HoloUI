@@ -5,7 +5,7 @@ AutoSlide();
 function AutoSlide()
 {  
     Slide(1);       
-    setTimeout("AutoSlide()", 3000);   
+    setTimeout("AutoSlide()", 5000);   
 }
 function Slide(x)
 {
@@ -18,14 +18,9 @@ function Slide(x)
     if(CurrentImg < 1){
         CurrentImg = Imgs;
     }
-    ImgHide();
+    setTimeout("ImgSwitch()", 300);
 }
-    
-function ImgHide()
-{
-    setTimeout("ImgShow()", 300);
-}
-function ImgShow()
+function ImgSwitch()
 {
     document.getElementsByClassName('slide-imgs')[OldImg - 1].style.left = "1000px";
     document.getElementsByClassName('slide-imgs')[OldImg - 1].style.display = "block";

@@ -1,7 +1,69 @@
+<html lang="en-us" class=""><script>(function main() {
+    // Create enabled event
+    function fireEnabledEvent() {
+        // If gli exists, then we are already present and shouldn't do anything
+        if (!window.gli) {
+            setTimeout(function () {
+                var enabledEvent = document.createEvent("Event");
+                enabledEvent.initEvent("WebGLEnabledEvent", true, true);
+                document.dispatchEvent(enabledEvent);
+            }, 0);
+        } else {
+            //console.log("WebGL Inspector already embedded on the page - disabling extension");
+        }
+    };
 
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
+    // Grab the path root from the extension
+    document.addEventListener("WebGLInspectorReadyEvent", function (e) {
+        var pathElement = document.getElementById("__webglpathroot");
+        if (window["gliloader"]) {
+            gliloader.pathRoot = pathElement.innerText;
+        } else {
+            // TODO: more?
+            window.gliCssUrl = pathElement.innerText + "gli.all.css";
+        }
+    }, false);
+
+    // Rewrite getContext to snoop for webgl
+    var originalGetContext = HTMLCanvasElement.prototype.getContext;
+    if (!HTMLCanvasElement.prototype.getContextRaw) {
+        HTMLCanvasElement.prototype.getContextRaw = originalGetContext;
+    }
+    HTMLCanvasElement.prototype.getContext = function () {
+        var ignoreCanvas = this.internalInspectorSurface;
+        if (ignoreCanvas) {
+            return originalGetContext.apply(this, arguments);
+        }
+
+        var result = originalGetContext.apply(this, arguments);
+        if (result == null) {
+            return null;
+        }
+
+        var contextNames = ["moz-webgl", "webkit-3d", "experimental-webgl", "webgl", "3d"];
+        var requestingWebGL = contextNames.indexOf(arguments[0]) != -1;
+        if (requestingWebGL) {
+            // Page is requesting a WebGL context!
+            fireEnabledEvent(this);
+
+            // If we are injected, inspect this context
+            if (window.gli) {
+                if (gli.host.inspectContext) {
+                    // TODO: pull options from extension
+                    result = gli.host.inspectContext(this, result);
+                    // NOTE: execute in a timeout so that if the dom is not yet
+                    // loaded this won't error out.
+                    window.setTimeout(function() {
+                        var hostUI = new gli.host.HostUI(result);
+                        result.hostUI = hostUI; // just so we can access it later for debugging
+                    }, 0);
+                }
+            }
+        }
+
+        return result;
+    };
+})();</script><head>
     <meta charset="UTF-8">
     <title>Holohud</title>
     <link rel="icon" href="img/favicon.ico">
@@ -14,39 +76,36 @@
    <script src="http://malsup.github.io/min/jquery.cycle2.min.js"> </script>
    <script src="js/slide.js"></script>
  
-  </head>
+  <style type="text/css">.fancybox-margin{margin-right:17px;}</style></head>
   <body>
     <section class="page-header">
-      <h1 class="header"> <a href="http://tuturo.github.io/HoloHud/" class="logo"> HoloHUD</a></h1>
-      <h2 class="project-tagline">A hud mod for Payday 2</h2>
+      <img src="https://i.imgur.com/crY5FsF.png" class="header">
+      <h2 class="project-tagline">A mod for Payday 2</h2>
       <a href="https://github.com/Tuturo/HoloHud" class="btn">GitHub page</a>
-      <a href="https://www.dropbox.com/s/9ficqknozewt777/HoloHud%203.3.1.zip?dl=0" class="btn">Download(3.3.1)</a>
+      <a href="https://www.dropbox.com/s/9ficqknozewt777/HoloHud%203.3.1.zip?dl=0" class="btn">Download</a>
       <a href="http://steamcommunity.com/groups/HoloHud" class="btn">Steam group</a>
     </section>
 <div class="content-bg">
     <div class="content">
-      <p>HoloHud is a payday 2 mod which focuses on how the hud looks and adds tons features!</p>
-      <p>Its also a very customizable hud with many options.</p>
-      <p>How to install : </p>
-       <ol>
-       <li>Download HoloHud : <a href="https://www.dropbox.com/s/9ficqknozewt777/HoloHud%203.3.1.zip?dl=0"> Download </a></li>
-       <li>Download <a href="http://paydaymods.com/download/">BLT</a> or <a href="https://github.com/Olipro/Payday-2-BLT_Club-Sandwich-Edition/releases">BLT:CSE</a> if you're using HoxHud</li>
-       <li>Drop the two files in the zip file to your payday 2 directory</li>
-       <li>You're done!</li>
-      </ol> 
+<p><span style="color:#3366ff"><strong>Reborn!</strong></span><br>
+&nbsp; &nbsp; &nbsp;HoloHUD is Reborn!, Now all of the assets of HoloHUD are inside the mod itself making it much easier to install and update the mod<br>
+&nbsp; &nbsp; &nbsp;Many new features and now uses BeardLib!<br>
+<span style="color:#3366ff"><strong>What is HoloHUD?</strong> </span><br>
+&nbsp; &nbsp; &nbsp;HoloHUD is a mod that focuses mostly on the look of the hud and menu and contains tons of customization options</p><p><strong><span style="color:#3366ff">How to install?</span>&nbsp;</strong><br>
+&nbsp; &nbsp; &nbsp;First you need to get <a href="http://paydaymods.com/download/">BLT</a>&nbsp;and <a href="http://lastbullet.net/mydownloads.php?action=view_down&amp;did=14924">BeardLib</a>, After that&nbsp;move the folder inside the zip file to mods folder.</p>
 </div>
 </div>
 
 
-<div id="container" data-cycle-fx = "fade">
+<div id="container" data-cycle-fx="fade">
  <p>Screenshots : </p>
-<a href="img/img1.jpg" rel="imgs"><img src="img/img1.jpg" class="slide-imgs" alt=""/> </a>
-<a href="img/img2.jpg" rel="imgs"><img src="img/img2.jpg" class="slide-imgs" alt=""/> </a>
-<a href="img/img3.jpg" rel="imgs"><img src="img/img3.jpg" class="slide-imgs" alt=""/> </a>
+<a href="img/img1.jpg" rel="imgs"><img src="img/img1.jpg" class="slide-imgs" alt="" style="left: 200px; opacity: 0;"> </a>
+<a href="img/img2.jpg" rel="imgs"><img src="img/img2.jpg" class="slide-imgs" alt="" style="opacity: 1; left: 0px;"> </a>
+<a href="img/img3.jpg" rel="imgs"><img src="img/img3.jpg" class="slide-imgs" alt="" style="opacity: 0; left: 200px;"> </a>
 </div>
 
 
-       <div class="footer"><span class="footer-owner"><a href="https://github.com/Tuturo/HoloHud">HoloHud</a> is maintained by <a href="https://github.com/Tuturo">Luffy</a>.</span> <span class="footer-credits">This page was created by <a href="https://pages.github.com">GitHub Pages</a></span></div>
+       
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -57,6 +116,7 @@ $(document).ready(function(){
 });
  </script>
  
-</body>
 
-</html>
+
+
+</body></html>

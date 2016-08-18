@@ -181,7 +181,7 @@
                         <option type="boolean" default_value="true" beforetext="Show" name="ECM"/>
                         <option type="boolean" default_value="false" beforetext="Show" name="GagePacks"/>
                         <option type="boolean" default_value="true" name="DrillTimers"/>
-                        <option type="number" default_value="0" name="InfoPosX"/>
+                        <option type="number" default_value="40" name="InfoPosX"/>
                         <option type="number" default_value="64" name="InfoPosY"/>
                         <option type="number" default_value="1145" name="StaminaPosX"/>
                         <option type="number" default_value="360" name="StaminaPosY"/>

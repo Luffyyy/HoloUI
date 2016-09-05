@@ -6,10 +6,10 @@ if Holo.Options:GetValue("Base/Hud") then
 	end)
 	Hooks:PreHook(HUDInteraction, "_animate_interaction_complete", "HoloAnimateInteractionComplete", function(self, bitmap, circle)
 		bitmap:set_blend_mode("normal")
-		bitmap:set_image("guis/textures/hud/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress")]))
+		bitmap:set_image("guis/textures/custom/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress")]))
 		circle._circle:set_blend_mode("normal")
 	end)
 	Hooks:PostHook(HUDInteraction, "set_bar_valid", "HoloSetBarValid", function(self, valid)
-		self._interact_circle:set_image("guis/textures/hud/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress" .. (valid and "" or "Red"))]))
+		self._interact_circle:set_image("guis/textures/custom/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress" .. (valid and "" or "Red"))]))
 	end)
 end

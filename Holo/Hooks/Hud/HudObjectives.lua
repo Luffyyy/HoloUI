@@ -77,10 +77,10 @@ function HUDBGBox_create_frame(box_panel, color)
 		layer = 10,
 	})
 	if FrameStyle == 1 then
-	    right_bottom:set_image("guis/textures/pd2/hud_frame", 8,8,8,8)
-	    left_bottom:set_image("guis/textures/pd2/hud_frame", 0,8,8,8)
-	    left_top:set_image("guis/textures/pd2/hud_frame", 0,0,8,8)
-	    right_top:set_image("guis/textures/pd2/hud_frame", 8,0,8,8)
+	    right_bottom:set_image("guis/textures/custom/Frame", 8,8,8,8)
+	    left_bottom:set_image("guis/textures/custom/Frame", 0,8,8,8)
+	    left_top:set_image("guis/textures/custom/Frame", 0,0,8,8)
+	    right_top:set_image("guis/textures/custom/Frame", 8,0,8,8)
 		local s = 8
 	    right_bottom:set_size(s,s)
 	    left_bottom:set_size(s,s)

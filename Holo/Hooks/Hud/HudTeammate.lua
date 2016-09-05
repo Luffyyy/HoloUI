@@ -197,12 +197,12 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TeammateHud") th
 		end
 		panel:child("Health"):set_font_size((self._main_player and 22 or 18))
 		panel:child("radial_health"):set_blend_mode("normal")
-		panel:child("radial_health"):set_image("guis/textures/hud/Health" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Health")])
-		panel:child("radial_bg"):set_image("guis/textures/hud/RadialBG")
-		panel:child("damage_indicator"):set_image("guis/textures/hud/adialHurt")
-		panel:child("radial_custom"):set_image("guis/textures/hud/SwangSong")
+		panel:child("radial_health"):set_image("guis/textures/custom/Health" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Health")])
+		panel:child("radial_bg"):set_image("guis/textures/custom/RadialBG")
+		panel:child("damage_indicator"):set_image("guis/textures/custom/adialHurt")
+		panel:child("radial_custom"):set_image("guis/textures/custom/SwangSong")
 		panel:child("radial_shield"):set_blend_mode("normal")
-		panel:child("radial_shield"):set_image("guis/textures/hud/Circle" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Armor")])
+		panel:child("radial_shield"):set_image("guis/textures/custom/Circle" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Armor")])
 		panel:child("damage_indicator"):hide()
 	end
 	function HUDTeammate:_create_firemode(is_secondary)

@@ -260,7 +260,7 @@ function HoloInfo:Update(t, dt)
 end
 function HoloInfo:CountInfo(info)
     local i = info.value_is_table and table.size(info.value()) or info.value()
-    if info.name == "Enemies" or "Civilians" then
+    if info.name == "Enemies" or "Civilians" and type(info.value()) == "table" then
 		for _, ene in pairs(info.value()) do
 			if ene.unit:brain()._logic_data and ene.unit:brain()._logic_data.is_tied then
 				i = i - 1

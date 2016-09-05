@@ -10,13 +10,18 @@ if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") th
 	    else
 	        self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() + 90)
 	    end
-		self._ready_slot_panel:remove(self._ready_slot_panel:child("BoxGui"))
+	    if self._ready_slot_panel:child("BoxGui") then
+			self._ready_slot_panel:remove(self._ready_slot_panel:child("BoxGui"))
+	    end
 		for i = 1, 7 do
 			self._job_schedule_panel:child("day_" .. tostring(i)):hide()
 			self._job_schedule_panel:child("ghost_" .. tostring(i)):hide()
 		end
 		for i = 1, managers.job:current_stage() or 0 do
 			self._job_schedule_panel:child("stage_done_" .. tostring(i)):hide()
+		end
+		if Holo.Options:GetValue("Menu/DisableLobbyVideo") then
+			self._background_layer_two:child("panel"):hide()
 		end
 		managers.job:is_job_stage_ghostable(managers.job:current_real_job_id(), i)
 		local num_stages = self._current_job_chain and #self._current_job_chain or 0
@@ -50,9 +55,8 @@ if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") th
 	    		slot:set_y((i - 1) * 32)
 		 		local bg = slot:rect({
 					name = "bg",
-					color = Color.black,
+					color = Color(0.1, 0.1, 0.1),
 					layer = -2,
-					alpha = 0.3,
 				})
 				local linebg = slot:rect({
 					name = "linebg",

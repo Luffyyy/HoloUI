@@ -40,6 +40,7 @@ function HUDChat:init(ws, hud)
 	})
 	scroll_panel:rect({
 		name = "scroll_bar",
+		visible = false,
 		alpha = 0.5,
 	})
 	self._mouse_id = managers.mouse_pointer:get_id()
@@ -212,7 +213,7 @@ function HUDChat:_layout_output_panel()
 		local line = self._lines[i]
 		local line_text = line:child("text")
 		line:set_bottom(messages_panel:h() - y)
-		y = y + line_height * line_text:number_of_lines()
+		y = y + line_text:h()
 	end
 	output_panel:set_bottom(self._input_panel:top())
 	if 10 >= lines or scroll_at_bottom then
@@ -281,6 +282,7 @@ function HUDChat:update_caret()
 	local caret = self._input_panel:child("caret")
 	local s, e = text:selection()
 	local x, y, w, h = text:selection_rect()
+	local selected_characters = s - e
 	if s == 0 and e == 0 then
 		if text:align() == "center" then
 			x = text:world_x() + text:w() / 2
@@ -294,10 +296,11 @@ function HUDChat:update_caret()
 		w = 0
 		h = 0
 	end
+	text:set_selection_color(Holo:GetColor("Colors/Main"))
 	caret:set_world_shape(x, y + 2, 2, h - 4)
 	self:set_blinking(s == e and self._focus)
 	local mid = x / self._input_panel:child("input_bg"):w()
-	caret:set_visible(self._enter_text_set)
+	caret:set_visible(self._focus and selected_characters == 0)
 end
 function HUDChat:mouse_released(o, button, x, y)
 	if self._grabbed_scroll_bar then
@@ -305,6 +308,7 @@ function HUDChat:mouse_released(o, button, x, y)
 		self._grabbed_scroll_bar = nil
 	end
 	self._start_select = nil
+	self:update_caret()
 end
 function HUDChat:mouse_moved(o, x, y)
 	local text = self._input_panel:child("input_text")
@@ -321,7 +325,7 @@ function HUDChat:mouse_moved(o, x, y)
 	    		text:clear_range_color(s - 1, e)
 	    		if text:inside(x,y) then
 		    		if p > 0 and (p == s or p == e or (p > s and p < e)) then
-		    			text:set_range_color(s - 1, e, Color.green)
+		    			text:set_range_color(s - 1, e, Holo:GetColor("Colors/Main"))
 		    		end
 	    		end
 	    	end
@@ -340,6 +344,7 @@ function HUDChat:mouse_moved(o, x, y)
 	            text:set_selection(self._start_select, i + 1)
 	        end
         end
+        self:update_caret()
     end
     self._old_x = x
 end
@@ -391,6 +396,7 @@ function HUDChat:mouse_pressed(o, button, x, y)
         self:update_caret()
         return true
     end
+    self:update_caret()
 end
 function HUDChat:scroll_up()
 	local output_panel = self._panel:child("output_panel")
@@ -401,7 +407,6 @@ function HUDChat:scroll_up()
         return true
     end
 end
-
 function HUDChat:scroll_down()
 	local output_panel = self._panel:child("output_panel")
 	local messages_panel = output_panel:child("messages_panel")
@@ -448,8 +453,6 @@ function HUDChat:receive_message(name, message, color, icon)
 		name = "icon",
 		color = color,
 		w = 2,
-		h = 10,
-		y = 4,
 	})
 	local line = message_panel:text({
 		name = "text",
@@ -469,9 +472,9 @@ function HUDChat:receive_message(name, message, color, icon)
 		layer = 1
 	})
 	self:check_text(line:text())
-	local total_len = utf8.len(line:text())
-	local _, _, w, h = line:text_rect()
-	line:set_size(w,h)
+	managers.hud:make_fine_text(line)
+	icon_bitmap:set_h(line:h() - 4)
+	icon_bitmap:set_center_y(line:center_y())
 	table.insert(self._lines, message_panel)
 	self:_layout_output_panel()
 	if not self._focus then

@@ -6,10 +6,12 @@ Hooks:PostHook(CarryData, "init", "HoloInit", function(self, unit)
 	end
 end)
 Hooks:PostHook(CarryData, "update", "HoloUpdate", function(self)
-	if not self._unit:enabled() then
+	if self._carry_id and not self._unit:enabled() then
 		Holo:RemoveLoot(string.pretty(self._carry_id, true), self._unit)
 	end
 end)
 Hooks:PostHook(CarryData, "destroy", "HoloDestroy", function(self)
-	Holo:RemoveLoot(string.pretty(self._carry_id, true), self._unit)
+	if self._carry_id then
+		Holo:RemoveLoot(string.pretty(self._carry_id, true), self._unit)
+	end
 end) 

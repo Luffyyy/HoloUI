@@ -1,15 +1,14 @@
-if Holo.Options:GetValue("Base/Menu") and Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Menu/ColoredBackground") then
-	function MenuBackdropGUI:_create_base_layer()
-		local base_layer = self._panel:child("base_layer")
-		base_layer:clear()
-		self:_set_layers_of_layer(1, 1)
-		local bd_base_layer = base_layer:rect({
-			name = "bd_base_layer",
-			color = Holo:GetColor("Colors/MenuBackground")
-		})
-		self._panel:child("pattern_layer"):set_visible(false)
-		self._panel:child("light_layer"):set_visible(false)
-		self._panel:child("particles_layer"):set_visible(false)
+if Holo.Options:GetValue("Base/Menu") then
+	if Holo.Options:GetValue("Menu/Lobby") then
+		Hooks:PostHook(MenuBackdropGUI, "_create_base_layer", "HoloCreateBaseLayer", function(self)
+			if Holo.Options:GetValue("Menu/ColoredBackground") then
+				self._panel:child("base_layer"):child("bd_base_layer"):set_image("units/white_df")
+				self._panel:child("base_layer"):child("bd_base_layer"):set_color(Holo:GetColor("Colors/MenuBackground"))
+			end
+			self._panel:child("pattern_layer"):set_visible(false)
+			self._panel:child("light_layer"):set_visible(false)
+			self._panel:child("particles_layer"):set_visible(false)	
+		end)
 	end
 	function MenuBackdropGUI:animate_bg_text(text)
 		text:hide()

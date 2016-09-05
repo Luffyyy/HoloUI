@@ -22,11 +22,11 @@ Hooks:PostHook(DigitalGui, "update", "HoloUpdate", function(self)
 end)
 
 Hooks:PostHook(DigitalGui, "timer_start_count_down", "HoloTimerStartCountDown", function(self)
-    if not Holo.NewInfo then
+    if not Holo.Info then
         return 
     end             
     if not self._created and not self._temp_timer then
-        Holo.NewInfo:CreateInfo({
+        Holo.Info:CreateInfo({
             timer = true,
             visible = true,
             name = self._unit:id(),
@@ -37,25 +37,25 @@ Hooks:PostHook(DigitalGui, "timer_start_count_down", "HoloTimerStartCountDown", 
 end)
 
 Hooks:PostHook(DigitalGui, "timer_pause", "HoloTimerPause", function(self)
-    if not Holo.NewInfo then
+    if not Holo.Info then
         return 
     end   
-    Holo.NewInfo:SetInfoValueColor(self._name, self._unit:id(), "Colors/" .. (self._unit_names[self._unit_id] ~= "Time" and "Timers" or "TimersJammed"))  
+    Holo.Info:SetInfoValueColor(self._name, self._unit:id(), "Colors/" .. (self._unit_names[self._unit_id] ~= "Time" and "Timers" or "TimersJammed"))  
     if self._temp_timer then
-        Holo.NewInfo:RemoveInfoValue(self._name, self._unit:id())
+        Holo.Info:RemoveInfoValue(self._name, self._unit:id())
         self._created = false
     elseif self._unit_names[self._unit_id] == "Time" then
-        Holo.NewInfo:RemoveInfoValue(self._name, self._unit:id())
+        Holo.Info:RemoveInfoValue(self._name, self._unit:id())
         self._created = false
     end        
 end)
 
 Hooks:PostHook(DigitalGui, "timer_resume", "HoloTimerResume", function(self)
-    if not Holo.NewInfo then
+    if not Holo.Info then
         return 
     end             
     if not self._created and not self._temp_timer then
-       Holo.NewInfo:CreateInfo({
+       Holo.Info:CreateInfo({
             timer = true,
             visible = true,
             name = self._unit:id(),
@@ -76,21 +76,21 @@ Hooks:PostHook(DigitalGui, "timer_set", "HoloTimerSet", function(self)
 end)
 
 Hooks:PostHook(DigitalGui, "destroy", "HoloDestroy", function(self)
-    if not Holo.NewInfo then
+    if not Holo.Info then
         return 
     end            
-    Holo.NewInfo:RemoveInfoValue(self._name, self._unit:id())
+    Holo.Info:RemoveInfoValue(self._name, self._unit:id())
 end)
 
 function DigitalGui:set_color_type(type)
-    if not Holo.NewInfo then
+    if not Holo.Info then
         return 
     end             
     self.COLOR_TYPE = type
     self.DIGIT_COLOR = DigitalGui.COLORS[self.COLOR_TYPE]
     self._title_text:set_color(self.DIGIT_COLOR)
     if self.DIGIT_COLOR == DigitalGui.COLORS.red then
-        Holo.NewInfo:RemoveInfoValue(self._name, self._unit:id())
+        Holo.Info:RemoveInfoValue(self._name, self._unit:id())
         self._created = false
     end
 end
@@ -98,7 +98,7 @@ end
 function DigitalGui:update_timer()
     self._time = self._timer < 0 and 0 or self._timer
     if self._temp_timer and not self._created and not self._timer_count_down then
-       Holo.NewInfo:CreateInfo({
+       Holo.Info:CreateInfo({
             timer = true,
             visible = true,
             name = self._unit:id(),
@@ -107,12 +107,12 @@ function DigitalGui:update_timer()
         self._created = true
     end  
     if self._timer_count_down and self._timer <= 0 then  
-        Holo.NewInfo:RemoveInfoValue(self._name, self._unit:id())
+        Holo.Info:RemoveInfoValue(self._name, self._unit:id())
         self._created = false
     end
 
     if self._created then
-        Holo.NewInfo:SetInfoTime(self._name, self._unit:id(), self._time, self._temp_timer)
+        Holo.Info:SetInfoTime(self._name, self._unit:id(), self._time, self._temp_timer)
     end
 end
 

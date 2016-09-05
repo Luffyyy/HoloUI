@@ -1,6 +1,11 @@
 if RequiredScript == "lib/managers/hudmanagerpd2" then
     local o_setup_player_info_hud_pd2 = HUDManager._setup_player_info_hud_pd2
     local o_hide_mission_briefing_hud = HUDManager.hide_mission_briefing_hud
+    Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
+        if self.UpdateHoloHUD then
+            self:UpdateHoloHUD()
+        end
+    end)
     Hooks:PostHook(HUDManager, "_setup_player_info_hud_pd2", "HoloSetupPlayerInfoHudPD2", function(self)
         local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)       
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
@@ -18,36 +23,43 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         end
         GUIAnim.flash_icon = hud.flash_icon
         if Holo.Options:GetValue("Base/Info") then
-            Holo.NewInfo = HoloInfo:new(Holo.Panel)
+            Holo.Info = HoloInfo:new("Info")
+            Holo.SkillInfo = HoloInfo:new("SkillInfo")
+            Holo:CreateInfos()
+            Holo:CreateSkillInfos()
         end
         if Holo.Options:GetValue("Voice") then
-            Holo.Voice = HUDVoice:new(managers.gui_data:create_fullscreen_workspace())
+            Holo.Voice = HUDVoice:new()
         end
     end)
-    function HUDManager:UpdateHoloHUD()
-        if self:alive(Idstring("guis/mask_off_hud")) then
-           self:script(Idstring("guis/mask_off_hud")):UpdateHoloHUD()
+    if Holo.Options:GetValue("Base/Hud") then
+        function HUDManager:UpdateHoloHUD()
+            managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HudScale"), Holo.Options:GetValue("HudSpacing"))
+            if self:alive(Idstring("guis/mask_off_hud")) then
+                self:script(Idstring("guis/mask_off_hud")):UpdateHoloHUD()
+            end
+            self:waypoints_update()
         end
-    end
-    Hooks:PostHook(HUDManager, "show", "HoloShow", function(self, name)
-      if name == Idstring("guis/mask_off_hud") then
-          if self:alive(name) then
-              local script = self:script(name)
-              script.UpdateHoloHUD = function(this)
-                  local scale = Holo.Options:GetValue("HudScale")
-                  this.mask_on_text:set_font(Idstring("fonts/font_large_mf"))
-                  this.mask_on_text:set_font_size(24 * scale)
-                  self:make_fine_text(this.mask_on_text)
-                  this.mask_on_text:set_y(26 * scale)
-                  this.mask_on_text:set_center_x(this.panel:center_x())
-              end
-              script:UpdateHoloHUD()
-          end
-      end
-    end)
-    function HUDManager:show_switching(id, curr, total)
-        if self._teammate_panels[HUDManager.PLAYER_PANEL].show_switching then
-            self._teammate_panels[HUDManager.PLAYER_PANEL]:show_switching(id, curr, total)
+        Hooks:PostHook(HUDManager, "show", "HoloShow", function(self, name)
+        if name == Idstring("guis/mask_off_hud") then
+            if self:alive(name) then
+                local script = self:script(name)
+                script.UpdateHoloHUD = function(this)
+                    this.mask_on_text:set_font(Idstring("fonts/font_large_mf"))
+                    this.mask_on_text:set_font_size(24)
+                    self:make_fine_text(this.mask_on_text)
+                    this.mask_on_text:set_y(26)
+                    this.mask_on_text:set_color(Holo:GetColor("Colors/Main"))
+                    this.mask_on_text:set_center_x(this.panel:center_x())
+                end
+                script:UpdateHoloHUD()
+            end
+        end
+        end)
+        function HUDManager:show_switching(id, curr, total)
+            if self._teammate_panels[HUDManager.PLAYER_PANEL].show_switching then
+                self._teammate_panels[HUDManager.PLAYER_PANEL]:show_switching(id, curr, total)
+            end
         end
     end
     if Holo.Options:GetValue("Chat") then
@@ -62,14 +74,13 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         	if hud.panel:child("teammates_panel") then
         		hud.panel:remove(hud.panel:child("teammates_panel"))
         	end
-            local scale = Holo.Options:GetValue("HudScale")
-        	local h = self:teampanels_height() * scale
+        	local h = self:teampanels_height()
         	local teammates_panel = hud.panel:panel({
         		name = "teammates_panel",
         		halign = "grow",
         		valign = "bottom"
         	})
-        	local teammate_w = 204 * scale
+        	local teammate_w = 204
         	local player_gap = 240
         	local small_gap = (teammates_panel:w() - player_gap - teammate_w * 4) / 3
         	for i = 1, HUDManager.PLAYER_PANEL do
@@ -89,16 +100,15 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         	end
         end
         function HUDManager:align_teammate_panels()
-        	local scale = Holo.Options:GetValue("HudScale")
-        	local teammate_w = 204 * scale
-        	local player_gap = 240 * scale
-        	local h = self:teampanels_height() * scale
+        	local teammate_w = 204
+        	local player_gap = 240
+        	local h = self:teampanels_height() 
         	local small_gap = (managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:child("teammates_panel"):w() - player_gap - teammate_w * 4) / 3
         	for i = 1, HUDManager.PLAYER_PANEL do
         		local is_player = i == HUDManager.PLAYER_PANEL
         		if self._teammate_panels[i] then
         			local pw = teammate_w + (is_player and 32 or 64)
-        			local x = math.floor(((pw - (is_player and 42 or 0)) + (is_player and small_gap or (10 * scale))) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
+        			local x = math.floor(((pw - (is_player and 42 or 0)) + (is_player and small_gap or 10)) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
         			self._teammate_panels[i]._panel:set_size(pw, h)
         			self._teammate_panels[i]._player_panel:set_size(pw, h)
         			self._teammate_panels[i]._panel:set_leftbottom(x, self._teammate_panels[i]._panel:parent():h())
@@ -106,21 +116,18 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         	end
         end
     end
-    function HUDManager:hide_mission_briefing_hud(...)
-        o_hide_mission_briefing_hud(self, ...)
-        if self._hud_mission_briefing then
-            self._mission_briefing_hidden = true
-            Holo.Panel:show()
-        end
-    end
+    Hooks:PostHook(HUDManager, "hide_mission_briefing_hud", "HideMissionBriefingHud", function()
+        Holo.Panel:show()
+    end)
     if Holo.Options:GetValue("TeammateHud") then
         Hooks:PostHook(HUDManager, "show_player_gear", "HoloShowPlayerGear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-                if alive(self._teammate_panels[panel_id]._player_panel:child("Mainbg")) then
+                local panel = self._teammate_panels[panel_id]._player_panel
+                if alive(panel:child("Mainbg")) then
                     panel:child("Mainbg"):set_visible((not CompactHUD and not Fallout4hud))
-                    panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("EquipmentsBG"):h())
-                    panel:parent():child("teammate_line"):set_right(panel:child("EquipmentsBG"):left())
-                    panel:parent():child("teammate_line"):set_bottom(panel:child("EquipmentsBG"):bottom())                
+                    panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("Mainbg"):h())
+                    panel:parent():child("teammate_line"):set_right(panel:child("Mainbg"):left())
+                    panel:parent():child("teammate_line"):set_bottom(panel:child("Mainbg"):bottom())                
                     if self._teammate_panels[panel_id].layout_equipments then
                         self._teammate_panels[panel_id]:layout_equipments()
                     end      
@@ -129,11 +136,12 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         end)        
         Hooks:PostHook(HUDManager, "hide_player_gear", "HoloHidePlayerGear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-                if alive(self._teammate_panels[panel_id]._player_panel:child("Mainbg")) then
+                local panel = self._teammate_panels[panel_id]._player_panel
+                if alive(panel:child("Mainbg")) then
                     panel:child("Mainbg"):hide()
-                    panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("EquipmentsBG"):h())
-                    panel:parent():child("teammate_line"):set_right(panel:child("EquipmentsBG"):left())
-                    panel:parent():child("teammate_line"):set_bottom(panel:child("EquipmentsBG"):bottom())                
+                    panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("Mainbg"):h())
+                    panel:parent():child("teammate_line"):set_right(panel:child("Mainbg"):left())
+                    panel:parent():child("teammate_line"):set_bottom(panel:child("Mainbg"):bottom())                
                     if self._teammate_panels[panel_id].layout_equipments then
                         self._teammate_panels[panel_id]:layout_equipments()
                     end      

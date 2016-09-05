@@ -87,6 +87,22 @@ if Holo.Options:GetValue("Base/Menu") then
 		self._stats_titles.skill:set_blend_mode("normal")
 		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
 	end)
+	BlackMarketGuiSlotItem._init = BlackMarketGuiSlotItem._init or BlackMarketGuiSlotItem.init
+	function BlackMarketGuiSlotItem:init(panel, data, ...)
+		if data.lock_texture == true then
+			data.lock_texture = "guis/textures/pd2/skilltree/padlock"
+		end
+		self:_init(panel, data, ...)
+		if self._bitmap then
+			self._bitmap:set_color(Color.white)
+			self._bitmap:set_blend_mode("normal")
+		end	
+		if self._lock_bitmap then
+			self._lock_bitmap:set_size(16, 16)
+			self._lock_bitmap:set_leftbottom(4, self._panel:h() - 4)
+		end
+	end
+ 
 	function BlackMarketGuiSlotItem:select(instant, no_sound)
 		BlackMarketGuiSlotItem.super.select(self, instant, no_sound)
 		if not managers.menu:is_pc_controller() then

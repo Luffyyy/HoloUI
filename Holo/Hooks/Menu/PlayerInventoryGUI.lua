@@ -65,6 +65,6 @@ if Holo.Options:GetValue("Base/Menu") then
 	    params.text_unselected_color = Holo:GetColor("TextColors/Menu")
 	    params.box_selected_sides = {0, 0, 0, 2}
 	    params.box_unselected_sides = {0, 0, 0, 2}
-	    return o_create_box(self, params, index)
+		return o_create_box(self, params, index)
 	end
 end

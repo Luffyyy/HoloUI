@@ -1,18 +1,22 @@
 <mod name="HoloHud" global_key="Holo">
       <Classes directory="Classes">
+            <class file="Definitions.lua"/>
             <class file="OptionsMenu.lua"/>
             <class file="GUIAnimations.lua"/>
             <class file="HudVoice.lua"/>
             <class file="HoloInfo.lua"/>
-            <class file="HudInfo.lua"/>
       </Classes>
        <Localization directory="Loc" default="EN.txt">
           <loc file="EN.txt" language="english"/>
           <loc file="RU.txt" language="russian"/>
           <loc file="GR.txt" language="german"/>
-      </Classes>     
+      </Localization>     
       <Hooks directory="Hooks">
             <!-- Hooks -->
+            <hook source_file="lib/setups/setup" file="Setup.lua"/>
+            <hook source_file="core/lib/managers/coreguidatamanager" file="CoreGUIDataManager.lua"/>
+            <hook source_file="lib/states/ingamewaitingforplayers" file="InGameWaitingForPlayers.lua"/>
+            <hook source_file="lib/tweak_data/tweakdata" file="TweakData.lua"/>
             <hook source_file="lib/managers/hudmanager" file="HudManager.lua"/>
             <hook source_file="lib/managers/hudmanagerpd2" file="HudManager.lua"/>
             <hook source_file="lib/managers/crimenetmanager" file="CrimeNetManager.lua"/>
@@ -28,7 +32,9 @@
             <hook source_file="lib/units/props/carrydata" file="Info/CarryData.lua"/>
             <hook source_file="lib/units/interactions/interactionext" file="Info/InteractionExt.lua"/>
             <hook source_file="lib/units/equipment/ecm_jammer/ecmjammerbase" file="Info/EcmJammerBase.lua"/>     
+            <hook source_file="lib/units/enemies/cop/copdamage" file="Info/CopDamage.lua"/>     
             <!-- Hud Hooks -->
+            <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua"/>
             <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua"/>
             <hook source_file="lib/managers/hud/hudheisttimer" file="Hud/HudHeistTimer.lua"/>
             <hook source_file="lib/managers/hud/hudplayerdowned" file="Hud/HudPlayerDowned.lua"/>
@@ -43,6 +49,8 @@
             <hook source_file="lib/managers/hud/hudhint" file="Hud/HudHint.lua"/>
             <hook source_file="lib/managers/hud/hudpresenter" file="Hud/HudPresenter.lua"/>
             <!-- Menu Hooks -->
+            <hook source_file="lib/managers/menu/multiprofileitemgui" file="Menu/MultiProfileItemGUI.lua"/>
+            <hook source_file="lib/managers/menu/walletguiobject" file="Menu/WalletGUIObject.lua"/>
             <hook source_file="lib/managers/menu/menubackdropgui" file="Menu/MenuBackdropGUI.lua"/>
             <hook source_file="lib/managers/hud/hudstageendscreen" file="Menu/StageendScreen.lua"/>
             <hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuSlider.lua"/>
@@ -81,8 +89,9 @@
                         <option type="boolean" default_value="true" desc="true" menu="Main" name="Info"/>   
                   </option_group>
                   <div name="HudDiv" text="Hud"/>
-                  <option type="number" default_value="0.8" min="0" max="1" name="HudAlpha"/>
+                  <option type="number" default_value="1" min="0" max="1" name="HudAlpha"/>
                   <option type="number" default_value="1" min="0" max="1.25" name="HudScale"/>
+                  <option type="number" default_value="0.98" min="0" max="1.25" name="HudSpacing"/>
                   <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha"/>
                   <option type="number" default_value="0.4" min="0" max="1" name="TeammateBackgroundAlpha"/>
                   <option type="boolean" default_value="true" beforetext="Modified" name="Assault"/>
@@ -128,6 +137,7 @@
                         <option type="number" default_value="9" menu="Info" name="Infos"/>    
                         <option type="number" default_value="1" menu="Info" name="Timers"/>    
                         <option type="number" default_value="9" menu="Info" name="TimersJammed"/>    
+                        <option type="number" default_value="9" menu="Info" name="Stamina"/>    
                         <option type="number" default_value="1" menu="Info" name="Civilians"/>
                         <option type="number" default_value="1" menu="Info" name="SmallLoot"/>
                         <option type="number" default_value="3" menu="Info" name="Enemies"/>
@@ -141,6 +151,13 @@
                         <option type="number" default_value="1" name="Menu" name="Marker"/>
                         <option type="number" default_value="1" menu="Menu" name="TabHighlighted"/>
                         <option type="number" default_value="1" menu="Main" index="After|Base" items="ColorsStrings" name="Main"/>
+                         <!-- Extended Colors -->            
+                        <option type="boolean" default_value="false" name="ColorizeTeammates"/>                        
+                        <option type="number" default_value="4" name="TeammateHost"/>                        
+                        <option type="number" default_value="2" name="Teammate2"/>                        
+                        <option type="number" default_value="14" name="Teammate3"/>                        
+                        <option type="number" default_value="3" name="Teammate4"/>                        
+                        <option type="number" default_value="15" name="TeammateAI"/>                        
                   </option_group>
                   <option_group name="TextColors">
                         <div name="TopHud"/>                 
@@ -156,6 +173,7 @@
                         <div name="TeammateHud"/>                          
                         <option type="number" default_value="1" name="Health"/>
                         <option type="number" default_value="9" name="HealthNeg"/>                        
+                        <option type="number" default_value="11" name="Teammate"/>                         
                         <option type="number" default_value="11" name="Teammate"/>                         
                         <option type="number" default_value="6" menu="Info" name="Infos"/>    
                         <option type="number" default_value="6" menu="Info" name="Timers"/>    
@@ -180,18 +198,21 @@
                         <option type="boolean" default_value="false" name="TimerInSeconds"/>
                         <option type="boolean" default_value="true" beforetext="Show" name="ECM"/>
                         <option type="boolean" default_value="false" beforetext="Show" name="GagePacks"/>
-                        <option type="boolean" default_value="true" name="DrillTimers"/>
+                        <option type="boolean" default_value="true" name="DrillTimers"/>                        
+                        <option type="boolean" default_value="true" name="InfoFromLeft"/>                        
+                        <option type="boolean" default_value="false" name="SkillInfoFromLeft"/>                        
                         <option type="number" default_value="40" name="InfoPosX"/>
-                        <option type="number" default_value="64" name="InfoPosY"/>
-                        <option type="number" default_value="1145" name="StaminaPosX"/>
-                        <option type="number" default_value="360" name="StaminaPosY"/>
-                        <option type="number" default_value="5" floats="0" min="1" max="10" name="RowMaxInfos"/>    
+                        <option type="number" default_value="64" name="InfoPosY"/>                        
+                        <option type="number" default_value="995" name="SkillInfoPosX"/>
+                        <option type="number" default_value="72" name="SkillInfoPosY"/>
+                        <option type="number" default_value="5" floats="0" min="1" max="10" name="RowMaxInfos"/>   
                   </option_group>
                   <option_group name="Menu">                        
                         <option type="boolean" default_value="true" beforetext="Modified" name="Loading"/>                  
                         <option type="boolean" default_value="true" beforetext="Modified" name="Lobby"/>
                         <option type="boolean" default_value="true" beforetext="Modified" name="CrimeNet"/>
-						<option type="boolean" default_value="true" name="ColoredBackground"/>
+				<option type="boolean" default_value="true" name="ColoredBackground"/>
+				<option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo"/>
                         <option type="number" default_value="2" menu_type="combo" items="TextSizesStrings" name="TextSize"/>      
                         <option type="number" default_value="1" min="0" max="1" name="MarkerAlpha"/>
                   </option_group>                  

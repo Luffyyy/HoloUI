@@ -1,32 +1,31 @@
-if Holo.Options:GetValue("Presenter") then
+if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("Presenter") then
 	Hooks:PostHook(HUDPresenter, "init", "HoloInit", function(self)
 		self:UpdateHoloHUD()
 	end)
 	function HUDPresenter:UpdateHoloHUD()
-	 	local scale = Holo.Options:GetValue("HudScale")
 	 	local color = Holo:GetColor("Colors/Presenter")
 	 	local title = self._bg_box:child("title")
 	 	local text = self._bg_box:child("text")
 		title:configure({
 			color = Holo:GetColor("TextColors/Presenter"),
 			font = "fonts/font_large_mf",
-			font_size = 24 * scale,
-			h = 24 * scale,
+			font_size = 24,
+			h = 24,
 		})
 		text:configure({
 			color = Holo:GetColor("TextColors/Presenter"),
 			font = "fonts/font_large_mf",
-			font_size = 20 * scale,
-			h = 20 * scale,
+			font_size = 20,
+			h = 20,
 		})
 		local _, _, w, _ = title:text_rect()
 		title:set_w(w)
 		local _, _, w2, _ = text:text_rect()
 		text:set_w(w2)
-	 	local w = math.max(w, w2) + (24 * scale)
-		local h = 68 * scale
+	 	local w = math.max(w, w2) + 24
+		local h = 68
 		local x = math.round(self._hud_panel:w() / 2 - w / 2)
-		local y = 86 * scale
+		local y = 86 
 		HUDBGBox_recreate(self._bg_box, {
 			x = x,
 			y = y,
@@ -36,19 +35,18 @@ if Holo.Options:GetValue("Presenter") then
 		})
 		self._box_width = w
 		title:set_bottom(math.floor(self._bg_box:h() / 2))
-		text:set_top(math.ceil(self._bg_box:h() / 2) - (4 * scale))
+		text:set_top(math.ceil(self._bg_box:h() / 2) - 4)
 	end
 	function HUDPresenter:_animate_present_information(present_panel, params)
 		present_panel:set_visible(true)
 		present_panel:set_alpha(1)
-		local scale = Holo.Options:GetValue("HudScale")
 		local title = self._bg_box:child("title")
 		local text = self._bg_box:child("text")
 		local _, _, w, _ = title:text_rect()
 		title:set_w(w)
 		local _, _, w2, _ = text:text_rect()
 		text:set_w(w2)
-		local _w = math.max(w, w2) + (24 * scale)
+		local _w = math.max(w, w2) + 24
 		self._box_width = _w
  		local function open_done()
 			title:set_visible(true)

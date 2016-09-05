@@ -8,22 +8,21 @@ if Holo.Options:GetValue("Base/Hud") then
 		end)
 	end
 	function HUDTemp:UpdateHoloHUD()
-		local scale = Holo.Options:GetValue("HudScale")
 		local bag_panel = self._temp_panel:child("bag_panel")
 		bag_panel:configure({
-			w = 204 * scale,
-			h = 32 * scale,
+			w = 204,
+			h = 32,
 		})
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
-		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + (20 * scale))
+		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
 		HUDBGBox_recreate(self._bg_box, {
-			w = 204 * scale,
+			w = 204,
 			h = bag_panel:h(),
 			color = Holo:GetColor("Colors/Carrying"),
 		})
 		self._bg_box:child("bag_text"):configure({
 			visible = true,
-			font_size = 20 * scale,
+			font_size = 20,
 			align = "center",
 			color = Holo:GetColor("TextColors/Carrying"),
 			blend_mode = "normal",
@@ -32,7 +31,6 @@ if Holo.Options:GetValue("Base/Hud") then
 		self._bg_box:child("bag_text"):set_center(self._bg_box:center())
 	end
 	function HUDTemp:show_carry_bag(carry_id, value)
-		local scale = Holo.Options:GetValue("HudScale")
 		local bag_panel = self._temp_panel:child("bag_panel")
 		local carry_data = tweak_data.carry[carry_id]
 		local type_text = carry_data.name_id and managers.localization:text(carry_data.name_id)
@@ -41,7 +39,7 @@ if Holo.Options:GetValue("Base/Hud") then
 		self:UpdateHoloHUD()
 		bag_panel:set_w(0)
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
-		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + (20 * scale))
+		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
 		bag_panel:show()
 		GUIAnim.play(bag_panel, "left_grow", self._bg_box:w())
 	end

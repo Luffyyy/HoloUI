@@ -1,13 +1,13 @@
 {  
-   "name":"HoloHUD Reborn",
+   "name":"HoloHUD",
    "description":"A mod that changes the look of the HUD & Menu to look more modern and comes with some extras",
    "author":"Luffy",
-   "version":"1.0",
+   "version":"Reborn 1.0",
    "priority":15,
    "updates":[  
       {  
-         "revision":1,
-         "identifier":"HoloHUDReborn"
+         "revision" : 76,
+         "identifier" : "HoloHud",
       }
    ],
    "libraries":[  

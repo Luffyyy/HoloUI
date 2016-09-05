@@ -29,7 +29,6 @@ function HUDBGBox_create(panel, params, config )
 	return box_panel
 end
 function HUDBGBox_create_frame(box_panel, color)
-	local scale = Holo.Options:GetValue("HudScale")
 	local FrameColor = color or Holo:GetColor("Colors/Frame")
 	local FrameStyle = Holo.Options:GetValue("FrameStyle")
 	if alive(box_panel:child("left_top")) then
@@ -58,7 +57,6 @@ function HUDBGBox_create_frame(box_panel, color)
 		halign = "left",
 		valign = "bottom",
 		color = FrameColor,
-		rotation = -90,
 		visible = FrameStyle ~= 5,
 		layer = 10,
 	})
@@ -67,7 +65,6 @@ function HUDBGBox_create_frame(box_panel, color)
 		halign = "right",
 		valign = "top",
 		color = FrameColor,
-		rotation = 90,
 		visible = FrameStyle ~= 5,
 		layer = 10,
 	})
@@ -76,51 +73,43 @@ function HUDBGBox_create_frame(box_panel, color)
 		halign = "right",
 		valign = "bottom",
 		color = FrameColor,
-		rotation = 180,
 		visible = FrameStyle ~= 5,
 		layer = 10,
 	})
 	if FrameStyle == 1 then
-	    right_bottom:set_image("guis/textures/pd2/hud_corner")
-	    left_bottom:set_image("guis/textures/pd2/hud_corner")
-	    left_top:set_image("guis/textures/pd2/hud_corner")
-	    right_top:set_image("guis/textures/pd2/hud_corner")
-		local s = 8 * scale
+	    right_bottom:set_image("guis/textures/pd2/hud_frame", 8,8,8,8)
+	    left_bottom:set_image("guis/textures/pd2/hud_frame", 0,8,8,8)
+	    left_top:set_image("guis/textures/pd2/hud_frame", 0,0,8,8)
+	    right_top:set_image("guis/textures/pd2/hud_frame", 8,0,8,8)
+		local s = 8
 	    right_bottom:set_size(s,s)
 	    left_bottom:set_size(s,s)
 	    left_top:set_size(s,s)
 	    right_top:set_size(s,s)
     elseif FrameStyle == 2 then
-	    left_bottom:set_size(box_panel:w() , 1 * scale)
+	    left_bottom:set_size(box_panel:w() , 1)
 	    left_bottom:set_halign("grow")
 	    right_bottom:set_alpha(0)
-	    left_bottom:set_rotation(0)
 	    right_top:set_alpha(0)
 	    left_top:set_alpha(0)
     elseif FrameStyle == 3 then
- 	    left_bottom:set_size(1 * scale, box_panel:h())
+ 	    left_bottom:set_size(1, box_panel:h())
 	    right_bottom:set_alpha(0)
-	    left_bottom:set_rotation(0)
 	    right_top:set_alpha(0)
 	    left_top:set_alpha(0)
 	elseif FrameStyle == 4 then
-	   	left_top:set_size(box_panel:w(), 1 * scale)
+	   	left_top:set_size(box_panel:w(), 1)
 	    left_top:set_halign("grow")
 	    right_bottom:set_alpha(0)
-	    left_top:set_rotation(0)
 	    right_top:set_alpha(0)
 	    left_bottom:set_alpha(0)
     else
-	    left_bottom:set_size(box_panel:w() , 1 * scale)
-	    right_bottom:set_size(1 * scale, box_panel:h())
-	    right_top:set_size(box_panel:w(), 1 * scale)
-	    left_top:set_size(1 * scale, box_panel:h())
+	    left_bottom:set_size(box_panel:w() , 1)
+	    right_bottom:set_size(1, box_panel:h())
+	    right_top:set_size(box_panel:w(), 1)
+	    left_top:set_size(1, box_panel:h())
 	    left_bottom:set_halign("grow")
 	    right_top:set_halign("grow")
-	    right_bottom:set_rotation(0)
-	    left_bottom:set_rotation(0)
-	    right_top:set_rotation(0)
-	    left_top:set_rotation(0)
 	end
 	right_bottom:set_right(box_panel:w())
 	right_bottom:set_bottom(box_panel:h())
@@ -129,41 +118,23 @@ function HUDBGBox_create_frame(box_panel, color)
 end
 if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") and Holo.Options:GetValue("Objective") then
 	function HUDObjectives:UpdateHoloHUD()
-		local scale = Holo.Options:GetValue("HudScale")
 		local objectives_panel = self._hud_panel:child("objectives_panel")
-		objectives_panel:set_size(500 * scale, 100 * scale)
-		objectives_panel:child("icon_objectivebox"):configure({
+		objectives_panel:child("icon_objectivebox"):set_color(Holo:GetColor("Colors/Objective"))
+		HUDBGBox_recreate(self._bg_box, {
 			color = Holo:GetColor("Colors/Objective"),
-			alpha = Holo.Options:GetValue("HudAlpha"),
-			w = 24 * scale,
-			h = 24 * scale,
+			h = 26,
 		})
 		objectives_panel:child("objective_text"):configure({
-			visible = true,
 			color = Holo:GetColor("TextColors/Objective"),
 			font = "fonts/font_large_mf",
-			font_size = 22 * scale,
-			x = 34 * scale,
-			y = 4 * scale,
+			font_size = self._bg_box:h() - 2,
+			y = 1,
 		})
-		local _,_,w,_ = objectives_panel:child("objective_text"):text_rect()
 		objectives_panel:child("amount_text"):configure({
 			color = Holo:GetColor("TextColors/Objective"),
 			font = "fonts/font_large_mf",
-			font_size = 22 * scale,
-			x = objectives_panel:child("objective_text"):x() + (5 * scale) + w,
-			y = 4 * scale,
-		})
-		local amount_size = 26 * scale
-		local _,_,amount_w, _ = objectives_panel:child("amount_text"):text_rect()
-		if self._has_amount then
-			amount_size = amount_size + amount_w
-		end
-		HUDBGBox_recreate(self._bg_box, {
-			w = w + amount_size,
-			h = 30 * scale,
-			x = 26 * scale,
-			color = Holo:GetColor("Colors/Objective"),
+			y = objectives_panel:child("objective_text"):y(),
+			font_size = self._bg_box:h() - 2,
 		})
 	end
 	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)
@@ -173,13 +144,12 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") and Hol
 		local objectives_panel = self._hud_panel:child("objectives_panel")
 		local objective_text = objectives_panel:child("objective_text")
 		local amount_text = objectives_panel:child("amount_text")
-		local scale = Holo.Options:GetValue("HudScale")
 		self._active_objective_id = data.id
 		self._has_amount = data.amount ~= nil
 		objective_text:set_text(utf8.to_upper(data.text))
 		local _,_,obj_w,_ = objective_text:text_rect()
 		objectives_panel:set_visible(true)
-	    amount_size = 26 * scale
+	    amount_size = 26
 		amount_text:set_visible(false)
 		if data.amount then
 			self:update_amount_objective(data)
@@ -193,8 +163,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") and Hol
 		GUIAnim.play(self._bg_box, "w", obj_w + amount_size, 2)
 		objective_text:show()
 		amount_text:show()
-		self._bg_box:set_w( obj_w + amount_size)
-		amount_text:set_x(objective_text:x() + (5 * scale) + obj_w)
+		amount_text:set_x(objective_text:x() + 4 + obj_w)
 		objectives_panel:stop()
 		objectives_panel:animate(callback(self, self, "_animate_activate_objective"))
 	end

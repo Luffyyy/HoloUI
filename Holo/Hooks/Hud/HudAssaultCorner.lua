@@ -19,9 +19,8 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 		local icon_casingbox = casing_panel:child("icon_casingbox")
 		local icon_noreturnbox = point_of_no_return_panel:child("icon_noreturnbox")
 		local icon_assaultbox = assault_panel:child("icon_assaultbox")
-		local scale = Holo.Options:GetValue("HudScale")
-		self._box_width = 242 * scale
-		self._box_height = 38 * scale
+		self._box_width = 242 
+		self._box_height = 32
 		HUDBGBox_recreate(self._bg_box,{
 			w = self._box_width,
 			h = self._box_height,
@@ -46,28 +45,28 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 			color = Holo:GetColor("Colors/Hostages"),
 		})
 		self._hud_panel:child("buffs_panel"):set_alpha(0)
-		assault_panel:set_size(400 * scale, 40 * scale)
+		assault_panel:set_size(400, 40)
 		assault_panel:set_righttop(self._hud_panel:w(), 0)
-		casing_panel:set_size(400 * scale, 40 * scale)
+		casing_panel:set_size(400, 40)
 		casing_panel:set_righttop(self._hud_panel:w(), 0)
-		point_of_no_return_panel:set_size(400 * scale, 40 * scale)
+		point_of_no_return_panel:set_size(400, 40)
 		point_of_no_return_panel:set_righttop(self._hud_panel:w(), 0)
-		hostages_panel:set_size(200 * scale, 40 * scale)
+		hostages_panel:set_size(200, 40)
 		hostages_panel:set_righttop(self._hud_panel:w(), 0)
 		icon_casingbox:configure({
 			color = Holo.Options:GetValue("Casing") and Holo:GetColor("Colors/Casing"),
-			w = 24 * scale,
-			h = 24 * scale,
+			w = 24,
+			h = 24,
 		})
 		icon_assaultbox:configure({
 			color = Holo.Options:GetValue("Assault") and Holo:GetColor("Colors/Assault"),
-			w = 24 * scale,
-			h = 24 * scale,
+			w = 24,
+			h = 24,
 		})
 		icon_noreturnbox:configure({
 			color = Holo.Options:GetValue("NoPointOfReturn") and Holo:GetColor("Colors/NoPointOfReturn"),
-			w = 24 * scale,
-			h = 24 * scale,
+			w = 24,
+			h = 24,
 		})
 		icon_assaultbox:set_right(assault_panel:w())
 		icon_casingbox:set_right(casing_panel:w())
@@ -104,9 +103,8 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 		local texts = {}
 		local padding = 10
 		local function create_new_text(text_panel, text_list, text_index, texts)
-			local scale = Holo.Options:GetValue("HudScale")
-			text_panel:set_size(600 * scale, text_panel:parent():h())
-			text_panel:set_center_x(10 * scale)
+			text_panel:set_size(600, text_panel:parent():h())
+			text_panel:set_center_x(10)
 			if texts[text_index] and texts[text_index].text then
 				text_panel:remove(texts[text_index].text)
 				texts[text_index] = nil
@@ -127,7 +125,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 				vertical = "center",
 				blend_mode = color_function and "add",
 				color = color_function and color_function() or color or self._assault_color,
-				font_size = tweak_data.hud_corner.assault_size * scale,
+				font_size = text_panel:h(),
 				font = "fonts/font_large_mf",
 			})
 			local _, _, w, h = text:text_rect()
@@ -138,7 +136,6 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 			}
 		end
 		while true do
-			local scale = Holo.Options:GetValue("HudScale")
 			local dt = coroutine.yield()
 			local last_text = texts[text_index]
 			if last_text and last_text.text then
@@ -155,7 +152,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 				if data.text then
 					data.text:configure({
 						color = color_function and color_function() or color or self._assault_color,
-						font_size = tweak_data.hud_corner.assault_size * scale,
+						font_size = tweak_data.hud_corner.assault_size,
 					})
 					managers.hud:make_fine_text(data.text)
 					data.x = data.x - dt * speed
@@ -192,12 +189,11 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 			end)
 		end)
 		function HUDAssaultCorner:flash_point_of_no_return_timer(beep)
-			local scale = Holo.Options:GetValue("HudScale")
 			local function flash_timer(o)
 				local t = 0
 				while t < 0.5 do
 					t = t + coroutine.yield()
-					local font_size = (tweak_data.hud_corner.noreturn_size * scale)
+					local font_size = (tweak_data.hud_corner.noreturn_size)
 					o:set_font_size(math.lerp(font_size, font_size * 1.25, n))
 				end
 			end

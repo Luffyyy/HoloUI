@@ -2,12 +2,12 @@ Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
 	if self._hud_panel:child("hostages_panel") then
 		self._hud_panel:child("hostages_panel"):set_visible(not Holo.Options:GetValue("Base/Info") and not Holo.Options:GetValue("Info/Infos"))
 	end
-	if self.UpdateHoloHUD then
-		self:UpdateHoloHUD()
+	if self.UpdateHolo then
+		self:UpdateHolo()
 	end
 end)
 if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
-	function HUDAssaultCorner:UpdateHoloHUD()
+	function HUDAssaultCorner:UpdateHolo()
 		local hostages_panel = self._hud_panel:child("hostages_panel")
 		local num_hostages = self._hostages_bg_box:child("num_hostages")
 		local hostages_icon = hostages_panel:child("hostages_icon")
@@ -95,7 +95,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 		end)
 	end
 	Hooks:PostHook(HUDAssaultCorner, "sync_set_assault_mode", "HoloSyncSetAssaultMode", function(self)
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)
 	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function)
 		local text_list = (bg_box or self._bg_box):script().text_list

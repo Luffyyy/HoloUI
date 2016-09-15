@@ -1,6 +1,6 @@
 {  
-   "name":"HoloHUD",
-   "description":"A mod that changes the look of the HUD & Menu to look more modern and comes with some extras",
+   "name":"HoloUI",
+   "description":"A UI Mod inspired by Google's Material Design",
    "author":"Luffy",
    "version":"Reborn 1.0",
    "priority":15,

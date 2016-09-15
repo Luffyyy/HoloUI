@@ -1,8 +1,8 @@
 if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("Hint") then
 	Hooks:PostHook(HUDHint, "init", "HoloInit", function(self)
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)
-	function HUDHint:UpdateHoloHUD()
+	function HUDHint:UpdateHolo()
 		self._hint_panel:configure({
 			h = 30,
 			y = 50

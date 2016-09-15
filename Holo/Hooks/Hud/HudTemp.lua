@@ -1,13 +1,13 @@
 if Holo.Options:GetValue("Base/Hud") then
 	Hooks:PostHook(HUDTemp, "init", "HoloInit", function(self, ...)
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)
 	function HUDTemp:_animate_hide_bag_panel(bag_panel)
-		GUIAnim.play(bag_panel, "left_grow", 0, function()
+		bag_panel:animate(callback(nil, _G, "HUDBGBox_animate_close_left"), function()
 			bag_panel:hide()
 		end)
 	end
-	function HUDTemp:UpdateHoloHUD()
+	function HUDTemp:UpdateHolo()
 		local bag_panel = self._temp_panel:child("bag_panel")
 		bag_panel:configure({
 			w = 204,
@@ -36,7 +36,7 @@ if Holo.Options:GetValue("Base/Hud") then
 		local type_text = carry_data.name_id and managers.localization:text(carry_data.name_id)
 		bag_panel:set_x(self._temp_panel:parent():w() / 2)
 		self._bg_box:child("bag_text"):set_text(utf8.to_upper(managers.localization:text("hud_carrying") .. " " .. type_text))
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 		bag_panel:set_w(0)
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
 		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)

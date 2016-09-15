@@ -73,21 +73,19 @@ if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") th
 					layer = -1,
 					h = 2
 				})		
-				local center_y = slot:center_y()
 				slot:child("criminal"):set_blend_mode("normal")
-				slot:child("criminal"):set_x(4)
-				slot:child("criminal"):set_center_y(center_y)
+				slot:child("criminal"):move(4, 4)
 				slot:child("name"):set_blend_mode("normal")
-				slot:child("name"):set_center_y(center_y)
+				slot:child("name"):move(0, 4)
 				slot:child("status"):set_blend_mode("normal")
-				slot:child("status"):set_center_y(center_y)
-				slot:child("detection"):set_center_y(center_y)
+				slot:child("status"):move(0, 4)
+				slot:child("detection"):move(0, 4)
 				slot:child("detection"):child("detection_left_bg"):set_blend_mode("normal")				
 				slot:child("detection"):child("detection_left"):set_blend_mode("normal")
 				slot:child("detection"):child("detection_right_bg"):set_blend_mode("normal")
 				slot:child("detection"):child("detection_right"):set_blend_mode("normal")
 				slot:child("detection_value"):set_blend_mode("normal")
-				slot:child("detection_value"):set_center_y(center_y)
+				slot:child("detection_value"):move(0, 4)
 				slot:child("status"):set_right(slot:w() - 4)
 	    	end
 	    end

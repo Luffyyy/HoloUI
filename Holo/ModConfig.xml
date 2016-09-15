@@ -1,9 +1,10 @@
-<mod name="HoloHud" global_key="Holo">
+<mod name="HoloUI" global_key="Holo">
       <Classes directory="Classes">
             <class file="Definitions.lua"/>
             <class file="OptionsMenu.lua"/>
             <class file="GUIAnimations.lua"/>
             <class file="HudVoice.lua"/>
+            <class file="FloatingInfo.lua"/>
             <class file="HoloInfo.lua"/>
       </Classes>
        <Localization directory="Loc" default="EN.txt">
@@ -33,6 +34,10 @@
             <hook source_file="lib/units/interactions/interactionext" file="Info/InteractionExt.lua"/>
             <hook source_file="lib/units/equipment/ecm_jammer/ecmjammerbase" file="Info/EcmJammerBase.lua"/>     
             <hook source_file="lib/units/enemies/cop/copdamage" file="Info/CopDamage.lua"/>     
+            <hook source_file="lib/units/equipment/ammo_bag/ammobagbase" file="Info/AmmoBagBase.lua"/>     
+            <hook source_file="lib/units/equipment/doctor_bag/doctorbagbase" file="Info/DoctorBagBase.lua"/>     
+            <hook source_file="lib/units/environment/environmentfire" file="Info/EnvironmentFire.lua"/>     
+            <hook source_file="lib/units/weapons/grenades/grenadebase" file="Info/GrenadeBase.lua"/>     
             <!-- Hud Hooks -->
             <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua"/>
             <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua"/>
@@ -100,6 +105,8 @@
                   <option type="boolean" default_value="true" beforetext="Modified" name="NoPointOfReturn"/>
                   <option type="boolean" default_value="true" beforetext="Modified" name="Presenter"/>
                   <option type="boolean" default_value="true" beforetext="Modified" name="Hint"/>
+                  <option type="boolean" default_value="true" beforetext="Modified" name="Interaction"/>
+                  <option type="boolean" default_value="true" beforetext="Modified" name="HealthAndArmor"/>
                   <option type="boolean" default_value="true" name="Voice"/>
                   <option type="boolean" default_value="true" name="TopHud"/>
                   <option type="boolean" default_value="true" beforetext="Show" name="HealthText"/>
@@ -112,6 +119,7 @@
                   <div name="Other"/>
                   <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle"/>    
                   <option_group name="Colors">
+                        <option type="number" default_value="1" items="ColorsStrings" name="Main"/>
                         <div name="TopHud"/>                 
                         <option type="number" default_value="10" name="Assault"/>
                         <option type="number" default_value="1" name="Casing"/>
@@ -122,6 +130,7 @@
                         <option type="number" default_value="1" name="Hint"/>
                         <option type="number" default_value="1" name="Carrying"/>
                         <option type="number" default_value="1" name="TimerBox"/>
+                        <option type="number" default_value="11" name="Frame"/>
                         <div name="TeammateHud"/>                         
                         <option type="number" default_value="6" name="TeammateBackground"/>
                         <option type="number" default_value="1" name="SelectedWeapon"/>
@@ -130,27 +139,30 @@
                         <option type="number" default_value="1" items="RadialColors" name="Health"/>
                         <option type="number" default_value="5" items="RadialColors" name="Armor"/>
                         <option type="number" default_value="1" items="RadialColors" name="Progress"/>
-                        <option type="number" default_value="7" items="RadialColors" name="ProgressRed"/>                             
-                        <div name="Other"/> 
-                        <option type="number" default_value="1" name="Waypoints"/>                        
-                        <option type="number" default_value="11" name="Frame"/>
-                        <option type="number" default_value="9" menu="Info" name="Infos"/>    
-                        <option type="number" default_value="1" menu="Info" name="Timers"/>    
-                        <option type="number" default_value="9" menu="Info" name="TimersJammed"/>    
-                        <option type="number" default_value="9" menu="Info" name="Stamina"/>    
-                        <option type="number" default_value="1" menu="Info" name="Civilians"/>
-                        <option type="number" default_value="1" menu="Info" name="SmallLoot"/>
-                        <option type="number" default_value="3" menu="Info" name="Enemies"/>
-                        <option type="number" default_value="1" menu="Info" name="Diamonds"/>
-                        <option type="number" default_value="1" menu="Info" name="Money"/>
-                        <option type="number" default_value="1" menu="Info" name="Weapons"/>
-                        <option type="number" default_value="1" menu="Info" name="Pagers"/>   
-                        <option type="number" default_value="1" menu="Info" name="GagePacks"/>
-                        <option type="number" default_value="7" menu="Menu" name="MenuBackground"/>
-                        <option type="number" default_value="11" menu="Menu" name="Tab"/>                       
-                        <option type="number" default_value="1" name="Menu" name="Marker"/>
-                        <option type="number" default_value="1" menu="Menu" name="TabHighlighted"/>
-                        <option type="number" default_value="1" menu="Main" index="After|Base" items="ColorsStrings" name="Main"/>
+                        <option type="number" default_value="7" items="RadialColors" name="ProgressRed"/>                                                   
+                        <div name="Menu"/>  
+                        <option type="number" default_value="7"  name="MenuBackground"/>
+                        <option type="number" default_value="11" name="Tab"/>                       
+                        <option type="number" default_value="1" name="Marker"/>
+                        <option type="number" default_value="1" name="TabHighlighted"/>
+                        <div name="Info"/>
+                        <option type="number" default_value="9" name="Infos"/>    
+                        <option type="number" default_value="1" name="Timers"/>    
+                        <option type="number" default_value="9" name="TimersJammed"/>    
+                        <option type="number" default_value="9" name="Stamina"/>    
+                        <option type="number" default_value="1" name="Civilians"/>
+                        <option type="number" default_value="1" name="SmallLoot"/>
+                        <option type="number" default_value="3" name="Enemies"/>
+                        <option type="number" default_value="1" name="Diamonds"/>
+                        <option type="number" default_value="1" name="Money"/>
+                        <option type="number" default_value="1" name="Weapons"/>
+                        <option type="number" default_value="1" name="Drill"/>   
+                        <option type="number" default_value="1" name="Pagers"/>   
+                        <option type="number" default_value="1" name="GagePacks"/>
+                        <option type="number" default_value="1" name="MeleeCharge"/>
+                        <option type="number" default_value="1" name="InspireSkill"/>
+                        <div name="Other"/>
+                        <option type="number" default_value="1" name="Waypoints"/>  
                          <!-- Extended Colors -->            
                         <option type="boolean" default_value="false" name="ColorizeTeammates"/>                        
                         <option type="number" default_value="4" name="TeammateHost"/>                        
@@ -174,19 +186,22 @@
                         <option type="number" default_value="1" name="Health"/>
                         <option type="number" default_value="9" name="HealthNeg"/>                        
                         <option type="number" default_value="11" name="Teammate"/>                         
-                        <option type="number" default_value="11" name="Teammate"/>                         
-                        <option type="number" default_value="6" menu="Info" name="Infos"/>    
-                        <option type="number" default_value="6" menu="Info" name="Timers"/>    
-                        <option type="number" default_value="6" menu="Info" name="Stamina"/>
-                        <option type="number" default_value="9" menu="Info" name="StaminaNeg"/>    
-                        <option type="number" default_value="6" menu="Menu" name="Tab"/>
-                        <option type="number" default_value="11" menu="Menu" name="Menu"/>
-                        <option type="number" default_value="6" menu="Menu" name="MenuHighlighted"/>
+                        <option type="number" default_value="11" name="Teammate"/>    
+                        <div name="Menu"/>      
+                        <option type="number" default_value="6" name="Tab"/>
+                        <option type="number" default_value="11" name="Menu"/>
+                        <option type="number" default_value="6" name="MenuHighlighted"/>
+                        <div name="Info"/>                     
+                        <option type="number" default_value="6" name="Infos"/>    
+                        <option type="number" default_value="6" name="Timers"/>    
+                        <option type="number" default_value="6" name="Stamina"/>
+                        <option type="number" default_value="9" name="StaminaNeg"/>    
                   </option_group>    
-                  <option_group name="Info">                        
+                  <option_group name="Info">          
                         <option type="boolean" default_value="true" beforetext="Show" name="Timers"/>
                         <option type="boolean" default_value="true" beforetext="Show" name="Infos"/>
                         <option type="boolean" default_value="false" beforetext="Show" name="Stamina"/>
+                        <option type="boolean" default_value="true" beforetext="Show" name="MeleeCharge"/>
                         <option type="boolean" default_value="true" beforetext="Show" name="Civilians"/>    
                         <option type="boolean" default_value="true" beforetext="Show" name="Enemies"/>    
                         <option type="boolean" default_value="true" beforetext="Show" name="SmallLoot"/>    
@@ -195,6 +210,8 @@
                         <option type="boolean" default_value="true" beforetext="Show" name="Weapons"/>    
                         <option type="boolean" default_value="true" beforetext="Show" name="Loot"/>    
                         <option type="boolean" default_value="true" beforetext="Show" name="Pagers"/>
+                        <option type="boolean" default_value="true" beforetext="Show" name="MeleeCharge"/>
+                        <option type="boolean" default_value="true" beforetext="Show" name="InspireSkill"/>
                         <option type="boolean" default_value="false" name="TimerInSeconds"/>
                         <option type="boolean" default_value="true" beforetext="Show" name="ECM"/>
                         <option type="boolean" default_value="false" beforetext="Show" name="GagePacks"/>

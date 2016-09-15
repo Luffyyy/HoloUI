@@ -1,8 +1,8 @@
-if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("Presenter") then
+if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("Presenter") then
 	Hooks:PostHook(HUDPresenter, "init", "HoloInit", function(self)
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)
-	function HUDPresenter:UpdateHoloHUD()
+	function HUDPresenter:UpdateHolo()
 	 	local color = Holo:GetColor("Colors/Presenter")
 	 	local title = self._bg_box:child("title")
 	 	local text = self._bg_box:child("text")

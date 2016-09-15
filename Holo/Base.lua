@@ -13,17 +13,6 @@ function Holo:init()
 		self.Options:SetValue("NoPointOfReturn", false)
 		self.Options:SetValue("Presenter", false)
 	end
-	if pdth_hud and pdth_hud.Options then
-		if self.Options:GetValue("Assault") then
-			pdth_hud.Options:SetValue("HUD/Assault", false)
-		end
-		if pdth_hud.Options:GetValue("HUD/MainHud") then
-			self.Options:SetValue("TeammateHud", false)
-		end
-		if pdth_hud.Options:GetValue("HUD/Objectives") then
-			self.Options:SetValue("Presenter", false)
-		end
-	end
 	World:effect_manager():set_rendering_enabled(true)		
 	self:LoadTextures()
 	self:log("Done Loading")
@@ -128,6 +117,14 @@ function Holo:CreateSkillInfos()
         icon_rect = {67,511,55,66},		
 		text = "0",
 		func = "UpdateStamina",
+	})	
+	self.SkillInfo:CreateInfo({
+        name = "MeleeCharge",
+        icon = "guis/textures/pd2/skilltree/icons_atlas",
+		panel = "InfoBoxes",
+        icon_rect = {255,763,61,71},		
+		text = "0",
+		func = "UpdateMeleeCharge",
 	})	
 	self.SkillInfo:CreateInfo({
         name = "InspireSkill",
@@ -257,27 +254,27 @@ function Holo:UpdateSettings()
 	}
 	if managers.hud then
 		if self.Info then
-			self.Info:UpdateHoloHUD()
+			self.Info:UpdateHolo()
 		end		 
 		if self.SkillInfo then
-			self.SkillInfo:UpdateHoloHUD()
+			self.SkillInfo:UpdateHolo()
 		end
-		if managers.hud.UpdateHoloHUD then
-			managers.hud:UpdateHoloHUD()
+		if managers.hud.UpdateHolo then
+			managers.hud:UpdateHolo()
 			for _, teammate in pairs(managers.hud._teammate_panels) do
-				if teammate.UpdateHoloHUD then
-					teammate:UpdateHoloHUD()
+				if teammate.UpdateHolo then
+					teammate:UpdateHolo()
 				end
 			end
 			for _, hud in pairs(updaters) do
-				if managers.hud[hud].UpdateHoloHUD then
-					managers.hud[hud]:UpdateHoloHUD()
+				if managers.hud[hud].UpdateHolo then
+					managers.hud[hud]:UpdateHolo()
 				end
 			end
 		end
 	end
 	if tweak_data then
-		tweak_data:UpdateHoloHUD()
+		tweak_data:UpdateHolo()
 	end
 end
 function Holo:GetColor(setting)
@@ -293,10 +290,37 @@ function Holo:GetColor(setting)
 		return Color.white
 	end
 end
+function Holo:ShouldModify(option)  
+	local LogInfo = function(a,b)
+		self:log(string.format("Cannot modify %s because %s", a, b))
+	end
+	local value = self.Options:GetValue(option)
+	if pdth_hud and pdth_hud.Options then
+		if Holo.Options:GetValue("Assault") then
+			pdth_hud.Options:SetValue("HUD/Assault", false)
+		end
+		if pdth_hud.Options:GetValue("HUD/MainHud") and option == "TeammateHud" then
+			LogInfo(option, "PDTH Hud Uses it.")	
+			return false
+		end
+		if pdth_hud.Options:GetValue("HUD/Objectives") and option == "Presenter" then
+			LogInfo(option, "PDTH Hud Uses it.")
+			return false
+		end
+		if pdth_hud.Options:GetValue("HUD/Interaction") and option == "Interaction" then
+			LogInfo(option, "PDTH Hud Uses it.")
+			return false
+		end
+	end	
+	return value
+end
 if not Holo.setup then
 	Holo:init()
 end
 if Hooks then
+	Hooks:Add("SetupPreInitManagers", "HoloSetupPostInitManagers", function(self)
+
+	end)
 	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)
 		lua_mod_options_menu_id = LuaModManager.Constants._lua_mod_options_menu_id
 		MenuHelper:NewMenu(lua_mod_options_menu_id)
@@ -308,7 +332,6 @@ if Hooks then
 			self._highlight_right_rect:hide()
 		end)
 	end)
- 
 	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu()
 			Holo.Menu._menu:toggle()

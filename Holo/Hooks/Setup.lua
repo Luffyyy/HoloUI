@@ -1,3 +1,4 @@
+Hooks:RegisterHook("SetupPreInitManagers")
 Hooks:PreHook(Setup, "_start_loading_screen", "HoloStartLoadingScreen", function()
 	if Global.level_data then
 		local level_tweak_data = tweak_data.levels[Global.level_data.level_id]
@@ -9,4 +10,7 @@ Hooks:PreHook(Setup, "_start_loading_screen", "HoloStartLoadingScreen", function
 			Global.level_data.briefing_string = managers.localization:text(level_tweak_data.briefing_id)
 		end
 	end
+end)
+Hooks:PreHook(Setup, "init_managers", "HoloInitManagers", function(self)
+	Hooks:Call("SetupPreInitManagers", self)
 end)

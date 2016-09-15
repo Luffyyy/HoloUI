@@ -1,4 +1,4 @@
-function TweakData:UpdateHoloHUD()
+function TweakData:UpdateHolo()
     if Holo.Options:GetValue("Colors/ColorizeTeammates") then
         self.chat_colors = {
             Holo:GetColor("Colors/TeammateHost"),
@@ -38,4 +38,4 @@ function TweakData:UpdateHoloHUD()
         end
     end
 end
-tweak_data:UpdateHoloHUD()
+tweak_data:UpdateHolo()

@@ -34,8 +34,8 @@ function HUDChat:init(ws, hud)
 	})
 	local scroll_panel = output_panel:panel({
 		name = "scroll_panel",
-		h = 10,
-		w = 5,
+		h = 4,
+		w = 3,
 		layer = 2
 	})
 	scroll_panel:rect({
@@ -446,8 +446,8 @@ function HUDChat:receive_message(name, message, color, icon)
 	local messages_panel = output_panel:child("messages_panel")
 	local len = utf8.len(name) + 1
 	local message_panel = messages_panel:panel({
-		x = 10,
-		w = messages_panel:w() - 10,
+		x = 8,
+		w = messages_panel:w() - 4,
 	})
 	local icon_bitmap = message_panel:rect({
 		name = "icon",
@@ -459,7 +459,7 @@ function HUDChat:receive_message(name, message, color, icon)
 		text = string.format("%s: %s", name, message),
 		font = "fonts/font_medium_mf",
 		font_size = 16,
-		w = message_panel:w() - 12,
+		w = message_panel:w() - 2,
 		x = icon_bitmap:right() + 2,
 		y = 0,
 		align = "left",
@@ -471,12 +471,13 @@ function HUDChat:receive_message(name, message, color, icon)
 		word_wrap = true,
 		layer = 1
 	})
-	self:check_text(line:text())
-	managers.hud:make_fine_text(line)
+	local _,_,_,h = line:text_rect()
+	line:set_h(h)
 	icon_bitmap:set_h(line:h() - 4)
 	icon_bitmap:set_center_y(line:center_y())
 	table.insert(self._lines, message_panel)
 	self:_layout_output_panel()
+	self:check_text(line:text())
 	if not self._focus then
 		local output_panel = self._panel:child("output_panel")
 		output_panel:stop()

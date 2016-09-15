@@ -117,7 +117,7 @@ function HUDBGBox_create_frame(box_panel, color)
 	left_bottom:set_bottom(box_panel:h())
 end
 if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") and Holo.Options:GetValue("Objective") then
-	function HUDObjectives:UpdateHoloHUD()
+	function HUDObjectives:UpdateHolo()
 		local objectives_panel = self._hud_panel:child("objectives_panel")
 		objectives_panel:child("icon_objectivebox"):set_color(Holo:GetColor("Colors/Objective"))
 		HUDBGBox_recreate(self._bg_box, {
@@ -127,45 +127,31 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") and Hol
 		objectives_panel:child("objective_text"):configure({
 			color = Holo:GetColor("TextColors/Objective"),
 			font = "fonts/font_large_mf",
-			font_size = self._bg_box:h() - 2,
+			font_size = self._bg_box:h() - 4,
 			y = 1,
-		})
-		objectives_panel:child("amount_text"):configure({
-			color = Holo:GetColor("TextColors/Objective"),
-			font = "fonts/font_large_mf",
-			y = objectives_panel:child("objective_text"):y(),
-			font_size = self._bg_box:h() - 2,
 		})
 	end
 	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)
 	function HUDObjectives:activate_objective(data)
 		local objectives_panel = self._hud_panel:child("objectives_panel")
 		local objective_text = objectives_panel:child("objective_text")
-		local amount_text = objectives_panel:child("amount_text")
+		objectives_panel:child("amount_text"):hide()
 		self._active_objective_id = data.id
 		self._has_amount = data.amount ~= nil
-		objective_text:set_text(utf8.to_upper(data.text))
-		local _,_,obj_w,_ = objective_text:text_rect()
-		objectives_panel:set_visible(true)
-	    amount_size = 26
-		amount_text:set_visible(false)
-		if data.amount then
-			self:update_amount_objective(data)
-			local _,_,amount_w,_ = amount_text:text_rect()
-			amount_size = amount_size + amount_w
-		end
+		objective_text:set_text(string.format("%s %s", utf8.to_upper(data.text), data.amount or ""))
+		local _,_,w,_ = objective_text:text_rect()
 		self._bg_box:stop()
 		self._bg_box:set_w(0)
-		objective_text:hide()
-		amount_text:hide()
-		GUIAnim.play(self._bg_box, "w", obj_w + amount_size, 2)
+		objective_text:set_w(0)
 		objective_text:show()
-		amount_text:show()
-		amount_text:set_x(objective_text:x() + 4 + obj_w)
+		objective_text:set_x(self._bg_box:x() + 4)
+		objectives_panel:show()
 		objectives_panel:stop()
 		objectives_panel:animate(callback(self, self, "_animate_activate_objective"))
+		GUIAnim.play(objective_text, "w", w, 2)
+		GUIAnim.play(self._bg_box, "w", w + 8, 2)
 	end
 	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
 		self._bg_box:child("bg"):stop()

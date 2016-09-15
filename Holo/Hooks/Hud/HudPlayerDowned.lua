@@ -1,8 +1,8 @@
 if Holo.Options:GetValue("Base/Hud") then
 	Hooks:PostHook(HUDPlayerDowned, "init", "HoloInit", function(self, hud, ...)	
-		self:UpdateHoloHUD()
+		self:UpdateHolo()
 	end)	
-	function HUDPlayerDowned:UpdateHoloHUD()
+	function HUDPlayerDowned:UpdateHolo()
 		local scale = Holo.Options:GetValue("HudScale")
 		local downed_panel = self._hud_panel:child("downed_panel")
 		local timer_msg = downed_panel:child("timer_msg")
@@ -42,7 +42,7 @@ if Holo.Options:GetValue("Base/Hud") then
 		GUIAnim.play(self._hud.timer, "alpha", 0.65)
 	end
 	Hooks:PostHook(HUDPlayerDowned, "on_downed", "HoloOnDowned", function(self)
-		if Holo.Options:GetValue("HealthText") and managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHoloHUD then
+		if Holo.Options:GetValue("HealthText") and managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHolo then
 		 	managers.hud._teammate_panels[managers.hud.PLAYER_PANEL]:set_downed()
 		end
 	end)

@@ -2,8 +2,9 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
     local o_setup_player_info_hud_pd2 = HUDManager._setup_player_info_hud_pd2
     local o_hide_mission_briefing_hud = HUDManager.hide_mission_briefing_hud
     Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
-        if self.UpdateHoloHUD then
-            self:UpdateHoloHUD()
+        self._floating_infos = {}
+        if self.UpdateHolo then
+            self:UpdateHolo()
         end
     end)
     Hooks:PostHook(HUDManager, "_setup_player_info_hud_pd2", "HoloSetupPlayerInfoHudPD2", function(self)
@@ -33,10 +34,10 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         end
     end)
     if Holo.Options:GetValue("Base/Hud") then
-        function HUDManager:UpdateHoloHUD()
+        function HUDManager:UpdateHolo()
             managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HudScale"), Holo.Options:GetValue("HudSpacing"))
             if self:alive(Idstring("guis/mask_off_hud")) then
-                self:script(Idstring("guis/mask_off_hud")):UpdateHoloHUD()
+                self:script(Idstring("guis/mask_off_hud")):UpdateHolo()
             end
             self:waypoints_update()
         end
@@ -44,7 +45,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         if name == Idstring("guis/mask_off_hud") then
             if self:alive(name) then
                 local script = self:script(name)
-                script.UpdateHoloHUD = function(this)
+                script.UpdateHolo = function(this)
                     this.mask_on_text:set_font(Idstring("fonts/font_large_mf"))
                     this.mask_on_text:set_font_size(24)
                     self:make_fine_text(this.mask_on_text)
@@ -52,7 +53,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
                     this.mask_on_text:set_color(Holo:GetColor("Colors/Main"))
                     this.mask_on_text:set_center_x(this.panel:center_x())
                 end
-                script:UpdateHoloHUD()
+                script:UpdateHolo()
             end
         end
         end)
@@ -66,7 +67,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         function HUDManager._create_hud_chat_access()
         end
     end
-    if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TeammateHud") then
+    if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
         function HUDManager:_create_teammates_panel(hud)
         	hud = hud or managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
         	self._hud.teammate_panels_data = self._hud.teammate_panels_data or {}
@@ -119,7 +120,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
     Hooks:PostHook(HUDManager, "hide_mission_briefing_hud", "HideMissionBriefingHud", function()
         Holo.Panel:show()
     end)
-    if Holo.Options:GetValue("TeammateHud") then
+    if Holo:ShouldModify("TeammateHud") then
         Hooks:PostHook(HUDManager, "show_player_gear", "HoloShowPlayerGear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
                 local panel = self._teammate_panels[panel_id]._player_panel
@@ -244,8 +245,13 @@ else
         Holo.Panel:hide()
 	end)
 	Hooks:PostHook(HUDManager, "set_enabled", "HoloSetEnabled", function(self)
-        if self._mission_briefing_hidden then
+        if not self._hud_mission_briefing._backdrop._panel:visible() then
             Holo.Panel:show()
         end
 	end)
+    Hooks:PostHook(HUDManager, "update", "HoloUpdate", function(self, t, dt)
+        for _, float in pairs(self._floating_infos) do
+            float:update()
+        end
+    end)
 end

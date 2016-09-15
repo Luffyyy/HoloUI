@@ -13,9 +13,9 @@ function HoloInfo:init(type)
         visible = Holo.Options:GetValue("Info/Timers"),
     })    
     managers.hud:add_updator(type .. "Update", callback(self, self, "Update"))
-    self:UpdateHoloHUD()
+    self:UpdateHolo()
 end
-function HoloInfo:UpdateHoloHUD()
+function HoloInfo:UpdateHolo()
     local scale = Holo.Options:GetValue("HudScale")    
     self._info_panel:set_w(math.max(200 * scale, (50 * scale) * Holo.Options:GetValue("Info/RowMaxInfos")))
 	self._info_panel:set_position(Holo.Options:GetValue("Info/" .. self._type .. "PosX"), Holo.Options:GetValue("Info/" .. self._type .. "PosY"))
@@ -76,7 +76,7 @@ function HoloInfo:CreateInfo(params)
     if not params.visible then
         params.option = "Info/" .. params.name
     end
-    params.color = params.color or "Colors/" .. params.name
+    params.color = "Colors/" .. (params.color or params.name)
     params.name = params.name and tostring(params.name)
     params.values = {}
     local panel = params.panel and self._info_panel:child(params.panel) or self._info_panel:panel({
@@ -106,7 +106,7 @@ function HoloInfo:CreateInfo(params)
     end
     box_panel:text({
         name = "text",
-        text = params.text or managers.localization:text("Holo/" .. params.name),
+        text = params.text or not params.panel and managers.localization:text("Holo/" .. params.name) or "0:00",
         wrap = true,
         vertical = "center",
         x = params.icon and 10 * scale,
@@ -161,6 +161,9 @@ function HoloInfo:AlignInfos()
                 else
                     GUIAnim.play(value_panel, "alpha", 0)
                 end
+				if value.unit and (not alive(value.unit) or not value.unit:timer_gui()._visible)  then
+					self:RemoveInfoValue(value.panel, value.name)
+				end				
             end
             last_panel = panel
             panel:set_h(panel:child("name"):h() + (times * (24 * scale)))
@@ -204,7 +207,7 @@ function HoloInfo:SetInfoValueColor(info, name, color_name)
 	local info_values = wanted_info.values
 	for i, value in pairs(info_values) do
 		if value.name == tostring(name) then
-			value.color = color_name
+			value.color = "Colors/" .. color_name
 			return true
 		end
 	end
@@ -278,6 +281,20 @@ function HoloInfo:CountLoot(info)
 	local i = #Holo.Loot[info.name]
     info.visible = i > 0
     self:SetInfoValue("InfoBoxes", info.name, i) 
+end
+function HoloInfo:UpdateMeleeCharge(info)
+	local ply = managers.player:player_unit()
+	if not ply or not ply:movement() or not ply:movement():current_state() then
+		return
+	end
+	local state = ply:movement():current_state()
+	local max_charge_time = tweak_data.blackmarket.melee_weapons[managers.blackmarket:equipped_melee_weapon()].stats.charge_time
+	local start_t = state._state_data and state._state_data.melee_start_t
+    info.visible = state._state_data.meleeing
+	if start_t then
+		local p = math.clamp(managers.player:player_timer():time() - state._state_data.melee_start_t, 0, max_charge_time) / max_charge_time
+    	self:SetInfoValue("InfoBoxes", info.name, math.floor(p * 100) .. "%")
+	end
 end
 function HoloInfo:UpdateStamina(info)
 	local ply = managers.player:player_unit()

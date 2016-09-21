@@ -17,6 +17,11 @@ function Holo:init()
 	self:LoadTextures()
 	self:log("Done Loading")
 end
+function Holo:PrintGuiObj(o)
+    for _, prop in pairs(o.__properties) do
+        log(string.format("%s = %s", prop, tostring(o[prop](o))))
+    end
+end
 function Holo:ModifyWallet()
  	local panel = Global.wallet_panel
 	local w
@@ -86,14 +91,23 @@ function Holo:FixBackButton(this, back_button)
 		end
 	end)
 end
-function Holo:FixBlendMode(panel)
-	for k,v in pairs(panel:children()) do
-		if v.children then
-			self:FixBlendMode(v)
-		else
-			v:set_blend_mode("normal")
-		end
-	end
+function Holo:SetBlendMode(o, ...)
+    local ignore = {...}
+    local toignore 
+    if o.type_name == "Panel" then
+        for _, child in pairs(o:children()) do
+            self:SetBlendMode(child, ...)
+        end
+    else
+        for _, v in ipairs(ignore) do
+            if o:name():match(v) or o:parent():name():match(v) then
+                toignore = true
+            end
+        end
+        if not toignore or o.type_name == "Text" then
+            o:set_blend_mode("normal")
+        end
+    end
 end
 function Holo:ApplySettings(toset, config)
 	if toset then
@@ -318,9 +332,6 @@ if not Holo.setup then
 	Holo:init()
 end
 if Hooks then
-	Hooks:Add("SetupPreInitManagers", "HoloSetupPostInitManagers", function(self)
-
-	end)
 	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)
 		lua_mod_options_menu_id = LuaModManager.Constants._lua_mod_options_menu_id
 		MenuHelper:NewMenu(lua_mod_options_menu_id)

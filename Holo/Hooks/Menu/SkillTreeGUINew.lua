@@ -44,4 +44,10 @@ if Holo.Options:GetValue("Base/Menu") then
 		Holo:FixBackButton(self, self._panel:child("BackButton"))
 		self._skillset_panel:child("SkillSetText"):set_blend_mode("normal")
 	end)
+	Hooks:PostHook(NewSkillTreeSkillItem, "refresh", "HoloRefresh", function(self)
+		if alive(self._skill_panel) then		
+			local step = self._skilltree:next_skill_step(self._skill_id) 
+			self._skill_panel:child("SkillIconPanel"):child("Icon"):set_alpha(step > 1 and 1 or 0.25)
+		end
+	end)	
 end

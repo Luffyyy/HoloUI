@@ -2,6 +2,7 @@ if Holo.Options:GetValue("Menu/CrimeNet") then
 
 Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_ws, node )
 	Holo:FixBackButton(self, self._panel:child("back_button"))
+	Holo:SetBlendMode(self._panel, "focus")
 	local no_servers = node:parameters().no_servers
 	self._fullscreen_panel:child("vignette"):hide()
 	self._fullscreen_panel:child("bd_light"):hide()
@@ -31,6 +32,10 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 	end
 	self._panel:child("legends_button"):set_color(Holo:GetColor("TextColors/Menu"))
 	self._map_panel:child("map"):set_alpha(Holo.Options:GetValue("Menu/ColoredBackground") and 0 or 1)
+end)
+
+Hooks:PostHook(CrimeNetGui, "_create_job_gui", "HoloCreateJobGUI", function(self)
+	Holo:SetBlendMode(self._panel, "focus")
 end)
 Hooks:PostHook(CrimeNetGui, "_create_polylines", "HoloCreatePolyLines", function( self, o, x, y )
 	if self._region_panel then

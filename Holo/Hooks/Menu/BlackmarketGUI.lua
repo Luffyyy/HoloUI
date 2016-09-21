@@ -64,6 +64,7 @@ if Holo.Options:GetValue("Base/Menu") then
 	end
 	Hooks:PostHook(BlackMarketGui, "_setup", "HoloSetup", function(self, is_start_page, component_data)
 		Holo:FixBackButton(self, self._panel:child("back_button"))
+		Holo:SetBlendMode(self._panel, "suspicion")
 	end)
 	Hooks:PostHook(BlackMarketGui, "set_weapons_stats_columns", "HoloSetWeaponsStatsColumns", function(self)
 		for i, stat in ipairs(self._stats_shown) do

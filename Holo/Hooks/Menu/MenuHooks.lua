@@ -113,5 +113,13 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._top_rect:set_alpha(0)
 			self._bottom_rect:set_alpha(0)
 		end)	
+	elseif RequiredScript == "lib/managers/menu/playerprofileguiobject" then
+		Hooks:PostHook(PlayerProfileGuiObject, "init", "HoloInit", function(self)
+			for _, child in pairs(self._panel:children()) do
+				if child.texture_name and child:texture_name() == Idstring("guis/textures/pd2/crimenet_marker_glow") then
+					child:hide()
+				end
+			end
+		end)
 	end
 end

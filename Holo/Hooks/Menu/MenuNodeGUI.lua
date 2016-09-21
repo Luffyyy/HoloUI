@@ -58,39 +58,13 @@ if Holo.Options:GetValue("Base/Menu") then
 			row_item.gui_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
 		end
 	end)
-	function MenuNodeGui:_align_marker(row_item)
-		self._marker_data.marker:show()
-		if self.marker_color or row_item.marker_color then
-			self._marker_data.gradient:set_color(row_item.item:enabled() and Holo:GetColor("Colors/Marker") or row_item.marker_disabled_color)
-			self._marker_data.gradient:set_alpha(Holo.Options:GetValue("Menu/MarkerAlpha"))
+	Hooks:PostHook(MenuNodeGui, "_align_marker", "HoloAlignMarker", function(self, row_item)
+		local panel = row_item.gui_panel or row_item.gui_text
+		self._marker_data.marker:set_h(panel:h())
+		self._marker_data.gradient:set_h(panel:h())
+		self._marker_data.marker:set_world_center_y(panel:world_center_y())
+		if row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel then
+			self._marker_data.marker:set_world_center_y(row_item.gui_text:world_center_y())
 		end
-		if row_item.item:parameters().pd2_corner then
-			local _,_,_,h = row_item.gui_text:text_rect()
-			self._marker_data.gradient:set_rotation(360)
-			self._marker_data.marker:set_h(h)
-			self._marker_data.marker:set_w(self:_scaled_size().width - row_item.menu_unselected:x())
-			self._marker_data.marker:set_world_right(row_item.menu_unselected:world_right())
-			self._marker_data.marker:set_world_bottom(row_item.gui_text:world_bottom())
-			return
-		end
-		self._marker_data.marker:set_h(row_item.gui_panel:h())
-		self._marker_data.gradient:set_rotation(0)
-		self._marker_data.gradient:set_x(row_item.menu_unselected:x())
-		self._marker_data.marker:set_center_y(row_item.gui_panel:center_y())
-		if row_item.type == "upgrade" then
-			self._marker_data.marker:set_left(self:_mid_align())
-		elseif row_item.type == "friend" then
-			if row_item.align == "right" then
-				self._marker_data.marker:move(-100, 0)
-			else
-				local _, _, w, _ = row_item.signin_status:text_rect()
-				self._marker_data.marker:set_left(self:_left_align() - w - self._align_line_padding)
-			end
-		elseif row_item.type == "server_column" then
-			self._marker_data.marker:set_left(row_item.gui_panel:x())
-		elseif row_item.type == "slider" then
-			self._marker_data.marker:hide()
-		end
-		self._marker_data.marker:set_w(self:_scaled_size().width - self._marker_data.marker:left())
-	end
+	end)
 end

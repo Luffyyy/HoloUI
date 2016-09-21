@@ -7,7 +7,7 @@
    "updates":[  
       {  
          "revision" : 76,
-         "identifier" : "HoloHud",
+         "identifier" : "HoloHud"
       }
    ],
    "libraries":[  

@@ -241,7 +241,7 @@ end
 function HoloInfo:Update(t, dt)
     for k, typ in pairs(Holo.Loot) do
         for _, unit in pairs(typ) do
-            if not unit:enabled() then
+            if not alive(unit) or not unit:enabled() then
                 Holo:RemoveLoot(k, unit)
             end
         end

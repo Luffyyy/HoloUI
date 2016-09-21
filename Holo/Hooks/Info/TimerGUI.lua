@@ -33,7 +33,7 @@ Hooks:PostHook(TimerGui, "_start", "HoloStart", function(self)
 end)
 
 Hooks:PostHook(TimerGui, "update", "HoloUpdate", function(self)
-	if not Holo.Info then
+	if not Holo.Info or not self._name then
 		return 
 	end		
 	if alive(self._unit) then

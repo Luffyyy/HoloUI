@@ -73,8 +73,8 @@
             <hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua"/>
             <hook source_file="lib/managers/menu/menunodegui" file="Menu/MenuNodeGUI.lua"/>
             <hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua"/>
-            <hook source_file="lib/managers/menu/skilltreegui" file="Menu/SkillTreeGUI.lua"/>
             <hook source_file="lib/managers/menu/menupauserenderer" file="Menu/MenuHooks.lua"/>
+            <hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/MenuHooks.lua"/>
             <hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua"/>
             <hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua"/>
             <hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua"/>

@@ -1,5 +1,8 @@
 FloatingInfo = FloatingInfo or class()
 function FloatingInfo:init(unit, world)
+    if not managers.hud then
+        return 
+    end
     local panel 
     if world then
 	    self._ws = World:newgui():create_linked_workspace(100, 100, unit, unit:position() + unit:rotation():y() * 25, unit:rotation():x() * 50, unit:rotation():y() * 50)

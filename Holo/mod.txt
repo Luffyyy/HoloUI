@@ -17,9 +17,9 @@
       }
    ],
    "hooks":[  
-      {  
-         "hook_id":"lib/utils/levelloadingscreenguiscript",
-         "script_path":"Hooks/Menu/MenuLoading.lua"
+      {
+          "hook_id":"lib/utils/levelloadingscreenguiscript", 
+          "script_path":"Hooks/Menu/MenuLoading.lua"
       }
    ],
    "pre_hooks":[  

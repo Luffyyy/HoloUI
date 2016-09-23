@@ -77,27 +77,21 @@ if Holo.Options:GetValue("Base/Menu") then
 		function MenuNodeCrimenetContactInfoGui:_align_marker(row_item)
 			MenuNodeCrimenetContactInfoGui.super._align_marker(self, row_item)
 			if row_item.item:parameters().pd2_corner then
-				self._marker_data.marker:set_w(self.MENU_WIDTH)
-				self._marker_data.gradient:set_w(self.MENU_WIDTH)
-				self._marker_data.marker:set_left(row_item.menu_unselected:x())
+				self._marker_data.marker:set_left(row_item.menu_unselected:x() + 2)
 				return
 			end
 		end
 		function MenuNodeCrimenetContactShortGui:_align_marker(row_item)
 			MenuNodeCrimenetContactShortGui.super._align_marker(self, row_item)
 			if row_item.item:parameters().pd2_corner then
-				self._marker_data.marker:set_w(self.MENU_WIDTH)
-				self._marker_data.gradient:set_w(self.MENU_WIDTH)
-				self._marker_data.marker:set_left(row_item.menu_unselected:x())
+				self._marker_data.marker:set_left(row_item.menu_unselected:x() + 2)
 				return
 			end
 		end
 		function MenuNodeCrimenetChallengeGui:_align_marker(row_item)
 			MenuNodeCrimenetChallengeGui.super._align_marker(self, row_item)
 			if row_item.item:parameters().pd2_corner then
-				self._marker_data.marker:set_w(self.MENU_WIDTH)
-				self._marker_data.gradient:set_w(self.MENU_WIDTH)
-				self._marker_data.marker:set_left(row_item.menu_unselected:x())
+				self._marker_data.marker:set_left(row_item.menu_unselected:x() + 2)
 				return
 			end
 		end

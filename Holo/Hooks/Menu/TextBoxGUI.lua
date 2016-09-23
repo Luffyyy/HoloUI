@@ -33,8 +33,10 @@ if Holo.Options:GetValue("Base/Menu") then
 			local selected = self._text_box_buttons_panel:child("selected")
 			if is_selected then
 				button_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
-	 			selected:set_shape(button_panel:shape())
-				selected:move(2, -1)
+	 			selected:set_size(2, button_panel:h())
+	 			selected:set_x(button_panel:right() + 2)
+	 			selected:set_rotation(360)
+				GUIAnim.play(selected, "y", button_panel:y() - 1, 5)
 			else
 				button_text:set_color(Holo:GetColor("TextColors/Menu"))
 			end

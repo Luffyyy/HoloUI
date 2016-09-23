@@ -21,7 +21,7 @@ if not _G.MenuBackgrounds and not GameSetup and Holo.Options:GetValue("Menu/Colo
 				if self._shaker then
 					self._shaker:stop_all()
 				end
-				managers.environment_controller:set_default_color_grading("color_off") --Remove if you wish Holohud to not remove color grading.
+				managers.environment_controller:set_default_color_grading("color_off") --Remove if you wish the mod to not remove color grading.
 				managers.environment_controller:refresh_render_settings()		
 			else
 				self._background_ws = World:newgui():create_world_workspace(w,h,a,b,c)
@@ -34,14 +34,23 @@ if not _G.MenuBackgrounds and not GameSetup and Holo.Options:GetValue("Menu/Colo
 				})
 				self._background_ws:set_billboard(Workspace.BILLBOARD_BOTH)
 				self._bg_unit:set_visible(false)
+				self._menu_logo:set_visible(false)
 				self._bg_unit:effect_spawner(Idstring("e_money")):set_enabled(false)
 				managers.environment_controller._vp:vp():set_post_processor_effect("World", Idstring("bloom_combine_post_processor"), Idstring("bloom_combine_empty"))
-				local smoke = "units/menu/menu_scene/menu_smokecylinder"
+				local unwanted = {
+					"units/menu/menu_scene/menu_smokecylinder1",
+					"units/menu/menu_scene/menu_smokecylinder2",
+					"units/menu/menu_scene/menu_smokecylinder3",
+					"units/menu/menu_scene/menu_cylinder_pattern",
+					"units/menu/menu_scene/menu_cylinder_pattern",
+				}
 				for k, unit in pairs(World:find_units_quick("all")) do 
-					if unit:name() == Idstring(smoke .. "1") or unit:name() == Idstring(smoke .. "2") or unit:name() == Idstring(smoke .. "3") then
-						World:delete_unit(unit)
+					for _, unit_name in pairs(unwanted) do
+						if unit:name() == Idstring(unit_name) then
+							unit:set_visible(false) --Making it invisible so mods like poser won't crash.
+						end
 					end
-				end				
+				end		
 			end
 	end)	
 end

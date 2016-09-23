@@ -58,13 +58,24 @@ if Holo.Options:GetValue("Base/Menu") then
 			row_item.gui_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
 		end
 	end)
+	Hooks:PreHook(MenuNodeGui, "_align_marker", "HoloAlignMarker", function(self, row_item)
+		self._old_center_y = self._marker_data.marker:world_center_y()
+	end)
 	Hooks:PostHook(MenuNodeGui, "_align_marker", "HoloAlignMarker", function(self, row_item)
 		local panel = row_item.gui_panel or row_item.gui_text
+		self._marker_data.gradient:set_rotation(360)
 		self._marker_data.marker:set_h(panel:h())
 		self._marker_data.gradient:set_h(panel:h())
-		self._marker_data.marker:set_world_center_y(panel:world_center_y())
-		if row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel then
-			self._marker_data.marker:set_world_center_y(row_item.gui_text:world_center_y())
+		self._marker_data.marker:set_w(2)
+		if row_item.align == "right" then
+			self._marker_data.marker:set_world_x(panel:world_right() + 2)
+		else
+			self._marker_data.marker:set_world_x(panel:world_x() - 2)
 		end
+		self._marker_data.marker:stop()
+		if self._old_center_y then
+			self._marker_data.marker:set_world_center_y(self._old_center_y)
+		end
+		GUIAnim.play(self._marker_data.marker, "world_center_y", row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel and row_item.gui_text:world_center_y() or panel:world_center_y(), 15)
 	end)
 end

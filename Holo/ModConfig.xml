@@ -46,7 +46,6 @@
             <hook source_file="lib/managers/menu/circleguiobject" file="Hud/CircleGUIObject.lua"/>
             <hook source_file="lib/managers/hud/hudplayercustody" file="Hud/HudPlayerCustody.lua"/>
             <hook source_file="lib/managers/hud/hudassaultcorner" file="Hud/HudAssaultCorner.lua"/>
-            <hook source_file="lib/managers/hud/hudstatsscreen" file="Hud/HudStatsScreen.lua"/>
             <hook source_file="lib/managers/hud/hudobjectives" file="Hud/HudObjectives.lua"/>
             <hook source_file="lib/managers/hud/hudchat" file="Hud/HudChat.lua"/>
             <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammate.lua"/>

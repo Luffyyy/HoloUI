@@ -8,7 +8,10 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         end
     end)
     Hooks:PostHook(HUDManager, "_setup_player_info_hud_pd2", "HoloSetupPlayerInfoHudPD2", function(self)
-        local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)       
+        local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)    
+        hud.panel:panel({ 
+            name = "chat_panel"
+        })  
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
             seconds = seconds or 4
             for i=1, seconds do

@@ -87,4 +87,3 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		oinit(self, scene_gui, res, progress, base_layer)
 	end
 end
- 

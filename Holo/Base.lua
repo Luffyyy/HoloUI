@@ -64,30 +64,33 @@ function Holo:FixBackButton(this, back_button)
 		font_size = 24,
 		blend_mode = "normal"
 	})
-	this._back_marker = back_button:parent():bitmap({
+	back_button:set_shape(back_button:text_rect())	
+	this._back_marker = back_button:parent():rect({
 		color = Holo:GetColor("Colors/Marker"),
-		alpha = Holo.Options:GetValue("MarkerAlpha"),
-		visible = false,
+		w = 2,
+		h = back_button:h(),
+		rotation = 360,
+		alpha = 0,
 		layer = back_button:layer() - 1
 	})
-	back_button:set_shape(back_button:text_rect())
 	back_button:set_world_rightbottom(back_button:parent():world_rightbottom())
-	this._back_marker:set_size(300,back_button:h())
-	this._back_marker:set_rightbottom(back_button:rightbottom())
+	this._back_marker:set_rightbottom(back_button:right() + 4, back_button:bottom())
 	Hooks:PostHook(this, "mouse_moved", "HoloMouseMoved", function(this, o, x, y)
 		if this._back_button:inside(x, y) then
 			if not this.back_button_highlighted then
 				this._back_button_highlighted = true
 				this.back_button_highlighted = true
-				this._back_button:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
-				this._back_marker:show()
+				GUIAnim.play(this._back_button, "color", Holo:GetColor("TextColors/MenuHighlighted"), 5)
+				this._back_marker:stop()
+				GUIAnim.play(this._back_marker, "alpha", Holo.Options:GetValue("Menu/MarkerAlpha"), 5)
 				managers.menu_component:post_event("highlight")
 			end
 		elseif this.back_button_highlighted then
 			this._back_button_highlighted = false
 			this.back_button_highlighted = false
-			this._back_marker:hide()
-			this._back_button:set_color(Holo:GetColor("TextColors/Menu"))
+			this._back_marker:stop()
+			GUIAnim.play(this._back_marker, "alpha", 0, 5)
+			GUIAnim.play(this._back_button, "color", Holo:GetColor("TextColors/Menu"), 5)
 		end
 	end)
 end

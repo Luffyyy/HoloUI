@@ -13,7 +13,11 @@ function GUIAnim:animate(o, func, v, speed, clbk)
 	speed = math.abs(o[func](o) - v) * speed
 	speed = speed < 1 and 1 or speed
     while o[func](o) ~= v do
-		o["set_" .. func](o, math.step(o[func](o), v, coroutine.yield() * speed))
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+		o["set_" .. func](o, math.step(o[func](o), v, dt * speed))
     end
 	o["set_" .. func](o, v)
     if clbk then
@@ -24,7 +28,11 @@ function GUIAnim:animate2(o, func, v1, v2, clbk)
    	local t = 0
    	local o_v1, o_v2 = o[func](o)
     while t < 0.3 do
-        t = t + coroutine.yield()
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+        t = t + dt
         local n = 1 - math.sin(t * 300)
         o["set_" .. func](o, math.lerp(v1, o_v1, n), math.lerp(v2, o_v2, n))
     end
@@ -41,7 +49,11 @@ function GUIAnim:left_grow(o, v, clbk)
 	local right = o:right()
 	o:set_w(0)
     while o:w() ~= v do
-		o:set_w(math.step(o:w(), v, coroutine.yield() * speed))
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+		o:set_w(math.step(o:w(), v, dt* speed))
 		o:set_right(right)
     end
 	o:set_w(v)
@@ -56,7 +68,11 @@ function GUIAnim:center_grow(o, v, clbk)
 	local center_x = o:center_x()
 	o:set_w(0)
     while o:w() ~= v do
-		o:set_w(math.step(o:w(), v, coroutine.yield() * speed))
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+		o:set_w(math.step(o:w(), v, dt * speed))
 		o:set_center_x(center_x)
     end
 	o:set_w(v)
@@ -86,7 +102,11 @@ end
 function GUIAnim:set_color(o, v, speed, clbk)
 	speed = speed or 10
     while o:color() ~= v do
-		local n = coroutine.yield() * speed
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+		local n = dt * speed
        	o:set_color(Color(math.step(o:color().r, v.r, n), math.step(o:color().g, v.g, n), math.step(o:color().b, v.b, n)))
 	end
     o:set_color(v)
@@ -98,7 +118,11 @@ function GUIAnim:set_number(o, v, clbk)
 	local t = 0
 	local o_v = tonumber(o:text())
 	while t < 0.5 do
-		t = t + coroutine.yield()
+		local dt = coroutine.yield()
+		if Application:paused() then
+			dt = TimerManager:main():delta_time()
+		end
+		t = t + dt
 		o:set_text(string.format("%.0f", math.lerp(v, o_v, 1 - math.sin(t * 180))))
 	end
 	o:set_text(string.format("%.0f", v))

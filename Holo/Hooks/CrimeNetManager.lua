@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Menu/CrimeNet") then
+if Holo.Options:GetValue("Base/Menu") then
 
 Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_ws, node )
 	Holo:FixBackButton(self, self._panel:child("back_button"))

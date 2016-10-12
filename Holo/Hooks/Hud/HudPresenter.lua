@@ -1,6 +1,7 @@
-if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("Presenter") then
+if Holo:ShouldModify("Hud", "Presenter") then
 	Hooks:PostHook(HUDPresenter, "init", "HoloInit", function(self)
 		self:UpdateHolo()
+		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
 	function HUDPresenter:UpdateHolo()
 	 	local color = Holo:GetColor("Colors/Presenter")
@@ -27,11 +28,11 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("Presenter") then
 		local x = math.round(self._hud_panel:w() / 2 - w / 2)
 		local y = 86 
 		HUDBGBox_recreate(self._bg_box, {
+			name = "Presenter",
 			x = x,
 			y = y,
 			w = w,
 			h = h,
-			color = Holo:GetColor("Colors/Presenter"),
 		})
 		self._box_width = w
 		title:set_bottom(math.floor(self._bg_box:h() / 2))
@@ -63,7 +64,15 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("Presenter") then
 		end
 		self._bg_box:stop()
 		self._bg_box:set_w(0)
-		self._bg_box:set_center_x(self._hud_panel:w() / 2)
-		GUIAnim.play(self._bg_box, "center_grow", self._box_width, open_done)
+		local center_x = self._hud_panel:w() / 2
+		self._bg_box:set_center_x(center_x)
+		Swoosh:work(self._bg_box, 
+			"w", self._box_width,
+			"speed", 4, 
+			"after", function()
+				self._bg_box:set_center_x(center_x)
+			end, 
+			"callback", open_done
+		)
 	end
 end

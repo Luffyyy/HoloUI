@@ -1,243 +1,221 @@
 <mod name="HoloUI" global_key="Holo">
-      <Classes directory="Classes">
-            <class file="Definitions.lua"/>
-            <class file="OptionsMenu.lua"/>
-            <class file="GUIAnimations.lua"/>
-            <class file="HudVoice.lua"/>
-            <class file="FloatingInfo.lua"/>
-            <class file="HoloInfo.lua"/>
-      </Classes>
-       <Localization directory="Loc" default="EN.txt">
-          <loc file="EN.txt" language="english"/>
-          <loc file="RU.txt" language="russian"/>
-          <loc file="GR.txt" language="german"/>
-      </Localization>     
-      <Hooks directory="Hooks">
-            <!-- Hooks -->
-            <hook source_file="lib/setups/setup" file="Setup.lua"/>
-            <hook source_file="core/lib/managers/coreguidatamanager" file="CoreGUIDataManager.lua"/>
-            <hook source_file="lib/states/ingamewaitingforplayers" file="InGameWaitingForPlayers.lua"/>
-            <hook source_file="lib/tweak_data/tweakdata" file="TweakData.lua"/>
-            <hook source_file="lib/managers/hudmanager" file="HudManager.lua"/>
-            <hook source_file="lib/managers/hudmanagerpd2" file="HudManager.lua"/>
-            <hook source_file="lib/managers/crimenetmanager" file="CrimeNetManager.lua"/>
-            <hook source_file="lib/managers/chatmanager" file="ChatManager.lua"/>
-            <hook source_file="lib/managers/chatmanager" file="ChatManager.lua"/>
-            <hook source_file="lib/managers/menu/menuscenemanager" file="MenuSceneManager.lua"/>
-            <hook source_file="lib/units/beings/player/states/playerstandard" file="PlayerStandard.lua"/>
-            <hook source_file="lib/network/base/clientnetworksession" file="Info/ClientNetworkSession.lua"/>
-            <hook source_file="lib/network/handlers/unitnetworkhandler" file="Info/UnitNetworkHandler.lua"/>
-            <hook source_file="lib/units/props/digitalgui" file="Info/DigitalGUI.lua"/>
-            <hook source_file="lib/units/props/timergui" file="Info/TimerGUI.lua"/>
-            <hook source_file="lib/units/props/smalllootbase" file="Info/SmallLootBase.lua"/>
-            <hook source_file="lib/units/props/carrydata" file="Info/CarryData.lua"/>
-            <hook source_file="lib/units/interactions/interactionext" file="Info/InteractionExt.lua"/>
-            <hook source_file="lib/units/equipment/ecm_jammer/ecmjammerbase" file="Info/EcmJammerBase.lua"/>     
-            <hook source_file="lib/units/enemies/cop/copdamage" file="Info/CopDamage.lua"/>     
-            <hook source_file="lib/units/equipment/ammo_bag/ammobagbase" file="Info/AmmoBagBase.lua"/>     
-            <hook source_file="lib/units/equipment/doctor_bag/doctorbagbase" file="Info/DoctorBagBase.lua"/>     
-            <hook source_file="lib/units/environment/environmentfire" file="Info/EnvironmentFire.lua"/>     
-            <hook source_file="lib/units/weapons/grenades/grenadebase" file="Info/GrenadeBase.lua"/>     
-            <!-- Hud Hooks -->
-            <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua"/>
-            <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua"/>
-            <hook source_file="lib/managers/hud/hudheisttimer" file="Hud/HudHeistTimer.lua"/>
-            <hook source_file="lib/managers/hud/hudplayerdowned" file="Hud/HudPlayerDowned.lua"/>
-            <hook source_file="lib/managers/menu/circleguiobject" file="Hud/CircleGUIObject.lua"/>
-            <hook source_file="lib/managers/hud/hudplayercustody" file="Hud/HudPlayerCustody.lua"/>
-            <hook source_file="lib/managers/hud/hudassaultcorner" file="Hud/HudAssaultCorner.lua"/>
-            <hook source_file="lib/managers/hud/hudobjectives" file="Hud/HudObjectives.lua"/>
-            <hook source_file="lib/managers/hud/hudchat" file="Hud/HudChat.lua"/>
-            <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammate.lua"/>
-            <hook source_file="lib/managers/hud/hudtemp" file="Hud/HudTemp.lua"/>
-            <hook source_file="lib/managers/hud/hudhint" file="Hud/HudHint.lua"/>
-            <hook source_file="lib/managers/hud/hudpresenter" file="Hud/HudPresenter.lua"/>
-            <!-- Menu Hooks -->
-            <hook source_file="lib/managers/menu/multiprofileitemgui" file="Menu/MultiProfileItemGUI.lua"/>
-            <hook source_file="lib/managers/menu/walletguiobject" file="Menu/WalletGUIObject.lua"/>
-            <hook source_file="lib/managers/menu/menubackdropgui" file="Menu/MenuBackdropGUI.lua"/>
-            <hook source_file="lib/managers/hud/hudstageendscreen" file="Menu/StageendScreen.lua"/>
-            <hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuSlider.lua"/>
-            <hook source_file="lib/managers/hud/hudmissionbriefing" file="Menu/MissionBriefing.lua"/>
-            <hook source_file="lib/managers/hud/hudlootscreen" file="Menu/LootScreen.lua"/>           
-            <hook source_file="lib/managers/menu/missionbriefinggui" file="Menu/MissionBriefingGUI.lua"/>
-            <hook source_file="lib/managers/menu/renderers/menunodejukeboxgui" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/lootdropscreengui" file="Menu/MenuHooks.lua"/>    
-            <hook source_file="lib/managers/menu/textboxgui" file="Menu/TextBoxGUI.lua"/>
-            <hook source_file="lib/managers/menu/blackmarketgui" file="Menu/BlackMarketGUI.lua"/>
-            <hook source_file="lib/managers/menu/playerinventorygui" file="Menu/PlayerInventoryGUI.lua"/>
-            <hook source_file="lib/managers/menu/stageendscreengui" file="Menu/StageEndScreenGUI.lua"/>
-            <hook source_file="lib/managers/menu/newsfeedgui" file="Menu/NewsFeedGUI.lua"/>
-            <hook source_file="lib/managers/menu/renderers/menunodebasegui" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua"/>
-            <hook source_file="lib/managers/menu/menunodegui" file="Menu/MenuNodeGUI.lua"/>
-            <hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua"/>
-            <hook source_file="lib/managers/menu/menupauserenderer" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua"/>
-            <hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="Menu/MenuHooks.lua"/>
-            <hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua"/>
-            <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua"/>             
-      </Hooks>
-      <Options build_menu="false" auto_load="true">
-            <options>                    
-                  <div name="Base"/>                 
-                  <option type="string" default_value="f1" name="OptionsKey"/>
-                  <option type="string" default_value="q" name="VoiceKey"/>
-                  <option_group name="Base">
-                        <option type="boolean" default_value="true" desc="true" menu="Main" name="Hud"/>
-                        <option type="boolean" default_value="true" desc="true" menu="Main" name="Menu"/>
-                        <option type="boolean" default_value="true" desc="true" menu="Main" name="Info"/>   
-                  </option_group>
-                  <div name="HudDiv" text="Hud"/>
-                  <option type="number" default_value="1" min="0" max="1" name="HudAlpha"/>
-                  <option type="number" default_value="1" min="0" max="1.25" name="HudScale"/>
-                  <option type="number" default_value="0.98" min="0" max="1.25" name="HudSpacing"/>
-                  <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha"/>
-                  <option type="number" default_value="0.4" min="0" max="1" name="TeammateBackgroundAlpha"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Assault"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Objective"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Casing"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="NoPointOfReturn"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Presenter"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Hint"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Interaction"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="HealthAndArmor"/>
-                  <option type="boolean" default_value="true" name="Voice"/>
-                  <option type="boolean" default_value="true" name="TopHud"/>
-                  <option type="boolean" default_value="true" beforetext="Show" name="HealthText"/>
-                  <option type="boolean" default_value="true" beforetext="Show" name="HealthTextTeammate"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Chat"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="TeammateHud"/>
-                  <option type="boolean" default_value="false" desc="true" name="FixedAmmoTotal"/>
-                  <option type="boolean" default_value="true" beforetext="Modified" name="Waypoints"/>
-                  <option type="boolean" default_value="true" name="TimerBackground"/>                    
-                  <div name="Other"/>
-                  <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle"/>    
-                  <option_group name="Colors">
-                        <option type="number" default_value="1" items="ColorsStrings" name="Main"/>
-                        <div name="TopHud"/>                 
-                        <option type="number" default_value="10" name="Assault"/>
-                        <option type="number" default_value="1" name="Casing"/>
-                        <option type="number" default_value="9" name="NoPointOfReturn"/>
-                        <option type="number" default_value="1" name="Hostages"/>
-                        <option type="number" default_value="1" name="Objective"/>
-                        <option type="number" default_value="1" name="Presenter"/>
-                        <option type="number" default_value="1" name="Hint"/>
-                        <option type="number" default_value="1" name="Carrying"/>
-                        <option type="number" default_value="1" name="TimerBox"/>
-                        <option type="number" default_value="11" name="Frame"/>
-                        <div name="TeammateHud"/>                         
-                        <option type="number" default_value="6" name="TeammateBackground"/>
-                        <option type="number" default_value="1" name="SelectedWeapon"/>
-                        <option type="number" default_value="11" name="Equipments"/>
-                        <option type="number" default_value="1" name="Pickups"/>                       
-                        <option type="number" default_value="1" items="RadialColors" name="Health"/>
-                        <option type="number" default_value="5" items="RadialColors" name="Armor"/>
-                        <option type="number" default_value="1" items="RadialColors" name="Progress"/>
-                        <option type="number" default_value="7" items="RadialColors" name="ProgressRed"/>                                                   
-                        <div name="Menu"/>  
-                        <option type="number" default_value="7"  name="MenuBackground"/>
-                        <option type="number" default_value="11" name="Tab"/>                       
-                        <option type="number" default_value="1" name="Marker"/>
-                        <option type="number" default_value="1" name="TabHighlighted"/>
-                        <div name="Info"/>
-                        <option type="number" default_value="9" name="Infos"/>    
-                        <option type="number" default_value="1" name="Timers"/>    
-                        <option type="number" default_value="9" name="TimersJammed"/>    
-                        <option type="number" default_value="9" name="Stamina"/>    
-                        <option type="number" default_value="1" name="Civilians"/>
-                        <option type="number" default_value="1" name="SmallLoot"/>
-                        <option type="number" default_value="3" name="Enemies"/>
-                        <option type="number" default_value="1" name="Diamonds"/>
-                        <option type="number" default_value="1" name="Money"/>
-                        <option type="number" default_value="1" name="Weapons"/>
-                        <option type="number" default_value="1" name="Drill"/>   
-                        <option type="number" default_value="1" name="Pagers"/>   
-                        <option type="number" default_value="1" name="GagePacks"/>
-                        <option type="number" default_value="1" name="MeleeCharge"/>
-                        <option type="number" default_value="1" name="InspireSkill"/>
-                        <div name="Other"/>
-                        <option type="number" default_value="1" name="Waypoints"/>  
-                         <!-- Extended Colors -->            
-                        <option type="boolean" default_value="false" name="ColorizeTeammates"/>                        
-                        <option type="number" default_value="4" name="TeammateHost"/>                        
-                        <option type="number" default_value="2" name="Teammate2"/>                        
-                        <option type="number" default_value="14" name="Teammate3"/>                        
-                        <option type="number" default_value="3" name="Teammate4"/>                        
-                        <option type="number" default_value="15" name="TeammateAI"/>                        
-                  </option_group>
-                  <option_group name="TextColors">
-                        <div name="TopHud"/>                 
-                        <option type="number" default_value="6" name="Assault"/>
-                        <option type="number" default_value="6" name="Casing"/>
-                        <option type="number" default_value="6" name="NoPointOfReturn"/>
-                        <option type="number" default_value="6" name="Hostages"/>
-                        <option type="number" default_value="6" name="Objective"/>
-                        <option type="number" default_value="6" name="Presenter"/>
-                        <option type="number" default_value="6" name="Hint"/>
-                        <option type="number" default_value="6" name="Carrying"/>
-                        <option type="number" default_value="6" name="TimerBox"/>     
-                        <div name="TeammateHud"/>                          
-                        <option type="number" default_value="1" name="Health"/>
-                        <option type="number" default_value="9" name="HealthNeg"/>                        
-                        <option type="number" default_value="11" name="Teammate"/>                         
-                        <option type="number" default_value="11" name="Teammate"/>    
-                        <div name="Menu"/>      
-                        <option type="number" default_value="6" name="Tab"/>
-                        <option type="number" default_value="11" name="Menu"/>
-                        <option type="number" default_value="6" name="MenuHighlighted"/>
-                        <div name="Info"/>                     
-                        <option type="number" default_value="6" name="Infos"/>    
-                        <option type="number" default_value="6" name="Timers"/>    
-                        <option type="number" default_value="6" name="Stamina"/>
-                        <option type="number" default_value="9" name="StaminaNeg"/>    
-                  </option_group>    
-                  <option_group name="Info">          
-                        <option type="boolean" default_value="true" beforetext="Show" name="Timers"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="Infos"/>
-                        <option type="boolean" default_value="false" beforetext="Show" name="Stamina"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="MeleeCharge"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="Civilians"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Enemies"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="SmallLoot"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Diamonds"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Money"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Weapons"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Loot"/>    
-                        <option type="boolean" default_value="true" beforetext="Show" name="Pagers"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="MeleeCharge"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="InspireSkill"/>
-                        <option type="boolean" default_value="false" name="TimerInSeconds"/>
-                        <option type="boolean" default_value="true" beforetext="Show" name="ECM"/>
-                        <option type="boolean" default_value="false" beforetext="Show" name="GagePacks"/>
-                        <option type="boolean" default_value="true" name="DrillTimers"/>                        
-                        <option type="boolean" default_value="true" name="InfoFromLeft"/>                        
-                        <option type="boolean" default_value="false" name="SkillInfoFromLeft"/>                        
-                        <option type="number" default_value="40" name="InfoPosX"/>
-                        <option type="number" default_value="64" name="InfoPosY"/>                        
-                        <option type="number" default_value="995" name="SkillInfoPosX"/>
-                        <option type="number" default_value="72" name="SkillInfoPosY"/>
-                        <option type="number" default_value="5" floats="0" min="1" max="10" name="RowMaxInfos"/>   
-                  </option_group>
-                  <option_group name="Menu">                        
-                        <option type="boolean" default_value="true" beforetext="Modified" name="Loading"/>                  
-                        <option type="boolean" default_value="true" beforetext="Modified" name="Lobby"/>
-                        <option type="boolean" default_value="true" beforetext="Modified" name="CrimeNet"/>
-				<option type="boolean" default_value="true" name="ColoredBackground"/>
-				<option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo"/>
-                        <option type="number" default_value="2" menu_type="combo" items="TextSizesStrings" name="TextSize"/>      
-                        <option type="number" default_value="1" min="0" max="1" name="MarkerAlpha"/>
-                  </option_group>                  
-                  <option_set name="AllowedTextures" not_pre_generated="true">
-                        <item_parameters />
-                  </option_set>                  
-                  <option_set name="CustomColors" not_pre_generated="true">
-                        <item_parameters />
-                  </option_set>
-            </options>
-      </Options>
+   <Classes directory="Classes">
+      <class file="Definitions.lua" />
+      <class file="OptionsMenu.lua" />
+      <class file="Swoosh.lua" />
+      <class file="HudVoice.lua" />
+   </Classes>
+   <Localization directory="Loc" default="EN.txt">
+      <loc file="EN.txt" language="english" />
+      <loc file="RU.txt" language="russian" />
+      <loc file="GR.txt" language="german" />
+      <loc file="FR.txt" language="french" />
+   </Localization>
+   <Hooks directory="Hooks">
+      <!-- Hooks -->
+      <hook source_file="lib/setups/setup" file="Setup.lua" />
+      <hook source_file="core/lib/managers/coreguidatamanager" file="CoreGUIDataManager.lua" />
+      <hook source_file="lib/states/ingamewaitingforplayers" file="InGameWaitingForPlayers.lua" />
+      <hook source_file="lib/tweak_data/tweakdata" file="TweakData.lua" />
+      <hook source_file="lib/managers/hudmanager" file="HudManager.lua" />
+      <hook source_file="lib/managers/hudmanagerpd2" file="HudManager.lua" />
+      <hook source_file="lib/managers/crimenetmanager" file="CrimeNetManager.lua" />
+      <hook source_file="lib/managers/chatmanager" file="ChatManager.lua" />
+      <hook source_file="lib/managers/menu/menuscenemanager" file="MenuSceneManager.lua" />
+      <hook source_file="lib/units/beings/player/states/playerstandard" file="PlayerStandard.lua" />
+      <!-- Hud Hooks -->
+      <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua" />
+      <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua" />
+      <hook source_file="lib/managers/hud/hudheisttimer" file="Hud/HudHeistTimer.lua" />
+      <hook source_file="lib/managers/hud/hudplayerdowned" file="Hud/HudPlayerDowned.lua" />
+      <hook source_file="lib/managers/menu/circleguiobject" file="Hud/CircleGUIObject.lua" />
+      <hook source_file="lib/managers/hud/hudplayercustody" file="Hud/HudPlayerCustody.lua" />
+      <hook source_file="lib/managers/hud/hudassaultcorner" file="Hud/HudAssaultCorner.lua" />
+      <hook source_file="lib/managers/hud/hudobjectives" file="Hud/HudObjectives.lua" />
+      <hook source_file="lib/managers/hud/hudchat" file="Hud/HudChat.lua" />
+      <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammate.lua" />
+      <hook source_file="lib/managers/hud/hudtemp" file="Hud/HudTemp.lua" />
+      <hook source_file="lib/managers/hud/hudhint" file="Hud/HudHint.lua" />
+      <hook source_file="lib/managers/hud/hudpresenter" file="Hud/HudPresenter.lua" />
+      <hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="Hud/SubtitlesPresenter.lua" />
+      <!-- Menu Hooks -->
+      <hook source_file="lib/managers/menu/multiprofileitemgui" file="Menu/MultiProfileItemGUI.lua" />
+      <hook source_file="lib/managers/menu/walletguiobject" file="Menu/WalletGUIObject.lua" />
+      <hook source_file="lib/managers/menu/menubackdropgui" file="Menu/MenuBackdropGUI.lua" />
+      <hook source_file="lib/managers/hud/hudstageendscreen" file="Menu/StageendScreen.lua" />
+      <hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuSlider.lua" />
+      <hook source_file="lib/managers/hud/hudmissionbriefing" file="Menu/MissionBriefing.lua" />
+      <hook source_file="lib/managers/hud/hudlootscreen" file="Menu/LootScreen.lua" />
+      <hook source_file="lib/managers/menu/missionbriefinggui" file="Menu/MissionBriefingGUI.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodejukeboxgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/lootdropscreengui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/textboxgui" file="Menu/TextBoxGUI.lua" />
+      <hook source_file="lib/managers/menu/blackmarketgui" file="Menu/BlackMarketGUI.lua" />
+      <hook source_file="lib/managers/menu/playerinventorygui" file="Menu/PlayerInventoryGUI.lua" />
+      <hook source_file="lib/managers/menu/stageendscreengui" file="Menu/StageEndScreenGUI.lua" />
+      <hook source_file="lib/managers/menu/newsfeedgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodebasegui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua" />
+      <hook source_file="lib/managers/menu/menunodegui" file="Menu/MenuNodeGUI.lua" />
+      <hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua" />
+      <hook source_file="lib/managers/menu/menupauserenderer" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua" />
+      <hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
+      <!-- -->
+   </Hooks>
+   <Options build_menu="false" auto_load="true">
+      <options>
+         <div name="Base" />
+         <option type="string" default_value="f1" name="OptionsKey" />
+         <option type="string" default_value="q" name="VoiceKey" />
+         <option_group name="Base">
+            <option type="boolean" default_value="true" menu="Main" name="Hud" />
+            <option type="boolean" default_value="true" menu="Main" name="Menu" />
+         </option_group>
+         <div name="HudDiv" text="Hud" />
+         <option type="number" default_value="0.4" min="0" max="1" name="HudAlpha" />
+         <option type="number" default_value="1" min="0" max="1.25" name="HudScale" />
+         <option type="number" default_value="0.936" min="0.1" max="1" name="HudSpacing" />
+         <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" />
+         <option type="number" default_value="0.4" min="0" max="1" name="TeammateBackgroundAlpha" />
+         <option type="boolean" default_value="true" name="Voice" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="HudBox" />        
+         <option type="boolean" default_value="true" beforetext="Modified" name="Chat" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="TeammateHud" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="HudAssault" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Objective" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Presenter" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Hint" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Carrying" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Interaction" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="HealthAndArmor" />
+         <option type="boolean" default_value="true" beforetext="Modified" name="Waypoints" />
+         <div name="Other" />
+         <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle" />
+         <option_group name="Extra">
+            <option type="boolean" default_value="true" beforetext="Show" name="HealthText" />
+            <option type="boolean" default_value="true" beforetext="Show" name="HealthTextTeammate" />
+            <option type="boolean" default_value="false" name="FixedAmmoTotal" />      
+            <option type="boolean" default_value="false" beforetext="Show" name="MyName" />      
+            <option type="boolean" default_value="false" name="UpperCaseNames" />      
+            <option type="boolean" default_value="true" name="TimerBackground"/>      
+            <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" />
+            <div name="HudBoxAlpha" />
+            <option type="boolean" default_value="false" name="HudBoxAlpha" text="Empty" />
+            <option_group name="Alpha" menu="Extra">
+               <option type="number" default_value="1" min="0" max="1" name="Assault" />
+               <option type="number" default_value="1" min="0" max="1" name="Casing" />
+               <option type="number" default_value="1" min="0" max="1" name="NoPointOfReturn" />
+               <option type="number" default_value="1" min="0" max="1" name="Hostages" />
+               <option type="number" default_value="1" min="0" max="1" name="Objective" />
+               <option type="number" default_value="1" min="0" max="1" name="Presenter" />
+               <option type="number" default_value="1" min="0" max="1" name="Hint" />
+               <option type="number" default_value="1" min="0" max="1" name="Carrying" />
+               <option type="number" default_value="1" min="0" max="1" name="TimerBox" />
+            </option_group>
+            <div name="HudBoxFrameColor" />
+            <option type="boolean" default_value="true" name="HudBoxFrameColor" text="Empty" />
+            <option_group name="FrameColor" menu="Extra">
+               <option type="number" default_value="10" menu_type="combo" items="AllColorsStrings" name="Assault" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Casing" />
+               <option type="number" default_value="9" menu_type="combo" items="AllColorsStrings" name="NoPointOfReturn" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Hostages" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Objective" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Presenter" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Carrying" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="TimerBackground" />
+            </option_group>
+            <div name="HudBoxFrameStyle" />
+            <option type="boolean" default_value="true" name="HudBoxFrameStyle" text="Empty"/>
+            <option_group name="FrameStyle" menu="Extra">
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Assault" />
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Casing" />
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="NoPointOfReturn" />
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Hostages" />
+               <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
+               <option type="number" default_value="1" menu_type="combo" items="FrameStyles" name="Presenter" />
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Carrying" />
+               <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="TimerBackground" />
+            </option_group>
+         </option_group>         
+         <option_group name="Colors">
+            <option type="number" default_value="1" items="ColorsStrings" name="Main" />
+            <div name="HudBox" />
+            <option type="number" default_value="6" name="Assault" />
+            <option type="number" default_value="6" name="Casing" />
+            <option type="number" default_value="6" name="NoPointOfReturn" />
+            <option type="number" default_value="6" name="Hostages" />
+            <option type="number" default_value="6" name="Objective" />
+            <option type="number" default_value="6" name="Presenter" />
+            <option type="number" default_value="6" name="Hint" />
+            <option type="number" default_value="6" name="Carrying" />
+            <option type="number" default_value="6" name="TimerBackground" />
+            <option type="number" default_value="11" name="Frame" />
+            <div name="TeammateHud" />
+            <option type="number" default_value="6" name="TeammateBackground" />
+            <option type="number" default_value="1" name="SelectedWeapon" />
+            <option type="number" default_value="11" name="Equipments" />
+            <option type="number" default_value="1" name="Pickups" />
+            <option type="number" default_value="1" items="RadialColors" name="Health" />
+            <option type="number" default_value="5" items="RadialColors" name="Armor" />
+            <option type="number" default_value="1" items="RadialColors" name="Progress" />
+            <option type="number" default_value="7" items="RadialColors" name="ProgressRed" />
+            <div name="Menu" />
+            <option type="number" default_value="7" name="MenuBackground" />
+            <option type="number" default_value="11" name="Tab" />
+            <option type="number" default_value="1" name="Marker" />
+            <option type="number" default_value="1" name="TabHighlighted" />
+            <option type="boolean" default_value="false" menu="Extra" name="ColorizeTeammates" />
+            <option type="number" default_value="4" menu="Extra" name="TeammateHost" />
+            <option type="number" default_value="2" menu="Extra" name="Teammate2" />
+            <option type="number" default_value="14" menu="Extra" name="Teammate3" />
+            <option type="number" default_value="3" menu="Extra" name="Teammate4" />
+            <option type="number" default_value="15" menu="Extra" name="TeammateAI" />
+            <option type="number" default_value="1" menu="Extra" name="Waypoints" />
+            <option type="number" default_value="1" menu="Extra" name="Interactable" />
+            <option type="number" default_value="11" menu="Extra" beforetext="Contour" name="InteractableSelected" />
+            <option type="number" default_value="14" menu="Extra" beforetext="Contour" name="DeployableStandard" />
+            <option type="number" default_value="11" menu="Extra" beforetext="Contour" name="DeployableSelected" />
+            <option type="number" default_value="1" menu="Extra" beforetext="Contour" name="DeployableActive" />
+            <option type="number" default_value="4" menu="Extra" beforetext="Contour" name="DeployableInteract" />
+            <option type="number" default_value="4" menu="Extra" beforetext="Contour" name="DeployableDisabled" />
+         </option_group>
+         <option_group name="TextColors">
+            <div name="HudBox" />
+            <option type="number" default_value="11" name="Assault" />
+            <option type="number" default_value="11" name="Casing" />
+            <option type="number" default_value="11" name="NoPointOfReturn" />
+            <option type="number" default_value="11" name="Hostages" />
+            <option type="number" default_value="11" name="Objective" />
+            <option type="number" default_value="11" name="Presenter" />
+            <option type="number" default_value="11" name="Hint" />
+            <option type="number" default_value="11" name="Carrying" />
+            <option type="number" default_value="11" name="TimerBox" />
+            <div name="TeammateHud" />
+            <option type="number" default_value="1" name="Health" />
+            <option type="number" default_value="9" name="HealthNeg" />
+            <option type="number" default_value="11" name="Teammate" />
+            <div name="Menu" />
+            <option type="number" default_value="6" name="Tab" />
+            <option type="number" default_value="11" name="Menu" />
+            <option type="number" default_value="1" name="MenuHighlighted" />
+            <div name="Other" />
+            <option type="number" default_value="11" name="Captions" />
+         </option_group>
+         <option_group name="Menu" menu="Main">        
+            <option type="number" default_value="2" menu_type="combo" items="TextSizesStrings" name="TextSize" />
+            <option type="number" default_value="1" min="0" max="1" name="MarkerAlpha" />            
+            <option type="boolean" default_value="true" name="ColoredBackground" />
+         </option_group>         
+         <option_set name="CustomColors" not_pre_generated="true">
+            <item_parameters />
+         </option_set>
+      </options>
+   </Options>
 </mod>

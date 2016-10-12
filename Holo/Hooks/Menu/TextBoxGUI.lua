@@ -9,6 +9,8 @@ if Holo.Options:GetValue("Base/Menu") then
 		if has_buttons then
 			buttons_panel:child("selected"):configure({
 				blend_mode = "normal",
+				w = 2,
+				h = 20,
 				color = Holo:GetColor("Colors/Marker"),
 				alpha = Holo.Options:GetValue("Menu/MarkerAlpha")
 			})	
@@ -21,8 +23,8 @@ if Holo.Options:GetValue("Base/Menu") then
 						})		
 					end
 				end
-			end	
-			self:_set_button_selected(focus_button, true)
+			end
+			self:_set_button_selected(focus_button, true)	
 		end
 	end)
 
@@ -33,10 +35,9 @@ if Holo.Options:GetValue("Base/Menu") then
 			local selected = self._text_box_buttons_panel:child("selected")
 			if is_selected then
 				button_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
-	 			selected:set_size(2, button_panel:h())
 	 			selected:set_x(button_panel:right() + 2)
 	 			selected:set_rotation(360)
-				GUIAnim.play(selected, "y", button_panel:y() - 1, 5)
+				Swoosh:work(selected, "y", button_panel:y() - 1, "speed", 15)
 			else
 				button_text:set_color(Holo:GetColor("TextColors/Menu"))
 			end

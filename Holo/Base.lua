@@ -1,34 +1,27 @@
 _G.Holo = _G.Holo or _G.ModCore:new(ModPath .. "ModConfig.xml", false, true)
 function Holo:init()
 	self:init_modules()
-	for k, v in ipairs(self.Colors) do
-		table.insert(self.AllColorsStrings, v.menu_name)
-	end
 	self.setup = true
-	self:UpdateSettings()
-	if not self.Options:GetValue("TopHud") then
-		self.Options:SetValue("Objective", false)
-		self.Options:SetValue("Assault", false)
-		self.Options:SetValue("Casing", false)
-		self.Options:SetValue("NoPointOfReturn", false)
-		self.Options:SetValue("Presenter", false)
+	for k, v in pairs(Holo.Options:GetOption("CustomColors")) do
+	    if type(v) == "table" and v.value then
+            table.insert(Holo.Colors, {color = v.value.color, name = v.value.name, custom = true})
+	    end
 	end
+	self:UpdateSettings()
 	World:effect_manager():set_rendering_enabled(true)		
 	self:LoadTextures()
 	self:log("Done Loading")
 end
-function Holo:PrintGuiObj(o)
-    for _, prop in pairs(o.__properties) do
-        log(string.format("%s = %s", prop, tostring(o[prop](o))))
-    end
+function Holo:AddUpdateFunc(func)
+    table.insert(self.Updaters, func)
 end
 function Holo:ModifyWallet()
  	local panel = Global.wallet_panel
 	local w
-	local items = {"money", "level", "skillpoint", "gage_coins"}
+	local items = {"money", "level", "skillpoint", "coins", "gage_coins"}
 	for i, v in pairs(items) do
 		local child = "wallet_" .. v
-		if i == 4 then
+		if i == 5 then -- tbh idk what's the point 
 			child = v
 		end
 		local icon = panel:child(child .. "_icon")
@@ -80,17 +73,25 @@ function Holo:FixBackButton(this, back_button)
 			if not this.back_button_highlighted then
 				this._back_button_highlighted = true
 				this.back_button_highlighted = true
-				GUIAnim.play(this._back_button, "color", Holo:GetColor("TextColors/MenuHighlighted"), 5)
 				this._back_marker:stop()
-				GUIAnim.play(this._back_marker, "alpha", Holo.Options:GetValue("Menu/MarkerAlpha"), 5)
+				this._back_button:stop()
+				Swoosh:color(this._back_button, Holo:GetColor("TextColors/MenuHighlighted"))
+				Swoosh:work(this._back_marker, 
+					"alpha", Holo.Options:GetValue("Menu/MarkerAlpha"),
+					"speed", 5
+				)	
 				managers.menu_component:post_event("highlight")
 			end
 		elseif this.back_button_highlighted then
 			this._back_button_highlighted = false
 			this.back_button_highlighted = false
 			this._back_marker:stop()
-			GUIAnim.play(this._back_marker, "alpha", 0, 5)
-			GUIAnim.play(this._back_button, "color", Holo:GetColor("TextColors/Menu"), 5)
+			this._back_button:stop()
+			Swoosh:color(this._back_button, Holo:GetColor("TextColors/Menu"))
+			Swoosh:work(this._back_marker, 
+				"alpha", 0,
+				"speed", 5
+			)			
 		end
 	end)
 end
@@ -112,127 +113,11 @@ function Holo:SetBlendMode(o, ...)
         end
     end
 end
-function Holo:ApplySettings(toset, config)
-	if toset then
-		for _, panel in pairs(toset) do
-			if config then
-				for k, v in pairs(config) do
-					k = k == "texture" and "image" or k
-					if panel["set_"..k] then
-						panel["set_"..k](panel, v)
-					end
-				end
-			end
+function Holo:Apply(tbl, config)
+	if tbl then
+		for _, o in pairs(tbl) do
+			o:configure(config)
 		end
-	end
-end
-function Holo:CreateSkillInfos()
-	self.SkillInfo:CreateInfo({
-        name = "Stamina",
-        icon = "guis/textures/pd2/skilltree/icons_atlas",
-		panel = "InfoBoxes",
-        icon_rect = {67,511,55,66},		
-		text = "0",
-		func = "UpdateStamina",
-	})	
-	self.SkillInfo:CreateInfo({
-        name = "MeleeCharge",
-        icon = "guis/textures/pd2/skilltree/icons_atlas",
-		panel = "InfoBoxes",
-        icon_rect = {255,763,61,71},		
-		text = "0",
-		func = "UpdateMeleeCharge",
-	})	
-	self.SkillInfo:CreateInfo({
-        name = "InspireSkill",
-        icon = "guis/textures/pd2/skilltree/icons_atlas",
-		panel = "InfoBoxes",
-		visible = true,
-        icon_rect = {254,574,66,66},		
-		text = "0",
-		func = "ShowInspireCoolDown",
-	})
-end
-function Holo:CreateInfos()
-	self.Info:CreateInfo({
-		name = "Hostages",
-	    icon = "guis/textures/pd2/skilltree/icons_atlas",       
-	    icon_rect = {255,449, 64, 64},
-	    func = "CountHostages",
-		panel = "InfoBoxes",
-		visible = true,
-		text = "0",
-	})
-	self.Info:CreateInfo({
-		name = "Civilians",
-	    icon = "guis/textures/pd2/skilltree/icons_atlas",
-	    icon_rect = {386,447,64,64},
-		panel = "InfoBoxes",
-		text = "0",
-        func = "CountInfo",   
-        value_is_table = true,     
-        value = callback(managers.enemy, managers.enemy, "all_civilians"),		
-	})
-	self.Info:CreateInfo({
-		name = "Enemies",
-	    icon = "guis/textures/pd2/skilltree/icons_atlas",
-	    icon_rect = {2,319,64,64},
-		panel = "InfoBoxes",
-		text = "0",
-        func = "CountInfo",        
-        value_is_table = true,
-        value = callback(managers.enemy, managers.enemy, "all_enemies"),
-	})
-	self.Info:CreateInfo({
-        name = "Pagers",
-        icon = "guis/textures/pd2/specialization/icons_atlas",
-		panel = "InfoBoxes",
-        icon_rect = {66,254,64,64},		
-		text = "0",
-		func = "CountPagers",
-	})	
-	self.Info:CreateInfo({
-        name = "GagePacks",
-        icon = "guis/textures/pd2/specialization/icons_atlas",
-		panel = "InfoBoxes",
-        icon_rect = {66,254,64,64},		
-		text = "0",
-		func = "CountInfo",
-        value = callback(managers.gage_assignment, managers.gage_assignment, "count_active_units"),
-	})		
-	local rects = {
-	    Money = {4, 3, 70, 59},
-	    Diamonds = {72, 7, 53, 53},
-	    Gold = {132, 9, 56, 52},
-	    Weapons = {188, 3, 57, 62},
-	    SmallLoot = {66, 59, 62, 57},
-	}
-	for typ, _ in pairs(self.Loot) do
-		self.Info:CreateInfo({
-			name = typ,
-			visible = true,
-		    icon = "guis/textures/custom/InfoIcons",
-		    func = "CountLoot",
-		    icon_rect = rects[typ] or rects.Money,
-			panel = "InfoBoxes",
-			text = "0",
-		})	
-	end
-end
-function Holo:AddLootType(name)
-	self.Loot[name] = {}
-end
-function Holo:AddLoot(name, unit)
-	if not self.Loot[name] then
-		self:AddLootType(name)
-	end
-	if not table.contains(self.Loot[name], unit) then
-    	table.insert(self.Loot[name], unit)
-	end
-end
-function Holo:RemoveLoot(name, unit)
-	if self.Loot[name] then
-		table.delete(self.Loot[name], unit)
 	end
 end
 function Holo:LoadTextures()
@@ -241,13 +126,8 @@ function Holo:LoadTextures()
 		for _, file in pairs(SystemFS:list(path)) do
 			local file_path = BeardLib.Utils.Path:Combine(path, file)
 			local in_path = file_path:gsub(".png", ""):gsub(self.ModPath, ""):gsub("Assets/", "")
-			if not file_path:match("custom") then
-				self.Options._storage.AllowedTextures[in_path] = {_meta = "option", type="boolean", name = in_path, value = true}
-			end
-			if file_path:match("custom") or self.Options._storage.AllowedTextures[in_path].value == true then
-				table.insert(ids_strings, Idstring(in_path))
-				DB:create_entry(Idstring("texture"), Idstring(in_path), file_path)
-			end
+			table.insert(ids_strings, Idstring(in_path))
+			DB:create_entry(Idstring("texture"), Idstring(in_path), file_path)
 		end
 		for _, dir in pairs(SystemFS:list(path, true)) do
 			LoadTextures(BeardLib.Utils.Path:Combine(path, dir))
@@ -260,72 +140,58 @@ function Holo:LoadTextures()
 end
 function Holo:UpdateSettings()
 	self.Colors[1].color = self:GetColor("Colors/Main")
-	local updaters = {
-		"_hud_assault_corner",
-		"_hud_player_downed",
-		"_hud_heist_timer",
-		"_hud_objectives",
-		"_hud_presenter",
-		"_hud_hint",
-		"_hud_temp",
-	}
-	if managers.hud then
-		if self.Info then
-			self.Info:UpdateHolo()
-		end		 
-		if self.SkillInfo then
-			self.SkillInfo:UpdateHolo()
-		end
-		if managers.hud.UpdateHolo then
-			managers.hud:UpdateHolo()
-			for _, teammate in pairs(managers.hud._teammate_panels) do
-				if teammate.UpdateHolo then
-					teammate:UpdateHolo()
-				end
-			end
-			for _, hud in pairs(updaters) do
-				if managers.hud[hud].UpdateHolo then
-					managers.hud[hud]:UpdateHolo()
-				end
-			end
-		end
-	end
-	if tweak_data then
-		tweak_data:UpdateHolo()
+	for _, func in pairs(self.Updaters) do
+		func()
 	end
 end
-function Holo:GetColor(setting)
+function Holo:GetFrameColor(setting)
+	return self.Options:GetValue("Extra/HudBoxFrameColor") and self:GetColor("Extra/FrameColor/" .. setting) or self:GetColor("Colors/Frame")  
+end
+function Holo:GetFrameStyle(setting)
+	return self.Options:GetValue("Extra/HudBoxFrameStyle") and self.Options:GetValue("Extra/FrameStyle/" .. setting) or self.Options:GetValue("FrameStyle")
+end
+function Holo:GetAlpha(setting)
+	return self.Options:GetValue("Extra/HudBoxAlpha") and self.Options:GetValue("Extra/Alpha/" .. setting) or self.Options:GetValue("HudAlpha")
+end
+function Holo:GetColor(setting, vec)
 	local value = self.Options:GetValue(setting)		
+	if value and value > #self.Colors then
+		self.Options:SetValue(setting, self.Options:GetOption(setting).default_value)
+		self.Options:Save()
+	end
 	if setting == "Colors/Main" then
 		value = math.min(value + 1, #self.Colors)
 	end
-	local col = self.Options._storage.CustomColors[setting]
-	if value and (self.Colors[value] and self.Colors[value].color) or col then
-		return (col and col.value) or self.Colors[value].color
+	local ret = Color.white
+	if value and (self.Colors[value] and self.Colors[value].color) then
+		ret = self.Colors[value].color
 	else
 		self:log("[ERROR] Color %s Doesn't exist!", setting)
-		return Color.white
 	end
+	return vec and Vector3(ret:unpack()) or ret
 end
-function Holo:ShouldModify(option)  
+function Holo:ShouldModify(comp, option)  
 	local LogInfo = function(a,b)
-		self:log(string.format("Cannot modify %s because %s", a, b))
+		self:log(string.format("[Info]Cannot modify %s because %s uses it", a, b))
 	end
 	local value = self.Options:GetValue(option)
+	if comp and not Holo.Options:GetValue("Base/" .. comp) then
+		return false
+	end 
 	if pdth_hud and pdth_hud.Options then
-		if Holo.Options:GetValue("Assault") then
+		if Holo.Options:GetValue("HudAssault") then
 			pdth_hud.Options:SetValue("HUD/Assault", false)
 		end
 		if pdth_hud.Options:GetValue("HUD/MainHud") and option == "TeammateHud" then
-			LogInfo(option, "PDTH Hud Uses it.")	
+			LogInfo(option, "PDTH Hud")	
 			return false
 		end
 		if pdth_hud.Options:GetValue("HUD/Objectives") and option == "Presenter" then
-			LogInfo(option, "PDTH Hud Uses it.")
+			LogInfo(option, "PDTH Hud")
 			return false
 		end
 		if pdth_hud.Options:GetValue("HUD/Interaction") and option == "Interaction" then
-			LogInfo(option, "PDTH Hud Uses it.")
+			LogInfo(option, "PDTH Hud")
 			return false
 		end
 	end	
@@ -339,13 +205,15 @@ if Hooks then
 		lua_mod_options_menu_id = LuaModManager.Constants._lua_mod_options_menu_id
 		MenuHelper:NewMenu(lua_mod_options_menu_id)
 	end)
-	Hooks:Add("MenuComponentManagerInitialize", "HoloMenuComponentManagerInitialize", function(menu)
-		Hooks:PostHook(NotificationsGuiObject, "init", "HoloInit", function(self)
-			self._highlight_rect:hide()
-			self._highlight_left_rect:hide()
-			self._highlight_right_rect:hide()
+	if Holo.Options:GetValue("Base/Menu") then
+		Hooks:Add("MenuComponentManagerInitialize", "HoloMenuComponentManagerInitialize", function(menu)
+			Hooks:PostHook(NotificationsGuiObject, "init", "HoloInit", function(self)
+				self._highlight_rect:hide()
+				self._highlight_left_rect:hide()
+				self._highlight_right_rect:hide()
+			end)
 		end)
-	end)
+	end
 	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu()
 			Holo.Menu._menu:toggle()

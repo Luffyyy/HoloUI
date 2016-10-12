@@ -1,15 +1,18 @@
 if Holo.Options:GetValue("Base/Menu") then
-	if Holo.Options:GetValue("Menu/Lobby") then
-		Hooks:PostHook(MenuBackdropGUI, "_create_base_layer", "HoloCreateBaseLayer", function(self)
-			if Holo.Options:GetValue("Menu/ColoredBackground") then
-				self._panel:child("base_layer"):child("bd_base_layer"):set_image("units/white_df")
-				self._panel:child("base_layer"):child("bd_base_layer"):set_color(Holo:GetColor("Colors/MenuBackground"))
+	Hooks:PostHook(MenuBackdropGUI, "_create_base_layer", "HoloCreateBaseLayer", function(self)
+		if Holo.Options:GetValue("Menu/ColoredBackground") then
+			for _, child in pairs(self._panel:children()) do
+				child:hide()
+				child:set_alpha(0)
 			end
-			self._panel:child("pattern_layer"):set_visible(false)
-			self._panel:child("light_layer"):set_visible(false)
-			self._panel:child("particles_layer"):set_visible(false)	
-		end)
-	end
+			self._panel:child("item_foreground_layer"):show()
+			self._panel:child("item_foreground_layer"):set_alpha(1)
+			self._panel:rect({
+				name = "background_simple",
+				color = Holo:GetColor("Colors/MenuBackground"),
+			})	 
+		end
+	end)
 	function MenuBackdropGUI:animate_bg_text(text)
 		text:hide()
 	end

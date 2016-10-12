@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") then	
+if Holo.Options:GetValue("Base/Menu") then	
 	Hooks:PostHook(HUDMissionBriefing, "init", "HoloInit", function(self)	    
 		local text_font_size = tweak_data.menu.pd2_small_font_size
 		local num_player_slots = BigLobbyGlobals and BigLobbyGlobals:num_player_slots() or 4
@@ -20,34 +20,19 @@ if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") th
 		for i = 1, managers.job:current_stage() or 0 do
 			self._job_schedule_panel:child("stage_done_" .. tostring(i)):hide()
 		end
-		if Holo.Options:GetValue("Menu/DisableLobbyVideo") then
+		if Holo.Options:GetValue("Extra/DisableLobbyVideo") then
 			self._background_layer_two:child("panel"):hide()
 		end
-		managers.job:is_job_stage_ghostable(managers.job:current_real_job_id(), i)
 		local num_stages = self._current_job_chain and #self._current_job_chain or 0
 		local ghost = managers.job:is_job_stage_ghostable(managers.job:current_real_job_id(), managers.job:current_stage()) and managers.localization:get_default_macro("BTN_GHOST") or ""
 		self._foreground_layer_one:child("job_overview_text"):set_text(managers.localization:to_upper_text("menu_day_short", {day = managers.job:current_stage() .. "/" .. num_stages .. " " .. ghost}))
 		self._job_schedule_panel:child("payday_stamp"):hide()
-		difficulty = Global.game_settings.difficulty
-		if Global.game_settings.difficulty == "overkill_145" then
-			difficulty = "overkill"
-		elseif Global.game_settings.difficulty == "overkill_290" then
-			difficulty = "apocalypse"
-		end			
+		local difficulty = Global.game_settings.difficulty
+		difficulty = difficulty == "overkill_145" and "overkill" or difficulty == "overkill_290" and "apocalypse" or difficulty		
 		self._foreground_layer_one:child("pg_text"):set_text(string.upper(managers.localization:text("menu_difficulty_" .. difficulty)))		
 		managers.hud:make_fine_text(self._foreground_layer_one:child("pg_text"))		
 		self._foreground_layer_one:child("pg_text"):set_right(self._paygrade_panel:right())
-		local risks = {
-			"risk_swat",
-			"risk_fbi",
-			"risk_death_squad"
-		}
-		if not Global.SKIP_OVERKILL_290 then
-			table.insert(risks, "risk_murder_squad")
-		end
-		for i, name in ipairs(risks) do
-			self._paygrade_panel:child(name):hide()
-		end
+		self._paygrade_panel:hide()
 	    if not self._singleplayer then
 	    	for i = 1, num_player_slots do
 	    		local slot = self._ready_slot_panel:child("slot_" .. tostring(i))
@@ -90,8 +75,6 @@ if Holo.Options:GetValue("Menu/Lobby") and Holo.Options:GetValue("Base/Menu") th
 	    	end
 	    end
 	end)
- 
-
 	Hooks:PostHook(HUDMissionBriefing, "set_slot_ready", "HoloSetSlotReady", function(self, peer, peer_id)
 		local slot = self._ready_slot_panel:child("slot_" .. tostring(peer_id))
 		if alive(slot) then

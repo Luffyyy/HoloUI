@@ -1,5 +1,5 @@
-HUDVoice = HUDVoice or class()
-function HUDVoice:init()
+HoloVoice = HoloVoice or class()
+function HoloVoice:init()
     self._voice_panel = Holo.Panel:panel({
         name = "voice_panel",
         layer = 999,
@@ -13,17 +13,16 @@ function HUDVoice:init()
     end
     managers.hud:add_updator("HoloVoiceUpdate", callback(self, self, "Update"))
 end
-function HUDVoice:Update(t, dt)
+function HoloVoice:Update(t, dt)
     if alive(managers.player:player_unit()) and Input:keyboard():down(Idstring(Holo.Options:GetValue("VoiceKey"))) then
         if not self._showing then
             self._showing = true
-            self._voice_panel:stop()
-            GUIAnim.play(self._voice_panel, "alpha", 1, 1, function()
+            Swoosh:work(self._voice_panel, "alpha", 1, "callback", function()
                 managers.mouse_pointer:use_mouse({
                     mouse_move = callback(self, self, "MouseMoved"),
                     mouse_press = callback(self, self, "MousePressed"),
                     id = self._mouse_id
-                })
+                })  
             end)
         end
     else
@@ -32,24 +31,23 @@ function HUDVoice:Update(t, dt)
             managers.mouse_pointer:remove_mouse(self._mouse_id)
             managers.mouse_pointer:set_mouse_world_position(self._voice_panel:center() + 20,self._voice_panel:top() + 90)
         end
-        self._voice_panel:stop()
-        GUIAnim.play(self._voice_panel, "alpha", 0, 1)
+        Swoosh:work(self._voice_panel, "alpha", 0)
     end
 end
-function HUDVoice:MouseMoved(o, x, y)
+function HoloVoice:MouseMoved(o, x, y)
     for panel, _ in pairs(self.Boxes) do
         if panel and panel:inside(x, y) then
             self._selected = panel
             panel:stop()
-            GUIAnim.play(panel:child("underline"), "bottom", panel:child("Bg"):bottom(), 10)
+            Swoosh:work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom())
         else
             panel:stop()
-            GUIAnim.play(panel:child("underline"), "bottom", panel:child("Bg"):bottom() + 2, 10)
+            Swoosh:work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom() + 2)
         end
         self._selected = self._selected and self._selected:inside(x, y) and self._selected
     end
 end
-function HUDVoice:MousePressed(o, button, x, y)
+function HoloVoice:MousePressed(o, button, x, y)
     if button == Idstring("0") then
         for panel, config in pairs(self.Boxes) do
             if panel and panel:inside(x, y) then
@@ -58,12 +56,12 @@ function HUDVoice:MousePressed(o, button, x, y)
         end
     end
 end
-function HUDVoice:Play(id)
+function HoloVoice:Play(id)
     if not managers.trade:is_peer_in_custody(managers.network:session():local_peer():id()) and id ~= nil then
         return managers.player:player_unit():sound():say(id, true, true)
     end
 end
-function HUDVoice:Add(id, text, comment)
+function HoloVoice:Add(id, text, comment)
     local max_per_row = 5
     local space = 10
     local w = 128

@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("Interaction") then
+if Holo:ShouldModify("Hud", "Interaction") then
 	Hooks:PostHook(HUDInteraction, "show_interact", "HoloShowInteract", function(self) 
 		local text = self._hud_panel:child(self._child_name_text)
 		text:set_color(Color.white)

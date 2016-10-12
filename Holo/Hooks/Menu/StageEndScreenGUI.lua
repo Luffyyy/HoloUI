@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") and Holo.Options:GetValue("Menu/Lobby") then
+if Holo.Options:GetValue("Base/Menu") then
 Hooks:PostHook(StatsTabItem, "init", "HoloInit", function(self, panel, tab_panel, text, i)
 	self._panel:set_h(self._main_panel:h())
 	local prev_item_title_text = tab_panel:child("tab_text_" .. tostring(i - 1))
@@ -56,55 +56,15 @@ Hooks:PostHook(StageEndScreenGui, "init", "HoloInit", function(self)
 	self._continue_button:configure({
 		font = "fonts/font_medium_mf",
 		font_size = 24,
+		rotation = 360,
 		color = Holo:GetColor("TextColors/Menu"),
 	})
-	self._continue_button:set_rightbottom(self._panel:w() - 10, self._panel:h() - 105)
+	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h() + 280)
 	self._prev_page:set_color(Holo:GetColor("TextColors/Menu"))
 	self._next_page:set_color(Holo:GetColor("TextColors/Menu"))
 end)
 Hooks:PostHook(StageEndScreenGui, "set_continue_button_text", "HoloSetContinueButtonText", function(self)
-	self._continue_button:set_rightbottom(self._panel:w() - 10, self._panel:h() - 105)
+	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h() + 280)
 	self._continue_button:set_color(self._button_not_clickable and tweak_data.screen_colors.item_stage_1 or Holo:GetColor("TextColors/Menu"))
-end)
-Hooks:PostHook(StageEndScreenGui, "mouse_moved", "HoloMouseMoved", function(self, x, y)
-	if alive(self._prev_page) then
-		if self._prev_page:visible() and self._prev_page:inside(x, y) then
-			if not self.prev_page_highlighted then
-				self._prev_page_highlighted = true
-				self.prev_page_highlighted = true
-				self._prev_page:set_color(Holo:GetColor("Colors/Marker"))
-			end
-		elseif self.prev_page_highlighted then
-			self._prev_page_highlighted = false
-			self.prev_page_highlighted = false
-			self._prev_page:set_color(Holo:GetColor("TextColors/Menu"))
-		end
-	end
-	if alive(self._next_page) then
-		if self._next_page:visible() and self._next_page:inside(x, y) then
-			if not self.next_page_highlighted then
-				self._next_page_highlighted = true
-				self.next_page_highlighted = true
-				self._next_page:set_color(Holo:GetColor("Colors/Marker"))
-			end
-		elseif self.next_page_highlighted then
-			self._next_page_highlighted = false
-			self.next_page_highlighted = false
-			self._next_page:set_color(Holo:GetColor("TextColors/Menu"))
-		end
-	end
-	if self._button_not_clickable then
-		self._continue_button:set_color(tweak_data.screen_colors.item_stage_1)
-	elseif self._continue_button:inside(x, y) then
-		if not self.continue_button_highlighted then
-			self._continue_button_highlighted = true
-			self.continue_button_highlighted = true
-			self._continue_button:set_color(Holo:GetColor("Colors/Marker"))
-		end
-	elseif self.continue_button_highlighted then
-		self._continue_button_highlighted = false
-		self.continue_button_highlighted = false
-		self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
-	end
 end)
 end

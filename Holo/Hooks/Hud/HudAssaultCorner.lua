@@ -1,48 +1,37 @@
-Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
-	if self._hud_panel:child("hostages_panel") then
-		self._hud_panel:child("hostages_panel"):set_visible(not Holo.Options:GetValue("Base/Info") and not Holo.Options:GetValue("Info/Infos"))
-	end
-	if self.UpdateHolo then
-		self:UpdateHolo()
-	end
-end)
-if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
+if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") then
 	function HUDAssaultCorner:UpdateHolo()
+		if not alive(self._bg_box) then -- Try not to crash :c
+			Holo:log("[ERROR] Something went wrong when trying to modify HUDAssaultCorner")
+			return
+		end
 		local hostages_panel = self._hud_panel:child("hostages_panel")
 		local num_hostages = self._hostages_bg_box:child("num_hostages")
-		local hostages_icon = hostages_panel:child("hostages_icon")
 		local point_of_no_return_text = self._noreturn_bg_box:child("point_of_no_return_text")
 		local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
 		local assault_panel = self._hud_panel:child("assault_panel")
 		local casing_panel = self._hud_panel:child("casing_panel")
 		local point_of_no_return_panel = self._hud_panel:child("point_of_no_return_panel")
-		local icon_casingbox = casing_panel:child("icon_casingbox")
-		local icon_noreturnbox = point_of_no_return_panel:child("icon_noreturnbox")
-		local icon_assaultbox = assault_panel:child("icon_assaultbox")
 		self._box_width = 242 
 		self._box_height = 32
 		HUDBGBox_recreate(self._bg_box,{
+			name = "Assault",
 			w = self._box_width,
 			h = self._box_height,
-			alpha = not Holo.Options:GetValue("Assault") and 0.25,
-			color = Holo.Options:GetValue("Assault") and Holo:GetColor("Colors/Assault"),
 		})
 		HUDBGBox_recreate(self._casing_bg_box,{
+			name = "Casing",
 			w = self._box_width,
 			h = self._box_height,
-			alpha = not Holo.Options:GetValue("Casing") and 0.25,
-			color = Holo.Options:GetValue("Casing") and Holo:GetColor("Colors/Casing"),
 		})
 		HUDBGBox_recreate(self._noreturn_bg_box,{
+			name = "NoPointOfReturn",
 			w = self._box_width,
 			h = self._box_height,
-			alpha = not Holo.Options:GetValue("NoPointOfReturn") and 0.25,
-			color = Holo.Options:GetValue("NoPointOfReturn") and Holo:GetColor("Colors/NoPointOfReturn"),
 		})
 		HUDBGBox_recreate(self._hostages_bg_box ,{
+			name = "Hostages",
 			w = self._box_height,
 			h = self._box_height,
-			color = Holo:GetColor("Colors/Hostages"),
 		})
 		self._hud_panel:child("buffs_panel"):set_alpha(0)
 		assault_panel:set_size(400, 40)
@@ -53,47 +42,54 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 		point_of_no_return_panel:set_righttop(self._hud_panel:w(), 0)
 		hostages_panel:set_size(200, 40)
 		hostages_panel:set_righttop(self._hud_panel:w(), 0)
-		icon_casingbox:configure({
-			color = Holo.Options:GetValue("Casing") and Holo:GetColor("Colors/Casing"),
-			w = 24,
-			h = 24,
-		})
-		icon_assaultbox:configure({
-			color = Holo.Options:GetValue("Assault") and Holo:GetColor("Colors/Assault"),
-			w = 24,
-			h = 24,
-		})
-		icon_noreturnbox:configure({
-			color = Holo.Options:GetValue("NoPointOfReturn") and Holo:GetColor("Colors/NoPointOfReturn"),
-			w = 24,
-			h = 24,
-		})
-		icon_assaultbox:set_right(assault_panel:w())
-		icon_casingbox:set_right(casing_panel:w())
-		icon_noreturnbox:set_right(point_of_no_return_panel:w())
-		self._bg_box:set_right(icon_assaultbox:left() - 3)
-		self._casing_bg_box:set_right(icon_assaultbox:left() - 3)
-		self._noreturn_bg_box:set_right(icon_assaultbox:left() - 3)
+		if self._is_offseted then
+			hostages_panel:set_y(self._bg_box:h() + 8)
+		end
+		self._bg_box:set_right(assault_panel:w())
+		self._casing_bg_box:set_right(assault_panel:w())
+		self._noreturn_bg_box:set_right(assault_panel:w())
+		self._hostages_bg_box:set_right(hostages_panel:w())
+		hostages_panel:child("hostages_icon"):set_right(self._hostages_bg_box:left())
+		assault_panel:child("icon_assaultbox"):hide()
+		casing_panel:child("icon_casingbox"):hide()
+		point_of_no_return_panel:child("icon_noreturnbox"):hide()
 		point_of_no_return_text:set_color(Holo:GetColor("TextColors/NoPointOfReturn"))
 		point_of_no_return_timer:set_color(Holo:GetColor("TextColors/NoPointOfReturn"))
 		num_hostages:set_color(Holo:GetColor("TextColors/Hostages"))
-		Holo:ApplySettings({point_of_no_return_timer, point_of_no_return_text, icon_assaultbox, icon_noreturnbox, icon_casingbox}, {blend_mode = "normal"})
+		num_hostages:set_shape(0,0,num_hostages:parent():size())
+		Holo:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
+		num_hostages:set_y(-2)
 	end	
+	Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
+		self:UpdateHolo()
+		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
+	end)
 	function HUDAssaultCorner:_show_icon_assaultbox(icon)
-		local h = icon:h()
-		icon:set_h(0)
 		icon:set_alpha(1)
-		GUIAnim.play(icon, "h", h)
+		Swoosh:work(icon, "rotation", 360, "callback", function()
+			icon:set_rotation(0)
+		end)
 	end
-	if Holo.Options:GetValue("Assault") then
-		Hooks:PostHook(HUDAssaultCorner, "_start_assault", "HoloStartAssault", function(self)
+	function HUDAssaultCorner:left_grow(o, clbk)
+		local right = o:right()
+		Swoosh:work(o, 
+			"w", self._box_width, 
+			"speed", 4,
+			"after", function()
+				o:set_right(right)
+			end,
+			"callback", clbk
+		)
+	end	
+	Hooks:PostHook(HUDAssaultCorner, "_start_assault", "HoloStartAssault", function(self)
+		if alive(self._bg_box) then
 			self._bg_box:stop()
 			self._bg_box:child("text_panel"):stop()
 			self._bg_box:show()
-			GUIAnim.play(self._bg_box, "left_grow", self._box_width)
+			self:left_grow(self._bg_box)
 	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, Holo:GetColor("TextColors/Assault"))
-		end)
-	end
+	 	end
+	end)
 	Hooks:PostHook(HUDAssaultCorner, "sync_set_assault_mode", "HoloSyncSetAssaultMode", function(self)
 		self:UpdateHolo()
 	end)
@@ -109,7 +105,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 				text_panel:remove(texts[text_index].text)
 				texts[text_index] = nil
 			end
-			color_function = not (Holo.Options:GetValue("Assault")) and color_function
+			color_function = nil
 			local text_id = text_list[text_index]
 			local text_string = ""
 			if type(text_id) == "string" then
@@ -125,7 +121,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 				vertical = "center",
 				blend_mode = color_function and "add",
 				color = color_function and color_function() or color or self._assault_color,
-				font_size = text_panel:h(),
+				font_size = text_panel:h() - 6,
 				font = "fonts/font_large_mf",
 			})
 			local _, _, w, h = text:text_rect()
@@ -152,7 +148,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 				if data.text then
 					data.text:configure({
 						color = color_function and color_function() or color or self._assault_color,
-						font_size = tweak_data.hud_corner.assault_size,
+						font_size = text_panel:h() - 6,
 					})
 					managers.hud:make_fine_text(data.text)
 					data.x = data.x - dt * speed
@@ -164,46 +160,53 @@ if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("TopHud") then
 					end
 				end
 			end
+			start_speed = nil
 		end
 	end
-	if Holo.Options:GetValue("Casing") then
-		Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
-			self._casing_bg_box:stop()
+	Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
+		if alive(self._casing_bg_box) then
 			self._casing_bg_box:child("text_panel"):stop()
 			self._casing_bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._casing_bg_box, Holo:GetColor("TextColors/Casing"))
 			self._casing_bg_box:stop()
 			self._casing_bg_box:show()
-			GUIAnim.play(self._casing_bg_box, "left_grow", self._box_width)
-		end)
-	end
-	if Holo.Options:GetValue("NoPointOfReturn") then
-		Hooks:PostHook(HUDAssaultCorner, "_animate_show_noreturn", "HoloAnimateShowNoReturn", function(self, point_of_no_return_panel)
+			self:left_grow(self._casing_bg_box)
+		end
+	end)
+	Hooks:PostHook(HUDAssaultCorner, "_animate_show_noreturn", "HoloAnimateShowNoReturn", function(self, point_of_no_return_panel)
+		if alive(self._noreturn_bg_box) then
 			local icon_noreturnbox = point_of_no_return_panel:child("icon_noreturnbox")
 			local point_of_no_return_text = self._noreturn_bg_box:child("point_of_no_return_text")
 			local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
 			self._noreturn_bg_box:stop()
 			self._noreturn_bg_box:show()
-			GUIAnim.play(self._noreturn_bg_box, "left_grow", self._box_width, function()
-				point_of_no_return_text:set_visible(true)
-				point_of_no_return_timer:set_visible(true)
+			self:left_grow(self._noreturn_bg_box, function()
+				point_of_no_return_text:show()
+				point_of_no_return_timer:show()
 			end)
-		end)
-		function HUDAssaultCorner:flash_point_of_no_return_timer(beep)
-			local function flash_timer(o)
-				local t = 0
-				while t < 0.5 do
-					t = t + coroutine.yield()
-					local font_size = (tweak_data.hud_corner.noreturn_size)
-					o:set_font_size(math.lerp(font_size, font_size * 1.25, n))
-				end
-			end
-			local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
-			point_of_no_return_timer:animate(flash_timer)
 		end
+	end)
+	function HUDAssaultCorner:flash_point_of_no_return_timer(beep)
+		local function flash_timer(o)
+			local t = 0
+			while t < 0.5 do
+				t = t + coroutine.yield()
+				local font_size = (tweak_data.hud_corner.noreturn_size)
+				o:set_font_size(math.lerp(font_size, font_size * 1.25, n))
+			end
+		end
+		local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
+		point_of_no_return_timer:animate(flash_timer)
 	end
+	Hooks:PostHook(HUDAssaultCorner, "_set_hostage_offseted", "HoloSetHostageOffested", function(self, is_offseted)
+		self._is_offseted = is_offseted
+	end)
+	Hooks:PostHook(HUDAssaultCorner, "set_control_info", "HoloSetControlInfo", function(self)
+		if alive(self._hostages_bg_box) then
+			self._hostages_bg_box:child("bg"):stop()
+			self._hostages_bg_box:child("num_hostages"):stop()
+			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+		end
+	end)
 end
-function HUDAssaultCorner:_show_hostages()
-	if not self._point_of_no_return and not Holo.Options:GetValue("Base/Info") and not Holo.Options:GetValue("Info/Infos") and self._hud_panel:child("hostages_panel") then
-		self._hud_panel:child("hostages_panel"):show()
-	end
-end
+ 
+ 

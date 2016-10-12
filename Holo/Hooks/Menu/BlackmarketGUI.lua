@@ -43,6 +43,7 @@ if Holo.Options:GetValue("Base/Menu") then
 			color = Holo:GetColor("Colors/Marker"),
 			alpha = Holo.Options:GetValue("Menu/MarkerAlpha"),
 			rotation = 360,
+			alpha = 0,
 			x = self._panel:w() + 2,
 			w = 2,
 			valign = "scale",
@@ -63,7 +64,7 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._btn_text:set_color(self._highlighted and Holo:GetColor("TextColors/MenuHighlighted") or Holo:GetColor("TextColors/Menu"))
 		end
 		self._panel:child("select_rect"):stop()
-		GUIAnim.play(self._panel:child("select_rect"), "alpha", self._highlighted and Holo.Options:GetValue("Menu/MarkerAlpha") or 0, 5)
+		Swoosh:work(self._panel:child("select_rect"), "alpha", self._highlighted and Holo.Options:GetValue("Menu/MarkerAlpha") or 0, "speed", 5)
 	end
 	Hooks:PostHook(BlackMarketGui, "_setup", "HoloSetup", function(self, is_start_page, component_data)
 		Holo:FixBackButton(self, self._panel:child("back_button"))

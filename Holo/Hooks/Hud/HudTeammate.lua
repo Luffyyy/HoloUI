@@ -1,5 +1,9 @@
-if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
+if Holo:ShouldModify("Hud", "TeammateHud") then
 	Hooks:PostHook(HUDTeammate, "init", "HoloInit", function(self)
+		if not alive(self._player_panel) or not alive(self._player_panel:child("radial_health_panel")) then
+			Holo:log("[ERROR] Something went wrong when trying to modify HUDTeammate")
+			return
+		end
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
@@ -8,8 +12,8 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
 		if self._main_player then
-	 		self._panel:child("name_bg"):hide()
-	 		self._panel:child("name"):hide()
+	 	--	self._panel:child("name_bg"):hide()
+	 	--	self._panel:child("name"):hide()
 	 	end
 		self._player_panel:child("carry_panel"):set_alpha(0)
 		primary_weapon_panel:child("weapon_selection"):child("weapon_selection"):hide()
@@ -26,11 +30,11 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 			w = 0,
 			valign = "grow",
 		})
-		Holo:ApplySettings({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
+		Holo:Apply({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
 		if CompactHUD then
-			Holo:ApplySettings({cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
+			Holo:Apply({cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
 		else
-			Holo:ApplySettings({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
+			Holo:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
 		end
 		radial_health_panel:text({
 			name = "Health",
@@ -46,7 +50,6 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		})
 		self._panel:rect({
 			name = "teammate_line",
-			visible = not self._main_player and (not CompactHUD and not Fallout4hud),
 			w = 2,
 		})
 		self._player_panel:rect({
@@ -61,17 +64,14 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		})
 		self:layout_equipments()
 		self:UpdateHolo()
+		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
 	function HUDTeammate:show_switching(id, curr, total)
 		local is_secondary = id == 1
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
-		if is_secondary then
-			GUIAnim.play(secondary_weapon_panel:child("switch_bg"), "alpha", curr and 0.1 or 0)
-		else
-			GUIAnim.play(primary_weapon_panel:child("switch_bg"), "alpha", curr and 0.1 or 0)
-		end
+		Swoosh:work((is_secondary and secondary_weapon_panel or primary_weapon_panel):child("switch_bg"), "alpha", curr and 0.1 or 0)
 		if not curr then
 			return
 		end
@@ -89,37 +89,40 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		local deployable = deployable_equipment_panel:child("equipment")
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
-		local secondary_weapon_bg = secondary_weapon_panel:child("bg")
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
-		local primary_weapon_bg = primary_weapon_panel:child("bg")
 		local bg = self._player_panel:child("Mainbg")
 		local name_bg = self._panel:child("name_bg")
 		local name = self._panel:child("name")
 		local teammate_line = self._panel:child("teammate_line")
-		if self._main_player then
-			bg:set_size(130, 64)
-			bg:set_rightbottom(self._panel:w(), self._panel:h())
+		local me = self._main_player			
+		name:configure({
+			color = Holo:GetColor("TextColors/Teammate"),
+			font_size = 20,
+			font = "fonts/font_medium_noshadow_mf",
+		})
+		managers.hud:make_fine_text(name)
+		bg:set_size(me and 130 or 208, me and 64 or 21.33)
+		if me then
+			bg:set_rightbottom(self._panel:size())
 		else
-			bg:set_size(208, 21.33)
 			bg:set_leftbottom(48, self._panel:h())
-
-			name:set_color(Holo:GetColor("TextColors/Teammate"))
-			name:set_font_size(20)
-			managers.hud:make_fine_text(name)
-			name_bg:set_size(name:w() + 4, name:h())
-			name_bg:set_leftbottom(bg:left(), self._ai and bg:bottom() or bg:top())
-			name:set_position(name_bg:x() + 2, name_bg:y())
-			teammate_line:set_size(2, name_bg:h() + (self._ai and 0 or bg:h()))
-			teammate_line:set_rightbottom(bg:leftbottom())
-		end
-		Holo:ApplySettings({name_bg, bg},{
+		end		
+		name_bg:set_size(name:w() + 4, name:h())
+		name_bg:set_leftbottom(bg:left(), self._ai and bg:bottom() or bg:top())
+		name:set_position(name_bg:x() + 2, name_bg:y())
+		teammate_line:set_size(2, name_bg:h() + ((self._ai or me) and 0 or bg:h()))
+		teammate_line:set_rightbottom(name_bg:leftbottom())
+		
+		Holo:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player and (not CompactHUD and not Fallout4hud)})
+		Holo:Apply({name_bg, bg},{
 			color = Holo:GetColor("Colors/TeammateBackground"),
 			alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
 		})
-		radial_health_panel:child("Health"):set_visible((Holo.Options:GetValue("HealthText") and self._main_player) and true or (Holo.Options:GetValue("HealthTextTeammate") and not self._main_player) and true or false)
+		radial_health_panel:child("Health"):set_font_size(me and 22 or 18)		
+		radial_health_panel:child("Health"):set_visible(me and Holo.Options:GetValue("Extra/HealthText") or not me and Holo.Options:GetValue("Extra/HealthTextTeammate"))
 		self:set_radials()
 
-		if self._main_player then
+		if me then
 			weapons_panel:set_size(80, radial_health_panel:h())
 			weapons_panel:set_leftbottom(radial_health_panel:rightbottom())
 		else
@@ -129,7 +132,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		for i, panel in pairs({primary_weapon_panel, secondary_weapon_panel}) do
 			panel:show()
 			panel:child("ammo_total"):set_font_size(22)
-			if self._main_player then
+			if me then
 				panel:set_size(weapons_panel:w(), 32)
 				panel:child("weapon_selection"):set_shape(panel:w() - panel:child("weapon_selection"):w(),0 ,12, panel:h())
 				panel:child("ammo_clip"):set_font_size(32)
@@ -151,8 +154,8 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 			panel:child("ammo_total"):set_color(Holo:GetColor("TextColors/Teammate"))
 			panel:child("ammo_clip"):set_color(Holo:GetColor("TextColors/Teammate"))
 		end
-		deployable_equipment_panel:set_shape(weapons_panel:right() + (2), weapons_panel:y(), 48, 21.33)
-		local eq_size = deployable_equipment_panel:h()
+		deployable_equipment_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y(), 48, 21.33)
+		local eq_size = deployable_equipment_panel:h() - 4
 		deployable:set_size(eq_size, eq_size)
 		deployable:set_color(Holo:GetColor("Colors/Equipments"))
 		deployable_equipment_panel:child("amount"):set_font(Idstring("fonts/font_large_mf"))
@@ -191,19 +194,20 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		local panel = self._player_panel:child("radial_health_panel")
 		local radial_size = self._main_player and 64 or 48
 		panel:set_size(radial_size,radial_size)
-		panel:set_rightbottom(self._player_panel:child("Mainbg"):left() - (2), self._player_panel:child("Mainbg"):bottom())
+		panel:set_rightbottom(self._player_panel:child("Mainbg"):left() - 2, self._player_panel:child("Mainbg"):bottom())
 		for _, child in pairs(panel:children()) do
 			child:set_size(panel:size())
 		end
-		panel:child("Health"):set_font_size((self._main_player and 22 or 18))
-		panel:child("radial_health"):set_blend_mode("normal")
-		panel:child("radial_health"):set_image("guis/textures/custom/Health" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Health")])
-		panel:child("radial_bg"):set_image("guis/textures/custom/RadialBG")
-		panel:child("damage_indicator"):set_image("guis/textures/custom/adialHurt")
-		panel:child("radial_custom"):set_image("guis/textures/custom/SwangSong")
-		panel:child("radial_shield"):set_blend_mode("normal")
-		panel:child("radial_shield"):set_image("guis/textures/custom/Circle" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Armor")])
-		panel:child("damage_indicator"):hide()
+		if Holo.Options:GetValue("HealthAndArmor") then
+			panel:child("radial_health"):set_blend_mode("normal")
+			panel:child("radial_health"):set_image("guis/textures/custom/Health" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Health")])
+			panel:child("radial_bg"):set_image("guis/textures/custom/RadialBG")
+			panel:child("damage_indicator"):set_image("guis/textures/custom/adialHurt")
+			panel:child("radial_custom"):set_image("guis/textures/custom/SwangSong")
+			panel:child("radial_shield"):set_blend_mode("normal")
+			panel:child("radial_shield"):set_image("guis/textures/custom/Circle" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Armor")])
+			panel:child("damage_indicator"):hide()			
+		end
 		local interact_panel = self._player_panel:child("interact_panel")
 		interact_panel:set_size(panel:size())
 		interact_panel:set_world_position(panel:child("radial_shield"):world_position())
@@ -292,26 +296,33 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		end
 	end
 	function HUDTeammate:set_state(state)
-		self._player_panel:set_alpha(state == "player" and 1 or 0)
+		if alive(self._player_panel) then
+			self._player_panel:set_alpha(state == "player" and 1 or 0)
+		end
 	end
 	function HUDTeammate:_set_weapon_selected(id, hud_icon)
 		local is_secondary = id == 1
+		local s = self._main_player and "w" or "h"
 		local wep_panel = self._player_panel:child("weapons_panel")
 		local secondary_bg = wep_panel:child("secondary_weapon_panel"):child("bg")
 		local primary_bg = wep_panel:child("primary_weapon_panel"):child("bg")
 		primary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
 		secondary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
-		GUIAnim.play(primary_bg, "alpha", is_secondary and 0 or 1)
-		GUIAnim.play(primary_bg, "w", is_secondary and 0 or 2, 10)
-		GUIAnim.play(secondary_bg, "alpha", is_secondary and 1 or 0)
-		GUIAnim.play(secondary_bg, "w", is_secondary and 2 or 0, 10)
+		Swoosh:work(primary_bg, 
+			"alpha", is_secondary and 0 or 1,
+			s, is_secondary and 0 or 2,
+			"speed", 10
+		)
+		Swoosh:work(secondary_bg, 
+			"alpha", is_secondary and 1 or 0,
+			s, is_secondary and 2 or 0,
+			"speed", 10
+		)
 	end
 	Hooks:PostHook(HUDTeammate, "set_name", "HoloSetName", function(self, teammate_name)
-		local name = self._panel:child("name")
-		local name_bg = self._panel:child("name_bg")
 		self._panel:child("callsign"):hide()
 		self._panel:child("callsign_bg"):hide()
-		name:set_text(string.upper(teammate_name))
+		self._panel:child("name"):set_text(Holo.Options:GetValue("Extra/UpperCaseNames") and teammate_name:upper() or teammate_name)
 		self:UpdateHolo()
 	end)
 	function HUDTeammate:_set_amount_string(text, amount)
@@ -322,7 +333,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 	function HUDTeammate:set_ammo_amount_by_type(type, max_clip, current_clip, current_left, max)
 		local weapon_panel = self._player_panel:child("weapons_panel"):child(type .. "_weapon_panel")
 		weapon_panel:show()
-		if Holo.Options:GetValue("FixedAmmoTotal") and ((type == "primary" and managers.blackmarket:equipped_primary().weapon_id ~= "saw") or (type == "secondary" and managers.blackmarket:equipped_secondary().weapon_id ~= "saw_secondary") ) then
+		if Holo.Options:GetValue("Extra/FixedAmmoTotal") and ((type == "primary" and managers.blackmarket:equipped_primary().weapon_id ~= "saw") or (type == "secondary" and managers.blackmarket:equipped_secondary().weapon_id ~= "saw_secondary") ) then
 			current_left = current_left - current_clip
 		end
 		local ammo_clip = weapon_panel:child("ammo_clip")
@@ -334,8 +345,8 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local Health = radial_health_panel:child("Health")
 		local val = data.current / data.total
-		GUIAnim.play(Health, "color", Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))
-		GUIAnim.play(Health, "number", data.current * 10, 5)
+		Swoosh:color(Health, Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))
+		Health:set_text(string.format("%.0f", data.current * 10))
 	end)
 	function HUDTeammate:set_talking(talking)
 		local callsign = self._panel:child("callsign")
@@ -348,8 +359,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 		end
 	end
 	function HUDTeammate:set_callsign(id)
-		local callsign = CompactHUD and self._panel:child("callsign") or self._panel:child("teammate_line")
-		callsign:set_color(tweak_data.chat_colors[id])
+		(CompactHUD and self._panel:child("callsign") or self._panel:child("teammate_line")):set_color(tweak_data.chat_colors[id])
 	end
 	function HUDTeammate:layout_special_equipments()
 		local special_equipment = self._special_equipment
@@ -374,7 +384,7 @@ if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
 				panel:child("amount_bg"):move(7, 7)
 				panel:child("amount"):set_center(panel:child("amount_bg"):center())
 			end
-			panel:set_bottom((self._main_player and self._player_panel:child("Mainbg") or self._panel:child("name")):top() - (2))
+			panel:set_bottom((self._main_player and self._player_panel:child("Mainbg") or self._panel:child("name")):top() - 2)
 			if self._main_player then
 				panel:set_x(w - (panel:w() * i))
 			else

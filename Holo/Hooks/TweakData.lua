@@ -31,6 +31,19 @@ function TweakData:UpdateHolo()
         self.overlay_effects.element_fade_in.color = Holo:GetColor("Colors/MenuBackground")
         self.overlay_effects.element_fade_out.color = Holo:GetColor("Colors/MenuBackground")
     end    
+    self.contour.deployable.standard_color = Holo:GetColor("Colors/DeployableStandard", true)   
+    self.contour.deployable.selected_color = Holo:GetColor("Colors/DeployableSelected", true) 
+    self.contour.deployable.active_color = Holo:GetColor("Colors/DeployableActive", true) 
+    self.contour.deployable.interact_color = Holo:GetColor("Colors/DeployableInteract", true) 
+    self.contour.deployable.disabled_color = Holo:GetColor("Colors/DeployableDisabled", true) 
+    self.contour.deployable.standard_opacity = 1
+    self.contour.interactable.standard_color = Holo:GetColor("Colors/Interactable", true)
+    self.contour.interactable.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
+    self.contour.interactable.standard_opacity = 1
+    self.contour.interactable_look_at.standard_color = Holo:GetColor("Colors/InteractableSelected", true)
+    self.contour.interactable_look_at.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
+    self.contour.interactable_look_at.standard_opacity = 1
+ 
     if managers.criminals then 
         for _, char in ipairs(managers.criminals:characters()) do
             if alive(char.unit) then
@@ -40,3 +53,4 @@ function TweakData:UpdateHolo()
     end
 end
 tweak_data:UpdateHolo()
+Holo:AddUpdateFunc(callback(tweak_data, tweak_data, "UpdateHolo"))

@@ -1,3 +1,4 @@
+--I should really rewrite this ¯\_(ツ)_/¯ 
 if Holo.Options:GetValue("Chat") then
 function HUDChat:init(ws, hud)
 	self._ws = managers.gui_data:create_fullscreen_workspace()

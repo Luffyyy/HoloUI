@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Menu/Lobby") then
+if Holo.Options:GetValue("Base/Menu") then
 function MissionBriefingTabItem:init(panel, text, i)
 	self._main_panel = panel
 	self._panel = self._main_panel:panel()
@@ -39,7 +39,15 @@ function MissionBriefingTabItem:init(panel, text, i)
 	self._panel:grow(0, -(self._panel:top() + 70 + tweak_data.menu.pd2_small_font_size * 4 + 25))
 	self._selected = true
 	self:deselect()
+	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
  end
+function MissionBriefingTabItem:UpdateHolo()
+	if alive(self._main_panel) and alive(self._tab_select_rect) and self._main_panel:child("line") then
+		self._tab_select_rect:set_color(Holo:GetColor("Colors/Tab"))
+		self._tab_text:set_color(Holo:GetColor("TextColors/Tab"))
+		self._main_panel:child("line"):set_color(Holo:GetColor("Colors/TabHighlighted"))
+	end
+end
 function MissionBriefingTabItem:reduce_to_small_font()
  
 end

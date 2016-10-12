@@ -1,24 +1,25 @@
 Holo.ModPath = ModPath
 Holo.CustomTextures = {}
+Holo.Updaters = {}
 Holo.Colors = { -- Add/Remove Colors!
-	 {color = Color(0.2 ,0.6 ,1), menu_name = "Holo/Prefered"},
-	 {color = Color(0.2, 0.6 ,1 ), menu_name = "Holo/Blue"},	  	 
-	 {color = Color(1,0.6 ,0), menu_name = "Holo/Orange"},
-	 {color = Color(0, 1, 0.1), menu_name = "Holo/Green"},	
-	 {color = Color(1, 0.25, 0.7), menu_name = "Holo/Pink"},				 
-	 {color = Color(0, 0, 0), menu_name = "Holo/Black"},		 		 
-	 {color = Color(0.15, 0.15, 0.15), menu_name = "Holo/Grey"},
-	 {color = Color(0.1, 0.1, 0.35), menu_name = "Holo/DarkBlue"},	
-	 {color = Color(1, 0.1, 0), menu_name = "Holo/Red"},	
-	 {color = Color(1, 0.8, 0.2), menu_name = "Holo/Yellow"},	
-	 {color = Color(1, 1, 1), menu_name = "Holo/White"},
-	 {color = Color(0, 1, 0.9), menu_name = "Holo/Cyan"},
-	 {color = Color(0.5, 0, 1), menu_name = "Holo/Purple"},
-	 {color = Color(0, 0.9, 0.5), menu_name = "Holo/SpringGreen"},
-	 {color = Color(0.6,0.8,0.85), menu_name = "Holo/Light Blue"},
-	 {color = Color(1, 0, 0.2), menu_name = "Holo/Crimson"},
-     {color = Color(0.5,82,45), menu_name = "Holo/Brown"},
-	 {color = Color(0.7, 0.9, 0), menu_name = "Holo/Lime"},
+	 {color = Color(0.2 ,0.6 ,1), name = "Prefered"},
+	 {color = Color(0.2, 0.6 ,1 ), name = "Blue"},	  	 
+	 {color = Color(1,0.6 ,0), name = "Orange"},
+	 {color = Color(0, 1, 0.1), name = "Green"},	
+	 {color = Color(1, 0.25, 0.7), name = "Pink"},				 
+	 {color = Color(0, 0, 0), name = "Black"},		 		 
+	 {color = Color(0.15, 0.15, 0.15), name = "Grey"},
+	 {color = Color(0.1, 0.1, 0.35), name = "DarkBlue"},	
+	 {color = Color(1, 0.1, 0), name = "Red"},	
+	 {color = Color(1, 0.8, 0.2), name = "Yellow"},	
+	 {color = Color(1, 1, 1), name = "White"},
+	 {color = Color(0, 1, 0.9), name = "Cyan"},
+	 {color = Color(0.5, 0, 1), name = "Purple"},
+	 {color = Color(0, 0.9, 0.5), name = "SpringGreen"},
+	 {color = Color(0.6,0.8,0.85), name = "Light Blue"},
+	 {color = Color(1, 0, 0.2), name = "Crimson"},
+     {color = Color(0.5,82,45), name = "Brown"},
+	 {color = Color(0.7, 0.9, 0), name = "Lime"},
 }
 Holo.Voices = { -- Add/Remove Voices!
 	["f40_any"] = "Move",
@@ -96,9 +97,10 @@ Holo.TextSizesStrings = {
 }
 Holo.FrameStyles ={
 	"Holo/Normal",
-	"Holo/Underline",
-	"Holo/Sideline",
-	"Holo/Upperline",
-	"Holo/Fullframe",
+	"Holo/BottomLine",
+	"Holo/LeftLine",
+	"Holo/RightLine",
+	"Holo/Topline",
+	"Holo/FullFrame",
 	"Holo/None",
 }

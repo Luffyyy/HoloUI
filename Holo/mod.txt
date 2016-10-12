@@ -2,7 +2,7 @@
    "name":"HoloUI",
    "description":"A UI Mod inspired by Google's Material Design",
    "author":"Luffy",
-   "version":"Reborn 1.0",
+   "version":"1.0",
    "priority":15,
    "updates":[  
       {  
@@ -19,7 +19,7 @@
    "hooks":[  
       {
           "hook_id":"lib/utils/levelloadingscreenguiscript", 
-          "script_path":"Hooks/Menu/MenuLoading.lua"
+          "script_path":"Hooks/Menu/LevelLoadingScreenGUI.lua"
       }
    ],
    "pre_hooks":[  

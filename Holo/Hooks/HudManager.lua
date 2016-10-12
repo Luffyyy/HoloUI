@@ -1,10 +1,13 @@
 if RequiredScript == "lib/managers/hudmanagerpd2" then
     local o_setup_player_info_hud_pd2 = HUDManager._setup_player_info_hud_pd2
     local o_hide_mission_briefing_hud = HUDManager.hide_mission_briefing_hud
-    Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
+    Hooks:PreHook(HUDManager, "init", "HoloPreInit", function(self)
         self._floating_infos = {}
+    end)
+    Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
         if self.UpdateHolo then
             self:UpdateHolo()
+            Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
         end
     end)
     Hooks:PostHook(HUDManager, "_setup_player_info_hud_pd2", "HoloSetupPlayerInfoHudPD2", function(self)
@@ -15,25 +18,21 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
             seconds = seconds or 4
             for i=1, seconds do
-                GUIAnim.play(o, "alpha", 0.5)
+                Swoosh:work(o, "alpha", 0.5)
                 wait(0.5)
-                GUIAnim.play(o, "alpha", 1)
+                Swoosh:work(o, "alpha", 1)
                 wait(0.5)
             end
-            GUIAnim.play(o, "alpha", no_remove and 1 or 0, nil, not no_remove and function()
-                on_panel = on_panel or hud
-                on_panel:remove(o)
+            Swoosh:work(o, "alpha", no_remove and 1 or 0, "callback", function()
+                if not no_remove then
+                    on_panel = on_panel or hud
+                    on_panel:remove(o)
+                end
             end)
         end
-        GUIAnim.flash_icon = hud.flash_icon
-        if Holo.Options:GetValue("Base/Info") then
-            Holo.Info = HoloInfo:new("Info")
-            Holo.SkillInfo = HoloInfo:new("SkillInfo")
-            Holo:CreateInfos()
-            Holo:CreateSkillInfos()
-        end
+        Swoosh.flash_icon = hud.flash_icon
         if Holo.Options:GetValue("Voice") then
-            Holo.Voice = HUDVoice:new()
+            Holo.Voice = HoloVoice:new()
         end
     end)
     if Holo.Options:GetValue("Base/Hud") then
@@ -70,7 +69,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         function HUDManager._create_hud_chat_access()
         end
     end
-    if Holo.Options:GetValue("Base/Hud") and Holo:ShouldModify("TeammateHud") then
+    if Holo:ShouldModify("Hud", "TeammateHud") then
         function HUDManager:_create_teammates_panel(hud)
         	hud = hud or managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
         	self._hud.teammate_panels_data = self._hud.teammate_panels_data or {}
@@ -123,7 +122,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
     Hooks:PostHook(HUDManager, "hide_mission_briefing_hud", "HideMissionBriefingHud", function()
         Holo.Panel:show()
     end)
-    if Holo:ShouldModify("TeammateHud") then
+    if Holo:ShouldModify("Hud", "TeammateHud") then
         Hooks:PostHook(HUDManager, "show_player_gear", "HoloShowPlayerGear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
                 local panel = self._teammate_panels[panel_id]._player_panel
@@ -154,7 +153,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         end)
     end
 else
-    if Holo.Options:GetValue("Base/Hud") and Holo.Options:GetValue("Waypoints") then
+   if Holo:ShouldModify("Hud", "Waypoints") then
         local o_add_waypoint = HUDManager.add_waypoint
         function HUDManager:add_waypoint(id, data)
             data.blend_mode = "normal"
@@ -248,7 +247,7 @@ else
         Holo.Panel:hide()
 	end)
 	Hooks:PostHook(HUDManager, "set_enabled", "HoloSetEnabled", function(self)
-        if not self._hud_mission_briefing._backdrop._panel:visible() then
+        if self._hud_mission_briefing and not self._hud_mission_briefing._backdrop._panel:visible() then
             Holo.Panel:show()
         end
 	end)

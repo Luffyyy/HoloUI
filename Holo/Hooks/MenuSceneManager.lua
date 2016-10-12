@@ -1,4 +1,4 @@
-if not _G.MenuBackgrounds and not GameSetup and Holo.Options:GetValue("Menu/ColoredBackground") then 
+if not _G.MenuBackgrounds and not GameSetup and Holo:ShouldModify("Menu", "Menu/ColoredBackground") then 
 	Hooks:PostHook(MenuSceneManager, "update", "HoloUpdateFov", function(self)
 		if self._camera_object then
 			local fixed_fov = math.min(50, self._new_fov)

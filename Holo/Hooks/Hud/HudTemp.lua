@@ -1,6 +1,7 @@
-if Holo.Options:GetValue("Base/Hud") then
+if Holo:ShouldModify("Hud", "Carrying") then
 	Hooks:PostHook(HUDTemp, "init", "HoloInit", function(self, ...)
 		self:UpdateHolo()
+		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
 	function HUDTemp:_animate_hide_bag_panel(bag_panel)
 		bag_panel:animate(callback(nil, _G, "HUDBGBox_animate_close_left"), function()
@@ -16,9 +17,9 @@ if Holo.Options:GetValue("Base/Hud") then
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
 		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
 		HUDBGBox_recreate(self._bg_box, {
+			name = "Carrying",
 			w = 204,
 			h = bag_panel:h(),
-			color = Holo:GetColor("Colors/Carrying"),
 		})
 		self._bg_box:child("bag_text"):configure({
 			visible = true,
@@ -41,6 +42,14 @@ if Holo.Options:GetValue("Base/Hud") then
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
 		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
 		bag_panel:show()
-		GUIAnim.play(bag_panel, "left_grow", self._bg_box:w())
+		
+		local right = bag_panel:right()
+		bag_panel:set_w(0)
+		Swoosh:work(bag_panel, 
+			"w", self._bg_box:w(),
+			"speed", 4,
+			"after", function()
+				bag_panel:set_right(right)
+		end)
 	end
 end

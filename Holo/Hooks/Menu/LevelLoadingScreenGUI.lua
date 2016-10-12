@@ -36,30 +36,39 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		self._back_drop_gui:set_panel_to_saferect(panel)
 		self._indicator = panel:bitmap({
 			name = "indicator",
+			color = data.text_color,
 			texture = "guis/textures/pd2/skilltree/drillgui_icon_restarter",
 			w = 32,
 			h = 32,
 		})		
 		self._level_title_text = panel:text({
-			text_id = "debug_loading_level",
 			font = "fonts/font_large_mf",
-			font_size = 42,
+			font_size = 0,
+			visible = false,
 			halign = "left",
 			vertical = "bottom",
-			h = 36
 		})
-		self._level_title_text:set_text(string.upper(self._level_title_text:text()))
 		self._level_name_text = panel:text({
 			text = string.upper(self._level_tweak_data.name or ""),
 			font = "fonts/font_large_mf",
+			color = data.text_color,
 			font_size = 42,
 	        halign="grow",
 	        valign="bottom",
-			h = 42
+		})			
+		local difficulty_text = panel:text({
+			text = data.difficulty_string,
+			font = "fonts/font_large_mf",
+			color = data.text_color,
+			font_size = 24,
+	        halign="grow",
+	        valign="bottom",
+			h = 24
 		})		
 		local brief_text = panel:text({
 			text = data.briefing_string,
 			font = "fonts/font_large_mf",
+			color = data.text_color,
 			font_size = 16,
 			align = "right",
 	        halign="grow",
@@ -67,22 +76,17 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 	        wrap = true,
 			w = 500
 		})
-		local line = panel:bitmap({
-			name = "line",
-			color = data.main_color,
-			h = 2,
-		})					
-		local _,_,w,h = self._level_name_text:text_rect()
-		self._level_name_text:set_size(w,h)
-		local _, _, w2, h2 = self._level_title_text:text_rect()
-		self._level_title_text:set_size(w2, h2)
-		line:set_w((w > w2 and w or w2) + 2)
-		self._level_title_text:set_lefttop(self._level_name_text:left(), self._level_name_text:bottom())
-		self._indicator:set_leftbottom(self._level_title_text:right(), self._level_title_text:bottom() - 6)
-		line:set_lefttop(self._level_title_text:left(), self._level_title_text:bottom())
-		local _,_,_,h = brief_text:text_rect()
-		brief_text:set_h(h)
-		brief_text:set_righttop(panel:right() - 50, panel:top() - 20)
+		local make_text = function(text)
+			local _,_,w,h = text:text_rect()
+			text:set_size(w,h)
+		end
+		make_text(brief_text)
+		brief_text:set_righttop(panel:right() - 50, panel:top() - 20)	
+		make_text(self._level_name_text)
+		make_text(difficulty_text)
+		difficulty_text:set_top(self._level_name_text:bottom())
+		self._indicator:set_leftbottom(self._level_name_text:rightbottom())
+		self._indicator:move(0, -6)
 	else
 		oinit(self, scene_gui, res, progress, base_layer)
 	end

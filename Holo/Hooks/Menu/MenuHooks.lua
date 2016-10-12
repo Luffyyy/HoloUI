@@ -1,40 +1,37 @@
 if Holo.Options:GetValue("Base/Menu") then
-	if Holo.Options:GetValue("Menu/Lobby") then
-		if RequiredScript == "lib/managers/menu/renderers/menunodejukeboxgui" then
-			Hooks:PostHook(MenuNodeJukeboxGui, "init", "HoloInit", function(self)
-				self.item_panel:set_y(self.item_panel:parent():y() + 50)
-			end)
-		elseif RequiredScript == "lib/managers/menu/lootdropscreengui" then
-			Hooks:PostHook(LootDropScreenGui, "init", "HoloInit", function(self)
-				self._continue_button:configure({
-					font = "fonts/font_medium_mf",
-					font_size = 24,
-					color = Holo:GetColor("TextColors/Menu"),
-				})
-			end)
-			Hooks:PostHook(LootDropScreenGui, "check_all_ready", "HoloCheckAllReady", function(self)
-				if managers.menu:is_pc_controller() then
-					self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
+	if RequiredScript == "lib/managers/menu/renderers/menunodejukeboxgui" then
+		Hooks:PostHook(MenuNodeJukeboxGui, "init", "HoloInit", function(self)
+			self.item_panel:set_y(self.item_panel:parent():y() + 50)
+		end)
+	elseif RequiredScript == "lib/managers/menu/lootdropscreengui" then
+		Hooks:PostHook(LootDropScreenGui, "init", "HoloInit", function(self)
+			self._continue_button:configure({
+				font = "fonts/font_medium_mf",
+				font_size = 24,
+				color = Holo:GetColor("TextColors/Menu"),
+			})
+		end)
+		Hooks:PostHook(LootDropScreenGui, "check_all_ready", "HoloCheckAllReady", function(self)
+			if managers.menu:is_pc_controller() then
+				self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
+			end
+		end)
+		Hooks:PostHook(LootDropScreenGui, "mouse_moved", "HoloMouseMoved", function(self, x, y)
+			if self._button_not_clickable then
+				self._continue_button:set_color(tweak_data.screen_colors.item_stage_1)
+			elseif self._continue_button:inside(x, y) then
+				if not self.continue_button_highlighted then
+					self._continue_button_highlighted = true
+					self.continue_button_highlighted = true
+					self._continue_button:set_color(Holo:GetColor("Colors/Marker"))
 				end
-			end)
-			Hooks:PostHook(LootDropScreenGui, "mouse_moved", "HoloMouseMoved", function(self, x, y)
-				if self._button_not_clickable then
-			 		self._continue_button:set_color(tweak_data.screen_colors.item_stage_1)
-			 	elseif self._continue_button:inside(x, y) then
-			 		if not self.continue_button_highlighted then
-						self._continue_button_highlighted = true
-			 			self.continue_button_highlighted = true
-			 			self._continue_button:set_color(Holo:GetColor("Colors/Marker"))
-			 		end
-			 	elseif self.continue_button_highlighted then
-					self._continue_button_highlighted = false
-			 		self.continue_button_highlighted = false
-			 		self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
-			 	end
-			end)
-		end
-	end
-	if RequiredScript == "lib/managers/menu/items/menuitemcustomizecontroller" then
+			elseif self.continue_button_highlighted then
+				self._continue_button_highlighted = false
+				self.continue_button_highlighted = false
+				self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
+			end
+		end)
+	elseif RequiredScript == "lib/managers/menu/items/menuitemcustomizecontroller" then
 		Hooks:PostHook(MenuItemCustomizeController, "setup_gui", "HoloSetupGUI", function(self, node, row_item)
 			row_item.controller_binding:set_color(row_item.color)
 		end)
@@ -114,6 +111,13 @@ if Holo.Options:GetValue("Base/Menu") then
 					child:hide()
 				end
 			end
+		end)
+	elseif RequiredScript == "lib/managers/menu/newsfeedgui" then
+		Hooks:PostHook(NewsFeedGui, "update", "HoloUpdate", function(self)
+			local color = Holo:GetColor("TextColors/Menu")
+			local color_highlight = Holo:GetColor("Colors/Marker")
+			self._title_panel:child("title"):set_color(self._mouse_over and color_highlight or color)		
+			self._panel:child("title_announcement"):set_color(color)
 		end)
 	end
 end

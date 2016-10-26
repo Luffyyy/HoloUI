@@ -23,7 +23,7 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 	self._map_panel:rect({
 		name = "background",
 		color = Holo:GetColor("Colors/MenuBackground"),
-		visible = Holo.Options:GetValue("MenuBackground"),
+		alpha = Holo.Options:GetValue("MenuBackground") and 1 or 0,
 		valign = "scale",
 		halign = "scale",
 	})

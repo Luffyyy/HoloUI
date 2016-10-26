@@ -5,33 +5,61 @@ function HoloVoice:init()
         layer = 999,
         alpha = 0
     })
+    self._delay = 0.5
+    self._next_t = 0
     self._mouse_id = managers.mouse_pointer:get_id()
     self.Boxes = {}
     self._comment_allow = true
     for id, text in pairs(Holo.Voices) do
         self:Add(id, text)
     end
+    Input:keyboard():add_trigger(Idstring(Holo.Options:GetValue("VoiceKey")), function()
+        self._holding = true
+    end)
     managers.hud:add_updator("HoloVoiceUpdate", callback(self, self, "Update"))
 end
 function HoloVoice:Update(t, dt)
-    if alive(managers.player:player_unit()) and Input:keyboard():down(Idstring(Holo.Options:GetValue("VoiceKey"))) then
+    if self._wait then
+        self._next_t = t + self._delay
+        self._wait = false
+    end
+    if alive(managers.player:player_unit()) and self._holding and self._next_t <= t then
         if not self._showing then
             self._showing = true
-            Swoosh:work(self._voice_panel, "alpha", 1, "callback", function()
-                managers.mouse_pointer:use_mouse({
-                    mouse_move = callback(self, self, "MouseMoved"),
-                    mouse_press = callback(self, self, "MousePressed"),
-                    id = self._mouse_id
-                })  
-            end)
+            Swoosh:work(self._voice_panel, "alpha", 1, "stop", true)                
+            managers.mouse_pointer:use_mouse({
+                mouse_move = callback(self, self, "MouseMoved"),
+                mouse_press = callback(self, self, "MousePressed"),
+                mouse_release = callback(self, self, "MouseReleased"),
+                id = self._mouse_id
+            })  
+            self:SetShootingEnabled(false)
         end
     else
         if self._showing then
+            if self._selected then
+                self:Play(self._selected:name())
+            end
             self._showing = false
+            self._holding = false 
+            managers.mouse_pointer:set_mouse_world_position(self._voice_panel:center_x(), self._voice_panel:center_y() - 5)
             managers.mouse_pointer:remove_mouse(self._mouse_id)
-            managers.mouse_pointer:set_mouse_world_position(self._voice_panel:center() + 20,self._voice_panel:top() + 90)
+            self:SetShootingEnabled(true)
         end
-        Swoosh:work(self._voice_panel, "alpha", 0)
+        Swoosh:work(self._voice_panel, "alpha", 0, "stop", true)
+    end
+    if self._holding and not Input:keyboard():down(Idstring(Holo.Options:GetValue("VoiceKey"))) then
+        self._holding = false
+    end
+end
+function HoloVoice:SetShootingEnabled(enabled)
+    if alive(managers.player:player_unit()) then
+        managers.player:player_unit():movement():current_state()._disable_shooting = not enabled
+    end
+end
+function HoloVoice:MouseReleased(o, x, y)
+    if self._showing then
+        managers.player:player_unit():base():controller():reset_cache(false)
     end
 end
 function HoloVoice:MouseMoved(o, x, y)
@@ -41,14 +69,16 @@ function HoloVoice:MouseMoved(o, x, y)
             panel:stop()
             Swoosh:work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom())
         else
+            if self._selected == panel then
+                self._selected = nil
+            end
             panel:stop()
-            Swoosh:work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom() + 2)
+            Swoosh:work(panel:child("underline"), "speed", 10,"top", panel:child("Bg"):bottom())
         end
-        self._selected = self._selected and self._selected:inside(x, y) and self._selected
     end
 end
 function HoloVoice:MousePressed(o, button, x, y)
-    if button == Idstring("0") then
+    if button == Idstring("0") and self._showing then
         for panel, config in pairs(self.Boxes) do
             if panel and panel:inside(x, y) then
                 self:Play(config.id)
@@ -58,6 +88,9 @@ function HoloVoice:MousePressed(o, button, x, y)
 end
 function HoloVoice:Play(id)
     if not managers.trade:is_peer_in_custody(managers.network:session():local_peer():id()) and id ~= nil then
+        self._holding = false
+        self._selected = nil
+        self._wait = true
         return managers.player:player_unit():sound():say(id, true, true)
     end
 end
@@ -67,6 +100,7 @@ function HoloVoice:Add(id, text, comment)
     local w = 128
     local h = 64
     local VBox = self._voice_panel:panel({
+        name = id,
         w = w,
         h = h,
     })
@@ -80,9 +114,9 @@ function HoloVoice:Add(id, text, comment)
     })
     VBox:rect({
         name = "underline",
-        h = 2,
+        layer = 0,
         color = Holo:GetColor("Colors/Marker"),
-    }):set_bottom(Bg:bottom() + 2)
+    }):set_top(Bg:bottom())
     Input:keyboard():add_trigger(Idstring(tostring(#self.Boxes)), function()
         if Input:keyboard():down(Idstring(LuaModManager:GetPlayerKeybind("Voice_key") or "q")) then
             self:Play(id)
@@ -97,7 +131,8 @@ function HoloVoice:Add(id, text, comment)
         h = VBox:h(),
         color = Holo:GetColor("TextColors/Menu"),
         font = "fonts/font_large_mf",
-        font_size = 16
+        font_size = 16,
+        layer = 1
     })
     self.Boxes[VBox] = {
         id = id,

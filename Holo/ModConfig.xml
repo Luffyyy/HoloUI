@@ -63,6 +63,7 @@
       <hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua" />
       <hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/renderers/menunodepreplanninggui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="Menu/MenuHooks.lua" />
       <hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua" />

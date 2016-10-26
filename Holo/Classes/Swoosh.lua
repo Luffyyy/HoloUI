@@ -13,6 +13,7 @@ function Swoosh:work(o, ...)
     local anim_tbl = {}
     local opt = {
         speed = 1,
+        stop = false,
         after = function() end,
         before = function() end,
         callback = function() end
@@ -21,14 +22,15 @@ function Swoosh:work(o, ...)
     for i=1, #tbl, 2 do
         local k = tbl[i]
         local v = tbl[i + 1]
-        if opt[k] then
+        if opt[k] ~= nil then
             opt[k] = v or opt[k]
-            if k == "stop" and stop and opt[k] == true then
-                o:stop()
-            end
         else
             table.insert(anim_tbl, {[k] = v})
         end       
+    end            
+    if anim_tbl.stop or stop == true then
+        o:stop()
+        anim_tbl.stop = nil
     end
     o:script().animating = tbl 
     o:animate(function()

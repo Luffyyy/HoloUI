@@ -92,6 +92,17 @@ if Holo.Options:GetValue("Base/Menu") then
 				return
 			end
 		end
+	elseif RequiredScript == "lib/managers/menu/renderers/menunodepreplanninggui" then
+		Hooks:PreHook(MenuNodePrePlanningGui, "setup", "HoloSetup", function(self)
+			self.large_font_size = self.font_size
+		end)
+		function MenuNodePrePlanningGui:_align_marker(row_item)
+			MenuNodePrePlanningGui.super._align_marker(self, row_item)
+			if row_item.item:parameters().pd2_corner then 
+				self._marker_data.marker:set_left(row_item.menu_unselected:x() + 2)
+				return
+			end
+		end
 	elseif RequiredScript == "lib/managers/menu/renderers/menunodeupdatesgui" then
 		MenuNodeUpdatesGui.PADDING = 10
 		Hooks:PostHook(MenuNodeUpdatesGui, "setup", "HoloSetup", function( self )

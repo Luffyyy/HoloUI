@@ -11,10 +11,6 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 	  	local grenades_panel = self._player_panel:child("grenades_panel")
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
-		if self._main_player then
-	 	--	self._panel:child("name_bg"):hide()
-	 	--	self._panel:child("name"):hide()
-	 	end
 		self._player_panel:child("carry_panel"):set_alpha(0)
 		primary_weapon_panel:child("weapon_selection"):child("weapon_selection"):hide()
 		secondary_weapon_panel:child("weapon_selection"):child("weapon_selection"):hide()
@@ -202,8 +198,8 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			panel:child("radial_health"):set_blend_mode("normal")
 			panel:child("radial_health"):set_image("guis/textures/custom/Health" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Health")])
 			panel:child("radial_bg"):set_image("guis/textures/custom/RadialBG")
-			panel:child("damage_indicator"):set_image("guis/textures/custom/adialHurt")
-			panel:child("radial_custom"):set_image("guis/textures/custom/SwangSong")
+			panel:child("damage_indicator"):set_image("guis/textures/custom/HealthRed")
+			panel:child("radial_custom"):set_image("guis/textures/custom/HealthCyan")
 			panel:child("radial_shield"):set_blend_mode("normal")
 			panel:child("radial_shield"):set_image("guis/textures/custom/Circle" .. Holo.RadialNames[Holo.Options:GetValue("Colors/Armor")])
 			panel:child("damage_indicator"):hide()			

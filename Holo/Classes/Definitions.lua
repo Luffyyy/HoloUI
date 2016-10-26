@@ -85,7 +85,7 @@ Holo.RadialNames = {
 	"Red", 
 	"Cyan",
 	"SpringGreen",
-	"arkBlue",
+	"DarkBlue",
 	"Purple",
 	"Lime",
 	"Black",

@@ -2,6 +2,7 @@ _G.Holo = _G.Holo or _G.ModCore:new(ModPath .. "ModConfig.xml", false, true)
 function Holo:init()
 	self:init_modules()
 	self.setup = true
+	self.init_colors = #Holo.Colors
 	for k, v in pairs(Holo.Options:GetOption("CustomColors")) do
 	    if type(v) == "table" and v.value then
             table.insert(Holo.Colors, {color = v.value.color, name = v.value.name, custom = true})
@@ -217,9 +218,6 @@ if Hooks then
 	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu()
 			Holo.Menu._menu:toggle()
-			if managers.hud then
-				managers.hud._chatinput_changed_callback_handler:dispatch(closed)
-			end
 		end		
 		Holo.Panel = managers.gui_data:create_fullscreen_workspace():panel()		
 		Holo.Menu = HoloMenu:new()

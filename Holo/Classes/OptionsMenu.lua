@@ -183,6 +183,12 @@ function HoloMenu:CreateColor(menu, i, name, color)
             position = "RightTop",
             align = "center",
             callback = function()
+                local v = Holo.init_colors + i
+                self:WorkValues(true, nil, function(item)
+                   if item.items and item.color and item.value > v then
+                        Holo.Options:SetValue(item.name, item.value - 1)   
+                    end                  
+                end)
                 Holo.Options._storage.CustomColors[i] = nil
                 Holo.Options:Save()
                 if self._current == i then
@@ -377,14 +383,19 @@ function HoloMenu:MouseMoved(x, y)
         self._menu._fullscreen_ws_pnl:child("resize_panel"):set_left(self._menu._panel:right())
     end
 end
-function HoloMenu:ResetOptions(all, menu)
+function HoloMenu:ResetOptions(all, menu)   
+    self:WorkValues(all, menu, function(item)
+        local option = Holo.Options:GetOption(item.name)
+        if option then
+            Holo.Options:SetValue(item.name, option.default_value)
+            item:SetValue(Holo.Options:GetValue(item.name))
+        end        
+    end)
+end
+function HoloMenu:WorkValues(all, menu, func)
     local ResetOptions = function(list)
         for _, item in pairs(list) do
-            local option = Holo.Options:GetOption(item.name)
-            if option then
-                Holo.Options:SetValue(item.name, option.default_value)
-                item:SetValue(Holo.Options:GetValue(item.name))
-            end
+            func(item)
         end 
         Holo.Options:Save()
         self:MainClbk()           

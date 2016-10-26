@@ -1,3 +1,11 @@
+local _check_action_primary_attack = PlayerStandard._check_action_primary_attack 
+function PlayerStandard:_check_action_primary_attack(t, input, ...)
+    if self._disable_shooting then
+        self._controller:reset_cache()
+        input = {}
+    end
+    return _check_action_primary_attack(self, t, input, ...)
+ end
 if Holo.Options:GetValue("Base/Hud") then
     Hooks:PostHook(PlayerStandard, "_start_action_equip_weapon", "HoloStartActionEquipWeapon", function(self, t)
         self._is_weapon = true

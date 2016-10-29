@@ -203,7 +203,6 @@ function HUDChat:_layout_output_panel()
 		local line = self._lines[i]
 		local line_text = line:child("text")
 		local _, _, w, h = line_text:text_rect()
-		log(tostring( h ))
 		line:set_h(h)
 		lines = lines + line_text:number_of_lines()
 	end

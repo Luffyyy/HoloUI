@@ -5,6 +5,8 @@ if Holo.Options:GetValue("Base/Menu") then
 				child:hide()
 				child:set_alpha(0)
 			end
+			self._panel:child("item_background_layer"):show()
+			self._panel:child("item_background_layer"):set_alpha(1)			
 			self._panel:child("item_foreground_layer"):show()
 			self._panel:child("item_foreground_layer"):set_alpha(1)
 			self._panel:rect({

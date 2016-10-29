@@ -135,6 +135,6 @@
    "Holo/New" : "Nouveau",
    "Holo/Name" : "Nom",
    "Holo/Saved" : "Sauvegarder",
-   "Holo/Empty" : ""
+   "Holo/Empty" : "",
    "Holo/WavesSurvived" : "Vague Survécu"
 }

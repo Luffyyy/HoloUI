@@ -14,8 +14,6 @@ Hooks:PostHook(StatsTabItem, "init", "HoloInit", function(self, panel, tab_panel
 		visible = true,
 	})
 	self._select_rect:set_shape(self._tab_text:shape())
-	self._main_panel:set_top(80)
-	self._panel:set_top(self._tab_text:bottom())
 end)
 Hooks:PostHook(StatsTabItem, "reduce_to_small_font", "HoloReduceToSmallFont", function(self)
 	self._panel:set_h(self._main_panel:h())
@@ -59,12 +57,12 @@ Hooks:PostHook(StageEndScreenGui, "init", "HoloInit", function(self)
 		rotation = 360,
 		color = Holo:GetColor("TextColors/Menu"),
 	})
-	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h() + 280)
+	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h())
 	self._prev_page:set_color(Holo:GetColor("TextColors/Menu"))
 	self._next_page:set_color(Holo:GetColor("TextColors/Menu"))
 end)
 Hooks:PostHook(StageEndScreenGui, "set_continue_button_text", "HoloSetContinueButtonText", function(self)
-	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h() + 280)
+	self._continue_button:set_rightbottom(self._panel:w(), self._panel:h())
 	self._continue_button:set_color(self._button_not_clickable and tweak_data.screen_colors.item_stage_1 or Holo:GetColor("TextColors/Menu"))
 end)
 end

@@ -27,11 +27,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			valign = "grow",
 		})
 		Holo:Apply({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
-		if CompactHUD then
-			Holo:Apply({cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
-		else
-			Holo:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
-		end
+		Holo:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
 		radial_health_panel:text({
 			name = "Health",
 			text = "100",
@@ -54,7 +50,6 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			layer = 0,
 			color = Holo:GetColor("Colors/TeammateBackground"),
 			alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
-			visible = (not CompactHUD and not Fallout4hud),
 			w = 130,
 			h = 64,
 		})
@@ -109,7 +104,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         teammate_line:set_size(2, name_bg:h() + ((self._ai or me) and 0 or bg:h()))
         teammate_line:set_rightbottom(name_bg:leftbottom())
         
-        Holo:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player and (not CompactHUD and not Fallout4hud)})
+        Holo:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player})
         Holo:Apply({name_bg, bg},{
             color = Holo:GetColor("Colors/TeammateBackground"),
             alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
@@ -361,7 +356,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		end
 	end
 	function HUDTeammate:set_callsign(id)
-		(CompactHUD and self._panel:child("callsign") or self._panel:child("teammate_line")):set_color(tweak_data.chat_colors[id])
+		self._panel:child("teammate_line"):set_color(tweak_data.chat_colors[id])
 	end
 	function HUDTeammate:layout_special_equipments()
 		local special_equipment = self._special_equipment

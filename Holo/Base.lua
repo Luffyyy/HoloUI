@@ -195,6 +195,9 @@ function Holo:ShouldModify(comp, option)
 	if comp and not Holo.Options:GetValue("Base/" .. comp) then
 		return false
 	end 
+	if (CompactHUD or Fallout4hud or SAOHUD) and option == "TeammateHud" then
+		return false
+	end
 	if pdth_hud and pdth_hud.Options then
 		if pdth_hud.Options:GetValue("HUD/MainHud") and option == "TeammateHud" then
 			LogInfo(option, "PDTH Hud")	

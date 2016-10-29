@@ -126,5 +126,6 @@
    "Holo/New" : "Neu",
    "Holo/Name" : "Name",
    "Holo/Saved" : "Gespeichert",
-   "Holo/Empty" : ""
+   "Holo/Empty" : "",
+   "Holo/WavesSurvived" : "Wellen überlebt"
 }

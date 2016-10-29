@@ -40,6 +40,7 @@ if Holo.Options:GetValue("Base/Menu") then
 	    		slot:set_y((i - 1) * 32)
 		 		local bg = slot:rect({
 					name = "bg",
+					alpha = 0.5,
 					color = Color(0.1, 0.1, 0.1),
 					layer = -2,
 				})

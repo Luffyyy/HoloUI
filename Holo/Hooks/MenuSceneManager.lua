@@ -34,7 +34,9 @@ if not _G.MenuBackgrounds and not GameSetup and Holo:ShouldModify("Menu", "Menu/
 				})
 				self._background_ws:set_billboard(Workspace.BILLBOARD_BOTH)
 				self._bg_unit:set_visible(false)
+				self._bg_unit:set_enabled(false)  
 				self._menu_logo:set_visible(false)
+				self._menu_logo:set_enabled(false)  
 				self._bg_unit:effect_spawner(Idstring("e_money")):set_enabled(false)
 				managers.environment_controller._vp:vp():set_post_processor_effect("World", Idstring("bloom_combine_post_processor"), Idstring("bloom_combine_empty"))
 				local unwanted = {
@@ -47,7 +49,8 @@ if not _G.MenuBackgrounds and not GameSetup and Holo:ShouldModify("Menu", "Menu/
 				for k, unit in pairs(World:find_units_quick("all")) do 
 					for _, unit_name in pairs(unwanted) do
 						if unit:name() == Idstring(unit_name) then
-							unit:set_visible(false) --Making it invisible so mods like poser won't crash.
+							unit:set_enabled(false)  
+							unit:set_visible(false)  
 						end
 					end
 				end		

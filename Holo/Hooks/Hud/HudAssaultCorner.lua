@@ -4,12 +4,15 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			Holo:log("[ERROR] Something went wrong when trying to modify HUDAssaultCorner")
 			return
 		end
+		local wave = alive(self._wave_bg_box)
 		local hostages_panel = self._hud_panel:child("hostages_panel")
 		local num_hostages = self._hostages_bg_box:child("num_hostages")
+		local num_waves = self._wave_bg_box and self._wave_bg_box:child("num_waves")
 		local point_of_no_return_text = self._noreturn_bg_box:child("point_of_no_return_text")
 		local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
 		local assault_panel = self._hud_panel:child("assault_panel")
 		local casing_panel = self._hud_panel:child("casing_panel")
+		local wave_panel = self._hud_panel:child("wave_panel")
 		local point_of_no_return_panel = self._hud_panel:child("point_of_no_return_panel")
 		self._box_width = 242 
 		self._box_height = 32
@@ -32,7 +35,14 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			name = "Hostages",
 			w = self._box_height,
 			h = self._box_height,
-		})
+		})		
+		if wave then
+			HUDBGBox_recreate(self._wave_bg_box ,{
+				name = "WavesSurvived",
+				w = 42,
+				h = self._box_height,
+			})
+		end
 		self._hud_panel:child("buffs_panel"):set_alpha(0)
 		assault_panel:set_size(400, 40)
 		assault_panel:set_righttop(self._hud_panel:w(), 0)
@@ -40,16 +50,27 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		casing_panel:set_righttop(self._hud_panel:w(), 0)
 		point_of_no_return_panel:set_size(400, 40)
 		point_of_no_return_panel:set_righttop(self._hud_panel:w(), 0)
-		hostages_panel:set_size(200, 40)
+		hostages_panel:set_size(70, 40)
 		hostages_panel:set_righttop(self._hud_panel:w(), 0)
+		if wave then
+			wave_panel:set_size(160, 40)
+			wave_panel:set_righttop(hostages_panel:left() - 4, 0)
+		end
 		if self._is_offseted then
 			hostages_panel:set_y(self._bg_box:h() + 8)
+			if wave then
+				wave_panel:set_y(hostages_panel:y())
+			end
 		end
 		self._bg_box:set_right(assault_panel:w())
 		self._casing_bg_box:set_right(assault_panel:w())
 		self._noreturn_bg_box:set_right(assault_panel:w())
 		self._hostages_bg_box:set_right(hostages_panel:w())
 		hostages_panel:child("hostages_icon"):set_right(self._hostages_bg_box:left())
+		if wave then
+			local icon = wave_panel:child("hostages_icon") or wave_panel:child("waves_icon") --Who knows they decide to fix the typo xd
+			icon:set_right(self._wave_bg_box:left())
+		end
 		assault_panel:child("icon_assaultbox"):hide()
 		casing_panel:child("icon_casingbox"):hide()
 		point_of_no_return_panel:child("icon_noreturnbox"):hide()
@@ -57,8 +78,15 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		point_of_no_return_timer:set_color(Holo:GetColor("TextColors/NoPointOfReturn"))
 		num_hostages:set_color(Holo:GetColor("TextColors/Hostages"))
 		num_hostages:set_shape(0,0,num_hostages:parent():size())
-		Holo:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
+		if wave then
+			num_waves:set_color(Holo:GetColor("TextColors/WavesSurvived"))
+			num_waves:set_shape(0,0,num_waves:parent():size())
+		end
+		Holo:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages, num_waves}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
 		num_hostages:set_y(-2)
+		if wave then
+			num_waves:set_y(-2)
+		end
 	end	
 	Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
 		self:UpdateHolo()
@@ -88,11 +116,27 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self._bg_box:show()
 			self:left_grow(self._bg_box)
 	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, Holo:GetColor("TextColors/Assault"))
+	 		if alive(self._wave_bg_box) then
+	 			self._wave_bg_box:child("bg"):stop()
+	 		end
 	 	end
 	end)
+	Hooks:PostHook(HUDAssaultCorner, "_end_assault", "HoloEndAssault", function(self)
+		if self:is_safehouse_raid() then		
+			self._wave_bg_box:stop()
+			self._wave_bg_box:child("num_waves"):stop()
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._hud_panel:child("assault_panel"):child("icon_assaultbox"):stop()
+			self:_close_assault_box()
+			self._wave_bg_box:child("bg"):stop()
+		end			
+	end)
+	function HUDAssaultCorner:_animate_wave_completed(panel)
+	end
 	Hooks:PostHook(HUDAssaultCorner, "sync_set_assault_mode", "HoloSyncSetAssaultMode", function(self)
 		self:UpdateHolo()
 	end)
+	function HUDAssaultCorner:_update_assault_hud_color(color) end
 	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function)
 		local text_list = (bg_box or self._bg_box):script().text_list
 		local text_index = 0
@@ -207,6 +251,16 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
 		end
 	end)
+	Hooks:PostHook(HUDAssaultCorner, "_animate_wave_started", "HoloAnimateWaveStarted", function(self)
+		if alive(self._wave_bg_box) then
+			self._wave_bg_box:child("bg"):stop()
+			self._wave_bg_box:child("num_waves"):stop()
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+		end
+	end)
+	function HUDAssaultCorner:get_completed_waves_string() --OVK can you make stuff less fucking ugly?
+		return string.format("%s / %s", self._completed_waves or 0, self._max_waves or 0)
+	end
 end
  
  

@@ -197,17 +197,19 @@ function HUDChat:_layout_output_panel()
 	local messages_panel = output_panel:child("messages_panel")
 	messages_panel:set_w(self._output_width)
 	output_panel:set_w(self._output_width)
-	local line_height = HUDChat.line_height + 1
+	local line_height = 16.6
 	local lines = 0
 	for i = #self._lines, 1, -1 do
 		local line = self._lines[i]
 		local line_text = line:child("text")
 		local _, _, w, h = line_text:text_rect()
+		log(tostring( h ))
 		line:set_h(h)
 		lines = lines + line_text:number_of_lines()
 	end
 	local scroll_at_bottom = messages_panel:bottom() == output_panel:h()
-	output_panel:set_h(line_height * math.min(10, lines))
+	output_panel:set_h(math.round(line_height * math.min(10, lines)))
+
 	messages_panel:set_h(math.round(line_height * lines))
 	local y = 0
 	for i = #self._lines, 1, -1 do

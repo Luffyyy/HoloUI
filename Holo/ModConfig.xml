@@ -27,6 +27,7 @@
       <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua" />
       <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua" />
       <hook source_file="lib/managers/hud/hudheisttimer" file="Hud/HudHeistTimer.lua" />
+      <hook source_file="lib/managers/hud/hudsuspicion" file="Hud/HudSuspicion.lua" />
       <hook source_file="lib/managers/hud/hudplayerdowned" file="Hud/HudPlayerDowned.lua" />
       <hook source_file="lib/managers/menu/circleguiobject" file="Hud/CircleGUIObject.lua" />
       <hook source_file="lib/managers/hud/hudplayercustody" file="Hud/HudPlayerCustody.lua" />
@@ -68,6 +69,7 @@
       <hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="Menu/MenuHooks.lua" />
       <hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menu/menuguicomponentgeneric" file="Menu/MenuGUIComponentGeneric.lua" />
       <!-- -->
    </Hooks>
    <Options build_menu="false" auto_load="true">
@@ -114,6 +116,7 @@
                <option type="number" default_value="1" min="0" max="1" name="Casing" />
                <option type="number" default_value="1" min="0" max="1" name="NoPointOfReturn" />
                <option type="number" default_value="1" min="0" max="1" name="Hostages" />
+               <option type="number" default_value="1" min="0" max="1" name="WavesSurvived" />
                <option type="number" default_value="1" min="0" max="1" name="Objective" />
                <option type="number" default_value="1" min="0" max="1" name="Presenter" />
                <option type="number" default_value="1" min="0" max="1" name="Hint" />
@@ -127,6 +130,7 @@
                <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Casing" />
                <option type="number" default_value="9" menu_type="combo" items="AllColorsStrings" name="NoPointOfReturn" />
                <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Hostages" />
+               <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="WavesSurvived" />
                <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Objective" />
                <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Presenter" />
                <option type="number" default_value="1" menu_type="combo" items="AllColorsStrings" name="Carrying" />
@@ -139,6 +143,7 @@
                <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Casing" />
                <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="NoPointOfReturn" />
                <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Hostages" />
+               <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
                <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
                <option type="number" default_value="1" menu_type="combo" items="FrameStyles" name="Presenter" />
                <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Carrying" />
@@ -152,6 +157,7 @@
             <option type="number" default_value="6" name="Casing" />
             <option type="number" default_value="6" name="NoPointOfReturn" />
             <option type="number" default_value="6" name="Hostages" />
+            <option type="number" default_value="6" name="WavesSurvived" />
             <option type="number" default_value="6" name="Objective" />
             <option type="number" default_value="6" name="Presenter" />
             <option type="number" default_value="6" name="Hint" />
@@ -193,6 +199,7 @@
             <option type="number" default_value="11" name="Casing" />
             <option type="number" default_value="11" name="NoPointOfReturn" />
             <option type="number" default_value="11" name="Hostages" />
+            <option type="number" default_value="11" name="WavesSurvived" />
             <option type="number" default_value="11" name="Objective" />
             <option type="number" default_value="11" name="Presenter" />
             <option type="number" default_value="11" name="Hint" />

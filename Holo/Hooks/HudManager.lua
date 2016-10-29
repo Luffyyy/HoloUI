@@ -52,7 +52,6 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
                     this.mask_on_text:set_font_size(24)
                     self:make_fine_text(this.mask_on_text)
                     this.mask_on_text:set_y(26)
-                    this.mask_on_text:set_color(Holo:GetColor("Colors/Main"))
                     this.mask_on_text:set_center_x(this.panel:center_x())
                 end
                 script:UpdateHolo()

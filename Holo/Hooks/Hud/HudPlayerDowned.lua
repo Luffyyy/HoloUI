@@ -1,6 +1,7 @@
 if Holo.Options:GetValue("Base/Hud") then
 	Hooks:PostHook(HUDPlayerDowned, "init", "HoloInit", function(self, hud, ...)	
 		self:UpdateHolo()
+		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)	
 	function HUDPlayerDowned:UpdateHolo()
 		local scale = Holo.Options:GetValue("HudScale")

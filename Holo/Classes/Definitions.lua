@@ -31,15 +31,15 @@ Holo.Voices = { -- Add/Remove Voices!
 	["p45"] = "Help",
 	["p17"] = "Any Seconds",
 	["whistling_attention"] = "Whistle",
-	["f33y_any"] = "Cloacker!",
+	["f33y_any"] = "Cloaker!",
 	["v55"] = "Sniper!",
 	["f30x_any"] = "Dozer!",
 	["f31x_any"] = "Shield!",
 	["f32x_any"] = "Taser!",
 	["s05x_sin"] = "Thanks",
 	["g92"] = "Hooray!",
-	["g06"] = "Go Up",
-	["g05"] = "Go Down",
+	["g06"] = "Go Down",
+	["g05"] = "Go Up",
 	["g63"] = "One Minute",
 	["g65"] = "Two Minutes",
 	["g67"] = "Any Seconds",
@@ -53,6 +53,7 @@ Holo.Voices = { -- Add/Remove Voices!
 	["g10"] = "Careful",
 	["p46"] = "Jump",
 }
+Holo.VoiceMaxPerRow = 5
 Holo.Loot = {}
 Holo.TextSizes = {
 	20,
@@ -100,7 +101,7 @@ Holo.FrameStyles ={
 	"Holo/BottomLine",
 	"Holo/LeftLine",
 	"Holo/RightLine",
-	"Holo/Topline",
+	"Holo/TopLine",
 	"Holo/FullFrame",
 	"Holo/None",
 }

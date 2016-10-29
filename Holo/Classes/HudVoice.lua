@@ -26,14 +26,14 @@ function HoloVoice:Update(t, dt)
     if alive(managers.player:player_unit()) and self._holding and self._next_t <= t then
         if not self._showing then
             self._showing = true
-            Swoosh:work(self._voice_panel, "alpha", 1, "stop", true)                
+            Swoosh:work(self._voice_panel, "alpha", 1, "stop", true)      
             managers.mouse_pointer:use_mouse({
                 mouse_move = callback(self, self, "MouseMoved"),
                 mouse_press = callback(self, self, "MousePressed"),
                 mouse_release = callback(self, self, "MouseReleased"),
                 id = self._mouse_id
             })  
-            self:SetShootingEnabled(false)
+            self:SetMovingEnabled(false)
         end
     else
         if self._showing then
@@ -44,7 +44,7 @@ function HoloVoice:Update(t, dt)
             self._holding = false 
             managers.mouse_pointer:set_mouse_world_position(self._voice_panel:center_x(), self._voice_panel:center_y() - 5)
             managers.mouse_pointer:remove_mouse(self._mouse_id)
-            self:SetShootingEnabled(true)
+            self:SetMovingEnabled(true)
         end
         Swoosh:work(self._voice_panel, "alpha", 0, "stop", true)
     end
@@ -52,9 +52,9 @@ function HoloVoice:Update(t, dt)
         self._holding = false
     end
 end
-function HoloVoice:SetShootingEnabled(enabled)
-    if alive(managers.player:player_unit()) then
-        managers.player:player_unit():movement():current_state()._disable_shooting = not enabled
+function HoloVoice:SetMovingEnabled(enabled)
+    if managers.hud then
+        managers.hud._chatinput_changed_callback_handler:dispatch(not enabled)
     end
 end
 function HoloVoice:MouseReleased(o, x, y)
@@ -95,7 +95,6 @@ function HoloVoice:Play(id)
     end
 end
 function HoloVoice:Add(id, text, comment)
-    local max_per_row = 5
     local space = 10
     local w = 128
     local h = 64
@@ -139,11 +138,11 @@ function HoloVoice:Add(id, text, comment)
         comment = comment,
     }
     local i = table.size(self.Boxes)
-    times = math.ceil(i / max_per_row)
-    local num = i % max_per_row
-    num = num == 0 and max_per_row or num
+    times = math.ceil(i / Holo.VoiceMaxPerRow)
+    local num = i % Holo.VoiceMaxPerRow
+    num = num == 0 and Holo.VoiceMaxPerRow or num
     VBox:set_position((w + space) * (num - 1), (h + space) * (times - 1))         
-    self._voice_panel:set_size((w + space) * max_per_row, (h + space) * times)
+    self._voice_panel:set_size((w + space) * Holo.VoiceMaxPerRow, (h + space) * times)
     self._voice_panel:set_world_center(Holo.Panel:world_center())
 end
  

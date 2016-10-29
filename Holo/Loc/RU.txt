@@ -135,5 +135,6 @@
    "Holo/New" : "Новый",
    "Holo/Name" : "Название",
    "Holo/Saved" : "Сохранено",
-   "Holo/Empty" : ""
+   "Holo/Empty" : "",
+   "Holo/WavesSurvived" : "Волн Завершено"
 }

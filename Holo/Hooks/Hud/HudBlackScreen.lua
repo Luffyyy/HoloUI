@@ -3,6 +3,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		self._blackscreen_panel:rect({
 			name = "bg",
 			color = Holo:GetColor("Colors/MenuBackground"),
+			visible = Holo.Options:GetValue("Menu/ColoredBackground"),
 			layer = -1,
 		})
 	    self._skip_circle._circle:hide()

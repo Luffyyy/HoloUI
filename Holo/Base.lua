@@ -8,6 +8,7 @@ function Holo:init()
             table.insert(Holo.Colors, {color = v.value.color, name = v.value.name, custom = true})
 	    end
 	end
+	self:CheckOtherMods()
 	self:UpdateSettings()
 	World:effect_manager():set_rendering_enabled(true)		
 	self:LoadTextures()
@@ -171,6 +172,21 @@ function Holo:GetColor(setting, vec)
 	end
 	return vec and Vector3(ret:unpack()) or ret
 end
+function Holo:CheckOtherMods()  
+	if pdth_hud and pdth_hud.Options then
+		if Holo.Options:GetValue("HudAssault") then
+			pdth_hud.Options:SetValue("HUD/Assault", false)
+		end
+	end
+	if restoration and restoration.Options then
+		if Holo.Options:GetValue("TeammateHud") then
+			restoration.Options:SetValue("HUD/MainHud", false)  
+		end		
+		if Holo.Options:GetValue("Base/Menu") then
+			restoration.Options:SetValue("HUD/Loadouts", false)
+		end
+	end
+end
 function Holo:ShouldModify(comp, option)  
 	local LogInfo = function(a,b)
 		self:log(string.format("[Info]Cannot modify %s because %s uses it", a, b))
@@ -180,9 +196,6 @@ function Holo:ShouldModify(comp, option)
 		return false
 	end 
 	if pdth_hud and pdth_hud.Options then
-		if Holo.Options:GetValue("HudAssault") then
-			pdth_hud.Options:SetValue("HUD/Assault", false)
-		end
 		if pdth_hud.Options:GetValue("HUD/MainHud") and option == "TeammateHud" then
 			LogInfo(option, "PDTH Hud")	
 			return false
@@ -196,6 +209,20 @@ function Holo:ShouldModify(comp, option)
 			return false
 		end
 	end	
+	if restoration and restoration.Options then
+		if restoration.Options:GetValue("HUD/AssaultPanel") and option == "HudAssault" then
+			LogInfo(option, "Resotration")
+			return false
+		end
+		if restoration.Options:GetValue("HUD/Presenter") and option == "Presenter" then
+			LogInfo(option, "Resotration")
+			return false
+		end
+		if restoration.Options:GetValue("HUD/ObjectivesPanel") and option == "Objective" then
+			LogInfo(option, "Resotration")
+			return false
+		end
+	end
 	return value
 end
 if not Holo.setup then

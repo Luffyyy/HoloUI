@@ -41,7 +41,9 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
             if self:alive(Idstring("guis/mask_off_hud")) then
                 self:script(Idstring("guis/mask_off_hud")):UpdateHolo()
             end
-            self:waypoints_update()
+            if self.waypoints_update then
+                self:waypoints_update()
+            end
         end
         Hooks:PostHook(HUDManager, "show", "HoloShow", function(self, name)
         if name == Idstring("guis/mask_off_hud") then

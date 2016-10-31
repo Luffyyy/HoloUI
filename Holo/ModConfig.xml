@@ -216,10 +216,12 @@
             <div name="Other" />
             <option type="number" default_value="11" name="Captions" />
          </option_group>
-         <option_group name="Menu" menu="Main">        
+         <option_group name="Menu" menu="Main">   
             <option type="number" default_value="2" menu_type="combo" items="TextSizesStrings" name="TextSize" />
             <option type="number" default_value="1" min="0" max="1" name="MarkerAlpha" />            
             <option type="boolean" default_value="true" name="ColoredBackground" />
+            <option type="boolean" default_value="true" beforetext="Modified" name="Lobby" />             
+            <option type="boolean" default_value="true" beforetext="Modified" name="Loading" />             
          </option_group>         
          <option_set name="CustomColors" not_pre_generated="true">
             <item_parameters />

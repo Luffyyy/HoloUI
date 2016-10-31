@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo:ShouldModify("Menu", "Menu/Lobby") then
 function MissionBriefingTabItem:init(panel, text, i)
 	self._main_panel = panel
 	self._panel = self._main_panel:panel()

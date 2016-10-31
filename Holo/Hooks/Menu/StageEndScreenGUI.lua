@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo:ShouldModify("Menu", "Menu/Lobby") then
 Hooks:PostHook(StatsTabItem, "init", "HoloInit", function(self, panel, tab_panel, text, i)
 	self._panel:set_h(self._main_panel:h())
 	local prev_item_title_text = tab_panel:child("tab_text_" .. tostring(i - 1))

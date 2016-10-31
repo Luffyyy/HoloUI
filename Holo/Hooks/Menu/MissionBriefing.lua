@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then	
+if Holo:ShouldModify("Menu", "Menu/Lobby") then	
 	Hooks:PostHook(HUDMissionBriefing, "init", "HoloInit", function(self)	    
 		local text_font_size = tweak_data.menu.pd2_small_font_size
 		local num_player_slots = BigLobbyGlobals and BigLobbyGlobals:num_player_slots() or 4

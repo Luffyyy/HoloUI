@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo:ShouldModify("Menu", "Menu/Lobby") then
 	Hooks:PostHook(HUDPackageUnlockedItem, "init", "HoloInit", function(self)
 		Holo:SetBlendMode(self._panel)
 	end)

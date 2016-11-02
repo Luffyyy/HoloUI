@@ -2,9 +2,13 @@ if core then
 	core:module("CoreGuiDataManager")
 end
 function GuiDataManager:layout_scaled_fullscreen_workspace(ws, scale, on_screen_scale)
+    local base_res = {x = 1280, y = 720}
     local res = RenderSettings.resolution
-    local w = math.round((on_screen_scale * 1280) * (2 - scale)) 
-    local h = math.round((on_screen_scale * 720) * (2 - scale))
+    local sc = (2 - scale)
+    local aspect_width = base_res.x / self:_aspect_ratio()
+    local h = math.round(sc * math.max(base_res.y, aspect_width))
+    local w = math.round(sc * math.max(base_res.x, aspect_width / h))
+
     local safe_w = math.round(on_screen_scale * res.x)
     local safe_h = math.round(on_screen_scale * res.y)   
     local sh = math.min(safe_h, safe_w / (w / h))

@@ -4,6 +4,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			Holo:log("[ERROR] Something went wrong when trying to modify HUDTeammate")
 			return
 		end
+        self._boo = true
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")

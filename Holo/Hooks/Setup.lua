@@ -10,7 +10,7 @@ Hooks:PreHook(Setup, "_start_loading_screen", "HoloStartLoadingScreen", function
 			Global.level_data.briefing_string = managers.localization:text(level_tweak_data.briefing_id)
 			local difficulty = Global.game_settings.difficulty
 			difficulty = difficulty == "overkill_145" and "overkill" or difficulty == "overkill_290" and "apocalypse" or difficulty	
-			Global.level_data.difficulty_string = managers.localization:to_upper_text("debug_loading_level") .. " - " .. managers.localization:to_upper_text("menu_difficulty_" .. difficulty)
+			Global.level_data.difficulty_string = string.upper(managers.localization:text("debug_loading_level").." - "..managers.localization:text(tweak_data.difficulty_name_ids[Global.game_settings.difficulty]))
 		end
 	end
 end)

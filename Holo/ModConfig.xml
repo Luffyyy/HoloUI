@@ -83,7 +83,7 @@
          </option_group>
          <div name="HudDiv" text="Hud" />
          <option type="number" default_value="0.4" min="0" max="1" name="HudAlpha" />
-         <option type="number" default_value="1" min="0" max="1.25" name="HudScale" />
+         <option type="number" default_value="1" min="0" max="1.5" name="HudScale" />
          <option type="number" default_value="0.936" min="0.1" max="1" name="HudSpacing" />
          <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" />
          <option type="number" default_value="0.4" min="0" max="1" name="TeammateBackgroundAlpha" />
@@ -217,11 +217,11 @@
             <option type="number" default_value="11" name="Captions" />
          </option_group>
          <option_group name="Menu" menu="Main">   
+            <option type="boolean" default_value="true" beforetext="Modified" name="Lobby" />             
+            <option type="boolean" default_value="true" beforetext="Modified" name="Loading" />             
             <option type="number" default_value="2" menu_type="combo" items="TextSizesStrings" name="TextSize" />
             <option type="number" default_value="1" min="0" max="1" name="MarkerAlpha" />            
             <option type="boolean" default_value="true" name="ColoredBackground" />
-            <option type="boolean" default_value="true" beforetext="Modified" name="Lobby" />             
-            <option type="boolean" default_value="true" beforetext="Modified" name="Loading" />             
          </option_group>         
          <option_set name="CustomColors" not_pre_generated="true">
             <item_parameters />

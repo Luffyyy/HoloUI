@@ -8,6 +8,14 @@ if Holo:ShouldModify("Hud", "Carrying") then
 			bag_panel:hide()
 		end)
 	end
+	function HUDTemp:Bottom()
+		local tm = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]
+		if Holo:ShouldModify("Hud", "TeammateHud") or tm._boo then
+			return tm._panel:world_top() + 24
+		else
+			return tm._panel:world_top()
+		end 
+	end
 	function HUDTemp:UpdateHolo()
 		local bag_panel = self._temp_panel:child("bag_panel")
 		bag_panel:configure({
@@ -15,7 +23,7 @@ if Holo:ShouldModify("Hud", "Carrying") then
 			h = 32,
 		})
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
-		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
+		bag_panel:set_world_rightbottom(teammate_panel:world_right(), self:Bottom())
 		HUDBGBox_recreate(self._bg_box, {
 			name = "Carrying",
 			w = 204,
@@ -40,7 +48,7 @@ if Holo:ShouldModify("Hud", "Carrying") then
 		self:UpdateHolo()
 		bag_panel:set_w(0)
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
-		bag_panel:set_world_rightbottom(teammate_panel:world_right(), teammate_panel:world_top() + 20)
+		bag_panel:set_world_rightbottom(teammate_panel:world_right(), self:Bottom())
 		bag_panel:show()
 		
 		local right = bag_panel:right()

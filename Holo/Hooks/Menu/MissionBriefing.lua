@@ -27,9 +27,7 @@ if Holo:ShouldModify("Menu", "Menu/Lobby") then
 		local ghost = managers.job:is_job_stage_ghostable(managers.job:current_real_job_id(), managers.job:current_stage()) and managers.localization:get_default_macro("BTN_GHOST") or ""
 		self._foreground_layer_one:child("job_overview_text"):set_text(managers.localization:to_upper_text("menu_day_short", {day = managers.job:current_stage() .. "/" .. num_stages .. " " .. ghost}))
 		self._job_schedule_panel:child("payday_stamp"):hide()
-		local difficulty = Global.game_settings.difficulty
-		difficulty = difficulty == "overkill_145" and "overkill" or difficulty == "overkill_290" and "apocalypse" or difficulty		
-		self._foreground_layer_one:child("pg_text"):set_text(string.upper(managers.localization:text("menu_difficulty_" .. difficulty)))		
+		self._foreground_layer_one:child("pg_text"):set_text(managers.localization:to_upper_text(tweak_data.difficulty_name_ids[Global.game_settings.difficulty]))
 		managers.hud:make_fine_text(self._foreground_layer_one:child("pg_text"))		
 		self._foreground_layer_one:child("pg_text"):set_right(self._paygrade_panel:right())
 		self._paygrade_panel:hide()

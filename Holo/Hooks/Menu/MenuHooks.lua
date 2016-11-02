@@ -1,9 +1,10 @@
 if Holo.Options:GetValue("Base/Menu") then
-	if RequiredScript == "lib/managers/menu/renderers/menunodejukeboxgui" then
+	local Lobby = Holo:ShouldModify("Menu", "Menu/Lobby")
+	if RequiredScript == "lib/managers/menu/renderers/menunodejukeboxgui" and Lobby then
 		Hooks:PostHook(MenuNodeJukeboxGui, "init", "HoloInit", function(self)
 			self.item_panel:set_y(self.item_panel:parent():y() + 50)
 		end)
-	elseif RequiredScript == "lib/managers/menu/lootdropscreengui" then
+	elseif RequiredScript == "lib/managers/menu/lootdropscreengui" and Lobby then
 		Hooks:PostHook(LootDropScreenGui, "init", "HoloInit", function(self)
 			self._continue_button:configure({
 				font = "fonts/font_medium_mf",

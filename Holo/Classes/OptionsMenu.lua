@@ -2,7 +2,7 @@ HoloMenu = HoloMenu or class()
 function HoloMenu:init()
     MenuUI:new({
         background_alpha = 0.65,
-        layer = tweak_data.gui.MOUSE_LAYER - 100,
+        layer = tweak_data.gui.MOUSE_LAYER - 700,
         text_color = Holo:GetColor("TextColors/Menu"),        
         background_color = Holo:GetColor("Colors/MenuBackground"),
         text_highlight_color = Holo:GetColor("TextColors/MenuHighlighted"),

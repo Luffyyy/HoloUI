@@ -18,7 +18,7 @@ Holo.Colors = { -- Add/Remove Colors!
 	 {color = Color(0, 0.9, 0.5), name = "SpringGreen"},
 	 {color = Color(0.6,0.8,0.85), name = "Light Blue"},
 	 {color = Color(1, 0, 0.2), name = "Crimson"},
-     {color = Color(0.5,82,45), name = "Brown"},
+     {color = Color(0.6, 0.3, 0.3), name = "Brown"},
 	 {color = Color(0.7, 0.9, 0), name = "Lime"},
 }
 Holo.Voices = { -- Add/Remove Voices!

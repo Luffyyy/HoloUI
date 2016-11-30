@@ -2,11 +2,11 @@
    "name":"HoloUI",
    "description":"A UI Mod inspired by Google's Material Design",
    "author":"Luffy",
-   "version":"1.0.5.1",
+   "version":"1.0.5.2",
    "priority":15,
    "updates":[  
       {  
-         "revision" : 76.6,
+         "revision" : 76.7,
          "identifier" : "HoloHud"
       }
    ],

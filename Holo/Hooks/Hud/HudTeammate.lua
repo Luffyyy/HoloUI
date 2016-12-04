@@ -382,19 +382,19 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 				panel:child("amount_bg"):move(7, 7)
 				panel:child("amount"):set_center(panel:child("amount_bg"):center())
 			end
-            
-            if self._main_player then
-                panel:set_x(w - (panel:w() * i))
-                panel:set_bottom((Holo.Options:GetValue("Extra/MyName") and self._panel:child("name") or self._player_panel:child("Mainbg")):top() - 2)
-            else
-                panel:set_bottom(self._panel:child("name"):top() - 2)
-                if i == 1 then
-                    panel:set_x(0)
-                else
-                    panel:set_left(special_equipment[i - 1]:right())
-                end
-            end
-        end
+
+			if self._main_player then
+				panel:set_x(w - (panel:w() * i))
+				panel:set_bottom((Holo.Options:GetValue("Extra/MyName") and self._panel:child("name") or self._player_panel:child("Mainbg")):top() - 2)
+			else
+				panel:set_bottom(self._panel:child("name"):top() - 2)
+				if i == 1 then
+					panel:set_x(0)
+				else
+					panel:set_left(special_equipment[i - 1]:right())
+				end
+			end
+		end
 	end
 	function HUDTeammate:update_special_equipments()
 		local special_equipment = self._special_equipment

@@ -211,6 +211,13 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         self._interact._circle:set_position(0,0)
         self._interact._bg_circle:set_size(self._interact._circle:size())   
         self._interact._bg_circle:set_position(0,0)
+        if self._stamina_bar and self._stamina_line then
+            self._stamina_bar:set_image("guis/textures/custom/HealthWhite")
+            self._stamina_bar:set_size(panel:w() * 0.37, panel:h() * 0.37)
+            self._stamina_bar:set_world_center(panel:world_center())
+            self._stamina_line:set_size(panel:w() * 0.05, 2)
+            self._stamina_line:set_world_center(panel:world_center())
+        end
     end
 	function HUDTeammate:_create_firemode(is_secondary)
 		local weapon_panel = self._player_panel:child("weapons_panel"):child((is_secondary and "secondary" or "primary") .. "_weapon_panel")

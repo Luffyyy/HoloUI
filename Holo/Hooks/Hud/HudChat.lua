@@ -1,5 +1,5 @@
 --I should really rewrite this ¯\_(ツ)_/¯ 
-if Holo.Options:GetValue("Chat") then
+if Holo:ShouldModify(nil, "Chat") then
 function HUDChat:init(ws, hud)
 	self._ws = managers.gui_data:create_fullscreen_workspace()
 	self._hud_panel = self._ws:panel()

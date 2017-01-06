@@ -10,6 +10,7 @@
       <loc file="RU.txt" language="russian" />
       <loc file="GR.txt" language="german" />
       <loc file="FR.txt" language="french" />
+      <loc file="ES.txt" language="spanish" />
    </Localization>
    <Hooks directory="Hooks">
       <!-- Hooks -->

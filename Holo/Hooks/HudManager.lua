@@ -53,7 +53,9 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
                     this.mask_on_text:set_font(Idstring("fonts/font_large_mf"))
                     this.mask_on_text:set_font_size(24)
                     self:make_fine_text(this.mask_on_text)
-                    this.mask_on_text:set_y(26)
+                    if not HUDObjectives._TEXT_MARGIN then
+                        this.mask_on_text:set_world_top(self._hud_heist_timer._bg_box:world_bottom())
+                    end
                     this.mask_on_text:set_center_x(this.panel:center_x())
                 end
                 script:UpdateHolo()

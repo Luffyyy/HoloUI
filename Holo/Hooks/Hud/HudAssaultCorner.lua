@@ -87,6 +87,9 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		if wave then
 			num_waves:set_y(-2)
 		end
+		if self.update_banner_pos then
+			self:update_banner_pos()
+		end
 	end	
 	Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
 		self:UpdateHolo()
@@ -166,7 +169,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 				blend_mode = color_function and "add",
 				color = color_function and color_function() or color or self._assault_color,
 				font_size = text_panel:h() - 6,
-				font = "fonts/font_large_mf",
+				font = "fonts/font_medium_mf",
 			})
 			local _, _, w, h = text:text_rect()
 			text:set_size(w, h)

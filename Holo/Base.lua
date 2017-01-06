@@ -226,6 +226,16 @@ function Holo:ShouldModify(comp, option)
 			return false
 		end
 	end
+	if WolfHUD then
+		if option == "TeammateHud" and WolfHUD:getSetting("use_customhud", "boolean") then
+			LogInfo(option, "WolfHUD")
+			return false			
+		end
+		if option == "Chat" and HUDChat.WIDTH then --No actual option to disable it! GREAT
+			LogInfo(option, "WolfHUD")
+			return false	
+		end
+	end
 	return value
 end
 if not Holo.setup then

@@ -34,9 +34,10 @@ function HUDBGBox_create(panel, params, config)
 	HUDBGBox_create_frame(box_panel, color == Color(1, 1, 0) and color or color == Color(1, 0, 0) and color)
 	return box_panel
 end
-function HUDBGBox_create_frame(box_panel, color, frame_style)
-	local FrameColor = color or Holo:GetColor("Colors/Frame")
-	local FrameStyle = frame_style or Holo.Options:GetValue("FrameStyle")
+function HUDBGBox_create_frame(box_panel, color, style)
+	color = color or Holo:GetColor("Colors/Frame")
+	style = style or Holo.Options:GetValue("FrameStyle")
+	local width = 1
 	if alive(box_panel:child("left_top")) then
 		box_panel:remove(box_panel:child("left_top"))
 	end
@@ -55,8 +56,8 @@ function HUDBGBox_create_frame(box_panel, color, frame_style)
 		halign = "left",
 		valign = "top",
 		rotation = 360,
-		color = FrameColor,
-		visible = FrameStyle ~= none,
+		color = color,
+		visible = style ~= none,
 		layer = 10,
 	})
 	local left_bottom = box_panel:bitmap({
@@ -64,8 +65,8 @@ function HUDBGBox_create_frame(box_panel, color, frame_style)
 		halign = "left",
 		valign = "bottom",
 		rotation = 360,
-		color = FrameColor,
-		visible = FrameStyle ~= none,
+		color = color,
+		visible = style ~= none,
 		layer = 10,
 	})
 	local right_top = box_panel:bitmap({
@@ -73,8 +74,8 @@ function HUDBGBox_create_frame(box_panel, color, frame_style)
 		halign = "right",
 		valign = "top",
 		rotation = 360,
-		color = FrameColor,
-		visible = FrameStyle ~= none,
+		color = color,
+		visible = style ~= none,
 		layer = 10,
 	})
 	local right_bottom = box_panel:bitmap({
@@ -82,11 +83,11 @@ function HUDBGBox_create_frame(box_panel, color, frame_style)
 		halign = "right",
 		valign = "bottom",
 		rotation = 360,
-		color = FrameColor,
-		visible = FrameStyle ~= none,
+		color = color,
+		visible = style ~= none,
 		layer = 10,
 	})
-	if FrameStyle == 1 then
+	if style == 1 then
 	    right_bottom:set_image("guis/textures/custom/Frame", 8,8,8,8)
 	    left_bottom:set_image("guis/textures/custom/Frame", 0,8,8,8)
 	    left_top:set_image("guis/textures/custom/Frame", 0,0,8,8)
@@ -95,35 +96,38 @@ function HUDBGBox_create_frame(box_panel, color, frame_style)
 	    right_bottom:set_size(s,s)
 	    left_bottom:set_size(s,s)
 	    left_top:set_size(s,s)
-	    right_top:set_size(s,s)
-	elseif FrameStyle ~= none then
-		local vis = FrameStyle == 6
-	    left_bottom:set_size(box_panel:w() , 1)
-	    right_bottom:set_size(1, box_panel:h())
-	    right_top:set_size(box_panel:w(), 1)
-	    left_top:set_size(1, box_panel:h())
+	    right_top:set_size(s,s)    
+	elseif style ~= none then
+		local vis = style == 6
+	    left_bottom:set_size(box_panel:w(), width)
+	    right_bottom:set_size(width, box_panel:h())
+	    right_top:set_size(box_panel:w(), width)
+	    left_top:set_size(width, box_panel:h())
 	    left_bottom:set_halign("grow")
 	    right_top:set_halign("grow")		
-	    left_bottom:set_visible(vis or FrameStyle == 2)
-	    left_top:set_visible(vis or FrameStyle == 3)
-	    right_bottom:set_visible(vis or FrameStyle == 4)
-	    right_top:set_visible(vis or FrameStyle == 5)
+	    left_bottom:set_visible(vis or style == 2)
+	    left_top:set_visible(vis or style == 3)
+	    right_bottom:set_visible(vis or style == 4)
+	    right_top:set_visible(vis or style == 5)
 	end
-	right_bottom:set_right(box_panel:w())
-	right_bottom:set_bottom(box_panel:h())
+	right_bottom:set_rightbottom(box_panel:size())
 	right_top:set_right(box_panel:w())
-	left_bottom:set_bottom(box_panel:h())
+	left_bottom:set_bottom(box_panel:h())		
 end
 if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") then
 	function HUDObjectives:UpdateHolo()
-		local objectives_panel = self._hud_panel:child("objectives_panel")
-		objectives_panel:child("icon_objectivebox"):hide()
+		self.ObjPanel = self._panel or self._hud_panel:child("objectives_panel")
+		self.ObjText = self.ObjPanel:child("objective_text") or self._bg_box:child("objective_text")
+		self.AmountText = self.ObjPanel:child("amount_text") or self._bg_box:child("amount_text")
+		if self.ObjPanel:child("icon_objectivebox") then
+			self.ObjPanel:child("icon_objectivebox"):hide()
+		end
 		HUDBGBox_recreate(self._bg_box, {
-			x = 0,
 			name = "Objective",
+			x = 0,
 			h = 28,
 		})
-		objectives_panel:child("objective_text"):configure({
+		self.ObjText:configure({
 			color = Holo:GetColor("TextColors/Objective"),
 			font = "fonts/font_medium_noshadow_mf",
 			font_size = self._bg_box:h() - 6,
@@ -134,36 +138,33 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
 	function HUDObjectives:activate_objective(data)
-		local objectives_panel = self._hud_panel:child("objectives_panel")
-		local objective_text = objectives_panel:child("objective_text")
-		objectives_panel:child("amount_text"):hide()
+		self.AmountText:hide()
+		self.AmountText:set_alpha(0)
 		self._active_objective_id = data.id
 		self._has_amount = data.amount ~= nil
 		local amount = self._has_amount and (data.current_amount or 0) .. "/" .. data.amount
-		objective_text:set_text(string.format("%s %s", utf8.to_upper(data.text), amount or ""))
-		local _,_,w,_ = objective_text:text_rect()
+		self.ObjText:set_text(string.format("%s %s", utf8.to_upper(data.text), amount or ""))
+		local _,_,w,_ = self.ObjText:text_rect()
 		self._bg_box:stop()
 		if not data.no_reset then
 			self._bg_box:set_w(0)
-			objective_text:set_w(0)
-			objective_text:show()
-			objectives_panel:show()
-			objectives_panel:stop()
-			objectives_panel:animate(callback(self, self, "_animate_activate_objective"))
+			self.ObjText:set_w(0)
+			self.ObjText:show()
+			self.ObjPanel:show()
+			self.ObjPanel:stop()
+			self.ObjPanel:animate(callback(self, self, "_animate_activate_objective"))
 		end
-		objective_text:set_position(4,2)
-		Swoosh:work(objective_text, "w", w, "speed", 3)
+		self.ObjText:set_world_center_y(self.ObjText:parent():world_center_y())
+		self.ObjText:set_x(4)
+		Swoosh:work(self.ObjText, "w", w, "speed", 3)
 		Swoosh:work(self._bg_box, "w", w + 8, "speed", 3)
 	end
 	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
 		self._bg_box:child("bg"):stop()
-		local objectives_panel = self._hud_panel:child("objectives_panel")
-		local objective_text = objectives_panel:child("objective_text")
-		local amount_text = objectives_panel:child("amount_text")
-		amount_text:stop()
-		objective_text:stop()
-		amount_text:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
-		objective_text:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
+		self.AmountText:stop()
+		self.ObjText:stop()
+		self.AmountText:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
+		self.ObjText:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
 	end)
 	Hooks:PostHook(HUDObjectives, "update_amount_objective", "HoloUpdateAmountObjective", function(self, data)
 		data.no_reset = true

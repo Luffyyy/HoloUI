@@ -187,56 +187,57 @@ function Holo:CheckOtherMods()
 		end
 	end
 end
-function Holo:ShouldModify(comp, option)  
-	local LogInfo = function(a,b)
-		self:log(string.format("[Info]Cannot modify %s because %s uses it", a, b))
-	end
-	local value = self.Options:GetValue(option)
-	if comp and not Holo.Options:GetValue("Base/" .. comp) then
+function Holo:ShouldModify(c, o)  
+	local function inform(a) self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a)) end
+	if c and not Holo.Options:GetValue("Base/" .. c) then
 		return false
 	end 
-	if (CompactHUD or Fallout4hud or SAOHUD) and option == "TeammateHud" then
+	if (CompactHUD or Fallout4hud or SAOHUD) and o == "TeammateHud" then
 		return false
 	end
 	if pdth_hud and pdth_hud.Options then
-		if pdth_hud.Options:GetValue("HUD/MainHud") and option == "TeammateHud" then
-			LogInfo(option, "PDTH Hud")	
+		if pdth_hud.Options:GetValue("HUD/MainHud") and o == "TeammateHud" then
+			inform("PDTH Hud")	
 			return false
 		end
-		if pdth_hud.Options:GetValue("HUD/Objectives") and option == "Presenter" then
-			LogInfo(option, "PDTH Hud")
+		if pdth_hud.Options:GetValue("HUD/Objectives") and o == "Presenter" then
+			inform("PDTH Hud")
 			return false
 		end
-		if pdth_hud.Options:GetValue("HUD/Interaction") and option == "Interaction" then
-			LogInfo(option, "PDTH Hud")
+		if pdth_hud.Options:GetValue("HUD/Interaction") and o == "Interaction" then
+			inform("PDTH Hud")
 			return false
 		end
 	end	
 	if restoration and restoration.Options then
-		if restoration.Options:GetValue("HUD/AssaultPanel") and option == "HudAssault" then
-			LogInfo(option, "Resotration")
+		if restoration.Options:GetValue("HUD/AssaultPanel") and o == "HudAssault" then
+			inform("Resotration")
 			return false
 		end
-		if restoration.Options:GetValue("HUD/Presenter") and option == "Presenter" then
-			LogInfo(option, "Resotration")
+		if restoration.Options:GetValue("HUD/Presenter") and o == "Presenter" then
+			inform("Resotration")
 			return false
 		end
-		if restoration.Options:GetValue("HUD/ObjectivesPanel") and option == "Objective" then
-			LogInfo(option, "Resotration")
+		if restoration.Options:GetValue("HUD/ObjectivesPanel") and o == "Objective" then
+			inform("Resotration")
+			return false
+		end		
+		if restoration.Options:GetValue("HUD/MainHud") and (o == "Hint" or o == "Carrying")  then
+			inform("Resotration")
 			return false
 		end
 	end
 	if WolfHUD then
-		if option == "TeammateHud" and WolfHUD:getSetting("use_customhud", "boolean") then
-			LogInfo(option, "WolfHUD")
+		if o == "TeammateHud" and WolfHUD:getSetting("use_customhud", "boolean") then
+			inform("WolfHUD")
 			return false			
 		end
-		if option == "Chat" and HUDChat.WIDTH then --No actual option to disable it! GREAT
-			LogInfo(option, "WolfHUD")
+		if o == "Chat" and HUDChat.WIDTH then --No actual option to disable it! GREAT
+			inform("WolfHUD")
 			return false	
 		end
 	end
-	return value
+	return self.Options:GetValue(o)
 end
 if not Holo.setup then
 	Holo:init()

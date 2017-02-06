@@ -1,4 +1,7 @@
 function HUDBGBox_recreate(panel, config)
+	if not alive(panel) then
+		log(debug.traceback())
+	end
 	panel:configure({
 		x = config.x,
 		y = config.y,
@@ -130,7 +133,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:configure({
 			color = Holo:GetColor("TextColors/Objective"),
 			font = "fonts/font_medium_noshadow_mf",
-			font_size = self._bg_box:h() - 6,
+			font_size = self._bg_box:h() - 5,
 		})
 	end
 	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)

@@ -1,5 +1,8 @@
 if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
 	Hooks:PostHook(HUDBlackScreen, "init", "HoloInit", function(self, hud)
+		self:HoloInit()
+	end)
+	function HUDBlackScreen:HoloInit()
 		self._blackscreen_panel:rect({
 			name = "bg",
 			color = Holo:GetColor("Colors/MenuBackground"),
@@ -12,9 +15,16 @@ if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
 			color = Holo:GetColor("Colors/Main"),
 	        h = 2,
 	    })
-	end)
+	end
 	Hooks:PostHook(HUDBlackScreen, "set_loading_text_status", "HoloSetLoadingTextStatus", function(self, status)
 		if status then
+			if not alive(self._progress) then
+				if alive(self._blackscreen_panel) then
+					self:HoloInit()
+				else
+					return 
+				end
+			end
 			local loading_text = self._blackscreen_panel:child("loading_text")
 			local skip_text = self._blackscreen_panel:child("skip_text")
 			managers.hud:make_fine_text(skip_text)

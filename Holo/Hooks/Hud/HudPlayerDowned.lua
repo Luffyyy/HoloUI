@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") then
+if Holo.Options:GetValue("Base/Hud") and (not restoration or not (restoration.Options and restoration.Options:GetValue("HUD/MainHud"))) then
 	Hooks:PostHook(HUDPlayerDowned, "init", "HoloInit", function(self, hud, ...)	
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))

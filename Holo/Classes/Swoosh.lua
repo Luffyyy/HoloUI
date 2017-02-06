@@ -3,6 +3,9 @@ Swoosh = Swoosh or {}
 function Swoosh:work(o, ...)
     local tbl = {...}
     local stop
+    if not alive(o) then
+        return
+    end
     if o:script().animating then
         if table.equals(o:script().animating, tbl) then
             return --No point in continuing

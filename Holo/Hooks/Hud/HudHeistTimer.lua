@@ -11,7 +11,7 @@ if Holo:ShouldModify("Hud", "HudBox") then
     end)
     function HUDHeistTimer:UpdateHolo()
         if WolfHUD then 
-            self._heist_timer_panel:set_world_center_y(managers.hud._hud_objectives._bg_box:world_center_y()) 
+            self._heist_timer_panel:set_y(2) 
         else
             self._heist_timer_panel:set_world_center_x(self._heist_timer_panel:parent():world_center_x())
         end
@@ -25,8 +25,9 @@ if Holo:ShouldModify("Hud", "HudBox") then
         self._bg_box:set_visible(self._hud_panel == managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel and Holo.Options:GetValue("Extra/TimerBackground"))
         self._timer_text:configure({
             font = "fonts/font_medium_noshadow_mf",
-            font_size = self._bg_box:h() - 2,
+            font_size = self._bg_box:h() - 1,
             color = Holo:GetColor("TextColors/TimerBox")
         })
+        self._timer_text:set_shape(self._bg_box:shape())
     end
 end

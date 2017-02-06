@@ -6,7 +6,7 @@
    "priority":15,
    "updates":[  
       {  
-         "revision" : 78,
+         "revision" : 77,
          "identifier" : "HoloHud"
       }
    ],

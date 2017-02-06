@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
 	Hooks:PostHook(HUDBlackScreen, "init", "HoloInit", function(self, hud)
 		self._blackscreen_panel:rect({
 			name = "bg",

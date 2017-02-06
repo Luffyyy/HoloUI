@@ -262,7 +262,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		end
 	end)
 	function HUDAssaultCorner:get_completed_waves_string() --OVK can you make stuff less fucking ugly?
-		return string.format("%s / %s", self._completed_waves or 0, self._max_waves or 0)
+		return string.format("%s / %s", managers.groupai:state():get_assault_number() or 0, self._max_waves or 0)
 	end
 end
  

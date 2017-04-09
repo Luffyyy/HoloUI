@@ -2,6 +2,7 @@ if Holo:ShouldModify("Menu", "Menu/Lobby") then
 	Hooks:PostHook(HUDMissionBriefing, "init", "HoloInit", function(self)	    
 		local text_font_size = tweak_data.menu.pd2_small_font_size
 		local num_player_slots = BigLobbyGlobals and BigLobbyGlobals:num_player_slots() or 4
+		local crime_spree_active = managers.crime_spree:_is_active()
 
 		self._ready_slot_panel:set_h(text_font_size * (num_player_slots * 2))	    
 		self._ready_slot_panel:set_bottom(self._foreground_layer_one:h())
@@ -20,7 +21,7 @@ if Holo:ShouldModify("Menu", "Menu/Lobby") then
 		for i = 1, managers.job:current_stage() or 0 do
 			self._job_schedule_panel:child("stage_done_" .. tostring(i)):hide()
 		end
-		if Holo.Options:GetValue("Extra/DisableLobbyVideo") then
+		if Holo.Options:GetValue("Extra/DisableLobbyVideo") and not crime_spree_active then
 			self._background_layer_two:child("panel"):hide()
 		end
 		local num_stages = self._current_job_chain and #self._current_job_chain or 0

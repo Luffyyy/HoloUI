@@ -1,46 +1,17 @@
 if Holo:ShouldModify("Menu", "Menu/Lobby") then
-function MissionBriefingTabItem:init(panel, text, i)
-	self._main_panel = panel
-	self._panel = self._main_panel:panel()
-	self._index = i
-	local prev_item_title_text = self._main_panel:child("tab_text_" .. tostring(i - 1))
-	local offset = prev_item_title_text and prev_item_title_text:right() + 2
-	self._tab_string = text
-	self._tab_string_prefix = ""
-	self._tab_string_suffix = ""
-	local tab_string = self._tab_string_prefix .. self._tab_string .. self._tab_string_suffix
-	self._tab_text = self._main_panel:text({
-		name = "tab_text_" .. tostring(self._index),
-		text = tab_string,
-		h = 32,
-		x = offset,
-		y = 2,
-		align = "center",
-		vertical = "center",
-		font_size = tweak_data.menu.pd2_medium_font_size - 3,
-		font = tweak_data.menu.pd2_large_font,
-		color = Holo:GetColor("TextColors/Tab"),
-		layer = 1,
-	})
-	local _, _, tw, th = self._tab_text:text_rect()
-	self._tab_text:set_size(tw + 30, th + 10)
-	self._tab_select_rect = self._main_panel:rect({
-		name = "tab_select_rect_" .. tostring(self._index),
-		color = Holo:GetColor("Colors/Tab"),
-	})
-	local line = self._main_panel:child("line") or self._main_panel:rect({		
+Hooks:PostHook(MissionBriefingTabItem, "init", "HoloInit", function(self)
+	self._tab_text:set_y(2)
+	Holo.Utils:NotUglyTab(self._tab_select_rect, self._tab_text)
+	local line = self._main_panel:child("line") or self._main_panel:rect({
 		name = "line",
 		h = 2,
+		layer = 2,
 		color = Holo:GetColor("Colors/TabHighlighted"),
-	})	
-	self._tab_select_rect:set_shape(self._tab_text:shape())
-	self._panel:set_top(self._tab_text:bottom())
-	self._main_panel:set_top(100)
-	self._panel:grow(0, -(self._panel:top() + 70 + tweak_data.menu.pd2_small_font_size * 4 + 25))
-	self._selected = true
-	self:deselect()
+	})
+	self._main_panel:set_top(89)
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
- end
+end)
+	 
 function MissionBriefingTabItem:UpdateHolo()
 	if alive(self._main_panel) and alive(self._tab_select_rect) and self._main_panel:child("line") then
 		self._tab_select_rect:set_color(Holo:GetColor("Colors/Tab"))
@@ -52,8 +23,8 @@ function MissionBriefingTabItem:reduce_to_small_font()
  
 end
 function MissionBriefingTabItem:update_tab_position()
-	local prev_item_title_text = self._main_panel:child("tab_text_" .. tostring(self._index - 1))	
-	local offset = prev_item_title_text and prev_item_title_text:right() or 0	
+	local prev_item = self._main_panel:child("tab_select_rect_" .. tostring(self._index - 1))
+	local offset = prev_item and prev_item:right() or 0
 	self._tab_select_rect:set_w(self._tab_text:w())
 	self._tab_text:set_x(offset)
 	self._tab_select_rect:set_x(offset)

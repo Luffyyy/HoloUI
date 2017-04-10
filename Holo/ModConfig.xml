@@ -1,5 +1,6 @@
 <mod name="HoloUI" global_key="Holo">
    <Classes directory="Classes">
+      <class file="Utils.lua" />
       <class file="Definitions.lua" />
       <class file="OptionsMenu.lua" />
       <class file="Swoosh.lua" />
@@ -54,7 +55,8 @@
       <hook source_file="lib/managers/menu/textboxgui" file="Menu/TextBoxGUI.lua" />
       <hook source_file="lib/managers/menu/blackmarketgui" file="Menu/BlackMarketGUI.lua" />
       <hook source_file="lib/managers/menu/playerinventorygui" file="Menu/PlayerInventoryGUI.lua" />
-      <hook source_file="lib/managers/menu/stageendscreengui" file="Menu/StageEndScreenGUI.lua" />
+      <hook source_file="lib/managers/menu/crimespreemissionsmenucomponent" file="Menu/CrimeSpreeMenu.lua" />
+      <hook source_file="lib/managers/menu/stageendscreentabcrimespree" file="Menu/StageEndScreenGUI.lua" />
       <hook source_file="lib/managers/menu/newsfeedgui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodebasegui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua" />
@@ -110,6 +112,14 @@
             <option type="boolean" default_value="false" name="UpperCaseNames" />      
             <option type="boolean" default_value="true" name="TimerBackground"/>      
             <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" />
+            <div name="Positions" />
+            <option_group name="Positions" menu="Extra">
+               <option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />
+               <option type="number" default_value="3" menu_type="combo" items="Positions" name="Casing" />
+               <option type="number" default_value="3" menu_type="combo" items="Positions" name="NoPointOfReturn" />
+               <option type="number" default_value="1" menu_type="combo" items="Positions" name="Objective" />
+               <option type="number" default_value="2" menu_type="combo" items="Positions" name="TimerBackground" />
+            </option_group>
             <div name="HudBoxAlpha" />
             <option type="boolean" default_value="false" name="HudBoxAlpha" text="Empty" />
             <option_group name="Alpha" menu="Extra">

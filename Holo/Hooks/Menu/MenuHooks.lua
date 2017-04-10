@@ -32,6 +32,16 @@ if Holo.Options:GetValue("Base/Menu") then
 				self._continue_button:set_color(Holo:GetColor("TextColors/Menu"))
 			end
 		end)
+		Hooks:PostHook(MenuGuiTabItem, "init","HoloInit", function(self, index, title_id, page_item, gui, tab_x, tab_panel)
+			local panel = tab_panel:child("Page" .. string.capitalize(tostring(title_id)))
+			Holo.Utils:NotUglyTab(panel:child("PageTabBG"), panel:child("PageText"))
+		end)
+		Hooks:PostHook(MenuGuiTabItem, "refresh", "HoloRefresh", function(self)
+			self._page_panel:child("PageText"):set_blend_mode("normal") --PLS STOP USING ADD BLEND MODE ITS SO FUCKING UGLY AND BADDD
+			self._page_panel:child("PageText"):set_color(Holo:GetColor("TextColors/Tab"))
+			self._page_panel:child("PageTabBG"):set_color(self._selected and Holo:GetColor("Colors/TabHighlighted") or Holo:GetColor("Colors/Tab"))
+			self._page_panel:child("PageTabBG"):show()
+		end)
 	elseif RequiredScript == "lib/managers/menu/items/menuitemcustomizecontroller" then
 		Hooks:PostHook(MenuItemCustomizeController, "setup_gui", "HoloSetupGUI", function(self, node, row_item)
 			row_item.controller_binding:set_color(row_item.color)
@@ -69,7 +79,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		end
 	elseif RequiredScript == "lib/managers/menu/infamytreegui" then
 		Hooks:PostHook(InfamyTreeGui, "_setup", "HoloSetup", function(self)
-			Holo:FixBackButton(self, self._panel:child("back_button"))
+			Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 		end)
 	elseif RequiredScript == "lib/managers/menu/renderers/menunodecrimenetgui" then
 		function MenuNodeCrimenetContactInfoGui:_align_marker(row_item)
@@ -107,7 +117,7 @@ if Holo.Options:GetValue("Base/Menu") then
 	elseif RequiredScript == "lib/managers/menu/renderers/menunodeupdatesgui" then
 		MenuNodeUpdatesGui.PADDING = 10
 		Hooks:PostHook(MenuNodeUpdatesGui, "setup", "HoloSetup", function( self )
-			Holo:FixBackButton(self, self._panel:child("back_button"))
+			Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 		end)
 	elseif RequiredScript == "lib/managers/menu/menupauserenderer" then
 		Hooks:PostHook(MenuPauseRenderer, "open", "HoloOpen", function(self)

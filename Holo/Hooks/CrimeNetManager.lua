@@ -1,8 +1,8 @@
 if Holo.Options:GetValue("Base/Menu") then
 
 Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_ws, node )
-	Holo:FixBackButton(self, self._panel:child("back_button"))
-	Holo:SetBlendMode(self._panel, "focus")
+	Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
+	Holo.Utils:SetBlendMode(self._panel, "focus")
 	local no_servers = node:parameters().no_servers
 	self._fullscreen_panel:child("vignette"):hide()
 	self._fullscreen_panel:child("bd_light"):hide()
@@ -35,7 +35,7 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 end)
 
 Hooks:PostHook(CrimeNetGui, "_create_job_gui", "HoloCreateJobGUI", function(self)
-	Holo:SetBlendMode(self._panel, "focus")
+	Holo.Utils:SetBlendMode(self._panel, "focus")
 end)
 Hooks:PostHook(CrimeNetGui, "_create_polylines", "HoloCreatePolyLines", function( self, o, x, y )
 	if self._region_panel then

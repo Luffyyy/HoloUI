@@ -38,29 +38,15 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
     if Holo.Options:GetValue("Base/Hud") then
         function HUDManager:UpdateHolo()
             managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HudScale"), Holo.Options:GetValue("HudSpacing"))
-            if self:alive(Idstring("guis/mask_off_hud")) then
-                self:script(Idstring("guis/mask_off_hud")):UpdateHolo()
-            end
             if self.waypoints_update then
                 self:waypoints_update()
             end
         end
         Hooks:PostHook(HUDManager, "show", "HoloShow", function(self, name)
-        if name == Idstring("guis/mask_off_hud") then
-            if self:alive(name) then
-                local script = self:script(name)
-                script.UpdateHolo = function(this)
-                    this.mask_on_text:set_font(Idstring("fonts/font_large_mf"))
-                    this.mask_on_text:set_font_size(24)
-                    self:make_fine_text(this.mask_on_text)
-                    if not HUDObjectives._TEXT_MARGIN then
-                        this.mask_on_text:set_world_top(self._hud_heist_timer._bg_box:world_bottom())
-                    end
-                    this.mask_on_text:set_center_x(this.panel:center_x())
-                end
-                script:UpdateHolo()
+            if name == Idstring("guis/mask_off_hud") then
+                self:script(name).mask_on_text:hide()
+                self:script(name).mask_on_text:set_alpha(0)
             end
-        end
         end)
         function HUDManager:show_switching(id, curr, total)
             if self._teammate_panels[HUDManager.PLAYER_PANEL].show_switching then

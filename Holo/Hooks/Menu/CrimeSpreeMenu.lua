@@ -1,0 +1,15 @@
+Hooks:PostHook(CrimeSpreeMissionButton, "init", "HoloInit", function(self)
+	self._mission_image:configure({blend_mode = "normal"})
+	self._mission_image:set_layer(1)
+	self._highlight:configure({blend_mode = "normal", color = Holo:GetColor("Colors/Marker")})
+	self._highlight:set_layer(2)
+	self._active_border:set_layer(3)
+end)
+
+Hooks:PostHook(CrimeSpreeMissionButton, "refresh", "HoloRefresh", function(self)
+	self._active_border:set_visible(true)
+end)
+
+Hooks:PostHook(CrimeSpreeStartButton, "init", "HoloInit", function(self)
+	self._highlight:configure({blend_mode = "normal", color = Holo:GetColor("Colors/Marker")})
+end)

@@ -27,8 +27,8 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			w = 0,
 			valign = "grow",
 		})
-		Holo:Apply({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
-		Holo:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
+		Holo.Utils:Apply({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
+		Holo.Utils:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
 		radial_health_panel:text({
 			name = "Health",
 			text = "100",
@@ -105,8 +105,8 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         teammate_line:set_size(2, name_bg:h() + ((self._ai or me) and 0 or bg:h()))
         teammate_line:set_rightbottom(name_bg:leftbottom())
         
-        Holo:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player})
-        Holo:Apply({name_bg, bg},{
+        Holo.Utils:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player})
+        Holo.Utils:Apply({name_bg, bg},{
             color = Holo:GetColor("Colors/TeammateBackground"),
             alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
         })

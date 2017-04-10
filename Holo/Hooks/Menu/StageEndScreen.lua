@@ -1,10 +1,10 @@
 if Holo:ShouldModify("Menu", "Menu/Lobby") then
 	Hooks:PostHook(HUDPackageUnlockedItem, "init", "HoloInit", function(self)
-		Holo:SetBlendMode(self._panel)
+		Holo.Utils:SetBlendMode(self._panel)
 	end)
 	Hooks:PostHook(HUDStageEndScreen, "init", "HoloInit", function(self)
 		self._background_layer_full:child("stage_text"):hide()
-		Holo:SetBlendMode(self._foreground_layer_safe)
+		Holo.Utils:SetBlendMode(self._foreground_layer_safe)
 		self._box._panel:hide()
 		self._package_box._panel:hide()
 		self._paygrade_panel:hide()

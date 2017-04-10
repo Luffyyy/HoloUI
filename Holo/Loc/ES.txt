@@ -136,5 +136,15 @@
    "Holo/Name" : "Nombre",
    "Holo/Saved" : "Guardado",
    "Holo/Empty" : "",
-   "Holo/WavesSurvived" : "Asaltos Sobrevividos"
+   "Holo/WavesSurvived" : "Asaltos Sobrevividos",
+   "Holo/Positions" : "Posiciones",
+   "Holo/TopLeft" : "Esquina Superior Izquierda",
+   "Holo/TopCenter" : "Centro Superior",
+   "Holo/TopRight" : "Esquina Superior Derecha",
+   "Holo/CenterLeft" : "Centro Izquierdo",
+   "Holo/Center" : "Centro",
+   "Holo/CenterRight" : "Centro Derecho",
+   "Holo/BottomLeft" : "Esquina Inferior Izquierda",
+   "Holo/BottomCenter" : "Centro Inferior",
+   "Holo/BottomRight" : "Esquina Inferior Derecha"
 }

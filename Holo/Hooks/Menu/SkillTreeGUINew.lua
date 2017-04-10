@@ -38,10 +38,10 @@ if Holo.Options:GetValue("Base/Menu") then
 		return self._page_panel:right() + 4
 	end
 	Hooks:PostHook(SkillTreeGui, "_setup", "HoloSetup", function(self)
-		Holo:FixBackButton(self, self._panel:child("BackButton"))
+		Holo.Utils:FixBackButton(self, self._panel:child("BackButton"))
 	end)	
 	Hooks:PostHook(NewSkillTreeGui, "_setup", "HoloSetup", function(self)
-		Holo:FixBackButton(self, self._panel:child("BackButton"))
+		Holo.Utils:FixBackButton(self, self._panel:child("BackButton"))
 		self._skillset_panel:child("SkillSetText"):set_blend_mode("normal")
 	end)
 	Hooks:PostHook(NewSkillTreeSkillItem, "refresh", "HoloRefresh", function(self)

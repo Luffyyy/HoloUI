@@ -1,7 +1,7 @@
 if Holo.Options:GetValue("Base/Menu") then
 	Hooks:PostHook(PlayerInventoryGui, "init", "HoloInit", function(self)
-		Holo:FixBackButton(self, self._panel:child("back_button"))
-		Holo:SetBlendMode(self._panel, "detection")
+		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
+		Holo.Utils:SetBlendMode(self._panel, "detection")
 	end)
 	Hooks:PostHook(PlayerInventoryGui, "mouse_moved", "HoloMouseMoved2", function(self, o, x, y)
 		for _, button in ipairs(self._text_buttons) do

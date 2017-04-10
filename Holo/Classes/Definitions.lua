@@ -95,7 +95,7 @@ Holo.TextSizesStrings = {
 	"Holo/Normal",
 	"Holo/Big"
 }
-Holo.FrameStyles ={
+Holo.FrameStyles = {
 	"Holo/Normal",
 	"Holo/BottomLine",
 	"Holo/LeftLine",
@@ -103,4 +103,15 @@ Holo.FrameStyles ={
 	"Holo/TopLine",
 	"Holo/FullFrame",
 	"Holo/None",
+}
+Holo.Positions = {
+	"Holo/TopLeft",
+	"Holo/TopCenter",
+	"Holo/TopRight",
+	"Holo/CenterLeft",
+	"Holo/Center",
+	"Holo/CenterRight",
+	"Holo/BottomLeft",
+	"Holo/BottomCenter",
+	"Holo/BottomRight",
 }

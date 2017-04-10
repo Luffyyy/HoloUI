@@ -1,19 +1,9 @@
 if Holo:ShouldModify("Menu", "Menu/Lobby") then
 Hooks:PostHook(StatsTabItem, "init", "HoloInit", function(self, panel, tab_panel, text, i)
-	self._panel:set_h(self._main_panel:h())
-	local prev_item_title_text = tab_panel:child("tab_text_" .. tostring(i - 1))
-	self._tab_text:configure({
-		blend_mode = "normal",
-		color = Holo:GetColor("TextColors/Tab"),
-		x = prev_item_title_text and prev_item_title_text:right() or 10
-	})
-	local _, _, _, h = self._tab_text:text_rect()
-	self._select_rect:configure({
-		texture = "units/white_df",
-		h = h + 10,
-		visible = true,
-	})
-	self._select_rect:set_shape(self._tab_text:shape())
+	Holo.Utils:NotUglyTab(tab_panel:child("tab_select_rect_" .. tostring(self._index)), tab_panel:child("tab_text_" .. tostring(self._index)))
+end)
+Hooks:PostHook(CrimeSpreeResultTabItem, "init", "HoloInit", function(self, panel, tab_panel, text, i)
+	Holo.Utils:NotUglyTab(tab_panel:child("tab_select_rect_" .. tostring(self._index)), tab_panel:child("tab_text_" .. tostring(self._index)))
 end)
 Hooks:PostHook(StatsTabItem, "reduce_to_small_font", "HoloReduceToSmallFont", function(self)
 	self._panel:set_h(self._main_panel:h())

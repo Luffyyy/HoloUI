@@ -54,42 +54,25 @@ function HUDBGBox_create_frame(box_panel, color, style)
 		box_panel:remove(box_panel:child("right_bottom"))
 	end
 	local none = Holo.FrameStyles
-	local left_top = box_panel:bitmap({
-		name = "left_top",
+	local opt = {
 		halign = "left",
 		valign = "top",
 		rotation = 360,
 		color = color,
 		visible = style ~= none,
-		layer = 10,
-	})
-	local left_bottom = box_panel:bitmap({
-		name = "left_bottom",
-		halign = "left",
-		valign = "bottom",
-		rotation = 360,
-		color = color,
-		visible = style ~= none,
-		layer = 10,
-	})
-	local right_top = box_panel:bitmap({
-		name = "right_top",
-		halign = "right",
-		valign = "top",
-		rotation = 360,
-		color = color,
-		visible = style ~= none,
-		layer = 10,
-	})
-	local right_bottom = box_panel:bitmap({
-		name = "right_bottom",
-		halign = "right",
-		valign = "bottom",
-		rotation = 360,
-		color = color,
-		visible = style ~= none,
-		layer = 10,
-	})
+		layer = 10,		
+	}
+	opt.name = "left_top"
+	local left_top = box_panel:bitmap(opt)
+	opt.name = "left_bottom"
+	opt.valign = "bottom"
+	local left_bottom = box_panel:bitmap(opt)
+	opt.name = "right_top"
+	opt.halign = "right"
+	local right_top = box_panel:bitmap(opt)
+	opt.name = "right_bottom"
+	opt.valign = "bottom"
+	local right_bottom = box_panel:bitmap(opt)
 	if style == 1 then
 	    right_bottom:set_image("guis/textures/custom/Frame", 8,8,8,8)
 	    left_bottom:set_image("guis/textures/custom/Frame", 0,8,8,8)
@@ -135,6 +118,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 			font = "fonts/font_medium_noshadow_mf",
 			font_size = self._bg_box:h() - 5,
 		})
+		Holo.Utils:SetPosition(self.ObjPanel, "Objective")
 	end
 	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)
 		self:UpdateHolo()
@@ -159,8 +143,10 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		end
 		self.ObjText:set_world_center_y(self.ObjText:parent():world_center_y())
 		self.ObjText:set_x(4)
+		self.ObjPanel:set_w(w + 8)
 		Swoosh:work(self.ObjText, "w", w, "speed", 3)
 		Swoosh:work(self._bg_box, "w", w + 8, "speed", 3)
+		Holo.Utils:SetPosition(self.ObjPanel, "Objective")
 	end
 	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
 		self._bg_box:child("bg"):stop()

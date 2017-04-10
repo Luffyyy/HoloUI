@@ -136,5 +136,15 @@
    "Holo/Name" : "Name",
    "Holo/Saved" : "Saved",
    "Holo/Empty" : "",
-   "Holo/WavesSurvived" : "Waves Survived"
+   "Holo/WavesSurvived" : "Waves Survived",
+   "Holo/Positions" : "Positions",
+   "Holo/TopLeft" : "Top Left",
+   "Holo/TopCenter" : "Top Center",
+   "Holo/TopRight" : "Top Right",
+   "Holo/CenterLeft" : "Center Left",
+   "Holo/Center" : "Center",
+   "Holo/CenterRight" : "Center Right",
+   "Holo/BottomLeft" : "Bottom Left",
+   "Holo/BottomCenter" : "Bottom Center",
+   "Holo/BottomRight" : "Bottom Right"
 }

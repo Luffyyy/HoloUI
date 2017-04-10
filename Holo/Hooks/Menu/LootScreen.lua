@@ -3,7 +3,7 @@ if Holo:ShouldModify("Menu", "Menu/Lobby") then
 		self._background_layer_full:child(0):hide() --fuck off with your bg text
 	end)
 	Hooks:PostHook(HUDLootScreen, "create_peer", "HoloCreatePeer", function(self, peers_panel, peer_id)
-		Holo:SetBlendMode(peers_panel)
+		Holo.Utils:SetBlendMode(peers_panel)
 		for _, o in pairs(peers_panel:child("peer" .. tostring(peer_id)):children()) do
 			if o.child then
 				for _, ob in pairs(o:children()) do
@@ -15,6 +15,6 @@ if Holo:ShouldModify("Menu", "Menu/Lobby") then
 		end
 	end)
 	Hooks:PostHook(HUDLootScreen, "create_selected_panel", "HoloCreateSelectedPanel", function(self, peer_id)
-		Holo:SetBlendMode(self._peers_panel)
+		Holo.Utils:SetBlendMode(self._peers_panel)
 	end)
 end

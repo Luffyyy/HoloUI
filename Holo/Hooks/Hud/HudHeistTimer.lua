@@ -13,7 +13,8 @@ if Holo:ShouldModify("Hud", "HudBox") then
         if WolfHUD then 
             self._heist_timer_panel:set_y(2) 
         else
-            self._heist_timer_panel:set_world_center_x(self._heist_timer_panel:parent():world_center_x())
+            self._heist_timer_panel:set_w(60)
+            Holo.Utils:SetPosition(self._heist_timer_panel, "TimerBackground")
         end
         self._heist_timer_panel:set_h(26)
         HUDBGBox_recreate(self._bg_box, {

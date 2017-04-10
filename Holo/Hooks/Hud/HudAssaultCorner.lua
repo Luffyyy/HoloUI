@@ -44,19 +44,19 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			})
 		end
 		self._hud_panel:child("buffs_panel"):set_alpha(0)
-		assault_panel:set_size(400, 40)
-		assault_panel:set_righttop(self._hud_panel:w(), 0)
-		casing_panel:set_size(400, 40)
-		casing_panel:set_righttop(self._hud_panel:w(), 0)
-		point_of_no_return_panel:set_size(400, 40)
-		point_of_no_return_panel:set_righttop(self._hud_panel:w(), 0)
+		assault_panel:set_size(self._box_width, 40)
+		Holo.Utils:SetPosition(assault_panel, "Assault")
+		casing_panel:set_size(self._box_width, 40)
+		Holo.Utils:SetPosition(casing_panel, "Casing")
+		point_of_no_return_panel:set_size(self._box_width, 40)
+		Holo.Utils:SetPosition(point_of_no_return_panel, "NoPointOfReturn")
 		hostages_panel:set_size(70, 40)
 		hostages_panel:set_righttop(self._hud_panel:w(), 0)
 		if wave then
 			wave_panel:set_size(160, 40)
 			wave_panel:set_righttop(hostages_panel:left() - 4, 0)
 		end
-		if self._is_offseted then
+		if self._is_offseted and not self._always_not_offseted then
 			hostages_panel:set_y(self._bg_box:h() + 8)
 			if wave then
 				wave_panel:set_y(hostages_panel:y())
@@ -82,16 +82,34 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			num_waves:set_color(Holo:GetColor("TextColors/WavesSurvived"))
 			num_waves:set_shape(0,0,num_waves:parent():size())
 		end
-		Holo:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages, num_waves}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
+		Holo.Utils:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages, num_waves}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
 		num_hostages:set_y(-2)
 		if wave then
 			num_waves:set_y(-2)
 		end
+
 		if self.update_banner_pos then
 			self:update_banner_pos()
 		end
 	end	
 	Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
+		self._top_right = {}		
+		Holo:AddSetPositionClbk(function(setting, pos)
+			if pos:match("TopRight") then
+				self._top_right[setting] = true
+			elseif self._top_right[setting] then
+				self._top_right[setting] = nil
+			end
+			self._always_offseted = false
+			self._always_not_offseted = table.size(self._top_right) == 0
+			for k in pairs(self._top_right) do
+				if k ~= "Assault" and k ~= "Casing" and k ~= "NoPointOfReturn" then
+					self._always_offseted = true
+					break
+				end
+			end
+			self:_set_hostage_offseted(self._is_offseted)
+		end)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
@@ -244,9 +262,17 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
 		point_of_no_return_timer:animate(flash_timer)
 	end
-	Hooks:PostHook(HUDAssaultCorner, "_set_hostage_offseted", "HoloSetHostageOffested", function(self, is_offseted)
+	local SetHostageOffseted = HUDAssaultCorner._set_hostage_offseted
+	function HUDAssaultCorner:_set_hostage_offseted(is_offseted, ...)
 		self._is_offseted = is_offseted
-	end)
+		if self._always_offseted then
+			is_offseted = true
+		end
+		if self._always_not_offseted then
+			is_offseted = false
+		end
+		SetHostageOffseted(self, is_offseted, ...)
+	end
 	Hooks:PostHook(HUDAssaultCorner, "set_control_info", "HoloSetControlInfo", function(self)
 		if alive(self._hostages_bg_box) then
 			self._hostages_bg_box:child("bg"):stop()

@@ -136,5 +136,15 @@
    "Holo/Name" : "Название",
    "Holo/Saved" : "Сохранено",
    "Holo/Empty" : "",
-   "Holo/WavesSurvived" : "Волн Завершено"
+   "Holo/WavesSurvived" : "Волн Завершено",
+   "Holo/Positions" : "Позиции",
+   "Holo/TopLeft" : "Веврху слева",
+   "Holo/TopCenter" : "Вверху по центру",
+   "Holo/TopRight" : "Вверху справа",
+   "Holo/CenterLeft" : "По центру слева",
+   "Holo/Center" : "По центру",
+   "Holo/CenterRight" : "По центру справа",
+   "Holo/BottomLeft" : "Внизу слева",
+   "Holo/BottomCenter" : "Внизу по центру",
+   "Holo/BottomRight" : "Внизу справа"
 }

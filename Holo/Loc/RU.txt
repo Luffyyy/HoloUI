@@ -110,6 +110,7 @@
    "Holo/TeammateAI" : "ИИ-Напарник",
    "Holo/HudSpacing" : "Положение Интерфейса",
    "Holo/DisableLobbyVideo" : "Видео С Контрактом В Лобби",
+   "Holo/DisableLoadingTips" : "Геймплей Советы по загрузке экрана",
    "Holo/Interaction" : "Шкала Взаимодействия",
    "Holo/Captions" : "Подписи",
    "Holo/EnemyHealth" : "Здоровье Врага",

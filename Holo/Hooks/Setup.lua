@@ -3,6 +3,7 @@ Hooks:PreHook(Setup, "_start_loading_screen", "HoloStartLoadingScreen", function
 		local level_tweak_data = tweak_data.levels[Global.level_data.level_id]
 		if level_tweak_data then  
 			Global.level_data.Holo = Holo:ShouldModify("Menu", "Menu/Loading") 
+			Global.level_data.notips = Holo.Options:GetValue("Extra/DisableLoadingTips")
 			Global.level_data.main_color = Holo:GetColor("Colors/Main")
 			Global.level_data.text_color = Holo:GetColor("TextColors/Menu")
 			Global.level_data.colored_background = Holo.Options:GetValue("Menu/ColoredBackground")

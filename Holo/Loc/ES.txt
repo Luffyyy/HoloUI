@@ -110,6 +110,7 @@
    "Holo/TeammateAI" : "Bots",
    "Holo/HudSpacing" : "Separacion del HUD",
    "Holo/DisableLobbyVideo" : "Video del Contacto en el Lobby",
+   "Holo/DisableLoadingTips" : "Consejos de juego en la pantalla de carga",
    "Holo/Interaction" : "Barra de interaccion",
    "Holo/Captions" : "Subtitulos",
    "Holo/EnemyHealth" : "Salud de enemigos",

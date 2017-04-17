@@ -34,7 +34,7 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		self._back_drop_gui._panel:child("particles_layer"):hide()
 		local panel = self._back_drop_gui:get_new_background_layer()
 		self._back_drop_gui:set_panel_to_saferect(panel)
-		if not self._coords and arg.load_level_data.tip then
+		if not self._coords and arg.load_level_data.tip and not arg.load_level_data.level_data.notips then
 			self._loading_hint = self:_make_loading_hint(panel, arg.load_level_data.tip)
 		end
 		self._indicator = panel:bitmap({

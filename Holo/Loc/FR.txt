@@ -110,6 +110,7 @@
    "Holo/TeammateAI" : "Coéquipiers controllés par l'ordinateur",
    "Holo/HudSpacing" : "Espacement de l'ATH",
    "Holo/DisableLobbyVideo" : "Vidéo du contrat dans le lobby",
+   "Holo/DisableLoadingTips" : "Astuces de jeu sur l'écran de chargement",
    "Holo/Interaction" : "Cercle d'interaction",
    "Holo/Captions" : "Sous titres",
    "Holo/EnemyHealth" : "Santé des ennemis",

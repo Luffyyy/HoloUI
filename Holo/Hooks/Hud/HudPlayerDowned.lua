@@ -33,14 +33,14 @@ if Holo.Options:GetValue("Base/Hud") and (not restoration or not (restoration.Op
 		local timer_msg = downed_panel:child("timer_msg")
 		timer_msg:set_visible(true)
 		self._hud.timer:set_visible(true)
-		Swoosh:work(timer_msg, "alpha", 1)
-		Swoosh:work(self._hud.timer, "alpha", 1)
+		QuickAnim:Work(timer_msg, "alpha", 1)
+		QuickAnim:Work(self._hud.timer, "alpha", 1)
 	end
 	function HUDPlayerDowned:hide_timer()
 		local downed_panel = self._hud_panel:child("downed_panel")
 		local timer_msg = downed_panel:child("timer_msg")
-		Swoosh:work(timer_msg, "alpha", .65)
-		Swoosh:work(self._hud.timer, "alpha", .65)	
+		QuickAnim:Work(timer_msg, "alpha", .65)
+		QuickAnim:Work(self._hud.timer, "alpha", .65)	
 	end
 	Hooks:PostHook(HUDPlayerDowned, "on_downed", "HoloOnDowned", function(self)
 		if Holo.Options:GetValue("Extra/HealthText") and managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHolo then

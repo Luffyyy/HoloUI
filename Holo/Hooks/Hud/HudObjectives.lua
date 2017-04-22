@@ -144,16 +144,16 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:set_world_center_y(self.ObjText:parent():world_center_y())
 		self.ObjText:set_x(4)
 		self.ObjPanel:set_w(w + 8)
-		Swoosh:work(self.ObjText, "w", w, "speed", 3)
-		Swoosh:work(self._bg_box, "w", w + 8, "speed", 3)
+		QuickAnim:Work(self.ObjText, "w", w, "speed", 3)
+		QuickAnim:Work(self._bg_box, "w", w + 8, "speed", 3)
 		Holo.Utils:SetPosition(self.ObjPanel, "Objective")
 	end
 	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
 		self._bg_box:child("bg"):stop()
 		self.AmountText:stop()
 		self.ObjText:stop()
-		self.AmountText:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
-		self.ObjText:animate(callback(nil, Swoosh, "flash_icon"), 4, nil, true)
+		self.AmountText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
+		self.ObjText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
 	end)
 	Hooks:PostHook(HUDObjectives, "update_amount_objective", "HoloUpdateAmountObjective", function(self, data)
 		data.no_reset = true
@@ -162,7 +162,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 	function HUDObjectives:_animate_icon_objectivebox(icon)
 		local x,y = icon:center()
 		icon:set_h(0)
-		Swoosh:work(icon,
+		QuickAnim:Work(icon,
 			"w", 24,
 			"h", 24,
 			"speed", 5,

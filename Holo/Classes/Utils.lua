@@ -3,6 +3,9 @@ local Utils = Holo.Utils
 
 function Utils:ModifyWallet()
  	local panel = Global.wallet_panel
+ 	if not panel then
+ 		return
+ 	end
 	local w
 	local items = {"money", "level", "skillpoint", "coins", "gage_coins"}
 	for i, v in pairs(items) do
@@ -62,8 +65,8 @@ function Utils:FixBackButton(this, back_button)
 				this.back_button_highlighted = true
 				this._back_marker:stop()
 				this._back_button:stop()
-				Swoosh:color(this._back_button, Holo:GetColor("TextColors/MenuHighlighted"))
-				Swoosh:work(this._back_marker, 
+				QuickAnim:WorkColor(this._back_button, Holo:GetColor("TextColors/MenuHighlighted"))
+				QuickAnim:Work(this._back_marker, 
 					"alpha", Holo.Options:GetValue("Menu/MarkerAlpha"),
 					"speed", 5
 				)	
@@ -74,8 +77,8 @@ function Utils:FixBackButton(this, back_button)
 			this.back_button_highlighted = false
 			this._back_marker:stop()
 			this._back_button:stop()
-			Swoosh:color(this._back_button, Holo:GetColor("TextColors/Menu"))
-			Swoosh:work(this._back_marker, 
+			QuickAnim:WorkColor(this._back_button, Holo:GetColor("TextColors/Menu"))
+			QuickAnim:Work(this._back_marker, 
 				"alpha", 0,
 				"speed", 5
 			)			

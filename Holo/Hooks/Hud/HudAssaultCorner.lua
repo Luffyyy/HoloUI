@@ -115,13 +115,13 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_show_icon_assaultbox(icon)
 		icon:set_alpha(1)
-		Swoosh:work(icon, "rotation", 360, "callback", function()
+		QuickAnim:Work(icon, "rotation", 360, "callback", function()
 			icon:set_rotation(0)
 		end)
 	end
 	function HUDAssaultCorner:left_grow(o, clbk)
 		local right = o:right()
-		Swoosh:work(o, 
+		QuickAnim:Work(o, 
 			"w", self._box_width, 
 			"speed", 4,
 			"after", function()
@@ -146,7 +146,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		if self:is_safehouse_raid() then		
 			self._wave_bg_box:stop()
 			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 			self._hud_panel:child("assault_panel"):child("icon_assaultbox"):stop()
 			self:_close_assault_box()
 			self._wave_bg_box:child("bg"):stop()
@@ -277,14 +277,14 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		if alive(self._hostages_bg_box) then
 			self._hostages_bg_box:child("bg"):stop()
 			self._hostages_bg_box:child("num_hostages"):stop()
-			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 		end
 	end)
 	Hooks:PostHook(HUDAssaultCorner, "_animate_wave_started", "HoloAnimateWaveStarted", function(self)
 		if alive(self._wave_bg_box) then
 			self._wave_bg_box:child("bg"):stop()
 			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 		end
 	end)
 	function HUDAssaultCorner:get_completed_waves_string() --OVK can you make stuff less fucking ugly?

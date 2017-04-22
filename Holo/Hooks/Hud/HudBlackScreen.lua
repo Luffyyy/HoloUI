@@ -46,18 +46,18 @@ if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
 	end)
 	function HUDBlackScreen:skip_circle_done()
 		local speed = 4
-		Swoosh:work(self._blackscreen_panel:child("loading_text"),
+		QuickAnim:Work(self._blackscreen_panel:child("loading_text"),
 			"y", self._progress:bottom(),
 			"h", 0,
 			"speed", speed
 		)
 		local bottom = self._progress:bottom()
-		Swoosh:work(self._blackscreen_panel:child("skip_text"),
+		QuickAnim:Work(self._blackscreen_panel:child("skip_text"),
 			"y", self._progress:bottom(),
 			"h", 0,
 			"speed", speed,
 			"callback", function()
-				Swoosh:work(self._progress, "h", 0, "speed", speed, "after", function()
+				QuickAnim:Work(self._progress, "h", 0, "speed", speed, "after", function()
 					self._progress:set_bottom(bottom)
 				end)
 		end)

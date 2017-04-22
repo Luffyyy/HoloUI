@@ -37,7 +37,7 @@ if Holo.Options:GetValue("Base/Menu") then
 				button_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
 	 			selected:set_x(button_panel:right() + 2)
 	 			selected:set_rotation(360)
-				Swoosh:work(selected, "y", button_panel:y() - 1, "speed", 15)
+				QuickAnim:Work(selected, "y", button_panel:y() - 1, "speed", 15)
 			else
 				button_text:set_color(Holo:GetColor("TextColors/Menu"))
 			end

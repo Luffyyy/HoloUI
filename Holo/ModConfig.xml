@@ -3,7 +3,6 @@
       <class file="Utils.lua" />
       <class file="Definitions.lua" />
       <class file="OptionsMenu.lua" />
-      <class file="Swoosh.lua" />
       <class file="HudVoice.lua" />
    </Classes>
    <Localization directory="Loc" default="EN.txt">

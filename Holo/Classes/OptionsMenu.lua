@@ -1,18 +1,15 @@
 HoloMenu = HoloMenu or class()
 function HoloMenu:init()
     MenuUI:new({
-        background_alpha = 0.65,
-        layer = tweak_data.gui.MOUSE_LAYER - 190,
         text_color = Holo:GetColor("TextColors/Menu"),        
-        background_color = Holo:GetColor("Colors/MenuBackground"),
         text_highlight_color = Holo:GetColor("TextColors/MenuHighlighted"),
         marker_alpha = 0,
         marker_highlight_color = Holo:GetColor("Colors/Marker"),
-        mouse_press = callback(self, self, "MousePressed"),
-        mouse_move = callback(self, self, "MouseMoved"),
+        always_mouse_press = callback(self, self, "MousePressed"),
+        always_mouse_move = callback(self, self, "MouseMoved"),
         mouse_release = callback(self, self, "MouseReleased"),
         w = "half",
-        align = "left",
+        text_align = "left",
         offset = 4,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
         toggle_clbk = function(closed)
@@ -26,16 +23,17 @@ end
 function HoloMenu:CreateItems(menu)
     self._menu = menu
     self._tabs = menu:NewMenu({
-        background_alpha = 0,
+        background_alpha = 0.65,
+        background_color = Holo:GetColor("Colors/MenuBackground"),
         name = "tabs",
         h = 30,
-        w = "full",
+        w = "half",
         items_size = 20,
-        align = "center",
+        text_align = "center",
         visible = true,
-        position = {10, 10},
+        position = {10, 0},
         size_by_text = true,
-        row_max = 1,
+        align_method = "grid"
     })
     self._menus = {
         main = self:Menu("Main"),
@@ -47,6 +45,10 @@ function HoloMenu:CreateItems(menu)
     local close = self._tabs:Button({
         name = "Close",
         text = "Holo/Close",
+        ignore_align = true,
+        position = function(item)
+            item:Panel():set_rightbottom(item:Panel():parent():rightbottom())
+        end,
         localized = true,
         callback = MenuCallbackHandler.OpenHoloMenu
     })
@@ -80,15 +82,14 @@ function HoloMenu:CreateItems(menu)
         localized = true,
         callback = callback(self, self, "ResetOptions", true),
     })
-    local panel = self._menu._fullscreen_ws_pnl
 
-    local resize_panel = panel:panel({
+    self._resize = self._menu._panel:panel({
         name = "resize_panel",
         w = 4,
         layer = self._menu._panel:layer() + 1,
-        x = self._menu._panel:right(),
+        x = self._menus.main.panel:right(),
     })    
-    resize_panel:rect({
+    self._resize:rect({
         color = Holo:GetColor("Colors/Marker")
     })
 end
@@ -182,7 +183,7 @@ function HoloMenu:CreateColor(menu, i, name, color)
             override_parent = btn,
             size_by_text = true,
             position = "RightTop",
-            align = "center",
+            text_align = "center",
             callback = function()
                 local v = Holo.init_colors + i
                 self:WorkValues(true, nil, function(item)
@@ -329,8 +330,9 @@ function HoloMenu:ComboBox(menu, name, text, items, clbk, color, loc, loc_items,
         name = name,
         text = text or self:Loc(name),
         localized = loc,
+        searchbox = not not color,
         localized_items = loc_items,
-        color = color and Holo:GetColor(name), --MenuUI Acting weird with this.. :cc
+        color = color and Holo:GetColor(name),
         value = Holo.Options:GetValue(name),
         items = items,
         index = index,
@@ -361,27 +363,30 @@ function HoloMenu:Menu(name)
 
     local new = self._menu:NewMenu({
         name = name,
-        w = "full",
+        w = "half",
         override_size_limit = true,
         items_size = 18,
+        background_alpha = 0.65,
+        background_color = Holo:GetColor("Colors/MenuBackground"),        
         visible = not self._current_menu,
-        w = self._menu._panel:w() - 30,
-        h = self._menu._panel:h() - 60,
+        h = self._menu._panel:h() - 35,
         position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},
     })
     self._current_menu = self._current_menu or new
     return new
 end
 function HoloMenu:MousePressed(button, x, y)
-    self._line_hold = button == Idstring("0") and self._menu._fullscreen_ws_pnl:child("resize_panel"):inside(x,y)
+    self._line_hold = button == Idstring("0") and self._resize:inside(x,y)
 end
 function HoloMenu:MouseReleased()
     self._line_hold = nil
 end
 function HoloMenu:MouseMoved(x, y)
     if self._line_hold and self._menu._old_x then
-        self._menu._panel:grow(x - self._menu._old_x)
-        self._menu._fullscreen_ws_pnl:child("resize_panel"):set_left(self._menu._panel:right())
+        for _, menu in pairs(self._menu._menus) do
+            menu:Panel():grow(x - self._menu._old_x)
+        end
+        self._resize:set_left(self._menus.main.panel:right())
     end
 end
 function HoloMenu:ResetOptions(all, menu)   

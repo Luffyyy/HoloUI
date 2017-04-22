@@ -66,7 +66,7 @@ if Holo:ShouldModify("Hud", "Presenter") then
 		self._bg_box:set_w(0)
 		local center_x = self._hud_panel:w() / 2
 		self._bg_box:set_center_x(center_x)
-		Swoosh:work(self._bg_box, 
+		QuickAnim:Work(self._bg_box, 
 			"w", self._box_width,
 			"speed", 4, 
 			"after", function()

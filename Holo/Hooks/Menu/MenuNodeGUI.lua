@@ -76,7 +76,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		if self._old_center_y then
 			self._marker_data.marker:set_world_center_y(self._old_center_y)
 		end
-		Swoosh:work(self._marker_data.marker, 
+		QuickAnim:Work(self._marker_data.marker, 
 			"world_center_y", row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel and row_item.gui_text:world_center_y() or panel:world_center_y(),
 			"speed", 15
 		)

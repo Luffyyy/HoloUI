@@ -18,7 +18,6 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._tab_pages_panel:set_visible(self._selected)
 		end
 	end
-
 	BlackMarketGuiButtonItem = BlackMarketGuiButtonItem or class(BlackMarketGuiItem)
 	function BlackMarketGuiButtonItem:init(main_panel, data, x)
 		BlackMarketGuiButtonItem.super.init(self, main_panel, data, 0, 0, 10, 10)
@@ -64,7 +63,7 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._btn_text:set_color(self._highlighted and Holo:GetColor("TextColors/MenuHighlighted") or Holo:GetColor("TextColors/Menu"))
 		end
 		self._panel:child("select_rect"):stop()
-		Swoosh:work(self._panel:child("select_rect"), "alpha", self._highlighted and Holo.Options:GetValue("Menu/MarkerAlpha") or 0, "speed", 5)
+		QuickAnim:Work(self._panel:child("select_rect"), "alpha", self._highlighted and Holo.Options:GetValue("Menu/MarkerAlpha") or 0, "speed", 5)
 	end
 	Hooks:PostHook(BlackMarketGui, "_setup", "HoloSetup", function(self, is_start_page, component_data)
 		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))

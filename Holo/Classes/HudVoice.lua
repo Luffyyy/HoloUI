@@ -26,7 +26,7 @@ function HoloVoice:Update(t, dt)
     if alive(managers.player:player_unit()) and self._holding and self._next_t <= t then
         if not self._showing then
             self._showing = true
-            Swoosh:work(self._voice_panel, "alpha", 1, "stop", true)      
+            QuickAnim:Work(self._voice_panel, "alpha", 1, "stop", true)      
             managers.mouse_pointer:use_mouse({
                 mouse_move = callback(self, self, "MouseMoved"),
                 mouse_press = callback(self, self, "MousePressed"),
@@ -46,7 +46,7 @@ function HoloVoice:Update(t, dt)
             managers.mouse_pointer:remove_mouse(self._mouse_id)
             self:SetMovingEnabled(true)
         end
-        Swoosh:work(self._voice_panel, "alpha", 0, "stop", true)
+        QuickAnim:Work(self._voice_panel, "alpha", 0, "stop", true)
     end
     if self._holding and not Input:keyboard():down(Idstring(Holo.Options:GetValue("VoiceKey"))) then
         self._holding = false
@@ -67,13 +67,13 @@ function HoloVoice:MouseMoved(o, x, y)
         if panel and panel:inside(x, y) then
             self._selected = panel
             panel:stop()
-            Swoosh:work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom())
+            QuickAnim:Work(panel:child("underline"), "speed", 10,"bottom", panel:child("Bg"):bottom())
         else
             if self._selected == panel then
                 self._selected = nil
             end
             panel:stop()
-            Swoosh:work(panel:child("underline"), "speed", 10,"top", panel:child("Bg"):bottom())
+            QuickAnim:Work(panel:child("underline"), "speed", 10,"top", panel:child("Bg"):bottom())
         end
     end
 end

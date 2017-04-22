@@ -63,7 +63,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
-		Swoosh:work((is_secondary and secondary_weapon_panel or primary_weapon_panel):child("switch_bg"), "alpha", curr and 0.1 or 0)
+		QuickAnim:Work((is_secondary and secondary_weapon_panel or primary_weapon_panel):child("switch_bg"), "alpha", curr and 0.1 or 0)
 		if not curr then
 			return
 		end
@@ -313,12 +313,12 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local primary_bg = wep_panel:child("primary_weapon_panel"):child("bg")
 		primary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
 		secondary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
-		Swoosh:work(primary_bg, 
+		QuickAnim:Work(primary_bg, 
 			"alpha", is_secondary and 0 or 1,
 			s, is_secondary and 0 or 2,
 			"speed", 10
 		)
-		Swoosh:work(secondary_bg, 
+		QuickAnim:Work(secondary_bg, 
 			"alpha", is_secondary and 1 or 0,
 			s, is_secondary and 2 or 0,
 			"speed", 10
@@ -350,7 +350,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local Health = radial_health_panel:child("Health")
 		local val = data.current / data.total
-		Swoosh:color(Health, Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))
+		QuickAnim:WorkColor(Health, Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))
 		Health:set_text(string.format("%.0f", data.current * 10))
 	end)
 	function HUDTeammate:set_talking(talking)

@@ -18,19 +18,19 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
             seconds = seconds or 4
             for i=1, seconds do
-                Swoosh:work(o, "alpha", 0.5)
+                QuickAnim:Work(o, "alpha", 0.5)
                 wait(0.5)
-                Swoosh:work(o, "alpha", 1)
+                QuickAnim:Work(o, "alpha", 1)
                 wait(0.5)
             end
-            Swoosh:work(o, "alpha", no_remove and 1 or 0, "callback", function()
+            QuickAnim:Work(o, "alpha", no_remove and 1 or 0, "callback", function()
                 if not no_remove then
                     on_panel = on_panel or hud
                     on_panel:remove(o)
                 end
             end)
         end
-        Swoosh.flash_icon = hud.flash_icon
+        Holo.flash_icon = hud.flash_icon
         if Holo.Options:GetValue("Voice") then
             Holo.Voice = HoloVoice:new()
         end

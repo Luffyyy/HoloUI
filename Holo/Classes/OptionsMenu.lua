@@ -12,9 +12,9 @@ function HoloMenu:init()
         text_align = "left",
         offset = 4,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
-        toggle_clbk = function(closed)
+        toggle_clbk = function(enabled)
             if managers.hud then
-                managers.hud._chatinput_changed_callback_handler:dispatch(not closed)
+                managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
             end
         end,
         create_items = callback(self, self, "CreateItems"),
@@ -22,7 +22,7 @@ function HoloMenu:init()
 end
 function HoloMenu:CreateItems(menu)
     self._menu = menu
-    self._tabs = menu:NewMenu({
+    self._tabs = menu:Menu({
         background_alpha = 0.65,
         background_color = Holo:GetColor("Colors/MenuBackground"),
         name = "tabs",

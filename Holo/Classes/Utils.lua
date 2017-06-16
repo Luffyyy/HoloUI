@@ -2,36 +2,38 @@ Holo.Utils = Holo.Utils or {}
 local Utils = Holo.Utils
 
 function Utils:ModifyWallet()
- 	local panel = Global.wallet_panel
-	local w
-	local items = {"money", "level", "skillpoint", "coins", "gage_coins"}
-	for i, v in pairs(items) do
-		local child = "wallet_" .. v
-		if i == 5 then -- tbh idk what's the point 
-			child = v
+	local panel = Global.wallet_panel
+	if alive(panel) then
+		local w
+		local items = {"money", "level", "skillpoint", "coins", "gage_coins"}
+		for i, v in pairs(items) do
+			local child = "wallet_" .. v
+			if i == 5 then -- tbh idk what's the point 
+				child = v
+			end
+			local icon = panel:child(child .. "_icon")
+			local text = panel:child(child .. "_text")
+			if icon then
+				local text_before = i > 1 and panel:child("wallet_" .. items[i - 1] .. "_text")
+				icon:set_leftbottom(text_before and text_before:right() + 10 or 4, Global.wallet_panel:h() - 4)
+				WalletGuiObject.make_fine_text(text)
+				text:set_left(icon:right() + 2)
+				text:set_y(math.round(icon:y() - 2))
+				icon:set_color(Holo:GetColor("TextColors/Menu"))	
+				text:set_color(Holo:GetColor("TextColors/Menu"))		
+				w = text:right() + 2
+			end
 		end
-		local icon = panel:child(child .. "_icon")
-		local text = panel:child(child .. "_text")
-		if icon then
-			local text_before = i > 1 and panel:child("wallet_" .. items[i - 1] .. "_text")
-			icon:set_leftbottom(text_before and text_before:right() + 10 or 4, Global.wallet_panel:h() - 4)
-			WalletGuiObject.make_fine_text(text)
-			text:set_left(icon:right() + 2)
-			text:set_y(math.round(icon:y() - 2))
-			icon:set_color(Holo:GetColor("TextColors/Menu"))	
-			text:set_color(Holo:GetColor("TextColors/Menu"))		
-			w = text:right() + 2
+		if panel:child("line") then
+			panel:remove(panel:child("line"))
 		end
+		panel:rect({
+			name = "line",
+			color = Holo:GetColor("Colors/Marker"),	
+			w = w,
+			h = 2,
+		}):set_bottom(panel:h())
 	end
-	if panel:child("line") then
-		panel:remove(panel:child("line"))
-	end
-	panel:rect({
-		name = "line",
-		color = Holo:GetColor("Colors/Marker"),	
-		w = w,
-		h = 2,
-	}):set_bottom(panel:h())	
 end
 
 function Utils:FixBackButton(this, back_button)

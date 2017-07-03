@@ -1,4 +1,4 @@
-Holo = Holo or ModCore:new(ModPath .. "ModConfig.xml", false, true)
+Holo = Holo or ModCore:new(ModPath .. "Config.xml", false, true)
 function Holo:init()
 	self:init_modules()
 	self.setup = true
@@ -47,19 +47,19 @@ function Holo:UpdateSettings()
 end
 
 function Holo:GetFrameColor(setting)
-	return self.Options:GetValue("Extra/HudBoxFrameColor") and self:GetColor("Extra/FrameColor/" .. setting) or self:GetColor("Colors/Frame")  
+	return self.Options:GetValue("Extra/FrameColor/Enable") and self:GetColor("Extra/FrameColor/" .. setting) or self:GetColor("Colors/Frame")  
 end
 
 function Holo:GetFrameStyle(setting)
-	return self.Options:GetValue("Extra/HudBoxFrameStyle") and self.Options:GetValue("Extra/FrameStyle/" .. setting) or self.Options:GetValue("FrameStyle")
+	return self.Options:GetValue("Extra/FrameStyle/Enable") and self.Options:GetValue("Extra/FrameStyle/" .. setting) or self.Options:GetValue("FrameStyle")
 end
 
 function Holo:GetAlpha(setting)
-	return self.Options:GetValue("Extra/HudBoxAlpha") and self.Options:GetValue("Extra/Alpha/" .. setting) or self.Options:GetValue("HudAlpha")
+	return self.Options:GetValue("HudAlpha")
 end
 
 function Holo:_GetColor(setting)
-	local v = self.Options:GetValue(setting)		
+	local v = self.Options:GetValue(setting)
 	if v and v > #self.Colors then
 		self.Options:SetValue(setting, self.Options:GetOption(setting).default_value)
 		self.Options:Save()
@@ -69,11 +69,7 @@ function Holo:_GetColor(setting)
 end
 
 function Holo:GetColor(setting, vec)
-	local color = self:_GetColor(setting)
-	if not color then
-		self:log("[ERROR] Color %s Doesn't exist!", setting)
-		color = Color.white
-	end
+	local color = self.Options:GetValue(setting) or Color.white
 	return vec and Vector3(color:unpack()) or color
 end
 
@@ -168,20 +164,10 @@ if Hooks then
 			end)
 		end)
 	end
-	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)			
-		function MenuCallbackHandler:OpenHoloMenu()
-			Holo.Menu._menu:toggle()
-		end		
+	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "VoicekeyOpt", function(menu_manager, nodes)			
+		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
 		Holo.Panel = managers.gui_data:create_fullscreen_workspace():panel()		
-		Holo.Menu = HoloMenu:new()
-		Holo.Dialog = MenuDialog:new({
-			background_alpha = 0.65,
-			text_color = Holo:GetColor("TextColors/Menu"),        
-	        background_color = Holo:GetColor("Colors/MenuBackground"),
-	        text_highlight_color = Holo:GetColor("TextColors/MenuHighlighted"),
-	        marker_alpha = Holo.Options:GetValue("Menu/MarkerAlpha"),
-	        marker_highlight_color = Holo:GetColor("Colors/Marker"),
-		})
+		Holo.Menu:Init()
 		MenuHelper:AddButton({
 			id = "HoloOptions",
 			title = "Holo/OptionsTitle",

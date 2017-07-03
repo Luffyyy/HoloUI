@@ -158,75 +158,28 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		self:UpdateHolo()
 	end)
 	function HUDAssaultCorner:_update_assault_hud_color(color) end
-	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function)
-		local text_list = (bg_box or self._bg_box):script().text_list
-		local text_index = 0
-		local texts = {}
-		local padding = 10
-		local function create_new_text(text_panel, text_list, text_index, texts)
-			text_panel:set_size(600, text_panel:parent():h())
-			text_panel:set_center_x(10)
-			if texts[text_index] and texts[text_index].text then
-				text_panel:remove(texts[text_index].text)
-				texts[text_index] = nil
-			end
-			color_function = nil
-			local text_id = text_list[text_index]
-			local text_string = ""
-			if type(text_id) == "string" then
-				text_string = managers.localization:to_upper_text(text_id)
-			elseif text_id == Idstring("risk") then
-				for i = 1, managers.job:current_difficulty_stars() do
-					text_string = text_string .. managers.localization:get_default_macro("BTN_SKULL")
-				end
-			end
-			local text = text_panel:text({
-				text = text_string,
-				align = "center",
-				vertical = "center",
-				blend_mode = color_function and "add",
-				color = color_function and color_function() or color or self._assault_color,
-				font_size = text_panel:h() - 6,
-				font = "fonts/font_medium_mf",
-			})
-			local _, _, w, h = text:text_rect()
-			text:set_size(w, h)
-			texts[text_index] = {
-				x = text_panel:w() + w * 0.5 + padding * 2,
-				text = text
-			}
-		end
-		while true do
-			local dt = coroutine.yield()
-			local last_text = texts[text_index]
-			if last_text and last_text.text then
-				if last_text.x + last_text.text:w() * 0.5 + padding < text_panel:w() then
-					text_index = text_index % #text_list + 1
-					create_new_text(text_panel, text_list, text_index, texts)
-				end
-			else
-				text_index = text_index % #text_list + 1
-				create_new_text(text_panel, text_list, text_index, texts)
-			end
-			local speed = 90
-			for i, data in pairs(texts) do
-				if data.text then
-					data.text:configure({
-						color = color_function and color_function() or color or self._assault_color,
-						font_size = text_panel:h() - 6,
+	local anim_text = HUDAssaultCorner._animate_text
+	function HUDAssaultCorner:_animate_text(text_panel, ...)
+		local done
+		BeardLib:AddUpdater("HoloFixBlendMode", function()
+			for _, child in pairs(text_panel:children()) do
+				if getmetatable(child) == Text then
+					child:configure({
+						blend_mode = "normal",
+						font = "fonts/font_medium_mf",
+						color_function and color_function() or color or self._assault_color,
+						font_size = text_panel:h() - 6
 					})
-					managers.hud:make_fine_text(data.text)
-					data.x = data.x - dt * speed
-					data.text:set_center_x(data.x)
-					data.text:set_center_y(text_panel:h() * 0.5)
-					if 0 > data.x + data.text:w() * 0.5 then
-						text_panel:remove(data.text)
-						data.text = nil
-					end
+					local _, _, w, h = child:text_rect()
+					child:set_size(w, h)
 				end
 			end
-			start_speed = nil
-		end
+			if done then
+				BeardLib:RemoveUpdater("HoloFixBlendMode")
+			end
+		end)
+		anim_text(self, text_panel, ...)
+		done = true
 	end
 	Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
 		if alive(self._casing_bg_box) then

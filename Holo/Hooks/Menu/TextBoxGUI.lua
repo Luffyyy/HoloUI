@@ -2,9 +2,13 @@ if Holo.Options:GetValue("Base/Menu") then
 	Hooks:PostHook(TextBoxGui, "add_background", "HoloAddBackground", function(self)
 		self._background:hide()
 	end)
+	Hooks:PostHook(TextBoxGui, "init", "HoloInit", function(self)
+		self._scroll_panel:child("text"):set_color(Holo:GetColor("TextColors/Menu"))
+	end)
 	Hooks:PostHook(TextBoxGui, "_setup_buttons_panel", "HoloSetupButtonsPanel", function(self, info_area, button_list, focus_button, only_buttons)
 		local has_buttons = button_list and #button_list > 0		
 		local buttons_panel = info_area:child("buttons_panel")
+		self._panel:child("title"):set_color(Holo:GetColor("TextColors/Menu"))
 		info_area:child("info_bg"):set_color(Holo:GetColor("Colors/MenuBackground"))
 		if has_buttons then
 			buttons_panel:child("selected"):configure({

@@ -148,4 +148,8 @@
    "Holo/BottomLeft" : "Bottom Left",
    "Holo/BottomCenter" : "Bottom Center",
    "Holo/BottomRight" : "Bottom Right"
+   "Holo/BottomRight" : "Bottom Right",
+   "Holo/AutomaticTextColorsOptionIsOn" : "Some options have been disabled because automatic text colors option is on",
+   "Holo/AutomaticTextColors" : "Automatic Text Colors",
+   "Holo/AutomaticTextColorsHelp" : "The mod will decide which text color is suitable for the background that you set, for example if you have a black background for some hud element it will set the text color to white",
 }

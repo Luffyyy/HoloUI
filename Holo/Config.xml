@@ -38,7 +38,6 @@
       <hook source_file="lib/managers/hud/hudobjectives" file="Hud/HudObjectives.lua" />
       <hook source_file="lib/managers/hud/hudchat" file="Hud/HudChat.lua" />
       <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammate.lua" />
-      <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammateCompact.lua" />
       <hook source_file="lib/managers/hud/hudtemp" file="Hud/HudTemp.lua" />
       <hook source_file="lib/managers/hud/hudhint" file="Hud/HudHint.lua" />
       <hook source_file="lib/managers/hud/hudpresenter" file="Hud/HudPresenter.lua" />
@@ -92,7 +91,6 @@
          <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" />
 
          <option type="boolean" default_value="true" name="Voice" />
-         <option type="boolean" default_value="false" name="CompactTeammate" />  
          <option type="boolean" default_value="true" beforetext="Modified" name="HudBox" />  
          <option type="boolean" default_value="true" beforetext="Modified" name="Chat" />
          <option type="boolean" default_value="true" beforetext="Modified" name="TeammateHud" />

@@ -1,3 +1,8 @@
+if not ModCore then
+	log("[ERROR][Holo] BeardLib is not installed!")
+	return
+end
+
 Holo = Holo or ModCore:new(ModPath .. "Config.xml", false, true)
 function Holo:init()
 	self:init_modules()

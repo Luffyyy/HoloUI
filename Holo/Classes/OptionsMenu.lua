@@ -238,10 +238,13 @@ function self:OpenSetColorDialog(menu, item)
             local m = menu:Menu({
                 name = "premadcolors",
                 align_method = "grid",
+                auto_height = true,
                 size_by_text = true
             })
             local premade_color = function(name, color)
-                m:Button({name = "color_"..name, text = name, marker_color = color})
+                m:Button({name = "color_"..name, text = name, marker_color = color, marker_highlight_color = color, callback = function()
+                    self._color_dialog:set_color(color)
+                end})
             end
             premade_color("Blue", Color(0.2, 0.6 ,1))
             premade_color("Orange", Color(1, 0.6, 0))
@@ -249,13 +252,14 @@ function self:OpenSetColorDialog(menu, item)
             premade_color("Pink", Color(1, 0.25, 0.7))
             premade_color("Black", Color(0, 0, 0))
             premade_color("Grey", Color(0.15, 0.15, 0.15))
-            premade_color("DarkBlue", Color(0.1, 0.1, 0.35))
+            premade_color("Light Grey", Color(0.8, 0.8, 0.8))
+            premade_color("Dark Blue", Color(0.1, 0.1, 0.35))
             premade_color("Red", Color(1, 0.1, 0))
             premade_color("Yellow", Color(1, 0.8, 0.2))
             premade_color("White", Color(1, 1, 1))
             premade_color("Cyan", Color(0, 1, 0.9))
             premade_color("Purple", Color(0.5, 0, 1))
-            premade_color("SpringGreen", Color(0, 0.9, 0.5))
+            premade_color("Spring Green", Color(0, 0.9, 0.5))
             premade_color("Light Blue", Color(0.6, 0.8, 0.85))
             premade_color("Crimson", Color(1, 0, 0.2))
             premade_color("Brown", Color(0.6, 0.3, 0.3))

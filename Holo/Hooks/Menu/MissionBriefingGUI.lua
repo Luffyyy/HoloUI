@@ -84,7 +84,7 @@ Hooks:PostHook(MissionBriefingGui, "init", "HoloInit", function(self)
 	self._ready_button:set_font_size(tweak_data.menu.pd2_medium_font_size)
 	managers.hud:make_fine_text(self._ready_button)
 	self._ready_button:set_rightbottom(self._panel:w(), self._panel:h() + 105)
-	self._multi_profile_item:panel():set_bottom(self._panel:h() + 105)
+	self._multi_profile_item:panel():set_bottom(self._panel:h() + 110)
 	self._ready_tick_box:hide()
 	self._fullscreen_panel:child("ready_big_text"):hide()
 	for _, child in pairs(self._panel:children()) do 

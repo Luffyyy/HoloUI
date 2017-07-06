@@ -101,6 +101,7 @@
 	"Holo/TeammateAI": "AI Teammate",
 	"Holo/HudSpacing": "Hud Abstand",
 	"Holo/DisableLobbyVideo": "Auftrags Video in Lobby",
+	"Holo/DisableLoadingTips" : "Spiel Tipps zum Einlegen von Bildschirm",
 	"Holo/Interaction": "Interaktions Leiste",
 	"Holo/Captions": "Untertitel",
 	"Holo/EnemyHealth": "Gegner Gesundheit",

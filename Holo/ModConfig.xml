@@ -112,6 +112,7 @@
             <option type="boolean" default_value="false" name="UpperCaseNames" />      
             <option type="boolean" default_value="true" name="TimerBackground"/>      
             <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" />
+            <option type="boolean" default_value="false" beforetext="Disable" name="DisableLoadingTips" />
             <div name="Positions" />
             <option_group name="Positions" menu="Extra">
                <option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />

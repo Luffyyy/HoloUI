@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	Hooks:PostHook(SpecializationTabItem, "init", "HoloInit", function(self)
 		self._spec_tab:child("spec_tab_select_rect"):set_image("units/white_df")
 		self._spec_tab:child("spec_tab_select_rect"):move(0, -4)

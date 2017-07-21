@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 
 Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_ws, node )
 	Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
@@ -22,7 +22,7 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 	end
 	self._map_panel:rect({
 		name = "background",
-		color = Holo:GetColor("Colors/MenuBackground"),
+		color = Holo:GetColor("Colors/Menu"),
 		alpha = Holo.Options:GetValue("MenuBackground") and 1 or 0,
 		valign = "scale",
 		halign = "scale",
@@ -31,7 +31,7 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 		self._panel:child("filter_button"):set_color(Holo:GetColor("TextColors/Menu"))
 	end
 	self._panel:child("legends_button"):set_color(Holo:GetColor("TextColors/Menu"))
-	self._map_panel:child("map"):set_alpha(Holo.Options:GetValue("Menu/ColoredBackground") and 0 or 1)
+	self._map_panel:child("map"):set_alpha(Holo.Options:GetValue("ColoredBackground") and 0 or 1)
 end)
 
 Hooks:PostHook(CrimeNetGui, "_create_job_gui", "HoloCreateJobGUI", function(self)

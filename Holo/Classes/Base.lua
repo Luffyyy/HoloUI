@@ -52,10 +52,6 @@ function Holo:GetFrameStyle(setting)
 	return self.Options:GetValue("FrameStyles/Enable") and self.Options:GetValue("FrameStyles/" .. setting) or self.Options:GetValue("FrameStyle")
 end
 
-function Holo:GetAlpha(setting)
-	return self.Options:GetValue("HudAlpha")
-end
-
 function Holo:GetColor(setting, vec)
 	local color = self.Options:GetValue(setting) or self.Options:GetValue("Colors/Main") or Color.white
 	if setting:match("TextColors") then
@@ -136,9 +132,6 @@ function Holo:ShouldModify(c, o)
 			inform("WolfHUD")
 			return false	
 		end
-	end
-	if o == "TeammateHud" and HUDTeammateCustom then
-		inform("CustomHud")
 	end
 	return self.Options:GetValue(o)
 end

@@ -1,12 +1,11 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	core:import("CoreMenuNodeGui")
 	local o_init = MenuNodeGui.init
 	function MenuNodeGui:init(node, layer, params)
 		params.row_item_color = Holo:GetColor("TextColors/Menu")
 		params.row_item_hightlight_color = Holo:GetColor("TextColors/MenuHighlighted")
 		params.row_item_blend_mode = "normal"
-		params.font_size = Holo.TextSizes[Holo.Options:GetValue("Menu/TextSize")]
-		params.marker_alpha = Holo.Options:GetValue("Menu/MarkerAlpha")
+		params.font_size = Holo.Options:GetValue("TextSize")
 		params.marker_color = Holo:GetColor("Colors/Marker")
 		params.marker_disabled_color = Color(0.1, 0.1, 0.1)
 		o_init(self, node, layer, params)
@@ -22,7 +21,6 @@ if Holo.Options:GetValue("Base/Menu") then
 		self._marker_data.gradient = self._marker_data.marker:rect({
 			halign = "grow",
 			valign = "grow",
-			alpha = Holo.Options:GetValue("Menu/MarkerAlpha"),
 			color = Holo:GetColor("TextColors/MenuHighlighted")
 		})
 		if self.marker_color ~= tweak_data.screen_colors.button_stage_3 or self.marker_color ~= tweak_data.screen_colors.button_stage_2 then
@@ -76,7 +74,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		if self._old_center_y then
 			self._marker_data.marker:set_world_center_y(self._old_center_y)
 		end
-		Swoosh:work(self._marker_data.marker, 
+		QuickAnim:Work(self._marker_data.marker, 
 			"world_center_y", row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel and row_item.gui_text:world_center_y() or panel:world_center_y(),
 			"speed", 15
 		)

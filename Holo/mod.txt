@@ -1,15 +1,9 @@
 {  
    "name":"HoloUI",
-   "description":"A UI Mod inspired by Google's Material Design",
+   "description":"A highly customizable UI for payday 2",
    "author":"Luffy",
-   "version":"1.2",
+   "version":"2.0",
    "priority":15,
-   "updates":[  
-      {  
-         "revision" : 79,
-         "identifier" : "HoloHud"
-      }
-   ],
    "libraries":[  
       {  
          "display_name":"BeardLib",

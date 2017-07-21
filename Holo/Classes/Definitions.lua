@@ -1,25 +1,5 @@
 Holo.CustomTextures = {}
 Holo.Updaters = {}
-Holo.Colors = { -- Add/Remove Colors!
-	{color = Color(0.2 ,0.6 ,1), name = "Prefered"},
-	{color = Color(0.2, 0.6 ,1 ), name = "Blue"},	  	 
-	{color = Color(1,0.6 ,0), name = "Orange"},
-	{color = Color(0, 1, 0.1), name = "Green"},	
-	{color = Color(1, 0.25, 0.7), name = "Pink"},				 
-	{color = Color(0, 0, 0), name = "Black"},		 		 
-	{color = Color(0.15, 0.15, 0.15), name = "Grey"},
-	{color = Color(0.1, 0.1, 0.35), name = "DarkBlue"},	
-	{color = Color(1, 0.1, 0), name = "Red"},	
-	{color = Color(1, 0.8, 0.2), name = "Yellow"},	
-	{color = Color(1, 1, 1), name = "White"},
-	{color = Color(0, 1, 0.9), name = "Cyan"},
-	{color = Color(0.5, 0, 1), name = "Purple"},
-	{color = Color(0, 0.9, 0.5), name = "SpringGreen"},
-	{color = Color(0.6,0.8,0.85), name = "Light Blue"},
-	{color = Color(1, 0, 0.2), name = "Crimson"},
-	{color = Color(0.6, 0.3, 0.3), name = "Brown"},
-	{color = Color(0.7, 0.9, 0), name = "Lime"},
-}
 Holo.Voices = { -- Add/Remove Voices!
 	["f40_any"] = "Move",
 	["l03x_sin"] = "And cuffs!",
@@ -54,42 +34,24 @@ Holo.Voices = { -- Add/Remove Voices!
 }
 Holo.VoiceMaxPerRow = 5
 Holo.Loot = {}
-Holo.TextSizes = {
-	20,
-	24,
-	30
-}
-Holo.AllColorsStrings = Holo.AllColorsStrings or {} 
-Holo.RadialColors = {
-	"Holo/Blue",
-	"Holo/Orange",
-	"Holo/Green", 
-	"Holo/Pink", 
-	"Holo/Yellow",
-	"Holo/White", 
-	"Holo/Red", 
-	"Holo/Cyan",
-	"Holo/SpringGreen",
-	"Holo/DarkBlue",
-	"Holo/Purple",
-	"Holo/Lime",
-	"Holo/Black",
-} 
 Holo.RadialNames = {
 	"Blue",
 	"Orange",
 	"Green", 
 	"Pink", 
 	"Yellow",
-	"White", 
-	"Red", 
+	"White",
+	"Red",
 	"Cyan",
 	"SpringGreen",
 	"DarkBlue",
 	"Purple",
 	"Lime",
 	"Black",
-} 
+}
+Holo.RadialColors = clone(Holo.RadialNames)
+for i, name in pairs(Holo.RadialColors) do Holo.RadialColors[i] = "Holo/"..name end
+
 Holo.TextSizesStrings = {
 	"Holo/Small",
 	"Holo/Normal",

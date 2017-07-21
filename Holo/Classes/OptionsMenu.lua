@@ -1,390 +1,233 @@
-HoloMenu = HoloMenu or class()
-function HoloMenu:init()
-    MenuUI:new({
-        background_alpha = 0.65,
-        layer = tweak_data.gui.MOUSE_LAYER - 190,
-        text_color = Holo:GetColor("TextColors/Menu"),        
-        background_color = Holo:GetColor("Colors/MenuBackground"),
-        text_highlight_color = Holo:GetColor("TextColors/MenuHighlighted"),
-        marker_alpha = 0,
-        marker_highlight_color = Holo:GetColor("Colors/Marker"),
-        mouse_press = callback(self, self, "MousePressed"),
-        mouse_move = callback(self, self, "MouseMoved"),
+Holo.Menu = Holo.Menu or {}
+local self = Holo.Menu
+function self:Init()
+    local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
+    local background_color = Holo:GetColor("Colors/Menu")
+    self._menu = MenuUI:new({
+        accent_color = accent_color,
+        text_highlight_color = accent_color,
+        marker_highlight_color = false,
+        always_mouse_press = callback(self, self, "MousePressed"),
+        always_mouse_move = callback(self, self, "MouseMoved"),
         mouse_release = callback(self, self, "MouseReleased"),
-        w = "half",
-        align = "left",
-        offset = 4,
+        offset = {8, 6},
+        layer = 400,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
-        toggle_clbk = function(closed)
+        toggle_clbk = function(enabled)
             if managers.hud then
-                managers.hud._chatinput_changed_callback_handler:dispatch(not closed)
+                managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
             end
         end,
-        create_items = callback(self, self, "CreateItems"),
     })
-end
-function HoloMenu:CreateItems(menu)
-    self._menu = menu
-    self._tabs = menu:NewMenu({
-        background_alpha = 0,
+    self._tabs = self._menu:Menu({
         name = "tabs",
+        background_alpha = 0.5,
+        border_color = self._menu.text_highlight_color,
+        background_color = background_color,
         h = 30,
-        w = "full",
+        w = "half",
         items_size = 20,
-        align = "center",
-        visible = true,
-        position = {10, 10},
+        text_align = "center",
         size_by_text = true,
-        row_max = 1,
+        align_method = "grid"
     })
     self._menus = {
         main = self:Menu("Main"),
         colors = self:Menu("Colors"),
-        textcolors = self:Menu("TextColors"),
         extra = self:Menu("Extra"),
     }
-    self._customcolors = self:Menu("CustomColors")
     local close = self._tabs:Button({
         name = "Close",
         text = "Holo/Close",
+        ignore_align = true,
+        position = function(item) item:Panel():set_rightbottom(item:Panel():parent():rightbottom()) end,
         localized = true,
         callback = MenuCallbackHandler.OpenHoloMenu
     })
-    close:Panel():child("bg"):set_h(2)
-    close:Panel():child("bg"):set_rotation(360)
-    close:Panel():child("bg"):set_y(close:Panel():h() + 2)
+    close:Panel():child("bg"):configure({h = 2, rotation = 360, y = close:Panel():h() + 2})
 
-    self._current_menu = main    
-    for k, v in ipairs(Holo.Colors) do
-        table.insert(Holo.AllColorsStrings, v.custom and v.name or managers.localization:text("Holo/" .. v.name))
-    end
-    Holo.ColorsStrings = {}
-    for k, v in pairs(Holo.AllColorsStrings) do
-        if k ~= 1 then
-            table.insert(Holo.ColorsStrings, v)
-        end
-    end
-    self:CreateGroupOptions(Holo.Options._config.options)
-    self:CreateCustomColorsMenu(self._customcolors)
-    for k, optmenu in pairs(self._menus) do
-        optmenu:Button({
-            name = "Reset",
-            text = "Holo/Reset",
-            localized = true,
-            callback = callback(self, self, "ResetOptions", false),
-        })
-    end
-    self._menus.main:Button({
-        name = "Reset",
-        text = "Holo/ResetAll",
-        localized = true,
-        callback = callback(self, self, "ResetOptions", true),
-    })
-    local panel = self._menu._fullscreen_ws_pnl
-
-    local resize_panel = panel:panel({
+    self._resize = self._menu._panel:panel({
         name = "resize_panel",
         w = 4,
+        x = self._menus.main.panel:right(),
         layer = self._menu._panel:layer() + 1,
-        x = self._menu._panel:right(),
-    })    
-    resize_panel:rect({
-        color = Holo:GetColor("Colors/Marker")
     })
+    self._resize:rect({color = Holo:GetColor("Colors/Marker")})
+    self._color_dialog = ColorDialog:new({marker_highlight_color = accent_color, background_color = background_color, no_blur = true})
+    for name, menu in pairs(self._menus) do
+        self["Create"..string.capitalize(name).."Menu"](self, menu)
+    end
+    self:SwitchMenu("Main")
 end
 
-function HoloMenu:Loc(s)
-    return "Holo/" .. s
-end
-
-function HoloMenu:CreateGroupOptions(group, parent_name)
-    for _, setting in ipairs(group) do  
-        local group_name = group.name or "Main"
-        local menu = self._menu:GetItem(group_name, true)
-        if type(setting) == "table" and setting._meta ~= "option_set" then
-            if setting._meta == "option_group" then
-                self:CreateGroupOptions(setting, group_name)
+function self:CreateItem(upper, setting, menu)
+    if setting.menu then
+        menu = menu:GetMenu(setting.menu)
+    end
+    local type = setting.type
+    local name = setting.name
+    local opt = {
+        text = setting.beforetext and self:BeforeText(setting.beforetext, setting.text or name),
+        localized = not setting.beforetext,
+        items_small = setting.items_small,
+        index = setting.index,
+        help = setting.help,
+        floats = setting.floats,
+        items = setting.items,
+        min = setting.min,
+        max = setting.max
+    }
+    if upper then
+        name = upper.."/"..name
+    end
+    if menu and (not menu:GetItem(name) or setting._meta and not menu:GetMenu(name)) then
+        if type == "number" then
+            if setting.menu_type == "combo" then
+                self:ComboBox(menu, name, opt)
+            elseif setting.min and setting.max then
+                self:Slider(menu, name, opt)
             else
-                if parent_name and parent_name ~= "Main" then 
-                    group_name = parent_name .. "/" .. group_name
-                end
-                local name = (group_name ~= "Main" and group_name .. "/" or "") .. setting.name
-                local _menu = group.menu or setting.menu
-                if _menu then
-                    menu = self._menu:GetItem(_menu, true)
-                end         
-                local txt = self:Loc(setting.name)
-                if not menu:GetItem(name) then
-                    local items = Holo[setting.items] or Holo.AllColorsStrings
-                    local loc_items = items ~= Holo.AllColorsStrings and items ~= Holo.ColorsStrings
-                    if group.name and group.name:match("Colors") and setting._meta == "option" and setting.type == "number" then
-                        local outside = menu.name ~= group.name
-                        self:ComboBox(menu, name, outside and self:TitleColor(setting.name, group.name, setting.beforetext) or txt, items, nil, true, not outside, loc_items, setting.index)
-                    else
-                        if setting.type == "number" then       
-                            if setting.menu_type == "combo" then
-                                self:ComboBox(menu, name, txt, items, nil, not loc_items, true, loc_items, setting.index)
-                            else
-                                if setting.min and setting.max then
-                                    self:Slider(menu, name, txt, setting.min, setting.max, nil, setting.floats, true, setting.index)
-                                else
-                                    self:NumberBox(menu, name, txt, nil, setting.floats, true, setting.index)
-                                end
-                            end
-                        elseif setting.type == "boolean" then
-                            self:Toggle(menu, name, self:BeforeText(setting.beforetext or "Enable", setting.text or setting.name), nil, false, setting.index)
-                        elseif setting._meta == "div" then
-                            self:Divider(menu, setting.text or setting.name, setting.beforetext and self:BeforeText(setting.beforetext, setting.name))
-                        else
-                            menu:KeyBind({
-                                name = name,
-                                text = txt,
-                                localized = true,
-                                value = Holo.Options:GetValue(name),
-                                callback = callback(self, self, "MainClbk")
-                            })
-                        end
-                    end                    
-                end
+                self:NumberBox(menu, name, opt)
+            end
+        elseif type == "boolean" then
+            self:Toggle(menu, name, opt)
+        elseif setting._meta == "div" then
+            self:DivGroup(menu, name, opt)
+        elseif type == "string" then
+            self:KeyBind(menu, name, opt)
+        end
+    end
+end
+
+function self:CreateMainMenu(menu)
+    menu:ClearItems()
+    self:Button(menu, "ResetAll", {callback = callback(self, self, "ResetOptions", true)})
+    self:Button(menu, "Reset", {callback = callback(self, self, "ResetOptions")})
+    for _, setting in ipairs(Holo.Options._config.options) do
+        self:CreateItem(nil, setting, menu)
+    end
+end
+
+function self:CreateExtraMenu(menu)
+    menu:ClearItems()
+    self:Button(menu, "Reset", {callback = callback(self, self, "ResetOptions")})
+    for _, v in ipairs(Holo.Options._config.options) do
+        if v.name == "Positions" or v.name == "FrameStyles" then
+            local group = menu:DivGroup({name = self:Loc(v.name), localized = true})
+            for _, setting in ipairs(v) do
+               self:CreateItem(v.name, setting, group)
             end
         end
     end
 end
-function HoloMenu:CreateCustomColorsMenu(menu)
-    self:Divider(menu, "CustomColorsDesc")
-    self:Divider(menu, "Preview", "")
-    self:TextBox(menu, "Name", nil, callback(self, self, "UpdateColor"), true)
-    self:Slider(menu, "Red", nil, 0, 1, callback(self, self, "UpdateColor"), 2, true)
-    self:Slider(menu, "Green", nil, 0, 1, callback(self, self, "UpdateColor"), 2, true)
-    self:Slider(menu, "Blue", nil, 0, 1, callback(self, self, "UpdateColor"), 2, true)
-    self:Button(menu, "Apply", nil, callback(self, self, "ApplyColor"), true, {8, 4})
-    self:Button(menu, "New", nil, callback(self, self, "SetCurrentCustomColor"), true, {8, 4})
-    self:UpdateColor(menu)
-    self:Divider(menu, "Saved")
-    for k, v in pairs(Holo.Options:GetOption("CustomColors")) do
-        if type(v) == "table" and v.value then
-            self:CreateColor(menu, k, v.value.name, v.value.color)
+
+function self:CreateColorsMenu(menu)
+    menu:ClearItems()
+    self:Button(menu, "Reset", {callback = callback(self, self, "ResetOptions")})
+    self:Toggle(menu, "Colors/ColorizeTeammates", {text = "ColorizeTeammates"})
+    local auto_textcolor = self:Toggle(menu, "TextColors/AutomaticTextColors", {text = "AutomaticTextColors", help = "AutomaticTextColorsHelp"})
+    self:ColorTextBox(menu, "Colors/Main")    
+    local other = menu:DivGroup({name = "Other", text = self:Loc("Other"), localized = true, align_method = "grid"})
+
+    local options = {
+        {name = "Casing", background = true, text = true, frame = true},
+        {name = "Assault", background = true, text = true, frame = true},
+        {name = "NoPointOfReturn", background = true, text = true, frame = true},
+        {name = "Hostages", background = true, text = true, frame = true},
+        {name = "Objective", background = true, text = true, frame = true},
+        {name = "WavesSurvived", background = true, text = true, frame = true},
+        {name = "Presenter", background = true, text = true, frame = true},
+        {name = "Carrying", background = true, text = true, frame = true},
+        {name = "Timer", background = true, text = true, frame = true},
+        {name = "Menu", background = true, text = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "TextColors/MenuHighlighted", {w = w, text = "Highlight"})
+        end},
+        {name = "Tab", background = true, text = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "Colors/TabHighlighted", {w = w, text = "Highlight"})
+        end},
+        {name = "Hint", background = true, text = true},
+        {name = "Teammate", background = true, text = true},
+        {name = "Health", text = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "TextColors/HealthNeg", {w = w, text = "HealthNeg"})
+        end},
+        {name = "Marker", color = true},
+        {name = "Pickups", color = true},
+        {name = "SelectedWeapon", color = true},
+        {name = "Frame", color = true},
+        {name = "TeammateHost", color = true},
+        {name = "Teammate2", color = true},
+        {name = "Teammate3", color = true},
+        {name = "Teammate4", color = true},
+        {name = "TeammateAI", color = true},
+        {name = "Waypoints", color = true},
+        {name = "Interactable", color = true},
+        {name = "InteractableSelected", color = true},
+        {name = "DeployableStandard", color = true},
+        {name = "DeployableSelected", color = true},
+        {name = "DeployableActive", color = true},
+        {name = "DeployableInteract", color = true},
+        {name = "DeployableDisabled", color = true},
+        {name = "Captions", text = true},
+    }
+    for _, option in pairs(options) do
+        local i = table.size(option) - 1
+        local group
+        local text
+        if i == 1 then
+            group = other
+            text = option.name
+        else
+            group = menu:DivGroup({name = self:Loc(option.name), localized = true, align_method = "grid", index = other:Index()})
+        end
+        local w = group:Width() / i
+        if option.color then
+            self:ColorTextBox(group, "Colors/"..option.name, {w = w, text = text or "Color"})
+        end
+        if option.background then
+            self:ColorTextBox(group, "Colors/"..option.name, {w = w, text = text or "Background"})
+        end
+        if option.text then
+            self:ColorTextBox(group, "TextColors/"..option.name, {w = w, text = text or "Text", enabled = not auto_textcolor:Value() and option.background})
+        end
+        if option.frame then
+            self:ColorTextBox(group, "FrameColors/"..option.name, {w = w, text = text or "Frame"})
+        end
+        if option.custom then
+            option.custom(option, group, w)
         end
     end
+    self:ComboBox(other, "Colors/Health", {items = "RadialColors", text = "Health"})
+    self:ComboBox(other, "Colors/Armor", {items = "RadialColors", text = "Armor"})
+    self:ComboBox(other, "Colors/Progress", {items = "RadialColors", text = "Progress"})
+    self:ComboBox(other, "Colors/ProgressRed", {items = "RadialColors", text = "ProgressRed"})
 end
-function HoloMenu:CreateColor(menu, i, name, color)
-    local btn = menu:GetItem(self._current or i)
-    if self._current and self._current ~= i then
-        Holo.Options._storage.CustomColors[self._current] = nil
-        btn.name = i
-        self._current = i
-    end
-    if not btn then
-        btn = self:Button(menu, i, name, callback(self, self, "SetCurrentCustomColor"), false, {16, 2}, "After|Saved")
-        menu:Button({
-            name = "delete_" .. i,
-            text = "x",
-            override_parent = btn,
-            size_by_text = true,
-            position = "RightTop",
-            align = "center",
-            callback = function()
-                local v = Holo.init_colors + i
-                self:WorkValues(true, nil, function(item)
-                   if item.items and item.color and item.value > v then
-                        Holo.Options:SetValue(item.name, item.value - 1)   
-                    end                  
-                end)
-                Holo.Options._storage.CustomColors[i] = nil
-                Holo.Options:Save()
-                if self._current == i then
-                    menu:GetItem("New"):RunCallback()
-                end
-                menu:RemoveItem(btn)
-            end,
-            marker_highlight_color = Color.red,
-        })        
-    end
-    btn:SetColor(color)
-    btn:SetText(name)
-end
-function HoloMenu:SetCurrentCustomColor(menu, item)
-    local name = menu:GetItem("Name")
-    local red = menu:GetItem("Red")
-    local green = menu:GetItem("Green")
-    local blue = menu:GetItem("Blue")
-    local curr = menu:GetItem(self._current)         
-    if curr then
-        curr:SetParam("text_color", Holo:GetColor("TextColors/Menu"))
-        curr:SetParam("text_highlight_color", Holo:GetColor("TextColors/MenuHighlighted"))
-        curr:Panel():child("title"):set_color(Holo:GetColor("TextColors/Menu"))       
-    end
-    local same = self._current == item.name
-    self._current = nil
-    name:SetValue("", true)
-    red:SetValue(1, true)
-    green:SetValue(1, true)
-    blue:SetValue(1, true)   
-    if item.name == "New" or same then
-        return
-    end        
-    self._current = item.name
-    local col = Holo:GetColor("TextColors/MenuHighlighted")
-    item:SetParam("text_color", col)
-    item:SetParam("text_highlight_color", col)
-    item:Panel():child("title"):set_color(col)
-    name:SetValue(item.text, true)
-    red:SetValue(item.color.r, true)
-    green:SetValue(item.color.g, true)
-    blue:SetValue(item.color.b, true)
-end
-function HoloMenu:CurrentCustomColor()
-    local menu = self._customcolors
-    return Color(menu:GetItem("Red").value, menu:GetItem("Green").value, menu:GetItem("Blue").value)
-end
-function HoloMenu:UpdateColor(menu)
-    menu:GetItem("Preview"):SetParam("marker_color", self:CurrentCustomColor())
-    menu:GetItem("Preview"):SetParam("marker_highlight_color", self:CurrentCustomColor())
-    menu:GetItem("Preview"):SetParam("marker_alpha", 1)
-    menu:GetItem("Preview"):Panel():child("bg"):set_alpha(1)
-    menu:GetItem("Preview"):Panel():child("bg"):set_color(self:CurrentCustomColor())
-end
-function HoloMenu:ApplyColor(menu)
-    local name = menu:GetItem("Name").value
-    if name:len() <= 0 then
-        QuickMenu:new(managers.localization:text("Holo/Error"), managers.localization:text("Holo/ColorNameError"), {{text = managers.localization:text("Holo/Ok"), is_cancel_button = true}}, true)
-        return
-    end
-    local color = self:CurrentCustomColor()
-    local i = self._current or #Holo.Options._storage.CustomColors + 1
-    Holo.Options._storage.CustomColors[i] = {_meta = "option", type="option", name = i, value = {
-        name = name,
-        color = color,
-    }}
-    Holo.Options:Save()
-    self:CreateColor(menu, i, name, color)
-end
-function HoloMenu:SwitchMenu(menu)
-    menu = self._menu:GetItem(menu, true)
+
+function self:SwitchMenu(name)
+    local menu = self._menu:GetItem(name, true)
     if not menu then
-        Holo:log("[ERROR] Failed switching to menu %s", menu)
+        Holo:log("[ERROR] Failed switching to menu %s", name)
         return
     end
-    self._current_menu = self._current_menu or self._menu:GetItem("Main", true)
+    self._current_menu = self._current_menu or self._menu:GetMenu("Main")
     self._current_menu:SetVisible(false)
+    local tab = self._menu:GetItem(self._current_menu.name.."Tab")
+    tab:SetBorder({bottom = false})
+    tab = self._menu:GetItem(name.."Tab")
+    tab:SetBorder({bottom = true})
     self._current_menu = menu
     menu:SetVisible(true)
 end
-function HoloMenu:Button(menu, name, text, clbk, loc, offset, index)
-    return menu:Button({
-        name = name,
-        text = text or self:Loc(name),
-        index = index,
-        localized = loc,
-        offset = offset,
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:Toggle(menu, name, text, clbk, loc, index)
-    return menu:Toggle({
-        name = name,
-        text = text or self:Loc(name),
-        index = index,
-        localized = loc,
-        value = Holo.Options:GetValue(name),
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:Slider(menu, name, text, min, max, clbk, floats, loc, index)
-    return menu:Slider({
-        name = name,
-        text = text or self:Loc(name),
-        localized = loc,
-        min = min,
-        max = max,
-        index = index,
-        floats = floats,
-        value = Holo.Options:GetValue(name),
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:TextBox(menu, name, text, clbk, loc, index)
-    return menu:TextBox({
-        name = name,
-        text = text or self:Loc(name),
-        localized = loc,
-        index = index,
-        value = Holo.Options:GetValue(name),
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:NumberBox(menu, name, text, clbk, floats, loc, index)
-    return menu:NumberBox({
-        name = name,
-        text = text or self:Loc(name),
-        localized = loc,
-        index = index,
-        floats = floats,
-        value = Holo.Options:GetValue(name),
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:ComboBox(menu, name, text, items, clbk, color, loc, loc_items, index)
-    return menu:ComboBox({
-        name = name,
-        text = text or self:Loc(name),
-        localized = loc,
-        localized_items = loc_items,
-        color = color and Holo:GetColor(name), --MenuUI Acting weird with this.. :cc
-        value = Holo.Options:GetValue(name),
-        items = items,
-        index = index,
-        callback = clbk or callback(self, self, "MainClbk"),
-    })
-end
-function HoloMenu:Divider(menu, name, text)
-    return menu:Divider({
-        name = name,
-        text = text or self:Loc(name),
-        text_color = Holo:GetColor("Colors/Marker"),
-        color = Holo:GetColor("Colors/Marker"),
-        localized = not text and true,
-        items_size = 22,
-        index = index,
-    })
-end
-function HoloMenu:Menu(name)
-    local tab = self._tabs:Button({
-        name = name .. "Tab",
-        text = self:Loc(name),
-        localized = true,
-        callback = callback(self, self, "SwitchMenu", name)
-    })
-    tab:Panel():child("bg"):set_h(2)
-    tab:Panel():child("bg"):set_rotation(360)
-    tab:Panel():child("bg"):set_y(tab:Panel():h() + 2)
 
-    local new = self._menu:NewMenu({
-        name = name,
-        w = "full",
-        override_size_limit = true,
-        items_size = 18,
-        visible = not self._current_menu,
-        w = self._menu._panel:w() - 30,
-        h = self._menu._panel:h() - 60,
-        position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},
-    })
-    self._current_menu = self._current_menu or new
-    return new
-end
-function HoloMenu:MousePressed(button, x, y)
-    self._line_hold = button == Idstring("0") and self._menu._fullscreen_ws_pnl:child("resize_panel"):inside(x,y)
-end
-function HoloMenu:MouseReleased()
-    self._line_hold = nil
-end
-function HoloMenu:MouseMoved(x, y)
+function self:MouseMoved(x, y)
     if self._line_hold and self._menu._old_x then
-        self._menu._panel:grow(x - self._menu._old_x)
-        self._menu._fullscreen_ws_pnl:child("resize_panel"):set_left(self._menu._panel:right())
+        for _, menu in pairs(self._menu._menus) do
+            menu:Panel():grow(x - self._menu._old_x)
+        end
+        self._resize:set_left(self._menus.main.panel:right())
     end
 end
-function HoloMenu:ResetOptions(all, menu)   
+
+function self:ResetOptions(all, menu)   
     self:WorkValues(all, menu, function(item)
         local option = Holo.Options:GetOption(item.name)
         if option then
@@ -393,38 +236,190 @@ function HoloMenu:ResetOptions(all, menu)
         end        
     end)
 end
-function HoloMenu:WorkValues(all, menu, func)
-    local ResetOptions = function(list)
+
+function self:WorkValues(all, menu, func)
+    local ResetOptions
+    ResetOptions = function(list)
         for _, item in pairs(list) do
-            func(item)
+            if item.menu_type then
+                ResetOptions(item._my_items)
+            else
+                func(item)
+            end
         end 
         Holo.Options:Save()
         self:MainClbk()           
     end
     if all then
         for _, optmenu in pairs(self._menus) do
-            ResetOptions(optmenu._items)
+            ResetOptions(optmenu._my_items)
         end
     else
-        ResetOptions(menu._items)
+        ResetOptions(menu._my_items)
     end
 end
-function HoloMenu:MainClbk(menu, item)
+
+function self:Set(name, value)
+    Holo.Options:SetValue(name, value)        
+    Holo.Options:Save()
+end
+
+function self:MainClbk(menu, item)
     if item then
-        Holo.Options:SetValue(item.name, item.value)        
-        Holo.Options:Save()   
+        self:Set(item.name, item:Value())
         if item.items and item.color then
             item:SetColor(Holo:GetColor(item.name))
-        end           
+        end   
+        if item.name == "TextColors/AutomaticTextColors" then
+            self:CreateColorsMenu(self._menus.colors)
+        end
     end
-    Holo:UpdateSettings()        
+    Holo:UpdateSettings()
     self._menu:SetParam("toggle_key", Holo.Options:GetValue("OptionsKey"))
 end
-function HoloMenu:BeforeText(beforetext, text, add)
-    return managers.localization:text(self:Loc(beforetext), {option = managers.localization:text(self:Loc(text)) .. (add and managers.localization:text(self:Loc(add)) or "")})
+
+function self:OpenSetColorDialog(menu, item)
+	local option = item.name
+    self._color_dialog:Show({
+        color = Holo.Options:GetValue(option), 
+        callback = function(color)
+            self:Set(option, color)
+            item:SetValue(color:to_hex())
+            Holo:UpdateSettings()
+        end, 
+        create_items = function(menu)
+            local m = menu:Menu({
+                name = "premadcolors",
+                align_method = "grid",
+                auto_height = true,
+                size_by_text = true
+            })
+            local premade_color = function(name, color)
+                m:Button({name = "color_"..name, text = name, auto_text_color = true, marker_color = color, marker_highlight_color = color, callback = function()
+                    self._color_dialog:set_color(color)
+                end})
+            end
+            premade_color("Blue", Color(0.2, 0.6 ,1))
+            premade_color("Orange", Color(1, 0.6, 0))
+            premade_color("Green", Color(0, 1, 0.1))
+            premade_color("Pink", Color(1, 0.25, 0.7))
+            premade_color("Black", Color(0, 0, 0))
+            premade_color("Grey", Color(0.15, 0.15, 0.15))
+            premade_color("Light Grey", Color(0.8, 0.8, 0.8))
+            premade_color("Dark Blue", Color(0.1, 0.1, 0.35))
+            premade_color("Red", Color(1, 0.1, 0))
+            premade_color("Yellow", Color(1, 0.8, 0.2))
+            premade_color("White", Color(1, 1, 1))
+            premade_color("Cyan", Color(0, 1, 0.9))
+            premade_color("Purple", Color(0.5, 0, 1))
+            premade_color("Spring Green", Color(0, 0.9, 0.5))
+            premade_color("Light Blue", Color(0.6, 0.8, 0.85))
+            premade_color("Crimson", Color(1, 0, 0.2))
+            premade_color("Brown", Color(0.6, 0.3, 0.3))
+            premade_color("Lime", Color(0.7, 0.9, 0))
+        end
+    })
 end
-function HoloMenu:TitleColor(setting, group, add)
+
+function self:TitleColor(setting, group, add)
     local is_text = group and group:match("Text")
     return self:BeforeText(is_text and "TextColor" or "Color", setting, add)  
 end
- 
+
+--Item creation functions
+function self:BasicItem(menu, name, opt)
+    opt = opt or {}
+    local splt = string.split(name, "/")
+    local text = opt.text or splt[#splt]
+    local help = opt.help
+    local items = Holo[opt.items]
+    opt.text = nil
+    opt.items = nil
+    opt.help = nil
+    return table.merge({
+        name = name,
+        text = opt.localized ~= false and self:Loc(text) or text,
+        items = items,
+        localized = true,
+        localized_items = true,
+        inherit = self._menus.main,
+        help = help and self:Loc(help),
+        help_localized = true,
+        size_by_text = menu.align_method == "grid",
+        value = Holo.Options:GetValue(name),
+        callback = callback(self, self, "MainClbk"),        
+    }, opt)
+end
+
+function self:Toggle(menu, name, opt)
+    return menu:Toggle(self:BasicItem(menu, name, opt))
+end
+
+function self:Slider(menu, name, opt)
+    return menu:Slider(self:BasicItem(menu, name, opt))
+end
+
+function self:NumberBox(menu, name, opt)
+    return menu:NumberBox(self:BasicItem(menu, name, opt))
+end
+
+function self:ComboBox(menu, name, opt)
+    return menu:ComboBox(self:BasicItem(menu, name, opt))
+end
+
+function self:KeyBind(menu, name, opt)
+    return menu:KeyBind(self:BasicItem(menu, name, opt))
+end
+
+function self:Button(menu, name, opt)
+    return menu:Button(self:BasicItem(menu, name, opt))
+end
+
+function self:DivGroup(menu, name, opt)
+    return menu:DivGroup(self:BasicItem(menu, name, table.merge(opt, {
+        align_method = opt.items_small and "grid",
+        private = {
+            text_color = Holo:GetColor("Colors/Marker"),
+            color = Holo:GetColor("Colors/Marker"),
+            last_y_offset = 0,
+            items_size = 22
+        },
+    })))
+end
+
+function self:ColorTextBox(menu, name, opt)
+    return menu:ColorTextBox(self:BasicItem(menu, name, table.merge(opt or {}, {
+        value = Holo.Options:GetValue(name):to_hex(),
+        show_color_dialog = callback(self, self, "OpenSetColorDialog")
+    })))
+end
+
+function self:Menu(name)
+    local tab = self._tabs:Button({
+        name = name .. "Tab",
+        text = self:Loc(name),
+        localized = true,
+        callback = callback(self, self, "SwitchMenu", name)
+    })
+    local new = self._menu:Menu({
+        name = name,
+        w = "half",
+        items_size = 18,
+        background_alpha = 0.5,
+        background_color = Holo:GetColor("Colors/Menu"),        
+        visible = not self._current_menu,
+        h = self._menu._panel:h() - 35,
+        position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},
+    })
+    self._current_menu = self._current_menu or new
+    return new
+end
+
+--Short functions
+function self:BeforeText(beforetext, text, add)
+    local loc = managers.localization
+    return loc:text(self:Loc(beforetext), {option = loc:text(self:Loc(text)) .. (add and loc:text(self:Loc(add)) or "")}) 
+end
+function self:MousePressed(button, x, y) self._line_hold = button == Idstring("0") and self._resize:inside(x,y) end
+function self:MouseReleased() self._line_hold = nil end
+function self:Loc(s) return "Holo/" .. s end

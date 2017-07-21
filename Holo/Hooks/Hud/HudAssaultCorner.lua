@@ -115,18 +115,16 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_show_icon_assaultbox(icon)
 		icon:set_alpha(1)
-		Swoosh:work(icon, "rotation", 360, "callback", function()
+		QuickAnim:Work(icon, "rotation", 360, "callback", function()
 			icon:set_rotation(0)
 		end)
 	end
 	function HUDAssaultCorner:left_grow(o, clbk)
 		local right = o:right()
-		Swoosh:work(o, 
+		QuickAnim:Work(o, 
 			"w", self._box_width, 
 			"speed", 4,
-			"after", function()
-				o:set_right(right)
-			end,
+			"sticky_right", right,
 			"callback", clbk
 		)
 	end	
@@ -136,7 +134,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self._bg_box:child("text_panel"):stop()
 			self._bg_box:show()
 			self:left_grow(self._bg_box)
-	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, Holo:GetColor("TextColors/Assault"))
+	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, nil, function() return Holo:GetColor("TextColors/Assault") end)
 	 		if alive(self._wave_bg_box) then
 	 			self._wave_bg_box:child("bg"):stop()
 	 		end
@@ -146,7 +144,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		if self:is_safehouse_raid() then		
 			self._wave_bg_box:stop()
 			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 			self._hud_panel:child("assault_panel"):child("icon_assaultbox"):stop()
 			self:_close_assault_box()
 			self._wave_bg_box:child("bg"):stop()
@@ -158,75 +156,28 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		self:UpdateHolo()
 	end)
 	function HUDAssaultCorner:_update_assault_hud_color(color) end
-	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function)
-		local text_list = (bg_box or self._bg_box):script().text_list
-		local text_index = 0
-		local texts = {}
-		local padding = 10
-		local function create_new_text(text_panel, text_list, text_index, texts)
-			text_panel:set_size(600, text_panel:parent():h())
-			text_panel:set_center_x(10)
-			if texts[text_index] and texts[text_index].text then
-				text_panel:remove(texts[text_index].text)
-				texts[text_index] = nil
-			end
-			color_function = nil
-			local text_id = text_list[text_index]
-			local text_string = ""
-			if type(text_id) == "string" then
-				text_string = managers.localization:to_upper_text(text_id)
-			elseif text_id == Idstring("risk") then
-				for i = 1, managers.job:current_difficulty_stars() do
-					text_string = text_string .. managers.localization:get_default_macro("BTN_SKULL")
-				end
-			end
-			local text = text_panel:text({
-				text = text_string,
-				align = "center",
-				vertical = "center",
-				blend_mode = color_function and "add",
-				color = color_function and color_function() or color or self._assault_color,
-				font_size = text_panel:h() - 6,
-				font = "fonts/font_medium_mf",
-			})
-			local _, _, w, h = text:text_rect()
-			text:set_size(w, h)
-			texts[text_index] = {
-				x = text_panel:w() + w * 0.5 + padding * 2,
-				text = text
-			}
-		end
-		while true do
-			local dt = coroutine.yield()
-			local last_text = texts[text_index]
-			if last_text and last_text.text then
-				if last_text.x + last_text.text:w() * 0.5 + padding < text_panel:w() then
-					text_index = text_index % #text_list + 1
-					create_new_text(text_panel, text_list, text_index, texts)
-				end
-			else
-				text_index = text_index % #text_list + 1
-				create_new_text(text_panel, text_list, text_index, texts)
-			end
-			local speed = 90
-			for i, data in pairs(texts) do
-				if data.text then
-					data.text:configure({
+	local anim_text = HUDAssaultCorner._animate_text
+	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function, ...)
+		local done
+		BeardLib:AddUpdater("HoloFixBlendMode", function()
+			for _, child in pairs(text_panel:children()) do
+				if getmetatable(child) == Text then
+					child:configure({
+						blend_mode = "normal",
+						font = "fonts/font_medium_mf",
 						color = color_function and color_function() or color or self._assault_color,
-						font_size = text_panel:h() - 6,
+						font_size = text_panel:h() - 6
 					})
-					managers.hud:make_fine_text(data.text)
-					data.x = data.x - dt * speed
-					data.text:set_center_x(data.x)
-					data.text:set_center_y(text_panel:h() * 0.5)
-					if 0 > data.x + data.text:w() * 0.5 then
-						text_panel:remove(data.text)
-						data.text = nil
-					end
+					local _, _, w, h = child:text_rect()
+					child:set_size(w, h)
 				end
 			end
-			start_speed = nil
-		end
+			if done then
+				BeardLib:RemoveUpdater("HoloFixBlendMode")
+			end
+		end)
+		anim_text(self, text_panel, bg_box, color, color_function, ...)
+		done = true
 	end
 	Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
 		if alive(self._casing_bg_box) then
@@ -277,19 +228,17 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		if alive(self._hostages_bg_box) then
 			self._hostages_bg_box:child("bg"):stop()
 			self._hostages_bg_box:child("num_hostages"):stop()
-			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 		end
 	end)
 	Hooks:PostHook(HUDAssaultCorner, "_animate_wave_started", "HoloAnimateWaveStarted", function(self)
 		if alive(self._wave_bg_box) then
 			self._wave_bg_box:child("bg"):stop()
 			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Swoosh, "flash_icon"), 2, nil, true)
+			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 		end
 	end)
 	function HUDAssaultCorner:get_completed_waves_string() --OVK can you make stuff less fucking ugly?
 		return string.format("%s / %s", managers.groupai:state():get_assault_number() or 0, self._max_waves or 0)
 	end
 end
- 
- 

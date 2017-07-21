@@ -1,6 +1,6 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	Hooks:PostHook(MenuBackdropGUI, "_create_base_layer", "HoloCreateBaseLayer", function(self)
-		if Holo.Options:GetValue("Menu/ColoredBackground") then
+		if Holo.Options:GetValue("ColoredBackground") then
 			for _, child in pairs(self._panel:children()) do
 				child:hide()
 				child:set_alpha(0)
@@ -11,7 +11,7 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._panel:child("item_foreground_layer"):set_alpha(1)
 			self._panel:rect({
 				name = "background_simple",
-				color = Holo:GetColor("Colors/MenuBackground"),
+				color = Holo:GetColor("Colors/Menu"),
 			})	 
 		end
 	end)

@@ -7,4 +7,3 @@ if Holo:ShouldModify("Hud", "Interaction") then
 		end
 	end)
 end
-	 

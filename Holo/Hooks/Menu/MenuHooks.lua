@@ -1,9 +1,17 @@
-if Holo.Options:GetValue("Base/Menu") then
-	local Lobby = Holo:ShouldModify("Menu", "Menu/Lobby")
+if Holo.Options:GetValue("Menu") then
+	local Lobby = Holo:ShouldModify("Menu", "Lobby")
 	if RequiredScript == "lib/managers/menu/renderers/menunodejukeboxgui" and Lobby then
 		Hooks:PostHook(MenuNodeJukeboxGui, "init", "HoloInit", function(self)
 			self.item_panel:set_y(self.item_panel:parent():y() + 50)
 		end)
+	elseif RequiredScript == "lib/managers/systemmenumanager" then
+		core:module("SystemMenuManager")
+		GenericSystemMenuManager = GenericSystemMenuManager or SystemMenuManager.GenericSystemMenuManager
+		_G.Hooks:PreHook(GenericSystemMenuManager, "show_buttons", "HoloShowButtons", function(self, dialog_data)
+			dialog_data.text_blend_mode = "normal" -- OVK PLS STOP :(
+		end)
+	elseif RequiredScript == "lib/managers/menu/buttonboxgui" then
+		Hooks:PostHook(ButtonBoxGui, "_setup_buttons_panel", "HoloSetupButtonsPanel", callback(Holo.Utils, Holo.Utils, "FixDialog"))
 	elseif RequiredScript == "lib/managers/menu/lootdropscreengui" and Lobby then
 		Hooks:PostHook(LootDropScreenGui, "init", "HoloInit", function(self)
 			self._continue_button:configure({
@@ -70,8 +78,7 @@ if Holo.Options:GetValue("Base/Menu") then
 				params.row_item_color = _G.Holo:GetColor("TextColors/Menu")
 				params.hightlight_color = _G.Holo:GetColor("TextColors/MenuHighlighted")
 				params.row_item_blend_mode = "normal"
-				params.font_size = _G.Holo.TextSizes[_G.Holo.Options:GetValue("Menu/TextSize")]
-				params.marker_alpha = _G.Holo.Options:GetValue("Menu/MarkerAlpha")
+				params.font_size = _G.Holo.Options:GetValue("TextSize")
 				params.marker_color = _G.Holo:GetColor("Colors/Marker")
 				params.marker_disabled_color = Color(0.1, 0.1, 0.1)
 			end
@@ -125,6 +132,15 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._blur_bg:set_alpha(0)
 			self._top_rect:set_alpha(0)
 			self._bottom_rect:set_alpha(0)
+			self._bg = self._fullscreen_panel:rect({
+				name = "bg",
+				valign = "center",
+				halign ="grow",
+				valign ="grow",
+				alpha = 0.5,
+				color = Holo:GetColor("Colors/Menu"),
+				layer = -1
+			})
 		end)	
 	elseif RequiredScript == "lib/managers/menu/playerprofileguiobject" then
 		Hooks:PostHook(PlayerProfileGuiObject, "init", "HoloInit", function(self)

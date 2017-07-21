@@ -1,9 +1,6 @@
 if RequiredScript == "lib/managers/hudmanagerpd2" then
     local o_setup_player_info_hud_pd2 = HUDManager._setup_player_info_hud_pd2
     local o_hide_mission_briefing_hud = HUDManager.hide_mission_briefing_hud
-    Hooks:PreHook(HUDManager, "init", "HoloPreInit", function(self)
-        self._floating_infos = {}
-    end)
     Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
         if self.UpdateHolo then
             self:UpdateHolo()
@@ -18,24 +15,24 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
             seconds = seconds or 4
             for i=1, seconds do
-                Swoosh:work(o, "alpha", 0.5)
+                QuickAnim:Work(o, "alpha", 0.5)
                 wait(0.5)
-                Swoosh:work(o, "alpha", 1)
+                QuickAnim:Work(o, "alpha", 1)
                 wait(0.5)
             end
-            Swoosh:work(o, "alpha", no_remove and 1 or 0, "callback", function()
+            QuickAnim:Work(o, "alpha", no_remove and 1 or 0, "callback", function()
                 if not no_remove then
                     on_panel = on_panel or hud
                     on_panel:remove(o)
                 end
             end)
         end
-        Swoosh.flash_icon = hud.flash_icon
+        Holo.flash_icon = hud.flash_icon
         if Holo.Options:GetValue("Voice") then
-            Holo.Voice = HoloVoice:new()
+            Holo.Voice:Init()
         end
     end)
-    if Holo.Options:GetValue("Base/Hud") then
+    if Holo.Options:GetValue("Hud") then
         function HUDManager:UpdateHolo()
             managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HudScale"), Holo.Options:GetValue("HudSpacing"))
             if self.waypoints_update then
@@ -91,20 +88,31 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         		end
         	end
         end
+
         function HUDManager:align_teammate_panels()
         	local teammate_w = 204
         	local player_gap = 240
         	local h = self:teampanels_height() 
         	local small_gap = (managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:child("teammates_panel"):w() - player_gap - teammate_w * 4) / 3
+            local compact = Holo.Options:GetValue("CompactTeammate")
         	for i = 1, HUDManager.PLAYER_PANEL do
         		local is_player = i == HUDManager.PLAYER_PANEL
-        		if self._teammate_panels[i] then
-        			local pw = teammate_w + (is_player and 32 or 64)
-        			local x = math.floor(((pw - (is_player and 42 or 0)) + (is_player and small_gap or 10)) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
-        			self._teammate_panels[i]._panel:set_size(pw, h)
-        			self._teammate_panels[i]._player_panel:set_size(pw, h)
-        			self._teammate_panels[i]._panel:set_leftbottom(x, self._teammate_panels[i]._panel:parent():h())
-        		end
+                if compact then
+                    if not is_player then
+                    local y = math.floor(24 * (HUDManager.PLAYER_PANEL - (i + 1)) - 2)
+                        if self._teammate_panels[i] then
+                             self._teammate_panels[i]._panel:set_y(y)
+                        end
+                    end
+                else
+                    if self._teammate_panels[i] then
+                        local pw = teammate_w + (is_player and 32 or 64)
+                        local x = math.floor(((pw - (is_player and 42 or 0)) + (is_player and small_gap or 10)) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
+                        self._teammate_panels[i]._panel:set_size(pw, h)
+                        self._teammate_panels[i]._player_panel:set_size(pw, h)
+                        self._teammate_panels[i]._panel:set_leftbottom(x, self._teammate_panels[i]._panel:parent():h())
+                    end
+                end
         	end
         end
     end
@@ -240,9 +248,4 @@ else
             Holo.Panel:show()
         end
 	end)
-    Hooks:PostHook(HUDManager, "update", "HoloUpdate", function(self, t, dt)
-        for _, float in pairs(self._floating_infos) do
-            float:update()
-        end
-    end)
 end

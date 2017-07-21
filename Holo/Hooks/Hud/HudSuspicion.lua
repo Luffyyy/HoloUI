@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") then
+if Holo.Options:GetValue("Hud") then
 	Hooks:PostHook(HUDSuspicion, "init", "HoloInit", function(self)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))

@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
+if Holo:ShouldModify("Menu", "BlackScreen") then
 	Hooks:PreHook(IngameWaitingForPlayersState, "at_enter", "HoloAtEnter", function(self)
 		if not managers.hud:exists(self.LEVEL_INTRO_GUI) then
 			managers.hud:load_hud(self.LEVEL_INTRO_GUI, false, false, false, {})

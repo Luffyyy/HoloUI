@@ -56,8 +56,7 @@ if Holo:ShouldModify("Hud", "Carrying") then
 		QuickAnim:Work(bag_panel, 
 			"w", self._bg_box:w(),
 			"speed", 4,
-			"after", function()
-				bag_panel:set_right(right)
-		end)
+			"sticky_right", right
+		)
 	end
 end

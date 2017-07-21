@@ -59,6 +59,7 @@ function Utils:FixBackButton(this, back_button)
 	back_button:set_world_rightbottom(back_button:parent():world_rightbottom())
 	this._back_marker:set_rightbottom(back_button:right() + 4, back_button:bottom())
 	Hooks:PostHook(this, "mouse_moved", "HoloMouseMoved", function(this, o, x, y)
+		this._back_marker:set_visible(true)
 		if this._back_button:inside(x, y) then
 			if not this.back_button_highlighted then
 				this._back_button_highlighted = true
@@ -67,7 +68,7 @@ function Utils:FixBackButton(this, back_button)
 				this._back_button:stop()
 				QuickAnim:WorkColor(this._back_button, Holo:GetColor("TextColors/MenuHighlighted"))
 				QuickAnim:Work(this._back_marker, 
-					"alpha", Holo.Options:GetValue("Menu/MarkerAlpha"),
+					"alpha", 1,
 					"speed", 5
 				)	
 				managers.menu_component:post_event("highlight")
@@ -81,9 +82,36 @@ function Utils:FixBackButton(this, back_button)
 			QuickAnim:Work(this._back_marker, 
 				"alpha", 0,
 				"speed", 5
-			)			
+			)
 		end
 	end)
+end
+
+function Utils:FixDialog(dialog, info_area, button_list, focus_button, only_buttons)
+	local has_buttons = button_list and #button_list > 0		
+	local buttons_panel = info_area:child("buttons_panel")
+	dialog._panel:child("title"):set_color(Holo:GetColor("TextColors/Menu"))
+	info_area:child("info_bg"):set_color(Holo:GetColor("Colors/Menu"))
+	if has_buttons then
+		buttons_panel:child("selected"):configure({
+			blend_mode = "normal",
+			w = 2,
+			h = 20,
+			alpha = 1,
+			color = Holo:GetColor("Colors/Marker"),
+		})	
+		if button_list then
+			for _, child in pairs(buttons_panel:children()) do	
+				if CoreClass.type_name(child) == "Panel" then
+					child:child("button_text"):configure({
+						blend_mode = "normal",
+						color = Holo:GetColor("TextColors/Menu")
+					})		
+				end
+			end
+		end
+		dialog:_set_button_selected(focus_button, true)	
+	end
 end
 
 function Utils:SetBlendMode(o, ...)
@@ -113,16 +141,17 @@ function Utils:Apply(tbl, config)
 	end
 end
 
-function Utils:SetPosition(p, setting)
-	local position = Holo.Options:GetValue("Extra/Positions/"..setting)
+function Utils:SetPosition(p, setting, offset)
+	offset = offset or 0
+	local position = Holo.Options:GetValue("Positions/"..setting)
 	if position then
 		local pos = Holo.Positions[position]
 		local pp = p:parent()
 		if pos:match("Center") then p:set_world_center(pp:world_center()) end
 		if pos:match("Top") then p:set_world_y(pp:world_y()) end
 		if pos:match("Bottom") then p:set_world_bottom(pp:world_bottom()) end
-		if pos:match("Left") then p:set_world_left(pp:world_left()) end
-		if pos:match("Right") then p:set_world_right(pp:world_right()) end
+		if pos:match("Left") then p:set_world_left(pp:world_left() + offset) end
+		if pos:match("Right") then p:set_world_right(pp:world_right() + offset) end
 		for _, clbk in pairs(Holo.set_position_clbks) do
 			clbk(setting, pos)
 		end

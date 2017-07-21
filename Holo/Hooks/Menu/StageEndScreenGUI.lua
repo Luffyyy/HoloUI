@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Menu", "Menu/Lobby") then
+if Holo:ShouldModify("Menu", "Lobby") then
 Hooks:PostHook(StatsTabItem, "init", "HoloInit", function(self, panel, tab_panel, text, i)
 	Holo.Utils:NotUglyTab(tab_panel:child("tab_select_rect_" .. tostring(self._index)), tab_panel:child("tab_text_" .. tostring(self._index)))
 end)

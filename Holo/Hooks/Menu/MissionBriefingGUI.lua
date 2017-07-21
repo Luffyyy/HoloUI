@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Menu", "Menu/Lobby") then
+if Holo:ShouldModify("Menu", "Lobby") then
 Hooks:PostHook(MissionBriefingTabItem, "init", "HoloInit", function(self)
 	self._tab_text:set_y(2)
 	Holo.Utils:NotUglyTab(self._tab_select_rect, self._tab_text)

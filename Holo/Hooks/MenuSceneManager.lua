@@ -1,4 +1,4 @@
-if not GameSetup and Holo:ShouldModify("Menu", "Menu/ColoredBackground") then 
+if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then 
 	function MenuSceneManager:HoloUpdate()
 		if self._camera_object then
 			local fixed_fov = math.min(50, self._new_fov)
@@ -16,7 +16,7 @@ if not GameSetup and Holo:ShouldModify("Menu", "Menu/ColoredBackground") then
 		local a,b,c = cam:position() - Vector3(0, -486.5, 449.5):rotate_with(cam:rotation()) , Vector3(0, w, 0):rotate_with(cam:rotation()) , Vector3(0, 0, h):rotate_with(cam:rotation())
 		if alive(self._background_ws) then
 			self._background_ws:set_world(w,h,a,b,c)
-			self._background_ws:panel():child("bg"):set_color(Holo:GetColor("Colors/MenuBackground"))
+			self._background_ws:panel():child("bg"):set_color(Holo:GetColor("Colors/Menu"))
 			if self._shaker then
 				self._shaker:stop_all()
 			end
@@ -26,7 +26,7 @@ if not GameSetup and Holo:ShouldModify("Menu", "Menu/ColoredBackground") then
 			self._background_ws = World:newgui():create_world_workspace(w,h,a,b,c)
 			self._background_ws:panel():bitmap({
 				name = "bg",
-				color = Holo:GetColor("Colors/MenuBackground"),
+				color = Holo:GetColor("Colors/Menu"),
 				layer = 20000,
 				w = w, 
 				h = h,

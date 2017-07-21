@@ -1,5 +1,6 @@
-HoloVoice = HoloVoice or class()
-function HoloVoice:init()
+Holo.Voice = Holo.Voice or class()
+local self = Holo.Voice
+function self:Init()
     self._voice_panel = Holo.Panel:panel({
         name = "voice_panel",
         layer = 999,
@@ -16,9 +17,10 @@ function HoloVoice:init()
     Input:keyboard():add_trigger(Idstring(Holo.Options:GetValue("VoiceKey")), function()
         self._holding = true
     end)
-    managers.hud:add_updator("HoloVoiceUpdate", callback(self, self, "Update"))
+    managers.hud:add_updator("Holo.VoiceUpdate", callback(self, self, "Update"))
 end
-function HoloVoice:Update(t, dt)
+
+function self:Update(t, dt)
     if self._wait then
         self._next_t = t + self._delay
         self._wait = false
@@ -32,7 +34,7 @@ function HoloVoice:Update(t, dt)
                 mouse_press = callback(self, self, "MousePressed"),
                 mouse_release = callback(self, self, "MouseReleased"),
                 id = self._mouse_id
-            })  
+            })
             self:SetMovingEnabled(false)
         end
     else
@@ -52,17 +54,20 @@ function HoloVoice:Update(t, dt)
         self._holding = false
     end
 end
-function HoloVoice:SetMovingEnabled(enabled)
+
+function self:SetMovingEnabled(enabled)
     if managers.hud then
         managers.hud._chatinput_changed_callback_handler:dispatch(not enabled)
     end
 end
-function HoloVoice:MouseReleased(o, x, y)
+
+function self:MouseReleased(o, x, y)
     if self._showing then
         managers.player:player_unit():base():controller():reset_cache(false)
     end
 end
-function HoloVoice:MouseMoved(o, x, y)
+
+function self:MouseMoved(o, x, y)
     for panel, _ in pairs(self.Boxes) do
         if panel and panel:inside(x, y) then
             self._selected = panel
@@ -77,7 +82,8 @@ function HoloVoice:MouseMoved(o, x, y)
         end
     end
 end
-function HoloVoice:MousePressed(o, button, x, y)
+
+function self:MousePressed(o, button, x, y)
     if button == Idstring("0") and self._showing then
         for panel, config in pairs(self.Boxes) do
             if panel and panel:inside(x, y) then
@@ -86,7 +92,8 @@ function HoloVoice:MousePressed(o, button, x, y)
         end
     end
 end
-function HoloVoice:Play(id)
+
+function self:Play(id)
     if not managers.trade:is_peer_in_custody(managers.network:session():local_peer():id()) and id ~= nil then
         self._holding = false
         self._selected = nil
@@ -94,7 +101,8 @@ function HoloVoice:Play(id)
         return managers.player:player_unit():sound():say(id, true, true)
     end
 end
-function HoloVoice:Add(id, text, comment)
+
+function self:Add(id, text, comment)
     local space = 10
     local w = 128
     local h = 64
@@ -107,7 +115,7 @@ function HoloVoice:Add(id, text, comment)
         name = "Bg",
         halign="grow",
         valign="grow",
-        color = Holo:GetColor("Colors/MenuBackground"),
+        color = Holo:GetColor("Colors/Menu"),
         alpha = 0.8,
         layer = -1
     })
@@ -133,10 +141,7 @@ function HoloVoice:Add(id, text, comment)
         font_size = 16,
         layer = 1
     })
-    self.Boxes[VBox] = {
-        id = id,
-        comment = comment,
-    }
+    self.Boxes[VBox] = {id = id, comment = comment}
     local i = table.size(self.Boxes)
     times = math.ceil(i / Holo.VoiceMaxPerRow)
     local num = i % Holo.VoiceMaxPerRow
@@ -145,4 +150,3 @@ function HoloVoice:Add(id, text, comment)
     self._voice_panel:set_size((w + space) * Holo.VoiceMaxPerRow, (h + space) * times)
     self._voice_panel:set_world_center(Holo.Panel:world_center())
 end
- 

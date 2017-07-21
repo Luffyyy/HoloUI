@@ -18,13 +18,13 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			name = "switch_bg",
 			alpha = 0.1,
 			w = 0,
-			valign = "grow",
+			valign = "grow"
 		})
 		secondary_weapon_panel:rect({
 			name = "switch_bg",
 			alpha = 0.1,
 			w = 0,
-			valign = "grow",
+			valign = "grow"
 		})
 		Holo.Utils:Apply({self._panel:child("name_bg"), primary_weapon_panel:child("bg"), secondary_weapon_panel:child("bg")}, {texture = "units/white_df"})
 		Holo.Utils:Apply({self._panel:child("callsign_bg"), self._panel:child("callsign"),cable_ties_panel:child("bg"),deployable_equipment_panel:child("bg"),grenades_panel:child("bg")},{visible = false})
@@ -40,19 +40,16 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 			font_size = self._main_player and 22 or 18,
 			font = "fonts/font_large_mf"
 		})
-		self._panel:rect({
-			name = "teammate_line",
-			w = 2,
-		})
 		self._player_panel:rect({
 			name = "Mainbg",
 			vertical = "bottom",
 			layer = 0,
-			color = Holo:GetColor("Colors/TeammateBackground"),
-			alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
+			color = Holo:GetColor("Colors/Teammate"),
+			alpha = Holo.Options:GetValue("HudAlpha"),
 			w = 130,
-			h = 64,
+			h = 64
 		})
+		self._panel:rect({name = "teammate_line", w = 2})
 		self:layout_equipments()
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
@@ -74,12 +71,12 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     function HUDTeammate:UpdateHolo()
         managers.hud:align_teammate_panels()
         local radial_health_panel = self._player_panel:child("radial_health_panel")
-        local deployable_equipment_panel = self._player_panel:child("deployable_equipment_panel")
-        local cable_ties_panel = self._player_panel:child("cable_ties_panel")
+        local deployable_panel = self._player_panel:child("deployable_equipment_panel")
+        local cableties_panel = self._player_panel:child("cable_ties_panel")
         local grenades_panel = self._player_panel:child("grenades_panel")
         local grenades = grenades_panel:child("grenades")
-        local cable_ties = cable_ties_panel:child("cable_ties")
-        local deployable = deployable_equipment_panel:child("equipment")
+        local cable_ties = cableties_panel:child("cable_ties")
+        local deployable = deployable_panel:child("equipment")
         local weapons_panel = self._player_panel:child("weapons_panel")
         local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
         local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
@@ -87,9 +84,11 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         local name_bg = self._panel:child("name_bg")
         local name = self._panel:child("name")
         local teammate_line = self._panel:child("teammate_line")
-        local me = self._main_player            
+        local me = self._main_player    
+		local bg_color = Holo:GetColor("Colors/Teammate")        
+		local text_color = Holo:GetColor("TextColors/Teammate")        
         name:configure({
-            color = Holo:GetColor("TextColors/Teammate"),
+            color = text_color,
             font_size = 20,
             font = "fonts/font_medium_noshadow_mf",
         })
@@ -108,15 +107,13 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         teammate_line:set_size(2, name_bg:h() + ((self._ai or me) and 0 or bg:h()))
         teammate_line:set_rightbottom(name_bg:leftbottom())
         
-        Holo.Utils:Apply({name_bg, name, teammate_line},{visible = Holo.Options:GetValue("Extra/MyName") or not self._main_player})
-        Holo.Utils:Apply({name_bg, bg},{
-            color = Holo:GetColor("Colors/TeammateBackground"),
-            alpha = Holo.Options:GetValue("TeammateBackgroundAlpha"),
-        })
+        Holo.Utils:Apply({name_bg, name, teammate_line}, {visible = Holo.Options:GetValue("MyName") or not self._main_player})
+        Holo.Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HudAlpha")})
         radial_health_panel:child("Health"):set_font_size(me and 22 or 18)      
-        radial_health_panel:child("Health"):set_visible(me and Holo.Options:GetValue("Extra/HealthText") or not me and Holo.Options:GetValue("Extra/HealthTextTeammate"))
+        radial_health_panel:child("Health"):set_visible(me and Holo.Options:GetValue("HealthText") or not me and Holo.Options:GetValue("HealthTextTeammate"))
         self:set_radials()
-
+		
+	--Weapons
         if me then
             weapons_panel:set_size(80, radial_health_panel:h())
             weapons_panel:set_leftbottom(radial_health_panel:rightbottom())
@@ -147,41 +144,41 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
                     panel:set_left(primary_weapon_panel:right())
                 end
             end
-            panel:child("ammo_total"):set_color(Holo:GetColor("TextColors/Teammate"))
-            panel:child("ammo_clip"):set_color(Holo:GetColor("TextColors/Teammate"))
+            panel:child("ammo_total"):set_color(text_color)
+            panel:child("ammo_clip"):set_color(text_color)
         end
-        deployable_equipment_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y() - 1, 36, 21.33)
-        local eq_size = deployable_equipment_panel:h() - 4
-        deployable:set_size(eq_size, eq_size)
-        deployable:set_color(Holo:GetColor("Colors/Equipments"))
-        deployable_equipment_panel:child("amount"):set_font(Idstring("fonts/font_large_mf"))
-        deployable_equipment_panel:child("amount"):set_font_size(20)
-        deployable_equipment_panel:child("amount"):set_shape(0, 2, deployable_equipment_panel:size())
-        deployable_equipment_panel:child("amount"):set_color(Holo:GetColor("TextColors/Teammate"))
-        deployable:set_center_y(deployable_equipment_panel:child("amount"):center_y())
-        cable_ties_panel:set_shape(deployable_equipment_panel:shape())
-        cable_ties:set_size(eq_size, eq_size)
-        cable_ties:set_color(Holo:GetColor("Colors/Equipments"))
-        cable_ties_panel:child("amount"):set_font(Idstring("fonts/font_large_mf"))
-        cable_ties_panel:child("amount"):set_font_size(20)
-        cable_ties_panel:child("amount"):set_shape(deployable_equipment_panel:child("amount"):shape())
-        cable_ties_panel:child("amount"):set_color(Holo:GetColor("TextColors/Teammate"))
-        cable_ties:set_center_y(cable_ties_panel:child("amount"):center_y())
-        grenades_panel:set_shape(cable_ties_panel:shape())
-        grenades:set_size(eq_size, eq_size)
-        grenades:set_color(Holo:GetColor("Colors/Equipments"))
-        grenades_panel:child("amount"):set_font(Idstring("fonts/font_large_mf"))
-        grenades_panel:child("amount"):set_font_size(20)
-        grenades_panel:child("amount"):set_shape(cable_ties_panel:child("amount"):shape())
-        grenades_panel:child("amount"):set_color(Holo:GetColor("TextColors/Teammate"))
-        grenades:set_center_y(grenades_panel:child("amount"):center_y())
-        self._panel:child("condition_icon"):set_size(radial_health_panel:size())
-        self._panel:child("condition_icon"):set_position(radial_health_panel:position())
-        self._panel:child("condition_timer"):set_size(radial_health_panel:size())
-        self._panel:child("condition_timer"):set_position(radial_health_panel:position())
+	--Weapons end
+
+	--Equipments
+        deployable_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y() - 1, 36, 21.33)
+        local eq_size = deployable_panel:h() - 4
+        
+        deployable:set_color(text_color)
+		for _, v in pairs({deployable_panel, cableties_panel, grenades_panel}) do
+			v:child("amount"):configure({
+				font = "fonts/font_large_mf",
+				font_size = 20,
+				color = text_color,
+				x = 0, y = 2, w = deployable_panel:w(), h = deployable_panel:h()
+			})
+		end
+		for _, v in pairs({deployable, cable_ties, grenades}) do
+			v:configure({
+				w = eq_size,
+				h = eq_size,
+				color = text_color
+			})
+			v:set_center_y(v:parent():child("amount"):center_y())
+		end
+        cableties_panel:set_shape(deployable_panel:shape())
+        grenades_panel:set_shape(cableties_panel:shape())
+
+        self._panel:child("condition_icon"):set_shape(radial_health_panel:shape())
+        self._panel:child("condition_timer"):set_shape(radial_health_panel:shape())
+	--Equipments end
         if self._main_player then
-            cable_ties_panel:set_top(deployable_equipment_panel:bottom())
-            grenades_panel:set_top(cable_ties_panel:bottom())
+            cableties_panel:set_top(deployable_panel:bottom())
+            grenades_panel:set_top(cableties_panel:bottom())
         else
             self:layout_equipments()
         end
@@ -211,10 +208,9 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         local interact_panel = self._player_panel:child("interact_panel")
         interact_panel:set_size(panel:size())
         interact_panel:set_world_position(panel:child("radial_shield"):world_position())
-        self._interact._circle:set_size(interact_panel:h(), interact_panel:h())
-        self._interact._circle:set_position(0,0)
-        self._interact._bg_circle:set_size(self._interact._circle:size())   
-        self._interact._bg_circle:set_position(0,0)
+        self._interact._circle:set_shape(0, 0, interact_panel:h(), interact_panel:h())
+        self._interact._bg_circle:set_shape(0, 0, self._interact._circle:size())
+
         if self._stamina_bar and self._stamina_line then
             self._stamina_bar:set_image("guis/textures/custom/HealthWhite")
             self._stamina_bar:set_size(panel:w() * 0.37, panel:h() * 0.37)
@@ -228,9 +224,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local weapon_panel = self._player_panel:child("weapons_panel"):child((is_secondary and "secondary" or "primary") .. "_weapon_panel")
 		local weapon_selection_panel = weapon_panel:child("weapon_selection")
 		local firemode = weapon_selection_panel:child("firemode")
-		if alive(firemode) then
-			weapon_selection_panel:remove(firemode)
-		end
+		if alive(firemode) then	weapon_selection_panel:remove(firemode) end
 		if self._main_player then
 			local equipped_wep = managers.blackmarket and (is_secondary and managers.blackmarket:equipped_secondary() or managers.blackmarket:equipped_primary())
 			local weapon_tweak_data = tweak_data.weapon[equipped_wep.weapon_id]
@@ -249,9 +243,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 				h = 24,
 			})
 			firemode:set_bottom(weapon_selection_panel:h() - 1)
-			if locked_to_single or not locked_to_auto and fire_mode == "single" then
-				firemode:set_text(".")
-			end
+			if locked_to_single or not locked_to_auto and fire_mode == "single" then firemode:set_text(".") end
 		end
 	end
 
@@ -259,9 +251,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local weapon_panel = self._player_panel:child("weapons_panel"):child((id == 1 and "secondary" or "primary") .. "_weapon_panel")
 		local weapon_selection_panel = weapon_panel:child("weapon_selection")
 		local firemode_text = weapon_selection_panel:child("firemode")
-		if alive(firemode_text) then
-			firemode_text:set_text(firemode == "single" and "." or ":")
-		end
+		if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "." or ":") end
 	end
 
     function HUDTeammate:layout_equipments()
@@ -294,9 +284,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     end
 
 	function HUDTeammate:set_state(state)
-		if alive(self._player_panel) then
-			self._player_panel:set_alpha(state == "player" and 1 or 0)
-		end
+		if alive(self._player_panel) then self._player_panel:set_alpha(state == "player" and 1 or 0) end
 	end
 
 	function HUDTeammate:_set_weapon_selected(id, hud_icon)
@@ -322,7 +310,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 	Hooks:PostHook(HUDTeammate, "set_name", "HoloSetName", function(self, teammate_name)
 		self._panel:child("callsign"):hide()
 		self._panel:child("callsign_bg"):hide()
-		self._panel:child("name"):set_text(Holo.Options:GetValue("Extra/UpperCaseNames") and teammate_name:upper() or teammate_name)
+		self._panel:child("name"):set_text(Holo.Options:GetValue("UpperCaseNames") and teammate_name:upper() or teammate_name)
 		self:UpdateHolo()
 	end)
 
@@ -335,7 +323,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 	function HUDTeammate:set_ammo_amount_by_type(type, max_clip, current_clip, current_left, max)
 		local weapon_panel = self._player_panel:child("weapons_panel"):child(type .. "_weapon_panel")
 		weapon_panel:show()
-		if Holo.Options:GetValue("Extra/FixedAmmoTotal") and ((type == "primary" and managers.blackmarket:equipped_primary().weapon_id ~= "saw") or (type == "secondary" and managers.blackmarket:equipped_secondary().weapon_id ~= "saw_secondary") ) then
+		if Holo.Options:GetValue("FixedAmmoTotal") and ((type == "primary" and managers.blackmarket:equipped_primary().weapon_id ~= "saw") or (type == "secondary" and managers.blackmarket:equipped_secondary().weapon_id ~= "saw_secondary") ) then
 			current_left = current_left - current_clip
 		end
 		local ammo_clip = weapon_panel:child("ammo_clip")
@@ -390,7 +378,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 
 			if self._main_player then
 				panel:set_x(w - (panel:w() * i))
-				panel:set_bottom((Holo.Options:GetValue("Extra/MyName") and self._panel:child("name") or self._player_panel:child("Mainbg")):top() - 2)
+				panel:set_bottom((Holo.Options:GetValue("MyName") and self._panel:child("name") or self._player_panel:child("Mainbg")):top() - 2)
 			else
 				panel:set_bottom(self._panel:child("name"):top() - 2)
 				if i == 1 then

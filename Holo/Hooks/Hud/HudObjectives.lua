@@ -9,7 +9,7 @@ function HUDBGBox_recreate(panel, config)
 		h = config.h,
 	})
 	if config.name then
-		config.alpha = Holo:GetAlpha(config.name) or 0.25
+		config.alpha = Holo.Options:GetValue("HudAlpha") or 0.25
 		config.frame_style = Holo:GetFrameStyle(config.name)
 		config.frame_color = Holo:GetFrameColor(config.name)
 		config.color = Holo:GetColor("Colors/" .. config.name)
@@ -108,22 +108,31 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		if self.ObjPanel:child("icon_objectivebox") then
 			self.ObjPanel:child("icon_objectivebox"):hide()
 		end
+		local box_height = 28
 		HUDBGBox_recreate(self._bg_box, {
 			name = "Objective",
 			x = 0,
-			h = 28,
+			h = box_height,
 		})
 		self.ObjText:configure({
 			color = Holo:GetColor("TextColors/Objective"),
-			font = "fonts/font_medium_noshadow_mf",
-			font_size = self._bg_box:h() - 5,
+			font_size = box_height - 6,
+			vertical = "center",
+			h = box_height,
+			font = "fonts/font_large_mf"
 		})
-		Holo.Utils:SetPosition(self.ObjPanel, "Objective")
+		self:PosObjectives()
 	end
+
 	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
+
+	function HUDObjectives:PosObjectives()
+		Holo.Utils:SetPosition(self.ObjPanel, "Objective", WolfHUD and (WolfHUD:getSetting({"TabStats", "CLOCK_MODE"}, 3) == 4) and 80 or 0)
+	end
+
 	function HUDObjectives:activate_objective(data)
 		self.AmountText:hide()
 		self.AmountText:set_alpha(0)
@@ -133,7 +142,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:set_text(string.format("%s %s", utf8.to_upper(data.text), amount or ""))
 		local _,_,w,_ = self.ObjText:text_rect()
 		self._bg_box:stop()
-		if not data.no_reset then
+		if not data.no_reset or not self.ObjPanel:visible() then
 			self._bg_box:set_w(0)
 			self.ObjText:set_w(0)
 			self.ObjText:show()
@@ -141,13 +150,14 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 			self.ObjPanel:stop()
 			self.ObjPanel:animate(callback(self, self, "_animate_activate_objective"))
 		end
-		self.ObjText:set_world_center_y(self.ObjText:parent():world_center_y())
+		self.ObjText:set_y(0)
 		self.ObjText:set_x(4)
 		self.ObjPanel:set_w(w + 8)
 		QuickAnim:Work(self.ObjText, "w", w, "speed", 3)
 		QuickAnim:Work(self._bg_box, "w", w + 8, "speed", 3)
-		Holo.Utils:SetPosition(self.ObjPanel, "Objective")
+		self:PosObjectives()
 	end
+
 	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
 		self._bg_box:child("bg"):stop()
 		self.AmountText:stop()
@@ -155,20 +165,9 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.AmountText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
 		self.ObjText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
 	end)
+
 	Hooks:PostHook(HUDObjectives, "update_amount_objective", "HoloUpdateAmountObjective", function(self, data)
 		data.no_reset = true
 		self:activate_objective(data)
 	end)
-	function HUDObjectives:_animate_icon_objectivebox(icon)
-		local x,y = icon:center()
-		icon:set_h(0)
-		QuickAnim:Work(icon,
-			"w", 24,
-			"h", 24,
-			"speed", 5,
-			"after", function()
-				icon:set_center(x,y)
-			end
-		)
-	end
 end

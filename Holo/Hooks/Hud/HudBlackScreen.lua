@@ -1,12 +1,12 @@
-if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
+if Holo:ShouldModify("Menu", "BlackScreen") then
 	Hooks:PostHook(HUDBlackScreen, "init", "HoloInit", function(self, hud)
 		self:HoloInit()
 	end)
 	function HUDBlackScreen:HoloInit()
 		self._blackscreen_panel:rect({
 			name = "bg",
-			color = Holo:GetColor("Colors/MenuBackground"),
-			visible = Holo.Options:GetValue("Menu/ColoredBackground"),
+			color = Holo:GetColor("Colors/Menu"),
+			visible = Holo.Options:GetValue("ColoredBackground"),
 			layer = -1,
 		})
 	    self._skip_circle._circle:hide()
@@ -57,9 +57,8 @@ if Holo:ShouldModify("Menu", "Menu/BlackScreen") then
 			"h", 0,
 			"speed", speed,
 			"callback", function()
-				QuickAnim:Work(self._progress, "h", 0, "speed", speed, "after", function()
-					self._progress:set_bottom(bottom)
-				end)
-		end)
+				QuickAnim:Work(self._progress, "h", 0, "speed", speed, "sticky_bottom", bottom)
+			end
+		)
 	end
 end

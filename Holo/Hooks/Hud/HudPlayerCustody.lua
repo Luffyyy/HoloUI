@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") then 
+if Holo.Options:GetValue("Hud") then 
 	Hooks:PostHook(HUDPlayerCustody, "init", "HoloInit", function(self)
 		local custody_panel = self._hud_panel:child("custody_panel")
 		custody_panel:child("timer_msg"):set_y(36)

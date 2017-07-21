@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	Hooks:PostHook(PlayerInventoryGui, "init", "HoloInit", function(self)
 		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 		Holo.Utils:SetBlendMode(self._panel, "detection")

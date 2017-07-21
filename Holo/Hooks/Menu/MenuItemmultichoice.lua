@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then 
+if Holo.Options:GetValue("Menu") then 
 	MenuItemMultiChoice = MenuItemMultiChoice or class(CoreMenuItem.Item)
 
 	function MenuItemMultiChoice:setup_gui(node, row_item)
@@ -122,6 +122,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		end
 		return true
 	end
+
 	local xl_pad = 64
 	function MenuItemMultiChoice:_layout(node, row_item)
 		local safe_rect = managers.gui_data:scaled_size()
@@ -183,6 +184,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		end
 		return true
 	end
+
 	function MenuItemMultiChoice:highlight_row_item(node, row_item, mouse_over)
 		row_item.gui_text:set_color(row_item.color)
 		row_item.choice_text:set_color(row_item.color)
@@ -202,6 +204,7 @@ if Holo.Options:GetValue("Base/Menu") then
 		end
 		return true
 	end
+
 	function MenuItemMultiChoice:fade_row_item(node, row_item, mouse_over)
 		row_item.gui_text:set_color(row_item.color)
 		row_item.choice_text:set_color(row_item.color)
@@ -221,5 +224,4 @@ if Holo.Options:GetValue("Base/Menu") then
 		end
 		return true
 	end
-
 end

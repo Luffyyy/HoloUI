@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Menu", "Menu/Lobby") then
+if Holo:ShouldModify("Menu", "Lobby") then
 	Hooks:PostHook(HUDLootScreen, "init", "HoloInit", function(self)
 		self._background_layer_full:child(0):hide() --fuck off with your bg text
 	end)

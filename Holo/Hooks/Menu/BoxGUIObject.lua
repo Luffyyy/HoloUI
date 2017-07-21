@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	local mvector_tl = Vector3()
 	local mvector_tr = Vector3()
 	local mvector_bl = Vector3()

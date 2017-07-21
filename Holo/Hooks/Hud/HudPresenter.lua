@@ -69,9 +69,7 @@ if Holo:ShouldModify("Hud", "Presenter") then
 		QuickAnim:Work(self._bg_box, 
 			"w", self._box_width,
 			"speed", 4, 
-			"after", function()
-				self._bg_box:set_center_x(center_x)
-			end, 
+			"sticky_center_x", center_x, 
 			"callback", open_done
 		)
 	end

@@ -34,7 +34,7 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		self._back_drop_gui._panel:child("particles_layer"):hide()
 		local panel = self._back_drop_gui:get_new_background_layer()
 		self._back_drop_gui:set_panel_to_saferect(panel)
-		if not self._coords and arg.load_level_data.tip and not arg.load_level_data.level_data.notips then
+		if arg.load_level_data.tip then
 			self._loading_hint = self:_make_loading_hint(panel, arg.load_level_data.tip)
 		end
 		self._indicator = panel:bitmap({
@@ -93,4 +93,25 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 	else
 		oinit(self, scene_gui, res, progress, base_layer)
 	end
+end
+
+local o_make_loading_hint = LevelLoadingScreenGuiScript._make_loading_hint
+function LevelLoadingScreenGuiScript:color_all(panel)
+	local text_color = arg.load_level_data.level_data.text_color
+	for _, child in pairs(panel:children()) do
+		if child.set_color and child:w() ~= 192 then
+			child:set_color(text_color)
+		elseif child.children then
+			self:color_all(child)
+		end
+	end
+end
+
+function LevelLoadingScreenGuiScript:_make_loading_hint(parent, tip)
+	local this = o_make_loading_hint(self, parent, tip)
+	local panel = parent:child(0)
+	if alive(panel) and panel.children then
+		self:color_all(panel)
+	end
+	return this
 end

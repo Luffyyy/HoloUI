@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	Hooks:PostHook(BlackMarketGuiTabItem, "init", "HoloInit", function( self )
 		self._tab_panel:child("tab_select_rect"):move(0, -1.5)
 		self._tab_panel:child("tab_text"):show()
@@ -40,7 +40,6 @@ if Holo.Options:GetValue("Base/Menu") then
 		self._panel:rect({
 			name = "select_rect",
 			color = Holo:GetColor("Colors/Marker"),
-			alpha = Holo.Options:GetValue("Menu/MarkerAlpha"),
 			rotation = 360,
 			alpha = 0,
 			x = self._panel:w() + 2,
@@ -63,7 +62,7 @@ if Holo.Options:GetValue("Base/Menu") then
 			self._btn_text:set_color(self._highlighted and Holo:GetColor("TextColors/MenuHighlighted") or Holo:GetColor("TextColors/Menu"))
 		end
 		self._panel:child("select_rect"):stop()
-		QuickAnim:Work(self._panel:child("select_rect"), "alpha", self._highlighted and Holo.Options:GetValue("Menu/MarkerAlpha") or 0, "speed", 5)
+		QuickAnim:Work(self._panel:child("select_rect"), "alpha", self._highlighted and 1 or 0, "speed", 5)
 	end
 	Hooks:PostHook(BlackMarketGui, "_setup", "HoloSetup", function(self, is_start_page, component_data)
 		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))

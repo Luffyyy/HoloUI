@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") and (not restoration or not (restoration.Options and restoration.Options:GetValue("HUD/MainHud"))) then
+if Holo.Options:GetValue("Hud") and (not restoration or not (restoration.Options and restoration.Options:GetValue("HUD/MainHud"))) then
 	Hooks:PostHook(HUDPlayerDowned, "init", "HoloInit", function(self, hud, ...)	
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
@@ -43,7 +43,7 @@ if Holo.Options:GetValue("Base/Hud") and (not restoration or not (restoration.Op
 		QuickAnim:Work(self._hud.timer, "alpha", .65)	
 	end
 	Hooks:PostHook(HUDPlayerDowned, "on_downed", "HoloOnDowned", function(self)
-		if Holo.Options:GetValue("Extra/HealthText") and managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHolo then
+		if Holo.Options:GetValue("HealthText") and managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHolo then
 		 	managers.hud._teammate_panels[managers.hud.PLAYER_PANEL]:set_downed()
 		end
 	end)

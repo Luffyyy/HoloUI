@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Menu") then
+if Holo.Options:GetValue("Menu") then
 	function ChatGui:set_righttop(right, top)
 		self._panel:set_x(self._panel:w())
 		self._panel:set_bottom(self._panel:h() - top)

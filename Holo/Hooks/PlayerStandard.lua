@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("Base/Hud") then
+if Holo.Options:GetValue("Hud") then
     Hooks:PostHook(PlayerStandard, "_start_action_equip_weapon", "HoloStartActionEquipWeapon", function(self, t)
         self._is_weapon = true
     end)

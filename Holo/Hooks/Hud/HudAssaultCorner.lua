@@ -124,9 +124,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		QuickAnim:Work(o, 
 			"w", self._box_width, 
 			"speed", 4,
-			"after", function()
-				o:set_right(right)
-			end,
+			"sticky_right", right,
 			"callback", clbk
 		)
 	end	
@@ -136,7 +134,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self._bg_box:child("text_panel"):stop()
 			self._bg_box:show()
 			self:left_grow(self._bg_box)
-	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, Holo:GetColor("TextColors/Assault"))
+	 		self._bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._bg_box, nil, function() return Holo:GetColor("TextColors/Assault") end)
 	 		if alive(self._wave_bg_box) then
 	 			self._wave_bg_box:child("bg"):stop()
 	 		end
@@ -159,7 +157,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_update_assault_hud_color(color) end
 	local anim_text = HUDAssaultCorner._animate_text
-	function HUDAssaultCorner:_animate_text(text_panel, ...)
+	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function, ...)
 		local done
 		BeardLib:AddUpdater("HoloFixBlendMode", function()
 			for _, child in pairs(text_panel:children()) do
@@ -167,7 +165,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 					child:configure({
 						blend_mode = "normal",
 						font = "fonts/font_medium_mf",
-						color_function and color_function() or color or self._assault_color,
+						color = color_function and color_function() or color or self._assault_color,
 						font_size = text_panel:h() - 6
 					})
 					local _, _, w, h = child:text_rect()
@@ -178,7 +176,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 				BeardLib:RemoveUpdater("HoloFixBlendMode")
 			end
 		end)
-		anim_text(self, text_panel, ...)
+		anim_text(self, text_panel, bg_box, color, color_function, ...)
 		done = true
 	end
 	Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
@@ -244,5 +242,3 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		return string.format("%s / %s", managers.groupai:state():get_assault_number() or 0, self._max_waves or 0)
 	end
 end
- 
- 

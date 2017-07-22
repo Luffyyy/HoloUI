@@ -1,4 +1,5 @@
-ColorTextBox = ColorTextBox or class(TextBox)
+BeardLib.Items.ColorTextBox = BeardLib.Items.ColorTextBox or class(BeardLib.Items.TextBox)
+local ColorTextBox = BeardLib.Items.ColorTextBox
 function ColorTextBox:Init(...)
     ColorTextBox.super.Init(self, ...)
     local panel = self:Panel()
@@ -41,6 +42,6 @@ function ColorTextBox:MousePressed(button, x, y)
     return result
 end
 
-function Menu:ColorTextBox(params)
-    return self:NewItem(ColorTextBox:new(self:ConfigureItem(params)))
+function BeardLib.Items.Menu:ColorTextBox(params)
+    return self:NewItem(BeardLib.Items.ColorTextBox:new(self:ConfigureItem(params)))
 end

@@ -11,7 +11,7 @@ function self:Init()
         always_mouse_move = callback(self, self, "MouseMoved"),
         mouse_release = callback(self, self, "MouseReleased"),
         offset = {8, 6},
-        layer = 400,
+        layer = 1000,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
         toggle_clbk = function(enabled)
             if managers.hud then

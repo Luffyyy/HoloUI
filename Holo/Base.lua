@@ -149,16 +149,15 @@ end
 
 if Hooks then
 	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)
-		lua_mod_options_menu_id = LuaModManager.Constants._lua_mod_options_menu_id
-		MenuHelper:NewMenu(lua_mod_options_menu_id)
+		MenuHelper:NewMenu("lua_mod_options_menu")
 	end)	
 	if Holo.Options:GetValue("Menu") then
 		Hooks:Add("MenuComponentManagerInitialize", "HoloMenuComponentManagerInitialize", function(menu)
-			Hooks:PostHook(NotificationsGuiObject, "init", "HoloInit", function(self)
+		--[[	Hooks:PostHook(NotificationsGuiObject, "init", "HoloInit", function(self)
 				self._highlight_rect:hide()
 				self._highlight_left_rect:hide()
 				self._highlight_right_rect:hide()
-			end)
+			end)]]
 		end)
 	end
 	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "VoicekeyOpt", function(menu_manager, nodes)			
@@ -171,7 +170,7 @@ if Hooks then
 			title = "Holo/OptionsTitle",
 			desc = "Holo/OptionsDesc",
 			callback = "OpenHoloMenu",
-			menu_id = lua_mod_options_menu_id,
+			menu_id = "lua_mod_options_menu",
 			priority = -13,
 		})
 	end)

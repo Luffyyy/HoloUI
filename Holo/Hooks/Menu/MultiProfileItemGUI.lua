@@ -14,8 +14,13 @@ Hooks:PostHook(MultiProfileItemGui, "update", "HoloUpdate", function(self)
 			arrow:set_rotation(360)
 		end
 	end
-	for _, element in pairs(self._quick_select_panel_elements) do
-		element:set_rotation(360)
+	if self._quick_select_panel_elements then
+		for _, element in pairs(self._quick_select_panel_elements) do
+			element:set_rotation(360)
+		end
 	end
-	self._profile_panel:child(0):set_rotation(360)
+	local some_shit = alive(self._profile_panel) and self._profile_panel:child(0)
+	if alive(some_shit) then
+		some_shit:set_rotation(360)
+	end
 end)

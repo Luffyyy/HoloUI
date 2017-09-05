@@ -125,7 +125,7 @@ function self:Add(id, text, comment)
         color = Holo:GetColor("Colors/Marker"),
     }):set_top(Bg:bottom())
     Input:keyboard():add_trigger(Idstring(tostring(#self.Boxes)), function()
-        if Input:keyboard():down(Idstring(LuaModManager:GetPlayerKeybind("Voice_key") or "q")) then
+        if Input:keyboard():down(Idstring(Holo.Options:GetValue("VoiceKey") or "q")) then
             self:Play(id)
         end
     end)

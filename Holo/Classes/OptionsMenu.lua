@@ -12,12 +12,9 @@ function self:Init()
         mouse_release = callback(self, self, "MouseReleased"),
         offset = {8, 6},
         layer = 1000,
+        animate_toggle = true,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
-        toggle_clbk = function(enabled)
-            if managers.hud then
-                managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
-            end
-        end,
+        toggle_clbk = callback(self, self, "SetEnabled"),
     })
     self._tabs = self._menu:Menu({
         name = "tabs",
@@ -53,11 +50,35 @@ function self:Init()
         layer = self._menu._panel:layer() + 1,
     })
     self._resize:rect({color = Holo:GetColor("Colors/Marker")})
-    self._color_dialog = ColorDialog:new({marker_highlight_color = accent_color, background_color = background_color, no_blur = true})
     for name, menu in pairs(self._menus) do
         self["Create"..string.capitalize(name).."Menu"](self, menu)
     end
     self:SwitchMenu("Main")
+end
+
+function self:SetEnabled(enabled)
+    local opened = BeardLib.managers.dialog:DialogOpened(self)
+    if enabled then
+        if not opened then
+            BeardLib.managers.dialog:ShowDialog(self)
+            self._menu:Enable()
+        end
+    elseif opened then
+        BeardLib.managers.dialog:CloseDialog(self)
+        self._menu:Disable()
+    end
+    if managers.hud then
+        managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
+    end
+end
+
+function self:should_close()
+    return self._menu:ShouldClose()
+end
+
+function self:hide()
+    self:SetEnabled(false)
+    return true
 end
 
 function self:CreateItem(upper, setting, menu)
@@ -179,7 +200,7 @@ function self:CreateColorsMenu(menu)
         else
             group = menu:DivGroup({name = self:Loc(option.name), localized = true, align_method = "grid", index = other:Index()})
         end
-        local w = group:Width() / i
+        local w = (group:ItemsWidth() - group:Offset()[1] * 2) / i
         if option.color then
             self:ColorTextBox(group, "Colors/"..option.name, {w = w, text = text or "Color"})
         end
@@ -279,7 +300,10 @@ function self:MainClbk(menu, item)
 end
 
 function self:OpenSetColorDialog(menu, item)
-	local option = item.name
+    local option = item.name    
+    local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
+    local background_color = Holo:GetColor("Colors/Menu")  
+    self._color_dialog = self._color_dialog or ColorDialog:new({marker_highlight_color = accent_color, background_color = background_color, no_blur = true})
     self._color_dialog:Show({
         color = Holo.Options:GetValue(option), 
         callback = function(color)

@@ -160,17 +160,17 @@ if Hooks then
 			end)]]
 		end)
 	end
-	Hooks:Add("MenuManager_Base_PopulateModOptionsMenu", "VoicekeyOpt", function(menu_manager, nodes)			
+	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(menu_manager, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
 		Holo.Workspace = managers.gui_data:create_fullscreen_workspace()		
 		Holo.Panel = Holo.Workspace:panel()
 		Holo.Menu:Init()
-		MenuHelper:AddButton({
+		MenuHelperPlus:AddButton({
 			id = "HoloOptions",
 			title = "Holo/OptionsTitle",
 			desc = "Holo/OptionsDesc",
 			callback = "OpenHoloMenu",
-			menu_id = "lua_mod_options_menu",
+			node = nodes.blt_options,
 			priority = -13,
 		})
 	end)

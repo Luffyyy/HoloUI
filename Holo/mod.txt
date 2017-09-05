@@ -2,7 +2,7 @@
    "name":"HoloUI",
    "description":"A highly customizable UI for payday 2",
    "author":"Luffy",
-   "version":"2.04",
+   "version":"2.06",
    "blt_version" : 2.0,
    "priority":15,
    "libraries":[  

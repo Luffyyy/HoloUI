@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Menu", "BlackScreen") then
-	Hooks:PostHook(HUDBlackScreen, "init", "HoloInit", function(self, hud)
+	Holo:Post(HUDBlackScreen, "init", function(self, hud)
 		self:HoloInit()
 	end)
 	function HUDBlackScreen:HoloInit()
@@ -16,7 +16,7 @@ if Holo:ShouldModify("Menu", "BlackScreen") then
 	        h = 2,
 	    })
 	end
-	Hooks:PostHook(HUDBlackScreen, "set_loading_text_status", "HoloSetLoadingTextStatus", function(self, status)
+	Holo:Post(HUDBlackScreen, "set_loading_text_status", function(self, status)
 		if status then
 			if not alive(self._progress) then
 				if alive(self._blackscreen_panel) then
@@ -45,20 +45,11 @@ if Holo:ShouldModify("Menu", "BlackScreen") then
 		end
 	end)
 	function HUDBlackScreen:skip_circle_done()
+		local bottom = self._progress:bottom()		
 		local speed = 4
-		QuickAnim:Work(self._blackscreen_panel:child("loading_text"),
-			"y", self._progress:bottom(),
-			"h", 0,
-			"speed", speed
-		)
-		local bottom = self._progress:bottom()
-		QuickAnim:Work(self._blackscreen_panel:child("skip_text"),
-			"y", self._progress:bottom(),
-			"h", 0,
-			"speed", speed,
-			"callback", function()
-				QuickAnim:Work(self._progress, "h", 0, "speed", speed, "sticky_bottom", bottom)
-			end
-		)
+		QuickAnim:Play(self._blackscreen_panel:child("loading_text"), {y = bottom, h = 0, speed = speed})
+		QuickAnim:Play(self._blackscreen_panel:child("skip_text"), {y = bottom, h = 0, speed = speed, callback = function()
+			QuickAnim:Play(self._progress, {h = 0, speed = speed, sticky_bottom = bottom})
+		end})
 	end
 end

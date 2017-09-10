@@ -1,10 +1,10 @@
 if Holo:ShouldModify("Hud", "HudBox") then
-    Hooks:PostHook(HUDHeistTimer, "init", "HoloInit", function(self)
+    Holo:Post(HUDHeistTimer, "init", function(self)
         self._bg_box = HUDBGBox_create(self._heist_timer_panel)
     	self:UpdateHolo()
         Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
     end)
-    Hooks:PostHook(HUDHeistTimer, "set_time", "HoloSetTime", function(self, ...)
+    Holo:Post(HUDHeistTimer, "set_time", function(self, ...)
         if Holo.Options:GetValue("RealTime") then
             self._timer_text:set_text(os.date("%X"))  
         end

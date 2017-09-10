@@ -1,9 +1,9 @@
-Hooks:PostHook(MultiProfileItemGui, "init", "HoloInit", function(self)
+Holo:Post(MultiProfileItemGui, "init", function(self)
 	if alive(self._caret) then
 		self._caret:set_rotation(360)
 	end
 end)
-Hooks:PostHook(MultiProfileItemGui, "update", "HoloUpdate", function(self)
+Holo:Post(MultiProfileItemGui, "update", function(self)
 	if alive(self._name_text) then
 		self._name_text:set_rotation(360)
 	end

@@ -124,7 +124,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self:PosObjectives()
 	end
 
-	Hooks:PostHook(HUDObjectives, "init", "HoloInit", function(self)
+	Holo:Post(HUDObjectives, "init", function(self)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
@@ -153,12 +153,12 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:set_y(0)
 		self.ObjText:set_x(4)
 		self.ObjPanel:set_w(w + 8)
-		QuickAnim:Work(self.ObjText, "w", w, "speed", 3)
-		QuickAnim:Work(self._bg_box, "w", w + 8, "speed", 3)
+		QuickAnim:Play(self.ObjText, {w = w, speed = 3})
+		QuickAnim:Play(self._bg_box, {w = w + 8, speed = 3})
 		self:PosObjectives()
 	end
 
-	Hooks:PostHook(HUDObjectives, "remind_objective", "HoloRemindObjective", function(self)
+	Holo:Post(HUDObjectives, "remind_objective", function(self)
 		self._bg_box:child("bg"):stop()
 		self.AmountText:stop()
 		self.ObjText:stop()
@@ -166,7 +166,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
 	end)
 
-	Hooks:PostHook(HUDObjectives, "update_amount_objective", "HoloUpdateAmountObjective", function(self, data)
+	Holo:Post(HUDObjectives, "update_amount_objective", function(self, data)
 		data.no_reset = true
 		self:activate_objective(data)
 	end)

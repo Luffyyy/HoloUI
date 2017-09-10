@@ -1,13 +1,13 @@
 if RequiredScript == "lib/managers/hudmanagerpd2" then
     local o_setup_player_info_hud_pd2 = HUDManager._setup_player_info_hud_pd2
     local o_hide_mission_briefing_hud = HUDManager.hide_mission_briefing_hud
-    Hooks:PreHook(HUDManager, "_setup_player_info_hud_pd2", "HoloPreSetupPlayerInfoHudPD2", function(self)
+    Holo:Pre(HUDManager, "_setup_player_info_hud_pd2", function(self)
         if self.UpdateHolo then
             self:UpdateHolo()
             Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
         end
     end)
-    Hooks:PostHook(HUDManager, "_setup_player_info_hud_pd2", "HoloSetupPlayerInfoHudPD2", function(self)
+    Holo:Post(HUDManager, "_setup_player_info_hud_pd2", function(self)
         local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)    
         hud.panel:panel({ 
             name = "chat_panel"
@@ -15,17 +15,17 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         hud.flash_icon = function(o, seconds, on_panel, no_remove)
             seconds = seconds or 4
             for i=1, seconds do
-                QuickAnim:Work(o, "alpha", 0.5)
+                QuickAnim:Play(o, {alpha = 0.5})
                 wait(0.5)
-                QuickAnim:Work(o, "alpha", 1)
+                QuickAnim:Play(o, {alpha = 1})
                 wait(0.5)
             end
-            QuickAnim:Work(o, "alpha", no_remove and 1 or 0, "callback", function()
+            QuickAnim:Play(o, {alpha = no_remove and 1 or 0, callback = function()
                 if not no_remove then
                     on_panel = on_panel or hud
                     on_panel:remove(o)
                 end
-            end)
+            end})
         end
         Holo.flash_icon = hud.flash_icon
         if Holo.Options:GetValue("Voice") then
@@ -39,7 +39,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
                 self:waypoints_update()
             end
         end
-        Hooks:PostHook(HUDManager, "show", "HoloShow", function(self, name)
+        Holo:Post(HUDManager, "show", function(self, name)
             if name == Idstring("guis/mask_off_hud") then
                 self:script(name).mask_on_text:hide()
                 self:script(name).mask_on_text:set_alpha(0)
@@ -116,11 +116,11 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
         	end
         end
     end
-    Hooks:PostHook(HUDManager, "hide_mission_briefing_hud", "HideMissionBriefingHud", function()
+    Holo:Post(HUDManager, "hide_mission_briefing_hud", function()
         Holo.Panel:show()
     end)
     if Holo:ShouldModify("Hud", "TeammateHud") then
-        Hooks:PostHook(HUDManager, "show_player_gear", "HoloShowPlayerGear", function(self, panel_id)
+        Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
                 local panel = self._teammate_panels[panel_id]._player_panel
                 if alive(panel:child("Mainbg")) then
@@ -134,7 +134,7 @@ if RequiredScript == "lib/managers/hudmanagerpd2" then
                 end
             end
         end)        
-        Hooks:PostHook(HUDManager, "hide_player_gear", "HoloHidePlayerGear", function(self, panel_id)
+        Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
             if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
                 local panel = self._teammate_panels[panel_id]._player_panel
                 if alive(panel:child("Mainbg")) then
@@ -240,10 +240,10 @@ else
             data.arrow:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
         end
     end
-	Hooks:PostHook(HUDManager, "set_disabled", "HoloSetDisabled", function(self)
+	Holo:Post(HUDManager, "set_disabled", function(self)
         Holo.Panel:hide()
 	end)
-	Hooks:PostHook(HUDManager, "set_enabled", "HoloSetEnabled", function(self)
+	Holo:Post(HUDManager, "set_enabled", function(self)
         if self._hud_mission_briefing and not self._hud_mission_briefing._backdrop._panel:visible() then
             Holo.Panel:show()
         end

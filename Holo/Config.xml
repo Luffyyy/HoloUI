@@ -2,11 +2,10 @@
    <Classes directory="Classes">
       <class file="Utils.lua" />
       <class file="Definitions.lua" />
-      <class file="ColorTextBox.lua" />
       <class file="OptionsMenu.lua" />
       <class file="HudVoice.lua" />
    </Classes>
-   <AssetUpdates id="12501" version="2.06" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+   <AssetUpdates id="12501" version="2.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />
@@ -70,6 +69,7 @@
       <hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua" />
       <hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/systemmenumanager" file="Menu/MenuHooks.lua" />
+      <hook source_file="lib/managers/menumanager" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/renderers/menunodepreplanninggui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="Menu/MenuHooks.lua" />
@@ -78,6 +78,7 @@
       <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/menuguicomponentgeneric" file="Menu/MenuGUIComponentGeneric.lua" />
       <hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
+      <hook source_file="lib/utils/LightLoadingScreenGuiScript" file="Menu/MenuLightLoading.lua" />
    </Hooks>
    <Options build_menu="false" auto_load="true" save_file="HoloUIConfig.txt">
       <options>
@@ -114,7 +115,8 @@
         <option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
 
         <div name="Menu" />
-        <option type="number" default_value="24" floats="0" name="TextSize" menu="Menu" />
+        <option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />
+        <option type="boolean" default_value="false" name="MenuColorGrading" menu="Menu" />
         <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" menu="Menu" />
         <option type="boolean" default_value="true" beforetext="Modified" name="Lobby" menu="Menu" />
         <option type="boolean" default_value="true" beforetext="Modified" name="Loading" menu="Menu"/>

@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Menu", "Lobby") then
-Hooks:PostHook(MissionBriefingTabItem, "init", "HoloInit", function(self)
+Holo:Post(MissionBriefingTabItem, "init", function(self)
 	self._tab_text:set_y(2)
 	Holo.Utils:NotUglyTab(self._tab_select_rect, self._tab_text)
 	local line = self._main_panel:child("line") or self._main_panel:rect({
@@ -79,7 +79,7 @@ function MissionBriefingGui:ready_text()
 	local ready = self._ready and "READY" or "NOT READY"
 	return legend .. ready
 end
-Hooks:PostHook(MissionBriefingGui, "init", "HoloInit", function(self)
+Holo:Post(MissionBriefingGui, "init", function(self)
 	self._ready_button:set_blend_mode("normal")
 	self._ready_button:set_font_size(tweak_data.menu.pd2_medium_font_size)
 	managers.hud:make_fine_text(self._ready_button)

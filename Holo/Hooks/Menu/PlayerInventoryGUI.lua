@@ -1,9 +1,9 @@
 if Holo.Options:GetValue("Menu") then
-	Hooks:PostHook(PlayerInventoryGui, "init", "HoloInit", function(self)
+	Holo:Post(PlayerInventoryGui, "init", function(self)
 		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 		Holo.Utils:SetBlendMode(self._panel, "detection")
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "mouse_moved", "HoloMouseMoved2", function(self, o, x, y)
+	Holo:Post(PlayerInventoryGui, "mouse_moved", function(self, o, x, y)
 		for _, button in ipairs(self._text_buttons) do
 				if alive(button.panel) and button.panel:visible() then
 					if button.panel:inside(x, y) then
@@ -24,35 +24,35 @@ if Holo.Options:GetValue("Menu") then
 				end
 			end
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "setup_player_stats", "HoloSetupPlayerStats", function(self, panel, data)
+	Holo:Post(PlayerInventoryGui, "setup_player_stats", function(self, panel, data)
 		self._player_stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
 		for i, stat in ipairs(self._player_stats_shown) do
 			self._player_stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._player_stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "set_skilltree_stats", "HoloSetSkillTreeStats", function(self, panel, data)
+	Holo:Post(PlayerInventoryGui, "set_skilltree_stats", function(self, panel, data)
 		self._stats_titles.aced:set_color(Holo:GetColor("Colors/Marker"))
 		for i, stat in ipairs(data) do
 			self._stats_texts[stat.name].aced:set_blend_mode("normal")
 			self._stats_texts[stat.name].aced:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "set_weapon_stats", "HoloSetWeaponStats", function(self, panel, data)
+	Holo:Post(PlayerInventoryGui, "set_weapon_stats", function(self, panel, data)
 		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
 		for i, stat in ipairs(data) do
 			self._stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "set_melee_stats", "HoloSetMeleeStats", function(self, panel, data)
+	Holo:Post(PlayerInventoryGui, "set_melee_stats", function(self, panel, data)
 		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
 		for i, stat in ipairs(data) do
 			self._stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(PlayerInventoryGui, "create_text_button", "HoloCreateTextButton", function(self, params)
+	Holo:Post(PlayerInventoryGui, "create_text_button", function(self, params)
 		for _, button in ipairs(self._text_buttons) do
 			button.text:configure({
 				color = Holo:GetColor("TextColors/Menu"),

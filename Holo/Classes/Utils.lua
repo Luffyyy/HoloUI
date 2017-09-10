@@ -1,6 +1,5 @@
 Holo.Utils = Holo.Utils or {}
 local Utils = Holo.Utils
-
 function Utils:ModifyWallet()
  	local panel = Global.wallet_panel
  	if not panel then
@@ -58,7 +57,7 @@ function Utils:FixBackButton(this, back_button)
 	})
 	back_button:set_world_rightbottom(back_button:parent():world_rightbottom())
 	this._back_marker:set_rightbottom(back_button:right() + 4, back_button:bottom())
-	Hooks:PostHook(this, "mouse_moved", "HoloMouseMoved", function(this, o, x, y)
+	Holo:Post(this, "mouse_moved", function(this, o, x, y)
 		this._back_marker:set_visible(true)
 		if this._back_button:inside(x, y) then
 			if not this.back_button_highlighted then
@@ -67,10 +66,7 @@ function Utils:FixBackButton(this, back_button)
 				this._back_marker:stop()
 				this._back_button:stop()
 				QuickAnim:WorkColor(this._back_button, Holo:GetColor("TextColors/MenuHighlighted"))
-				QuickAnim:Work(this._back_marker, 
-					"alpha", 1,
-					"speed", 5
-				)	
+				QuickAnim:Play(this._back_marker, {alpha = 1, speed = 5})
 				managers.menu_component:post_event("highlight")
 			end
 		elseif this.back_button_highlighted then
@@ -79,10 +75,7 @@ function Utils:FixBackButton(this, back_button)
 			this._back_marker:stop()
 			this._back_button:stop()
 			QuickAnim:WorkColor(this._back_button, Holo:GetColor("TextColors/Menu"))
-			QuickAnim:Work(this._back_marker, 
-				"alpha", 0,
-				"speed", 5
-			)
+			QuickAnim:Play(this._back_marker, {alpha = 0, speed = 5})
 		end
 	end)
 end

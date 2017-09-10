@@ -1,6 +1,7 @@
 if core then
 	core:module("CoreGuiDataManager")
 end
+local Holo = _G.Holo
 function GuiDataManager:layout_scaled_fullscreen_workspace(ws, scale, on_screen_scale)
     local data = {}
     local res = RenderSettings.resolution
@@ -23,6 +24,4 @@ function GuiDataManager:layout_scaled_fullscreen_workspace(ws, scale, on_screen_
     self:_set_layout(ws, data)
     ws:set_screen(data.w, data.h, data.x, data.y, math.min(data.sw, data.sh * (data.w / data.h)))
 end
-_G.Hooks:PostHook(GuiDataManager, "resolution_changed", "HoloResChanged", function(self)
-	_G.Holo:UpdateSettings()
-end)
+Holo:Post(GuiDataManager, "resolution_changed", callback(Holo, Holo, "UpdateSettings"))

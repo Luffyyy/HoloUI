@@ -5,7 +5,6 @@ if Holo.Options:GetValue("Menu") then
 		params.row_item_color = Holo:GetColor("TextColors/Menu")
 		params.row_item_hightlight_color = Holo:GetColor("TextColors/MenuHighlighted")
 		params.row_item_blend_mode = "normal"
-		params.font_size = Holo.Options:GetValue("TextSize")
 		params.marker_color = Holo:GetColor("Colors/Marker")
 		params.marker_disabled_color = Color(0.1, 0.1, 0.1)
 		o_init(self, node, layer, params)
@@ -28,7 +27,7 @@ if Holo.Options:GetValue("Menu") then
 		end
 	end
 
-	Hooks:PostHook(MenuNodeGui, "_create_menu_item", "HoloCreateMenuItem", function(self, row_item)
+	Holo:Post(MenuNodeGui, "_create_menu_item", function(self, row_item)
 		if row_item and row_item.item:parameters().pd2_corner then
 			row_item.gui_text:configure({
 				color = Holo:GetColor("TextColors/Menu"),
@@ -46,20 +45,20 @@ if Holo.Options:GetValue("Menu") then
 		end
 	end)
 
-	Hooks:PostHook(MenuNodeGui, "_fade_row_item", "HoloFadeRowItem", function(self, row_item)
+	Holo:Post(MenuNodeGui, "_fade_row_item", function(self, row_item)
 		if row_item and row_item.item:parameters().pd2_corner then
 			row_item.gui_text:set_color(Holo:GetColor("TextColors/Menu"))
 		end
 	end)
-	Hooks:PostHook(MenuNodeGui, "_highlight_row_item", "HoloHighlightRowItem", function(self, row_item)
+	Holo:Post(MenuNodeGui, "_highlight_row_item", function(self, row_item)
 		if row_item and row_item.item:parameters().pd2_corner then
 			row_item.gui_text:set_color(Holo:GetColor("TextColors/MenuHighlighted"))
 		end
 	end)
-	Hooks:PreHook(MenuNodeGui, "_align_marker", "HoloAlignMarker", function(self, row_item)
+	Holo:Pre(MenuNodeGui, "_align_marker", function(self, row_item)
 		self._old_center_y = self._marker_data.marker:world_center_y()
 	end)
-	Hooks:PostHook(MenuNodeGui, "_align_marker", "HoloAlignMarker", function(self, row_item)
+	Holo:Post(MenuNodeGui, "_align_marker", function(self, row_item)
 		local panel = row_item.gui_panel or row_item.gui_text
 		self._marker_data.gradient:set_rotation(360)
 		self._marker_data.marker:set_h(panel:h())
@@ -74,9 +73,10 @@ if Holo.Options:GetValue("Menu") then
 		if self._old_center_y then
 			self._marker_data.marker:set_world_center_y(self._old_center_y)
 		end
-		QuickAnim:Work(self._marker_data.marker, 
-			"world_center_y", row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel and row_item.gui_text:world_center_y() or panel:world_center_y(),
-			"speed", 15
-		)
+		QuickAnim:Play(self._marker_data.marker, {
+			world_center_y = row_item.item:parameters().pd2_corner and row_item.gui_pd2_panel and row_item.gui_text:world_center_y() or panel:world_center_y(),
+			alpha = 0.5,
+			speed = 15
+		})
 	end)
 end

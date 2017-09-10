@@ -92,7 +92,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self:update_banner_pos()
 		end
 	end	
-	Hooks:PostHook(HUDAssaultCorner, "init", "HoloInit", function(self)
+	Holo:Post(HUDAssaultCorner, "init", function(self)
 		self._top_right = {}		
 		Holo:AddSetPositionClbk(function(setting, pos)
 			if pos:match("TopRight") then
@@ -115,20 +115,13 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_show_icon_assaultbox(icon)
 		icon:set_alpha(1)
-		QuickAnim:Work(icon, "rotation", 360, "callback", function()
-			icon:set_rotation(0)
-		end)
+		QuickAnim:Play(icon, {rotation = 360, callback = function() icon:set_rotation(0) end})
 	end
 	function HUDAssaultCorner:left_grow(o, clbk)
 		local right = o:right()
-		QuickAnim:Work(o, 
-			"w", self._box_width, 
-			"speed", 4,
-			"sticky_right", right,
-			"callback", clbk
-		)
+		QuickAnim:Play(o, {w = self._box_width, speed = 4, sticky_right = right, callback = clbk})
 	end	
-	Hooks:PostHook(HUDAssaultCorner, "_start_assault", "HoloStartAssault", function(self)
+	Holo:Post(HUDAssaultCorner, "_start_assault", function(self)
 		if alive(self._bg_box) then
 			self._bg_box:stop()
 			self._bg_box:child("text_panel"):stop()
@@ -140,7 +133,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	 		end
 	 	end
 	end)
-	Hooks:PostHook(HUDAssaultCorner, "_end_assault", "HoloEndAssault", function(self)
+	Holo:Post(HUDAssaultCorner, "_end_assault", function(self)
 		if self:is_safehouse_raid() then		
 			self._wave_bg_box:stop()
 			self._wave_bg_box:child("num_waves"):stop()
@@ -152,7 +145,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_animate_wave_completed(panel)
 	end
-	Hooks:PostHook(HUDAssaultCorner, "sync_set_assault_mode", "HoloSyncSetAssaultMode", function(self)
+	Holo:Post(HUDAssaultCorner, "sync_set_assault_mode", function(self)
 		self:UpdateHolo()
 	end)
 	function HUDAssaultCorner:_update_assault_hud_color(color) end
@@ -179,7 +172,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		anim_text(self, text_panel, bg_box, color, color_function, ...)
 		done = true
 	end
-	Hooks:PostHook(HUDAssaultCorner, "_animate_show_casing", "HoloAnimateShowCasing", function(self, casing_panel, delay_time)
+	Holo:Post(HUDAssaultCorner, "_animate_show_casing", function(self, casing_panel, delay_time)
 		if alive(self._casing_bg_box) then
 			self._casing_bg_box:child("text_panel"):stop()
 			self._casing_bg_box:child("text_panel"):animate(callback(self, self, "_animate_text"), self._casing_bg_box, Holo:GetColor("TextColors/Casing"))
@@ -188,7 +181,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			self:left_grow(self._casing_bg_box)
 		end
 	end)
-	Hooks:PostHook(HUDAssaultCorner, "_animate_show_noreturn", "HoloAnimateShowNoReturn", function(self, point_of_no_return_panel)
+	Holo:Post(HUDAssaultCorner, "_animate_show_noreturn", function(self, point_of_no_return_panel)
 		if alive(self._noreturn_bg_box) then
 			local icon_noreturnbox = point_of_no_return_panel:child("icon_noreturnbox")
 			local point_of_no_return_text = self._noreturn_bg_box:child("point_of_no_return_text")
@@ -224,14 +217,14 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		end
 		SetHostageOffseted(self, is_offseted, ...)
 	end
-	Hooks:PostHook(HUDAssaultCorner, "set_control_info", "HoloSetControlInfo", function(self)
+	Holo:Post(HUDAssaultCorner, "set_control_info", function(self)
 		if alive(self._hostages_bg_box) then
 			self._hostages_bg_box:child("bg"):stop()
 			self._hostages_bg_box:child("num_hostages"):stop()
 			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
 		end
 	end)
-	Hooks:PostHook(HUDAssaultCorner, "_animate_wave_started", "HoloAnimateWaveStarted", function(self)
+	Holo:Post(HUDAssaultCorner, "_animate_wave_started", function(self)
 		if alive(self._wave_bg_box) then
 			self._wave_bg_box:child("bg"):stop()
 			self._wave_bg_box:child("num_waves"):stop()

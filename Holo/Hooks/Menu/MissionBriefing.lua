@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Menu", "Lobby") then	
-	Hooks:PostHook(HUDMissionBriefing, "init", "HoloInit", function(self)	    
+	Holo:Post(HUDMissionBriefing, "init", function(self)	    
 		if not alive(self._job_schedule_panel) then
 			return 
 		end
@@ -77,25 +77,25 @@ if Holo:ShouldModify("Menu", "Lobby") then
 	    	end
 	    end
 	end)
-	Hooks:PostHook(HUDMissionBriefing, "set_slot_ready", "HoloSetSlotReady", function(self, peer, peer_id)
+	Holo:Post(HUDMissionBriefing, "set_slot_ready", function(self, peer, peer_id)
 		local slot = self._ready_slot_panel:child("slot_" .. tostring(peer_id))
 		if alive(slot) then
 			slot:child("status"):set_blend_mode("normal")	
 		end 
 	end)
- 	Hooks:PostHook(HUDMissionBriefing, "set_slot_not_ready", "HoloSetSlotNotReady", function(self, peer, peer_id)
+ 	Holo:Post(HUDMissionBriefing, "set_slot_not_ready", function(self, peer, peer_id)
 		local slot = self._ready_slot_panel:child("slot_" .. tostring(peer_id))
 		if alive(slot) then
 			slot:child("line"):set_w(slot:child("linebg"):w()) 
 		end 
  	end)
-  	Hooks:PostHook(HUDMissionBriefing, "set_dropin_progress", "HoloSetDropInProgress", function(self, peer_id, progress_percentage, mode)
+  	Holo:Post(HUDMissionBriefing, "set_dropin_progress", function(self, peer_id, progress_percentage, mode)
 		local slot = self._ready_slot_panel:child("slot_" .. tostring(peer_id))
 		if alive(slot) then
 			slot:child("line"):set_w(slot:child("linebg"):w() * (progress_percentage / 100)) 
 		end
   	end)
-  	Hooks:PostHook(HUDMissionBriefing, "remove_player_slot_by_peer_id", "HoloRemovePlayerSlotByPeerID", function(self, peer, reason)
+  	Holo:Post(HUDMissionBriefing, "remove_player_slot_by_peer_id", function(self, peer, reason)
 		local slot = self._ready_slot_panel:child("slot_" .. tostring(peer_id))
 		if alive(slot) then
 			slot:child("line"):set_w(0) 

@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Hud", "Presenter") then
-	Hooks:PostHook(HUDPresenter, "init", "HoloInit", function(self)
+	Holo:Post(HUDPresenter, "init", function(self)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
@@ -49,7 +49,7 @@ if Holo:ShouldModify("Hud", "Presenter") then
 		text:set_w(w2)
 		local _w = math.max(w, w2) + 24
 		self._box_width = _w
- 		local function open_done()
+		local function open_done()
 			title:set_visible(true)
 			text:set_visible(true)
 			title:animate(callback(self, self, "_animate_show_text"), text)
@@ -66,11 +66,6 @@ if Holo:ShouldModify("Hud", "Presenter") then
 		self._bg_box:set_w(0)
 		local center_x = self._hud_panel:w() / 2
 		self._bg_box:set_center_x(center_x)
-		QuickAnim:Work(self._bg_box, 
-			"w", self._box_width,
-			"speed", 4, 
-			"sticky_center_x", center_x, 
-			"callback", open_done
-		)
+		QuickAnim:Play(self._bg_box, {w = self._box_width, speed = 4, sticky_center_x = center_x, callback = open_done})
 	end
 end

@@ -46,6 +46,19 @@ function TweakData:UpdateHolo()
     self.contour.interactable_look_at.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
     self.contour.interactable_look_at.standard_opacity = 1
  
+    local scale_multiplier = self.scale.default_font_multiplier
+	local small_scale_multiplier = self.scale.small_font_multiplier
+    local font_size = Holo.Options:GetValue("FontSize")
+    self.menu.small_font_size = font_size * small_scale_multiplier
+	self.menu.meidum_font_size = (font_size * 2) * scale_multiplier
+	self.menu.eroded_font_size = font_size + 66
+	self.menu.pd2_massive_font_size = font_size + 66
+	self.menu.pd2_large_font_size = font_size + 30
+	self.menu.pd2_medium_font_size = font_size * 2
+	self.menu.pd2_small_font_size = font_size + 6
+	self.menu.pd2_tiny_font_size = font_size + 2
+	self.menu.default_font_size = (font_size * 2) * scale_multiplier
+
     if managers.criminals then 
         for _, char in ipairs(managers.criminals:characters()) do
             if alive(char.unit) then

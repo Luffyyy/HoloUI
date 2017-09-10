@@ -1,5 +1,5 @@
 if Holo.Options:GetValue("Menu") then
-	Hooks:PostHook(MenuBackdropGUI, "_create_base_layer", "HoloCreateBaseLayer", function(self)
+	Holo:Post(MenuBackdropGUI, "_create_base_layer", function(self)
 		if Holo.Options:GetValue("ColoredBackground") then
 			for _, child in pairs(self._panel:children()) do
 				child:hide()

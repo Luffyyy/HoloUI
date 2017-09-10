@@ -1,15 +1,15 @@
 if Holo:ShouldModify("Hud", "Interaction") then
-	Hooks:PostHook(HUDInteraction, "show_interact", "HoloShowInteract", function(self) 
+	Holo:Post(HUDInteraction, "show_interact", function(self) 
 		local text = self._hud_panel:child(self._child_name_text)
 		text:set_color(Color.white)
 		text:set_w(text:parent():w())
 	end)
-	Hooks:PreHook(HUDInteraction, "_animate_interaction_complete", "HoloAnimateInteractionComplete", function(self, bitmap, circle)
+	Holo:Pre(HUDInteraction, "_animate_interaction_complete", function(self, bitmap, circle)
 		bitmap:set_blend_mode("normal")
 		bitmap:set_image("guis/textures/custom/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress")]))
 		circle._circle:set_blend_mode("normal")
 	end)
-	Hooks:PostHook(HUDInteraction, "set_bar_valid", "HoloSetBarValid", function(self, valid)
+	Holo:Post(HUDInteraction, "set_bar_valid", function(self, valid)
 		self._interact_circle:set_image("guis/textures/custom/Circle" .. (Holo.RadialNames[Holo.Options:GetValue("Colors/Progress" .. (valid and "" or "Red"))]))
 	end)
 end

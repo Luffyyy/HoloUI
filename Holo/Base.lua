@@ -4,9 +4,9 @@ if not ModCore then
 end
 
 Holo = Holo or ModCore:new(ModPath .. "Config.xml", false, true)
-function Holo:init()
+function Holo:Init()
 	self:init_modules()
-	self.setup = true
+	self.Setup = true
 	self.set_position_clbks = {}
 	self:CheckOtherMods()
 	self:UpdateSettings()
@@ -143,23 +143,19 @@ function Holo:ShouldModify(c, o)
 	return self.Options:GetValue(o)
 end
 
-if not Holo.setup then
-	Holo:init()
+function Holo:Post(clss, func, after_orig)
+	Hooks:PostHook(clss, func, "HoloUI"..func, after_orig)
+end
+
+function Holo:Pre(clss, func, before_orig)
+	Hooks:PreHook(clss, func, "HoloUIPre"..func, before_orig)
+end
+
+if not Holo.Setup then
+	Holo:Init()
 end
 
 if Hooks then
-	Hooks:Add("MenuManager_Base_SetupModOptionsMenu", "Voicekey_opt", function(menu_manager, nodes)
-		MenuHelper:NewMenu("lua_mod_options_menu")
-	end)	
-	if Holo.Options:GetValue("Menu") then
-		Hooks:Add("MenuComponentManagerInitialize", "HoloMenuComponentManagerInitialize", function(menu)
-		--[[	Hooks:PostHook(NotificationsGuiObject, "init", "HoloInit", function(self)
-				self._highlight_rect:hide()
-				self._highlight_left_rect:hide()
-				self._highlight_right_rect:hide()
-			end)]]
-		end)
-	end
 	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(menu_manager, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
 		Holo.Workspace = managers.gui_data:create_fullscreen_workspace()		

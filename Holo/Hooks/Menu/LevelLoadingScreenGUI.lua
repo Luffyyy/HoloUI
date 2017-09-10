@@ -1,7 +1,7 @@
 local oinit = LevelLoadingScreenGuiScript.init
 function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
-	local data = arg.load_level_data.level_data
-	if data.Holo then
+	if arg.Holo then
+		local data = arg.Holo
 		self._scene_gui = scene_gui
 		self._res = res
 		self._base_layer = base_layer

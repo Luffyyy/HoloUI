@@ -20,8 +20,10 @@ if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then
 			if self._shaker then
 				self._shaker:stop_all()
 			end
-			managers.environment_controller:set_default_color_grading("color_off") --Remove if you wish the mod to not remove color grading.
-			managers.environment_controller:refresh_render_settings()		
+			if not Holo.Options:GetValue("MenuColorGrading") then
+				managers.environment_controller:set_default_color_grading("color_off", true)
+				managers.environment_controller:refresh_render_settings()
+			end
 		else
 			self._background_ws = World:newgui():create_world_workspace(w,h,a,b,c)
 			self._background_ws:panel():bitmap({
@@ -55,8 +57,8 @@ if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then
 			end		
 		end		
 	end	
-	Hooks:PostHook(MenuSceneManager, "update", "HoloUpdate", function(self) self:HoloUpdate() end)		
-	Hooks:PreHook(MenuSceneManager, "init", "HoloInit", function(self)
+	Holo:Post(MenuSceneManager, "update", MenuSceneManager.HoloUpdate)		
+	Holo:Pre(MenuSceneManager, "init", function(self)
 		if MenuBackgrounds then
 			function MenuSceneManager:HoloUpdate() end
 		end

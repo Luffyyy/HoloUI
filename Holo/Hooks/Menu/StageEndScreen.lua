@@ -1,8 +1,8 @@
 if Holo:ShouldModify("Menu", "Lobby") then
-	Hooks:PostHook(HUDPackageUnlockedItem, "init", "HoloInit", function(self)
+	Holo:Post(HUDPackageUnlockedItem, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
-	Hooks:PostHook(HUDStageEndScreen, "init", "HoloInit", function(self)
+	Holo:Post(HUDStageEndScreen, "init", function(self)
 		self._background_layer_full:child("stage_text"):hide()
 		Holo.Utils:SetBlendMode(self._foreground_layer_safe)
 		self._box._panel:hide()
@@ -15,7 +15,7 @@ if Holo:ShouldModify("Menu", "Lobby") then
 		managers.hud:make_fine_text(pg_text)		
 		pg_text:set_right(self._paygrade_panel:right())
 	end)
-	Hooks:PostHook(HUDStageEndScreen, "stage_spin_up", "HoloStageSpinUp", function(self)
+	Holo:Post(HUDStageEndScreen, "stage_spin_up", function(self)
 		self._lp_text:set_font_size(48)
 	end)
 end

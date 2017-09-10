@@ -1,6 +1,6 @@
 if Holo.Options:GetValue("Menu") then
 
-Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_ws, node )
+Holo:Post(CrimeNetGui, "init", function( self, ws, fullscreeen_ws, node )
 	Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 	Holo.Utils:SetBlendMode(self._panel, "focus")
 	local no_servers = node:parameters().no_servers
@@ -34,10 +34,10 @@ Hooks:PostHook(CrimeNetGui, "init", "HoloInit", function( self, ws, fullscreeen_
 	self._map_panel:child("map"):set_alpha(Holo.Options:GetValue("ColoredBackground") and 0 or 1)
 end)
 
-Hooks:PostHook(CrimeNetGui, "_create_job_gui", "HoloCreateJobGUI", function(self)
+Holo:Post(CrimeNetGui, "_create_job_gui", function(self)
 	Holo.Utils:SetBlendMode(self._panel, "focus")
 end)
-Hooks:PostHook(CrimeNetGui, "_create_polylines", "HoloCreatePolyLines", function( self, o, x, y )
+Holo:Post(CrimeNetGui, "_create_polylines", function(self, o, x, y)
 	if self._region_panel then
 		for _, child in pairs(self._region_panel:children()) do
 			child:configure({
@@ -46,7 +46,7 @@ Hooks:PostHook(CrimeNetGui, "_create_polylines", "HoloCreatePolyLines", function
 		end
 	end
 end)
-Hooks:PostHook(CrimeNetGui, "mouse_moved", "HoloMouseMoved", function( self, o, x, y )
+Holo:Post(CrimeNetGui, "mouse_moved", function(self, o, x, y)
 	if not self._crimenet_enabled then
 		return false
 	end

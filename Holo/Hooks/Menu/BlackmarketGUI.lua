@@ -1,5 +1,5 @@
 if Holo.Options:GetValue("Menu") then
-	Hooks:PostHook(BlackMarketGuiTabItem, "init", "HoloInit", function( self )
+	Holo:Post(BlackMarketGuiTabItem, "init", function( self )
 		self._tab_panel:child("tab_select_rect"):move(0, -1.5)
 		self._tab_panel:child("tab_text"):show()
 	end)
@@ -62,31 +62,31 @@ if Holo.Options:GetValue("Menu") then
 			self._btn_text:set_color(self._highlighted and Holo:GetColor("TextColors/MenuHighlighted") or Holo:GetColor("TextColors/Menu"))
 		end
 		self._panel:child("select_rect"):stop()
-		QuickAnim:Work(self._panel:child("select_rect"), "alpha", self._highlighted and 1 or 0, "speed", 5)
+		QuickAnim:Play(self._panel:child("select_rect"), {alpha = self._highlighted and 1 or 0, speed = 5})
 	end
-	Hooks:PostHook(BlackMarketGui, "_setup", "HoloSetup", function(self, is_start_page, component_data)
+	Holo:Post(BlackMarketGui, "_setup", function(self, is_start_page, component_data)
 		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
 		Holo.Utils:SetBlendMode(self._panel, "suspicion")
 	end)
-	Hooks:PostHook(BlackMarketGui, "set_weapons_stats_columns", "HoloSetWeaponsStatsColumns", function(self)
+	Holo:Post(BlackMarketGui, "set_weapons_stats_columns", function(self)
 		for i, stat in ipairs(self._stats_shown) do
 			self._stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(BlackMarketGui, "set_weapon_mods_stats_columns", "HoloSetWeaponModsStatsColumns", function(self)
+	Holo:Post(BlackMarketGui, "set_weapon_mods_stats_columns", function(self)
 		for i, stat in ipairs(self._stats_shown) do
 			self._stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(BlackMarketGui, "show_stats", "HoloShowStats", function(self)
+	Holo:Post(BlackMarketGui, "show_stats", function(self)
 		for i, stat in ipairs(self._stats_shown) do
 			self._stats_texts[stat.name].skill:set_blend_mode("normal")
 			self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
 		end
 	end)
-	Hooks:PostHook(BlackMarketGui, "set_stats_titles", "HoloSetStatsTitles", function(self, ...)
+	Holo:Post(BlackMarketGui, "set_stats_titles", function(self, ...)
 		self._stats_titles.skill:set_blend_mode("normal")
 		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
 	end)

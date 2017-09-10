@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Hud", "TeammateHud") then
-	Hooks:PostHook(HUDTeammate, "init", "HoloInit", function(self)
+	Holo:Post(HUDTeammate, "init", function(self)
 		if not alive(self._player_panel) or not alive(self._player_panel:child("radial_health_panel")) then
 			Holo:log("[ERROR] Something went wrong when trying to modify HUDTeammate")
 			return
@@ -60,7 +60,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local weapons_panel = self._player_panel:child("weapons_panel")
 		local secondary_weapon_panel = weapons_panel:child("secondary_weapon_panel")
 		local primary_weapon_panel = weapons_panel:child("primary_weapon_panel")
-		QuickAnim:Work((is_secondary and secondary_weapon_panel or primary_weapon_panel):child("switch_bg"), "alpha", curr and 0.1 or 0)
+		QuickAnim:Play((is_secondary and secondary_weapon_panel or primary_weapon_panel):child("switch_bg"), {alpha = curr and 0.1 or 0})
 		if not curr then
 			return
 		end
@@ -295,19 +295,11 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		local primary_bg = wep_panel:child("primary_weapon_panel"):child("bg")
 		primary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
 		secondary_bg:set_color(Holo:GetColor("Colors/SelectedWeapon"))
-		QuickAnim:Work(primary_bg, 
-			"alpha", is_secondary and 0 or 1,
-			s, is_secondary and 0 or 2,
-			"speed", 10
-		)
-		QuickAnim:Work(secondary_bg, 
-			"alpha", is_secondary and 1 or 0,
-			s, is_secondary and 2 or 0,
-			"speed", 10
-		)
+		QuickAnim:Play(primary_bg, {alpha = is_secondary and 0 or 1, [s] = is_secondary and 0 or 2, speed = 10})
+		QuickAnim:Play(secondary_bg, {alpha = is_secondary and 1 or 0, [s] = is_secondary and 2 or 0, speed = 10})
 	end
 
-	Hooks:PostHook(HUDTeammate, "set_name", "HoloSetName", function(self, teammate_name)
+	Holo:Post(HUDTeammate, "set_name", function(self, teammate_name)
 		self._panel:child("callsign"):hide()
 		self._panel:child("callsign_bg"):hide()
 		self._panel:child("name"):set_text(Holo.Options:GetValue("UpperCaseNames") and teammate_name:upper() or teammate_name)
@@ -332,7 +324,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		ammo_total:set_text(tostring(current_left))
 	end
 
-	Hooks:PostHook(HUDTeammate, "set_health", "HoloSetHealth", function(self, data)
+	Holo:Post(HUDTeammate, "set_health", function(self, data)
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local Health = radial_health_panel:child("Health")
 		local val = data.current / data.total
@@ -397,9 +389,9 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 		end
 	end
 
-    Hooks:PostHook(HUDTeammate, "set_grenades_amount", "HoloSetGrenadesAmount", function(self) self:layout_equipments() end)
-    Hooks:PostHook(HUDTeammate, "set_cable_ties_amount", "HoloSetCableTiesAmount", function(self) self:layout_equipments() end)
-    Hooks:PostHook(HUDTeammate, "set_deployable_equipment_amount", "HoloSetDeployableEquipmentAmount", function(self) self:layout_equipments() end)
+    Holo:Post(HUDTeammate, "set_grenades_amount", function(self) self:layout_equipments() end)
+    Holo:Post(HUDTeammate, "set_cable_ties_amount", function(self) self:layout_equipments() end)
+    Holo:Post(HUDTeammate, "set_deployable_equipment_amount", function(self) self:layout_equipments() end)
     function HUDTeammate:_create_primary_weapon_firemode() self:_create_firemode() end
     function HUDTeammate:_create_secondary_weapon_firemode() self:_create_firemode(true) end
     function HUDTeammate:set_callsign(id) self._panel:child("teammate_line"):set_color(tweak_data.chat_colors[id]) end

@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Hud", "Carrying") then
-	Hooks:PostHook(HUDTemp, "init", "HoloInit", function(self, ...)
+	Holo:Post(HUDTemp, "init", function(self, ...)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
@@ -53,10 +53,6 @@ if Holo:ShouldModify("Hud", "Carrying") then
 		
 		local right = bag_panel:right()
 		bag_panel:set_w(0)
-		QuickAnim:Work(bag_panel, 
-			"w", self._bg_box:w(),
-			"speed", 4,
-			"sticky_right", right
-		)
+		QuickAnim:Play(bag_panel, {w = self._bg_box:w(), speed = 4, sticky_right = right})
 	end
 end

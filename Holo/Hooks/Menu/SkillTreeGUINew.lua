@@ -1,12 +1,12 @@
 if Holo.Options:GetValue("Menu") then
-	Hooks:PostHook(SpecializationTabItem, "init", "HoloInit", function(self)
+	Holo:Post(SpecializationTabItem, "init", function(self)
 		self._spec_tab:child("spec_tab_select_rect"):set_image("units/white_df")
 		self._spec_tab:child("spec_tab_select_rect"):move(0, -4)
 	end)	
-	Hooks:PostHook(NewSkillTreeTabItem, "init", "HoloInit", function(self, page_tab_panel, page)
+	Holo:Post(NewSkillTreeTabItem, "init", function(self, page_tab_panel, page)
 		self._page_panel:child("PageTabBG"):set_image("units/white_df")
 	end)	
-	Hooks:PostHook(SpecializationGuiButtonItem, "init", "HoloInit", function(self, page_tab_panel, page)
+	Holo:Post(SpecializationGuiButtonItem, "init", function(self, page_tab_panel, page)
 		self._btn_text:set_blend_mode("normal")
 		self._panel:child("select_rect"):set_blend_mode("normal")	
 	end)
@@ -35,16 +35,16 @@ if Holo.Options:GetValue("Menu") then
 		self._spec_tab:child("spec_tab_name"):set_blend_mode("normal")
 	end
 	function NewSkillTreeTabItem:next_page_position()
-		return self._page_panel:right() + 4
+		return self._page_panel:right() + 2
 	end
-	Hooks:PostHook(SkillTreeGui, "_setup", "HoloSetup", function(self)
+	Holo:Post(SkillTreeGui, "_setup", function(self)
 		Holo.Utils:FixBackButton(self, self._panel:child("BackButton"))
 	end)	
-	Hooks:PostHook(NewSkillTreeGui, "_setup", "HoloSetup", function(self)
+	Holo:Post(NewSkillTreeGui, "_setup", function(self)
 		Holo.Utils:FixBackButton(self, self._panel:child("BackButton"))
 		self._skillset_panel:child("SkillSetText"):set_blend_mode("normal")
 	end)
-	Hooks:PostHook(NewSkillTreeSkillItem, "refresh", "HoloRefresh", function(self)
+	Holo:Post(NewSkillTreeSkillItem, "refresh", function(self)
 		if alive(self._skill_panel) then		
 			local step = self._skilltree:next_skill_step(self._skill_id) 
 			self._skill_panel:child("SkillIconPanel"):child("Icon"):set_alpha(step > 1 and 1 or 0.25)

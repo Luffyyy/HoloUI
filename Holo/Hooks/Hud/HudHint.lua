@@ -1,5 +1,5 @@
 if Holo:ShouldModify("Hud", "Hint") then
-	Hooks:PostHook(HUDHint, "init", "HoloInit", function(self)
+	Holo:Post(HUDHint, "init", function(self)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)

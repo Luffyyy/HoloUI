@@ -21,6 +21,7 @@ function TweakData:UpdateHolo()
         self.screen_colors.button_stage_3 = Holo:GetColor("TextColors/Menu")
         self.screen_colors.item_stage_2 = Holo:GetColor("Colors/Marker")
         self.screen_colors.item_stage_3 = Holo:GetColor("TextColors/Menu")
+        self.screen_colors.title = Holo:GetColor("TextColors/Menu")
         self.screen_colors.text = Holo:GetColor("TextColors/Menu")
         self.overlay_effects.spectator.color = Holo:GetColor("Colors/Menu")
         if Holo:ShouldModify("Menu", "BlackScreen") then

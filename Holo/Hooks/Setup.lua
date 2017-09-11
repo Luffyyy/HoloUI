@@ -10,7 +10,7 @@ Holo:Pre(Setup, "_start_loading_screen", function()
 						background_color = Holo:GetColor("Colors/Menu"),
 						main_color = Holo:GetColor("Colors/Main"),
 						text_color = Holo:GetColor("TextColors/Menu"),
-						colored_background = Holo:GetColor("Colors/Menu"),
+						colored_background = Holo.Options:GetValue("ColoredBackground"),
 						briefing_string = managers.localization and level and managers.localization:text(level.briefing_id),
 						difficulty_string = difficulty and string.upper(managers.localization:text("debug_loading_level").." - "..managers.localization:text(tweak_data.difficulty_name_ids[difficulty]))
 					}

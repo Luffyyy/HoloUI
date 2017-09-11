@@ -24,7 +24,7 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		local base_panel = self._back_drop_gui:get_new_base_layer()		
 		base_panel:bitmap({
 			texture = not data.colored_background and "guis/textures/loading/loading_bg",
-			color = data.colored_background and data.background_color,
+			color = data.colored_background and data.background_color or nil,
 			w = base_panel:w(),
 			h = base_panel:h(),
 			layer = 0,
@@ -97,12 +97,14 @@ end
 
 local o_make_loading_hint = LevelLoadingScreenGuiScript._make_loading_hint
 function LevelLoadingScreenGuiScript:color_all(panel)
-	local text_color = arg.load_level_data.level_data.text_color
-	for _, child in pairs(panel:children()) do
-		if child.set_color and child:w() ~= 192 then
-			child:set_color(text_color)
-		elseif child.children then
-			self:color_all(child)
+	if arg.Holo then
+		local text_color = arg.Holo.text_color
+		for _, child in pairs(panel:children()) do
+			if child.set_color and child:w() ~= 192 then
+				child:set_color(text_color)
+			elseif child.children then
+				self:color_all(child)
+			end
 		end
 	end
 end

@@ -5,7 +5,7 @@
       <class file="OptionsMenu.lua" />
       <class file="HudVoice.lua" />
    </Classes>
-   <AssetUpdates id="12501" version="2.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+   <AssetUpdates id="12501" version="2.11" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />

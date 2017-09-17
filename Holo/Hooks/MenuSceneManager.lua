@@ -57,10 +57,9 @@ if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then
 			end		
 		end		
 	end	
-	Holo:Post(MenuSceneManager, "update", MenuSceneManager.HoloUpdate)		
 	Holo:Pre(MenuSceneManager, "init", function(self)
-		if MenuBackgrounds then
-			function MenuSceneManager:HoloUpdate() end
+		if not MenuBackgrounds then
+			Holo:Post(MenuSceneManager, "update", MenuSceneManager.HoloUpdate)
 		end
 	end)
 end

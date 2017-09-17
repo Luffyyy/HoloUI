@@ -5,7 +5,7 @@
       <class file="OptionsMenu.lua" />
       <class file="HudVoice.lua" />
    </Classes>
-   <AssetUpdates id="12501" version="2.11" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+   <AssetUpdates id="12501" version="2.12" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />
@@ -78,7 +78,6 @@
       <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/menuguicomponentgeneric" file="Menu/MenuGUIComponentGeneric.lua" />
       <hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
-      <hook source_file="lib/utils/LightLoadingScreenGuiScript" file="Menu/MenuLightLoading.lua" />
    </Hooks>
    <Options build_menu="false" auto_load="true" save_file="HoloUIConfig.txt">
       <options>

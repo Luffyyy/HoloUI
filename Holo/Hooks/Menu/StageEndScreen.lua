@@ -9,9 +9,7 @@ if Holo:ShouldModify("Menu", "Lobby") then
 		self._package_box._panel:hide()
 		self._paygrade_panel:hide()
 		local pg_text = self._foreground_layer_safe:child("pg_text") 
-		local difficulty = Global.game_settings.difficulty
-		difficulty = difficulty == "overkill_145" and "overkill" or difficulty == "overkill_290" and "apocalypse" or difficulty		
-		pg_text:set_text(string.upper(managers.localization:text("menu_difficulty_" .. difficulty)))		
+		pg_text:set_text(managers.localization:to_upper_text(tweak_data.difficulty_name_ids[Global.game_settings.difficulty]))		
 		managers.hud:make_fine_text(pg_text)		
 		pg_text:set_right(self._paygrade_panel:right())
 	end)

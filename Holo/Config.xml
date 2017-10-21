@@ -78,6 +78,7 @@
       <hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
       <hook source_file="lib/managers/menu/menuguicomponentgeneric" file="Menu/MenuGUIComponentGeneric.lua" />
       <hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
+      <hook source_file="lib/managers/menu/crimenetsidebargui" file="Menu/CrimeNetSidebarGUI.lua" />
    </Hooks>
    <Options build_menu="false" auto_load="true" save_file="HoloUIConfig.txt">
       <options>

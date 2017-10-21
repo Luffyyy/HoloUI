@@ -27,9 +27,6 @@ Holo:Post(CrimeNetGui, "init", function( self, ws, fullscreeen_ws, node )
 		valign = "scale",
 		halign = "scale",
 	})
-	if not no_servers then
-		self._panel:child("filter_button"):set_color(Holo:GetColor("TextColors/Menu"))
-	end
 	self._panel:child("legends_button"):set_color(Holo:GetColor("TextColors/Menu"))
 	self._map_panel:child("map"):set_alpha(Holo.Options:GetValue("ColoredBackground") and 0 or 1)
 end)

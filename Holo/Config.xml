@@ -22,23 +22,23 @@
       <hook source_file="lib/managers/crimenetmanager" file="CrimeNetManager.lua" />
       <hook source_file="lib/managers/chatmanager" file="ChatManager.lua" />
       <hook source_file="lib/managers/menu/menuscenemanager" file="MenuSceneManager.lua" />
-      <!-- Hud Hooks -->
-      <hook source_file="lib/units/props/timergui" file="Hud/TimerGUI.lua" />
-      <hook source_file="lib/managers/hud/hudblackscreen" file="Hud/HudBlackScreen.lua" />
-      <hook source_file="lib/managers/hud/hudinteraction" file="Hud/HudInteraction.lua" />
-      <hook source_file="lib/managers/hud/hudheisttimer" file="Hud/HudHeistTimer.lua" />
-      <hook source_file="lib/managers/hud/hudsuspicion" file="Hud/HudSuspicion.lua" />
-      <hook source_file="lib/managers/hud/hudplayerdowned" file="Hud/HudPlayerDowned.lua" />
-      <hook source_file="lib/managers/menu/circleguiobject" file="Hud/CircleGUIObject.lua" />
-      <hook source_file="lib/managers/hud/hudplayercustody" file="Hud/HudPlayerCustody.lua" />
-      <hook source_file="lib/managers/hud/hudassaultcorner" file="Hud/HudAssaultCorner.lua" />
-      <hook source_file="lib/managers/hud/hudobjectives" file="Hud/HudObjectives.lua" />
-      <hook source_file="lib/managers/hud/hudchat" file="Hud/HudChat.lua" />
-      <hook source_file="lib/managers/hud/hudteammate" file="Hud/HudTeammate.lua" />
-      <hook source_file="lib/managers/hud/hudtemp" file="Hud/HudTemp.lua" />
-      <hook source_file="lib/managers/hud/hudhint" file="Hud/HudHint.lua" />
-      <hook source_file="lib/managers/hud/hudpresenter" file="Hud/HudPresenter.lua" />
-      <hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="Hud/SubtitlesPresenter.lua" />
+      <!-- HUD Hooks -->
+      <hook source_file="lib/units/props/timergui" file="HUD/TimerGUI.lua" />
+      <hook source_file="lib/managers/hud/hudblackscreen" file="HUD/BlackScreen.lua" />
+      <hook source_file="lib/managers/hud/hudinteraction" file="HUD/Interaction.lua" />
+      <hook source_file="lib/managers/hud/hudheisttimer" file="HUD/HeistTimer.lua" />
+      <hook source_file="lib/managers/hud/hudsuspicion" file="HUD/Suspicion.lua" />
+      <hook source_file="lib/managers/hud/hudplayerdowned" file="HUD/PlayerDowned.lua" />
+      <hook source_file="lib/managers/menu/circleguiobject" file="HUD/CircleGUIObject.lua" />
+      <hook source_file="lib/managers/hud/hudplayercustody" file="HUD/PlayerCustody.lua" />
+      <hook source_file="lib/managers/hud/hudassaultcorner" file="HUD/AssaultCorner.lua" />
+      <hook source_file="lib/managers/hud/hudobjectives" file="HUD/Objectives.lua" />
+      <hook source_file="lib/managers/hud/hudchat" file="HUD/Chat.lua" />
+      <hook source_file="lib/managers/hud/hudteammate" file="HUD/Teammate.lua" />
+      <hook source_file="lib/managers/hud/hudtemp" file="HUD/Temp.lua" />
+      <hook source_file="lib/managers/hud/hudhint" file="HUD/HudHint.lua" />
+      <hook source_file="lib/managers/hud/hudpresenter" file="HUD/Presenter.lua" />
+      <hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="HUD/SubtitlesPresenter.lua" />
       <!-- Menu Hooks -->
       <hook source_file="lib/managers/hud/hudmissionbriefing" file="Menu/MissionBriefing.lua" />
       <hook source_file="lib/managers/menu/missionbriefinggui" file="Menu/MissionBriefingGUI.lua" />

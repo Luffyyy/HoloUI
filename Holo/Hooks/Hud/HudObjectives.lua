@@ -1,6 +1,7 @@
 function HUDBGBox_recreate(panel, config)
 	if not alive(panel) then
 		log(debug.traceback())
+		return
 	end
 	panel:configure({
 		x = config.x,
@@ -74,10 +75,10 @@ function HUDBGBox_create_frame(box_panel, color, style)
 	opt.valign = "bottom"
 	local right_bottom = box_panel:bitmap(opt)
 	if style == 1 then
-	    right_bottom:set_image("guis/textures/custom/Frame", 8,8,8,8)
-	    left_bottom:set_image("guis/textures/custom/Frame", 0,8,8,8)
-	    left_top:set_image("guis/textures/custom/Frame", 0,0,8,8)
-	    right_top:set_image("guis/textures/custom/Frame", 8,0,8,8)
+	    right_bottom:set_image("ui/custom/frame", 8,8,8,8)
+	    left_bottom:set_image("ui/custom/frame", 0,8,8,8)
+	    left_top:set_image("ui/custom/frame", 0,0,8,8)
+	    right_top:set_image("ui/custom/frame", 8,0,8,8)
 		local s = 8
 	    right_bottom:set_size(s,s)
 	    left_bottom:set_size(s,s)
@@ -153,8 +154,8 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self.ObjText:set_y(0)
 		self.ObjText:set_x(4)
 		self.ObjPanel:set_w(w + 8)
-		QuickAnim:Play(self.ObjText, {w = w, speed = 3})
-		QuickAnim:Play(self._bg_box, {w = w + 8, speed = 3})
+		play_value(self.ObjText, "w", w)
+		play_value(self._bg_box, "w", w + 8)
 		self:PosObjectives()
 	end
 
@@ -162,8 +163,12 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 		self._bg_box:child("bg"):stop()
 		self.AmountText:stop()
 		self.ObjText:stop()
-		self.AmountText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
-		self.ObjText:animate(callback(nil, Holo, "flash_icon"), 4, nil, true)
+		play_value(self.AmountText, "alpha", 0.25, {time = 1, callback = function()
+			play_value(self.AmountTextt, "alpha", 1, {time = 1})
+		end})
+		play_value(self.ObjText, "alpha", 0.25, {time = 1, callback = function()
+			play_value(self.ObjText, "alpha", 1, {time = 1})
+		end})
 	end)
 
 	Holo:Post(HUDObjectives, "update_amount_objective", function(self, data)

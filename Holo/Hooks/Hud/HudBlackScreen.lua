@@ -12,7 +12,7 @@ if Holo:ShouldModify("Menu", "BlackScreen") then
 	    self._skip_circle._circle:hide()
 	    self._progress = self._blackscreen_panel:rect({
 	        name = "line",
-			color = Holo:GetColor("Colors/Main"),
+			color = Holo:GetColor("Colors/Marker"),
 	        h = 2,
 	    })
 	end
@@ -47,9 +47,9 @@ if Holo:ShouldModify("Menu", "BlackScreen") then
 	function HUDBlackScreen:skip_circle_done()
 		local bottom = self._progress:bottom()		
 		local speed = 4
-		QuickAnim:Play(self._blackscreen_panel:child("loading_text"), {y = bottom, h = 0, speed = speed})
-		QuickAnim:Play(self._blackscreen_panel:child("skip_text"), {y = bottom, h = 0, speed = speed, callback = function()
-			QuickAnim:Play(self._progress, {h = 0, speed = speed, sticky_bottom = bottom})
+		play_anim(self._blackscreen_panel:child("loading_text"), {set = {y = bottom, h = 0}})
+		play_anim(self._blackscreen_panel:child("skip_text"), {set = {y = bottom, h = 0}, callback = function()
+			play_value(self._progress, "w", 0)
 		end})
 	end
 end

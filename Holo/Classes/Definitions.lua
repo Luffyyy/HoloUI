@@ -33,25 +33,6 @@ Holo.Voices = { -- Add/Remove Voices!
 	["p46"] = "Jump",
 }
 Holo.VoiceMaxPerRow = 5
-Holo.Loot = {}
-Holo.RadialNames = {
-	"Blue",
-	"Orange",
-	"Green", 
-	"Pink", 
-	"Yellow",
-	"White",
-	"Red",
-	"Cyan",
-	"SpringGreen",
-	"DarkBlue",
-	"Purple",
-	"Lime",
-	"Black",
-}
-Holo.RadialColors = clone(Holo.RadialNames)
-for i, name in pairs(Holo.RadialColors) do Holo.RadialColors[i] = "Holo/"..name end
-
 Holo.TextSizesStrings = {
 	"Holo/Small",
 	"Holo/Normal",
@@ -76,4 +57,30 @@ Holo.Positions = {
 	"Holo/BottomLeft",
 	"Holo/BottomCenter",
 	"Holo/BottomRight",
+}
+Holo.TMPositions = {
+	"left",
+	"center",
+	"right",
+	"left_top",
+	"center_top",
+	"right_top",
+}
+Holo.MenuMainTMPositions = {
+	"Holo/Left",
+	"Holo/Center",
+	"Holo/Right",
+}
+Holo.MenuTMPositions = {
+	"Holo/Left",
+	"Holo/Center",
+	"Holo/Right",
+	"Holo/LeftToTop",
+	"Holo/CenterToTop",
+	"Holo/RightToTop",
+}
+Holo.NonContrastable = {
+	["TextColors/Health"] = true,
+	["TextColors/Armor"] = true,
+	["TextColors/Tab"] = true,
 }

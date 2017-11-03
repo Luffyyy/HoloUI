@@ -7,7 +7,6 @@ Holo:Pre(Setup, "_start_loading_screen", function()
 				if Holo:ShouldModify("Menu", "Loading") then
 					data.Holo = {
 						background_color = Holo:GetColor("Colors/Menu"),
-						main_color = Holo:GetColor("Colors/Main"),
 						text_color = Holo:GetColor("TextColors/Menu"),
 						colored_background = Holo.Options:GetValue("ColoredBackground"),
 						briefing_string = managers.localization and level and managers.localization:text(level.briefing_id),

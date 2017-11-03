@@ -1,10 +1,15 @@
+Holo:Post(MenuComponentManager, "register_component", function(self, name, component)
+    Holo.Utils:FixBackButton(component)
+end)
+
 Holo:Post(BLTDownloadManagerGui, "_setup", function(self)
     Holo.Utils:FixBackButton(self, self._back_button)
-    self._fullscreen_panel:child("back_button"):hide()
+    Holo.Utils:SetBlendMode(self._panel)
+    Holo.Utils:SetBlendMode(self._scroll:canvas())
 end)
+
 Holo:Post(BLTModsGui, "_setup", function(self)
     Holo.Utils:FixBackButton(self, self._back_button)
-    self._fullscreen_panel:child("back_button"):hide()
 end)
 
 Holo:Post(BLTNotificationsGui, "_setup", function(self)
@@ -55,9 +60,4 @@ end)
 
 Holo:Post(BLTDownloadControl, "init", function(self)
     Holo.Utils:SetBlendMode(self._panel)
-end)
-
-Holo:Post(BLTDownloadManagerGui, "_setup", function(self)
-    Holo.Utils:SetBlendMode(self._panel)
-    Holo.Utils:SetBlendMode(self._scroll:canvas())
 end)

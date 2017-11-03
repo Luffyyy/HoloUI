@@ -115,11 +115,15 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	end)
 	function HUDAssaultCorner:_show_icon_assaultbox(icon)
 		icon:set_alpha(1)
-		QuickAnim:Play(icon, {rotation = 360, callback = function() icon:set_rotation(0) end})
+		play_color(this._back_button, Holo:GetColor("TextColors/Menu"))
+		play_value(this._back_marker, "alpha", 360, {callback = function()
+			icon:set_rotation(0)
+		end})
 	end
 	function HUDAssaultCorner:left_grow(o, clbk)
-		local right = o:right()
-		QuickAnim:Play(o, {w = self._box_width, speed = 4, sticky_right = right, callback = clbk})
+		play_anim(o, {
+			set = {w = self._box_width, right = {value = o:right(), sticky = true}
+		}})
 	end	
 	Holo:Post(HUDAssaultCorner, "_start_assault", function(self)
 		if alive(self._bg_box) then
@@ -136,8 +140,11 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	Holo:Post(HUDAssaultCorner, "_end_assault", function(self)
 		if self:is_safehouse_raid() then		
 			self._wave_bg_box:stop()
-			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
+			local waves = self._wave_bg_box:child("num_waves")
+			waves:stop()
+			play_value(waves, "alpha", 0.25, {time = 1, callback = function()
+				play_value(waves, "alpha", 1, {time = 1})
+			end})
 			self._hud_panel:child("assault_panel"):child("icon_assaultbox"):stop()
 			self:_close_assault_box()
 			self._wave_bg_box:child("bg"):stop()
@@ -152,7 +159,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	local anim_text = HUDAssaultCorner._animate_text
 	function HUDAssaultCorner:_animate_text(text_panel, bg_box, color, color_function, ...)
 		local done
-		BeardLib:AddUpdater("HoloFixBlendMode", function()
+		BeardLib:AddUpdater("HoloUIFixBlendMode", function()
 			for _, child in pairs(text_panel:children()) do
 				if getmetatable(child) == Text then
 					child:configure({
@@ -166,7 +173,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 				end
 			end
 			if done then
-				BeardLib:RemoveUpdater("HoloFixBlendMode")
+				BeardLib:RemoveUpdater("HoloUIFixBlendMode")
 			end
 		end)
 		anim_text(self, text_panel, bg_box, color, color_function, ...)
@@ -220,15 +227,21 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 	Holo:Post(HUDAssaultCorner, "set_control_info", function(self)
 		if alive(self._hostages_bg_box) then
 			self._hostages_bg_box:child("bg"):stop()
-			self._hostages_bg_box:child("num_hostages"):stop()
-			self._hostages_bg_box:child("num_hostages"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
+			local hostages = self._hostages_bg_box:child("num_hostages")
+			hostages:stop()
+			play_value(hostages, "alpha", 0.25, {time = 1, callback = function()
+				play_value(hostages, "alpha", 1, {time = 1})
+			end})
 		end
 	end)
 	Holo:Post(HUDAssaultCorner, "_animate_wave_started", function(self)
 		if alive(self._wave_bg_box) then
 			self._wave_bg_box:child("bg"):stop()
-			self._wave_bg_box:child("num_waves"):stop()
-			self._wave_bg_box:child("num_waves"):animate(callback(nil, Holo, "flash_icon"), 2, nil, true)
+			local waves = self._wave_bg_box:child("num_waves")
+			waves:stop()
+			play_value(waves, "alpha", 0.25, {time = 1, callback = function()
+				play_value(waves, "alpha", 1, {time = 1})
+			end})
 		end
 	end)
 	function HUDAssaultCorner:get_completed_waves_string() --OVK can you make stuff less fucking ugly?

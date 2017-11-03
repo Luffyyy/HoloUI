@@ -23,7 +23,7 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		self._back_drop_gui = MenuBackdropGUI:new(nil, self._gui_data_manager, true)		
 		local base_panel = self._back_drop_gui:get_new_base_layer()		
 		base_panel:bitmap({
-			texture = not data.colored_background and "guis/textures/loading/loading_bg",
+			texture = not data.colored_background and self._gui_data.bg_texture,
 			color = data.colored_background and data.background_color or nil,
 			w = base_panel:w(),
 			h = base_panel:h(),

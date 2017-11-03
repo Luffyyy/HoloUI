@@ -1,23 +1,13 @@
 if Holo.Options:GetValue("Menu") then
-	Holo:Post(BlackMarketGuiTabItem, "init", function( self )
-		self._tab_panel:child("tab_select_rect"):move(0, -1.5)
-		self._tab_panel:child("tab_text"):show()
+	Holo:Post(BlackMarketGuiTabItem, "init", function(self)
+		self._tab_panel:child("tab_select_rect"):set_alpha(0)
+		Holo.Utils:TabInit(self, self._tab_panel:child("tab_text"))
 	end)
-	function BlackMarketGuiTabItem:refresh()
-		self._alpha = 1
-		self._tab_panel:child("tab_text"):set_color(Holo:GetColor("TextColors/Tab"))
-		self._tab_panel:child("tab_text"):set_blend_mode("normal")
-		local x,y,w,h = self._tab_panel:child("tab_select_rect"):shape()
-		self._tab_panel:child("tab_select_rect"):set_image("units/white_df")
-		self._tab_panel:child("tab_select_rect"):set_color((self._selected or self._highlighted) and Holo:GetColor("Colors/TabHighlighted") or Holo:GetColor("Colors/Tab"))
-		self._tab_panel:child("tab_select_rect"):show()
-		if self._child_panel and alive(self._child_panel) then
-			self._child_panel:set_visible(self._selected)
-		end
-		if alive(self._tab_pages_panel) then
-			self._tab_pages_panel:set_visible(self._selected)
-		end
-	end
+
+	function BlackMarketGuiTabItem:is_tab_selected() return self._selected end
+	Holo:Post(BlackMarketGuiTabItem, "refresh", ClassClbk(Holo.Utils, "TabUpdate"))
+	Holo:Post(BlackMarketGuiTabItem, "set_tab_position", ClassClbk(Holo.Utils, "TabUpdate"))
+
 	BlackMarketGuiButtonItem = BlackMarketGuiButtonItem or class(BlackMarketGuiItem)
 	function BlackMarketGuiButtonItem:init(main_panel, data, x)
 		BlackMarketGuiButtonItem.super.init(self, main_panel, data, 0, 0, 10, 10)
@@ -61,11 +51,11 @@ if Holo.Options:GetValue("Menu") then
 		if managers.menu:is_pc_controller() then
 			self._btn_text:set_color(self._highlighted and Holo:GetColor("TextColors/MenuHighlighted") or Holo:GetColor("TextColors/Menu"))
 		end
-		self._panel:child("select_rect"):stop()
-		QuickAnim:Play(self._panel:child("select_rect"), {alpha = self._highlighted and 1 or 0, speed = 5})
+		play_value(self._panel:child("select_rect"), "alpha", self._highlighted and 1 or 0)
 	end
+
 	Holo:Post(BlackMarketGui, "_setup", function(self, is_start_page, component_data)
-		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
+		Holo.Utils:FixBackButton(self)
 		Holo.Utils:SetBlendMode(self._panel, "suspicion")
 	end)
 	Holo:Post(BlackMarketGui, "set_weapons_stats_columns", function(self)

@@ -53,6 +53,6 @@ if Holo:ShouldModify("Hud", "Carrying") then
 		
 		local right = bag_panel:right()
 		bag_panel:set_w(0)
-		QuickAnim:Play(bag_panel, {w = self._bg_box:w(), speed = 4, sticky_right = right})
+		play_anim(bag_panel, {set = {w = self._bg_box:w(), right = {value = right, sticky = true}}})
 	end
 end

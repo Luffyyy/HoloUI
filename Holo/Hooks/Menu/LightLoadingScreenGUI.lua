@@ -14,8 +14,8 @@ function LightLoadingScreenGuiScript:init(...)
         self._new_bg_gui = self._panel:bitmap({
             texture = not data.colored_background and "guis/textures/loading/loading_bg",
             color = data.colored_background and data.background_color or nil,
-            w = self._panel:w(),
-            h = self._panel:h(),
+			w = self._panel:w(),
+			h = self._panel:h(),
             layer = self._base_layer
         })
         self._title_text:set_color(data.text_color or Color.white)

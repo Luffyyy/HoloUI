@@ -2,11 +2,11 @@ Holo.Menu = Holo.Menu or {}
 local self = Holo.Menu
 function self:Init()
     local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
-    local background_color = Holo:GetColor("Colors/Menu")
+    local background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.5)
     self._menu = MenuUI:new({
         accent_color = accent_color,
-        text_highlight_color = accent_color,
-        marker_highlight_color = false,
+        foreground_highlight = accent_color,
+        highlight_color = false,
         always_mouse_press = callback(self, self, "MousePressed"),
         always_mouse_move = callback(self, self, "MouseMoved"),
         mouse_release = callback(self, self, "MouseReleased"),
@@ -18,8 +18,7 @@ function self:Init()
     })
     self._tabs = self._menu:Menu({
         name = "tabs",
-        background_alpha = 0.5,
-        border_color = self._menu.text_highlight_color,
+        border_color = self._menu.foreground_highlight,
         background_color = background_color,
         h = 30,
         w = "half",
@@ -41,7 +40,8 @@ function self:Init()
         localized = true,
         callback = MenuCallbackHandler.OpenHoloMenu
     })
-    close:Panel():child("bg"):configure({h = 2, rotation = 360, y = close:Panel():h() + 2})
+    close.bg:configure({h = 2, rotation = 360, y = close:Panel():h() + 2})
+    close.highlight_bg:configure({h = 2, rotation = 360, y = close:Panel():h() + 2})
 
     self._resize = self._menu._panel:panel({
         name = "resize_panel",
@@ -122,11 +122,12 @@ end
 
 function self:CreateMainMenu(menu)
     menu:ClearItems()
-    self:Button(menu, "ResetAll", {callback = callback(self, self, "ResetOptions", true)})
-    self:Button(menu, "Reset", {callback = callback(self, self, "ResetOptions")})
     for _, setting in ipairs(Holo.Options._config.options) do
         self:CreateItem(nil, setting, menu)
     end
+    local base = self._menu:GetMenu("Base")
+    self:Button(base, "ResetAll", {callback = callback(self, self, "ResetOptions", true), index = 1})
+    self:Button(base, "Reset", {callback = callback(self, self, "ResetOptions"), index = 1})
 end
 
 function self:CreateExtraMenu(menu)
@@ -147,9 +148,17 @@ function self:CreateColorsMenu(menu)
     self:Button(menu, "Reset", {callback = callback(self, self, "ResetOptions")})
     self:Toggle(menu, "Colors/ColorizeTeammates", {text = "ColorizeTeammates"})
     local auto_textcolor = self:Toggle(menu, "TextColors/AutomaticTextColors", {text = "AutomaticTextColors", help = "AutomaticTextColorsHelp"})
-    self:ColorTextBox(menu, "Colors/Main")    
+    local auto_textcolor_value = not auto_textcolor:Value()
+    local quick_opt = {help = "QuickOptionHelp", localized = false, callback = callback(self, self, "OpenSetColorDialog"), color_clbk = callback(self, self, "QuickOptAccentClbk")}
+    self:Button(menu, self:BeforeText("QuickOption", "Accent"), quick_opt)
+    quick_opt.color_clbk = callback(self, self, "QuickOptBackgroundClbk")    
+    self:Button(menu, self:BeforeText("QuickOption", "Backgrounds"), quick_opt)
+    quick_opt.color_clbk = callback(self, self, "QuickOptForegroundClbk")
+    quick_opt.help = "QuickOptionHelp"
+    quick_opt.enabled = auto_textcolor_value
+    self:Button(menu, self:BeforeText("QuickOption", "Foregrounds"), quick_opt)
+    
     local other = menu:DivGroup({name = "Other", text = self:Loc("Other"), localized = true, align_method = "grid"})
-
     local options = {
         {name = "Casing", background = true, text = true, frame = true},
         {name = "Assault", background = true, text = true, frame = true},
@@ -160,17 +169,16 @@ function self:CreateColorsMenu(menu)
         {name = "Presenter", background = true, text = true, frame = true},
         {name = "Carrying", background = true, text = true, frame = true},
         {name = "Timer", background = true, text = true, frame = true},
+        {name = "Chat", background = true, text = true},        
         {name = "Menu", background = true, text = true, custom = function(option, group, w)
             self:ColorTextBox(group, "TextColors/MenuHighlighted", {w = w, text = "Highlight"})
         end},
-        {name = "Tab", background = true, text = true, custom = function(option, group, w)
-            self:ColorTextBox(group, "Colors/TabHighlighted", {w = w, text = "Highlight"})
-        end},
-        {name = "Hint", background = true, text = true},
+        {name = "Tab", color = true, text = true},
         {name = "Teammate", background = true, text = true},
         {name = "Health", text = true, custom = function(option, group, w)
             self:ColorTextBox(group, "TextColors/HealthNeg", {w = w, text = "HealthNeg"})
         end},
+        {name = "Armor", text = true},
         {name = "Marker", color = true},
         {name = "Pickups", color = true},
         {name = "SelectedWeapon", color = true},
@@ -208,7 +216,11 @@ function self:CreateColorsMenu(menu)
             self:ColorTextBox(group, "Colors/"..option.name, {w = w, text = text or "Background"})
         end
         if option.text then
-            self:ColorTextBox(group, "TextColors/"..option.name, {w = w, text = text or "Text", enabled = not auto_textcolor:Value() and option.background})
+            local enabled
+            if auto_textcolor and option.background then
+                enabled = false
+            end
+            self:ColorTextBox(group, "TextColors/"..option.name, {w = w, text = text or "Text", enabled = enabled})
         end
         if option.frame then
             self:ColorTextBox(group, "FrameColors/"..option.name, {w = w, text = text or "Frame"})
@@ -217,10 +229,6 @@ function self:CreateColorsMenu(menu)
             option.custom(option, group, w)
         end
     end
-    self:ComboBox(other, "Colors/Health", {items = "RadialColors", text = "Health"})
-    self:ComboBox(other, "Colors/Armor", {items = "RadialColors", text = "Armor"})
-    self:ComboBox(other, "Colors/Progress", {items = "RadialColors", text = "Progress"})
-    self:ComboBox(other, "Colors/ProgressRed", {items = "RadialColors", text = "ProgressRed"})
 end
 
 function self:SwitchMenu(name)
@@ -299,16 +307,49 @@ function self:MainClbk(menu, item)
     self._menu:SetParam("toggle_key", Holo.Options:GetValue("OptionsKey"))
 end
 
+function self:SetColorsByDefault(tblname, def_color, color)
+    for _, option in pairs(Holo.Options._storage[tblname]) do
+        if type(option) == "table" and option.default_value == def_color then
+            self:Set(tblname.."/" .. option.name, color)
+            local item = self._menu:GetItem(tblname.."/"..option.name)
+            if item then
+                item:SetValue(color:to_hex())
+            else
+                Holo:log("Seems like an item is missing for the color %s", tostring(option.name))
+            end
+        end
+    end
+end
+
+function self:QuickOptAccentClbk(color)
+    local def_color = Color(0.2, 0.44, 1)
+    self:SetColorsByDefault("Colors", def_color, color)
+    self:SetColorsByDefault("TextColors", def_color, color)
+    self:SetColorsByDefault("FrameColors", def_color, color)
+end
+
+function self:QuickOptForegroundClbk(color)
+    self:SetColorsByDefault("TextColors", Color.white, color)
+end
+
+function self:QuickOptBackgroundClbk(color)
+    self:SetColorsByDefault("Colors", Color(0.1, 0.1, 0.1), color)
+end
+
 function self:OpenSetColorDialog(menu, item)
     local option = item.name    
     local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
     local background_color = Holo:GetColor("Colors/Menu")  
-    self._color_dialog = self._color_dialog or ColorDialog:new({marker_highlight_color = accent_color, background_color = background_color, no_blur = true})
+    self._color_dialog = self._color_dialog or ColorDialog:new({highlight_color = accent_color, background_color = background_color, no_blur = true})
     self._color_dialog:Show({
         color = Holo.Options:GetValue(option), 
         callback = function(color)
-            self:Set(option, color)
-            item:SetValue(color:to_hex())
+            if item.type_name == "ColoredTextBox" then
+                self:Set(option, color)
+                item:SetValue(color:to_hex())
+            elseif item.color_clbk then
+                item.color_clbk(color)
+            end
             Holo:UpdateSettings()
         end, 
         create_items = function(menu)
@@ -319,11 +360,11 @@ function self:OpenSetColorDialog(menu, item)
                 size_by_text = true
             })
             local premade_color = function(name, color)
-                m:Button({name = "color_"..name, text = name, auto_text_color = true, marker_color = color, marker_highlight_color = color, callback = function()
+                m:Button({name = "color_"..name, text = name, auto_foreground = true, marker_color = color, background_color = color, highlight_color = false, callback = function()
                     self._color_dialog:set_color(color)
                 end})
             end
-            premade_color("Blue", Color(0.2, 0.6 ,1))
+            premade_color("Blue", Color(0.2, 0.44, 1))
             premade_color("Orange", Color(1, 0.6, 0))
             premade_color("Green", Color(0, 1, 0.1))
             premade_color("Pink", Color(1, 0.25, 0.7))
@@ -403,7 +444,7 @@ function self:DivGroup(menu, name, opt)
     return menu:DivGroup(self:BasicItem(menu, name, table.merge(opt, {
         align_method = opt.items_small and "grid",
         private = {
-            text_color = Holo:GetColor("Colors/Marker"),
+            foreground = Holo:GetColor("Colors/Marker"),
             color = Holo:GetColor("Colors/Marker"),
             last_y_offset = 0,
             items_size = 22
@@ -429,8 +470,7 @@ function self:Menu(name)
         name = name,
         w = "half",
         items_size = 18,
-        background_alpha = 0.5,
-        background_color = Holo:GetColor("Colors/Menu"),        
+        background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.5),        
         visible = not self._current_menu,
         h = self._menu._panel:h() - 35,
         position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},

@@ -24,4 +24,3 @@ function GuiDataManager:layout_scaled_fullscreen_workspace(ws, scale, on_screen_
     self:_set_layout(ws, data)
     ws:set_screen(data.w, data.h, data.x, data.y, math.min(data.sw, data.sh * (data.w / data.h)))
 end
-Holo:Post(GuiDataManager, "resolution_changed", callback(Holo, Holo, "UpdateSettings"))

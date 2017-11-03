@@ -10,9 +10,9 @@ function Holo:Init()
 	self.set_position_clbks = {}
 	self:CheckOtherMods()
 	self:UpdateSettings()
-	World:effect_manager():set_rendering_enabled(true)		
+	World:effect_manager():set_rendering_enabled(true)
 	self:LoadTextures()
-	self:log("Done Loading")
+	self:log("Done Loading")	
 end
 
 function Holo:AddUpdateFunc(func)
@@ -24,7 +24,7 @@ function Holo:LoadTextures()
 	local function LoadTextures(path)
 		for _, file in pairs(SystemFS:list(path)) do
 			local file_path = BeardLib.Utils.Path:Combine(path, file)
-			local in_path = file_path:gsub(".png", ""):gsub(self.ModPath, ""):gsub("Assets/", "")
+			local in_path = file_path:gsub("%.png", ""):gsub("%.texture", ""):gsub(self.ModPath, ""):gsub("Assets/", "")
 			table.insert(ids_strings, Idstring(in_path))
 			DB:create_entry(Idstring("texture"), Idstring(in_path), file_path)
 		end
@@ -57,10 +57,10 @@ function Holo:GetAlpha(setting)
 end
 
 function Holo:GetColor(setting, vec)
-	local color = self.Options:GetValue(setting) or self.Options:GetValue("Colors/Main") or Color.white
+	local color = self.Options:GetValue(setting) or Color.white
 	if setting:match("TextColors") then
 		local bgname = setting:gsub("TextColors", "Colors")
-		if self.Options:GetValue("TextColors/AutomaticTextColors") and self.Options:GetValue(bgname) and setting ~= "TextColors/Health" then
+		if self.Options:GetValue("TextColors/AutomaticTextColors") and self.Options:GetValue(bgname) and not Holo.NonContrastable[setting] then
 			color = self:GetColor(bgname):contrast()
 		end
 	end

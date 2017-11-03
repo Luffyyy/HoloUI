@@ -1,6 +1,6 @@
 if Holo.Options:GetValue("Menu") then
 	Holo:Post(PlayerInventoryGui, "init", function(self)
-		Holo.Utils:FixBackButton(self, self._panel:child("back_button"))
+		Holo.Utils:FixBackButton(self)
 		Holo.Utils:SetBlendMode(self._panel, "detection")
 	end)
 	Holo:Post(PlayerInventoryGui, "mouse_moved", function(self, o, x, y)

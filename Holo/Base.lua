@@ -131,7 +131,7 @@ function Holo:ShouldModify(c, o)
 		end
 	end
 	if WolfHUD then
-		if o == "TeammateHud" and WolfHUD:getSetting("use_customhud", "boolean") then
+		if o == "TeammateHud" and WolfHUD:getSetting({"CustomHUD", "ENABLED"}) then
 			inform("WolfHUD")
 			return false			
 		end
@@ -152,6 +152,13 @@ end
 
 function Holo:Pre(clss, func, before_orig)
 	Hooks:PreHook(clss, func, "HoloUIPre"..func, before_orig)
+end
+
+function Holo:Replace(clss, func, new_func)
+	clss["holo_orig_"..func] = clss["holo_orig_"..func] or clss[func]
+	clss[func] = function(this, ...)
+		return new_func(this, clss["holo_orig_"..func], ...)
+	end
 end
 
 if not Holo.Setup then

@@ -131,7 +131,9 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 	end)
 
 	function HUDObjectives:PosObjectives()
-		Holo.Utils:SetPosition(self.ObjPanel, "Objective", WolfHUD and (WolfHUD:getSetting({"TabStats", "CLOCK_MODE"}, 3) == 4) and 80 or 0)
+		if not WolfHUD then 
+			Holo.Utils:SetPosition(self.ObjPanel, "Objective")
+		end
 	end
 
 	function HUDObjectives:activate_objective(data)

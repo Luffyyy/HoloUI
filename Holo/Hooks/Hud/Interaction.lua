@@ -2,6 +2,8 @@ if not Holo:ShouldModify("Hud", "Interaction") then
 	return
 end
 
+HUDInteraction.SHOW_CIRCLE = false --thanks
+
 Holo:Post(HUDInteraction, "init", function(self)
 	self._progress = self._hud_panel:rect({
 		name = "line",
@@ -29,7 +31,7 @@ Holo:Post(HUDInteraction, "show_interaction_bar", function(self)
 	self:set_current_color(Holo:GetColor("Colors/Interaction"))
 end)
 
-function HUDInteraction:hide_interaction_bar(complete) 
+Holo:Replace(HUDInteraction, "hide_interaction_bar", function(self, o, complete, ...)
 	play_value(self._progress_bg, "alpha", 0)
 	local function hide_func()
 		play_value(self._progress, "alpha", 0, {callback = function()
@@ -46,7 +48,8 @@ function HUDInteraction:hide_interaction_bar(complete)
 		self._interact_circle:remove()
 		self._interact_circle = nil
 	end
-end
+	return o(self, false, ...)
+end)
 
 Holo:Post(HUDInteraction, "set_interaction_bar_width", function(self, current, total)
 	local interact_text = self._hud_panel:child(self._child_name_text)
@@ -62,36 +65,34 @@ Holo:Post(HUDInteraction, "set_bar_valid", function(self, valid)
 	self:set_current_color(valid and Holo:GetColor("Colors/Interaction") or Holo:GetColor("Colors/InteractionRed"))
 end)
 
+Holo:Replace(HUDInteraction, "show_interact", function(self, o, ...)
+	local text = self._hud_panel:child(self._child_name_text)
+	local visible = text:visible()
+	if not visible then	
+		text:set_alpha(0)
+	end
+	o(self, ...)
+	play_value(text, "alpha", 1)
+end)
+
+Holo:Replace(HUDInteraction, "remove_interact", function(self, o, ...)
+	local text = self._hud_panel:child(self._child_name_text)
+	local visible = text:visible()
+	o(self, ...)
+	if visible then
+		text:set_visible(true)
+		play_value(text, "alpha", 0)
+	end
+end)
+
+Holo:Post(HUDInteraction, "destroy", function(self)
+	self._hud_panel:remove(self._progress)
+	self._hud_panel:remove(self._progress_bg)
+end)
+
 function HUDInteraction:set_current_color(color)
 	self._progress:set_color(color)
 	self._progress_bg:set_color(color)
 	self._hud_panel:child(self._child_name_text):set_color(color)
 	self._hud_panel:child(self._child_ivalid_name_text):set_color(color)
 end
-
-HUDInteraction.show_interact_orig_holo = HUDInteraction.show_interact_orig_holo or HUDInteraction.show_interact
-function HUDInteraction:show_interact(...)
-	local text = self._hud_panel:child(self._child_name_text)
-	local visible = text:visible()
-	if not visible then	
-		text:set_alpha(0)
-	end
-	self:show_interact_orig_holo(...)
-	play_value(text, "alpha", 1)
-end
-
-HUDInteraction.remove_interact_orig_holo = HUDInteraction.remove_interact_orig_holo or HUDInteraction.remove_interact
-function HUDInteraction:remove_interact(...)
-	local text = self._hud_panel:child(self._child_name_text)
-	local visible = text:visible()
-	self:remove_interact_orig_holo(...)
-	if visible then
-		text:set_visible(true)
-		play_value(text, "alpha", 0)
-	end
-end
-
-Holo:Post(HUDInteraction, "destroy", function(self)
-	self._hud_panel:remove(self._progress)
-	self._hud_panel:remove(self._progress_bg)
-end)

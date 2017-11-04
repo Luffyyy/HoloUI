@@ -87,7 +87,10 @@ function Holo:CheckOtherMods()
 	end
 end
 
-function Holo:ShouldModify(c, o)  
+function Holo:ShouldModify(c, o)
+	if not self.Setup then
+		return false
+	end
 	local function inform(a) self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a)) end
 	if c and not Holo.Options:GetValue("" .. c) then
 		return false
@@ -152,7 +155,12 @@ function Holo:Pre(clss, func, before_orig)
 end
 
 if not Holo.Setup then
-	Holo:Init()
+	if BeardLib.Version and BeardLib.Version >= 2.6 then
+        Holo:Init()
+    else
+        log("[ERROR] HoloUI requires at least version 2.6 of Beardlib installed!")
+        return
+    end
 end
 
 if Hooks then

@@ -369,7 +369,7 @@ function HUDTeammate:set_holo_health(data)
 	local Health = self._player_panel:child("Health")
 	local val = data.current / data.total
 	play_color(Health:child("Line"), Holo:GetColor("Colors/Health") * val + Holo:GetColor("Colors/HealthNeg") * (1 - val))		
-	Health:child("Text"):set_text(string.format("%.0f", data.current * 10))
+	Health:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
 end
 
 Holo:Post(HUDTeammate, "set_stored_health_max", function(self, hp_ratio)
@@ -395,7 +395,7 @@ Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
 	local val = math.min(hp_ratio, 1)
 	local curr = val * managers.player:player_unit():character_damage():_max_health()
 	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
-	Skill:child("Text"):set_text(string.format("%.0f", curr * 10))
+	Skill:child("Text"):set_text(string.format("%.0f", curr * tweak_data.gui.stats_present_multiplier))
 end)
 
 Holo:Post(HUDTeammate, "set_info_meter", function(self, data)
@@ -405,7 +405,7 @@ Holo:Post(HUDTeammate, "set_info_meter", function(self, data)
 	local Skill = self._player_panel:child("Skill")
 	local val = math.clamp(data.current / data.max, 0, 1)
 	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
-	Skill:child("Text"):set_text(string.format("%.0f", data.current * 10))
+	Skill:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
 end)
 
 Holo:Post(HUDTeammate, "set_armor", function(self, data)
@@ -413,7 +413,7 @@ Holo:Post(HUDTeammate, "set_armor", function(self, data)
 	Armor:set_alpha(data.total ~= 0 and 1 or 0)
 	local val = data.current / data.total
 	play_color(Armor:child("Line"), Holo:GetColor("Colors/Armor") * val + Holo:GetColor("Colors/ArmorNeg") * (1 - val))
-	Armor:child("Text"):set_text(string.format("%.0f", data.current * 10))
+	Armor:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
 end)
 
 Holo:Post(HUDTeammate, "start_timer", function(self, data)
@@ -442,7 +442,7 @@ Holo:Post(HUDTeammate, "update_delayed_damage", function(self)
 	local health_damage = damage < health_current and damage or health_current
 	local val = health_damage / health_max
 	play_color(DelayedDamage:child("Line"), Holo:GetColor("Colors/SkillNeg") * val + Holo:GetColor("TextColors/Skill") * (1 - val))
-	DelayedDamage:child("Text"):set_text(string.format("%.0f", health_damage * 10))
+	DelayedDamage:child("Text"):set_text(string.format("%.0f", health_damage * tweak_data.gui.stats_present_multiplier))
 end)
 
 function HUDTeammate:set_talking(talking)

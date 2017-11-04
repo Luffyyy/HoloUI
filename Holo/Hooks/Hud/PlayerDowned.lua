@@ -20,23 +20,9 @@ if Holo.Options:GetValue("Hud") and (not restoration or not (restoration.Options
 		self._hud.arrest_finished_text:world_center_x(timer_msg:world_center_x())	
 		self._hud.timer:set_world_center_x(self._hud_panel:world_center_x())
 		
-		timer_msg:set_world_y(managers.hud._hud_heist_timer._heist_timer_panel:world_bottom() + 1)
+		timer_msg:set_world_y(managers.hud._hud_heist_timer._heist_timer_panel:world_bottom() + 2)
 		self._hud.arrest_finished_text:set_world_y(timer_msg:world_y())
-		self._hud.timer:set_world_position(timer_msg:world_right(), timer_msg:world_y() + 1)
-	end
-	function HUDPlayerDowned:show_timer()
-		local downed_panel = self._hud_panel:child("downed_panel")
-		local timer_msg = downed_panel:child("timer_msg")
-		timer_msg:set_visible(true)
-		self._hud.timer:set_visible(true)
-		play_value(timer_msg, "alpha", 1)
-		play_value(self._hud.timer, "alpha", 1)
-	end
-	function HUDPlayerDowned:hide_timer()
-		local downed_panel = self._hud_panel:child("downed_panel")
-		local timer_msg = downed_panel:child("timer_msg")
-		play_value(timer_msg, "alpha", 0.65)
-		play_value(self._hud.timer, "alpha", 0.65)
+		self._hud.timer:set_world_position(timer_msg:world_right() - 4, timer_msg:world_y() + 1)
 	end
 	Holo:Post(HUDPlayerDowned, "on_downed", function(self)
 		if managers.hud._teammate_panels[managers.hud.PLAYER_PANEL].UpdateHolo then

@@ -183,6 +183,10 @@ if Holo:ShouldModify("Hud", "Waypoints") then
         data.icon = data.icon == "wp_suspicious" and "pd2_question" or data.icon == "wp_detected" and "pd2_generic_look" or data.icon
         o_add_waypoint(self, id, data)
         local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
+        if not hud then
+            return
+        end
+        
         local waypoint_panel = hud.panel
         local arrow = waypoint_panel:child("arrow".. id)
         local bitmap = waypoint_panel:child("bitmap".. id)

@@ -160,7 +160,7 @@
             <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
             <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
             <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Presenter" />
-            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Carrying" />
+            <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Carrying" />
             <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Timer" />
         </option_group>
         <option_group name="Colors">

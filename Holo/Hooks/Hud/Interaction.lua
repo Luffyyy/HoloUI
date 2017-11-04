@@ -21,7 +21,8 @@ end)
 Holo:Post(HUDInteraction, "show_interaction_bar", function(self)
 	local interact_text = self._hud_panel:child(self._child_name_text)
 	local invalid_text = self._hud_panel:child(self._child_ivalid_name_text)
-	self._interact_circle:set_visible(false)
+	self._interact_circle:set_visible(false)	
+	self._progress:set_w(0)
 	self._progress:set_alpha(1)
 	play_value(self._progress_bg, "alpha", 0.25)
 
@@ -30,10 +31,10 @@ end)
 
 function HUDInteraction:hide_interaction_bar(complete) 
 	play_value(self._progress_bg, "alpha", 0)
-	self._progress:set_alpha(1)
 	local function hide_func()
 		play_value(self._progress, "alpha", 0, {callback = function()
 			self:set_current_color(Holo:GetColor("TextColors/Interaction"))
+			self._progress:set_w(0)
 		end})
 	end
 	if complete then
@@ -89,3 +90,8 @@ function HUDInteraction:remove_interact(...)
 		play_value(text, "alpha", 0)
 	end
 end
+
+Holo:Post(HUDInteraction, "destroy", function(self)
+	self._hud_panel:remove(self._progress)
+	self._hud_panel:remove(self._progress_bg)
+end)

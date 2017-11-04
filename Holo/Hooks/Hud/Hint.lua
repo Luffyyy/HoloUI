@@ -13,7 +13,7 @@ end)
 
 function HUDHint:UpdateHolo()
 	self._hint_panel:set_h(38)
-	self._hint_panel:set_y(38)
+	self._hint_panel:set_y(56)
 	self._hint_panel:set_world_center_x(self._hint_panel:parent():world_center_x())
 	HUDBGBox_recreate(self._bg_box, {
 		name = "Presenter",

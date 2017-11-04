@@ -10,6 +10,7 @@ local function resize_value_text(p, font_size)
 	t:set_font_size(font_size)
 	managers.hud:make_fine_text(t)
 	t:set_text(ot)
+	t:set_color(Holo:GetColor("TextColors/Teammate"))
 	l:set_h(t:h() - 2)
 	p:set_size(t:w() + l:w() + 2, t:h())
 end
@@ -27,6 +28,7 @@ local function value_text(panel, name)
 		x = l:right() + 2,
 		text = "100 ",
 		font_size = 18,
+		color = Holo:GetColor("TextColors/Teammate"),
 		vertical = "center",
 		font = "fonts/font_large_mf"
 	})
@@ -58,7 +60,7 @@ Holo:Post(HUDTeammate, "init", function(self)
 	})
 	self._panel:rect({name = "teammate_line", w = 2, layer = 5})
 	self:layout_equipments()
-	self:set_avatar()		
+	self:UpdateHolo()		
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 end)
 
@@ -80,13 +82,14 @@ function HUDTeammate:set_avatar()
 			end)
 		end)
 	else
-		self:set_player_avatar(self._ai and "ui/custom/ai_text" or "guis/textures/pd2/none_icon")		
+		self:set_player_avatar(self._ai and "ui/custom/ai_text" or "guis/textures/pd2/none_icon")
 	end
 end
 
 function HUDTeammate:set_player_avatar(texture, texture_rect)
-	self._player_panel:child("avatar"):set_image(texture, texture_rect)
-	self:UpdateHolo()
+	local avatar = self._player_panel:child("avatar")
+	avatar:set_image(texture, texture_rect)
+	avatar:set_color(self._ai and Holo:GetColor("TextColors/Teammate") or Color.white)
 end
 
 function HUDTeammate:DebugWithAI()
@@ -106,6 +109,7 @@ function HUDTeammate:UpdateHolo()
 	--if self._ai then
 	--	self:DebugWithAI()
 	--end
+	self:set_avatar()
 	managers.hud:align_teammate_panels()
 	local weapons_panel = self._player_panel:child("weapons_panel")
 	local secondary = weapons_panel:child("secondary_weapon_panel")
@@ -126,8 +130,8 @@ function HUDTeammate:UpdateHolo()
 	local text_color = Holo:GetColor("TextColors/Teammate")
 	local avatar_enabled = Holo.Options:GetValue(me and "ShowAvatar" or "ShowTeammatesAvatar")
 	local show_all = me or Holo.Options:GetValue("ShowTeammateFullAmmo")
-	local compact = self._ai or not self._main_player and Holo.Options:GetValue("CompactTeammate")
-	local font_size = me and 18 or compact and 24 or 14
+	local compact = self._forced_compact or (self._ai or not self._main_player and Holo.Options:GetValue("CompactTeammate"))
+	local font_size = compact and (me and 28 or 24) or (me and 18 or 14)
 	
 	name:configure({
 		font_size = font_size,
@@ -274,8 +278,8 @@ function HUDTeammate:UpdateHolo()
 	Utils:Apply({
 		self._player_panel:child("carry_panel"), self._panel:child("name_bg"), primary:child("bg"), secondary:child("bg"),
 		self._panel:child("callsign_bg"), self._panel:child("callsign"), cable:child("bg"), dep:child("bg"), nades:child("bg"),
-	}, {visible = false, alpha = 0})	
-	Holo.Utils:Apply({name, hp:child("Text"), ap:child("Text")}, {color = text_color})
+	}, {visible = false, alpha = 0})
+	name:set_color(text_color)
 	self._player_panel:child("radial_health_panel"):hide()
 	
 	self:layout_equipments()
@@ -364,7 +368,7 @@ end
 function HUDTeammate:set_holo_health(data)
 	local Health = self._player_panel:child("Health")
 	local val = data.current / data.total
-	play_color(Health:child("Line"), Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))		
+	play_color(Health:child("Line"), Holo:GetColor("Colors/Health") * val + Holo:GetColor("Colors/HealthNeg") * (1 - val))		
 	Health:child("Text"):set_text(string.format("%.0f", data.current * 10))
 end
 
@@ -380,7 +384,7 @@ Holo:Post(HUDTeammate, "set_ability_radial", function(self, data)
 	local p = data.current / data.total
 	play_value(skill, "alpha", p > 0 and 1 or 0)
 	skill:child("Text"):set_text(string.format("%.0f%%", p * 100))
-	play_color(skill:child("Line"), Holo:GetColor("TextColors/Health") * p + Holo:GetColor("TextColors/HealthNeg") * (1 - p))	
+	play_color(skill:child("Line"), Holo:GetColor("Colors/Skill") * p + Holo:GetColor("Colors/SkillNeg") * (1 - p))	
 end)
 
 Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
@@ -390,7 +394,7 @@ Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
 	local Skill = self._player_panel:child("Skill")
 	local val = math.min(hp_ratio, 1)
 	local curr = val * managers.player:player_unit():character_damage():_max_health()
-	play_color(Skill:child("Line"), Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/Teamamte") * (1 - val))
+	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
 	Skill:child("Text"):set_text(string.format("%.0f", curr * 10))
 end)
 
@@ -400,7 +404,7 @@ Holo:Post(HUDTeammate, "set_info_meter", function(self, data)
 	end
 	local Skill = self._player_panel:child("Skill")
 	local val = math.clamp(data.current / data.max, 0, 1)
-	play_color(Skill:child("Line"), Holo:GetColor("TextColors/Health") * val + Holo:GetColor("TextColors/Teamamte") * (1 - val))
+	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
 	Skill:child("Text"):set_text(string.format("%.0f", data.current * 10))
 end)
 
@@ -408,7 +412,7 @@ Holo:Post(HUDTeammate, "set_armor", function(self, data)
 	local Armor = self._player_panel:child("Armor")
 	Armor:set_alpha(data.total ~= 0 and 1 or 0)
 	local val = data.current / data.total
-	play_color(Armor:child("Line"), Holo:GetColor("TextColors/Armor") * val + Holo:GetColor("TextColors/HealthNeg") * (1 - val))
+	play_color(Armor:child("Line"), Holo:GetColor("Colors/Armor") * val + Holo:GetColor("Colors/ArmorNeg") * (1 - val))
 	Armor:child("Text"):set_text(string.format("%.0f", data.current * 10))
 end)
 
@@ -437,7 +441,7 @@ Holo:Post(HUDTeammate, "update_delayed_damage", function(self)
 	damage = damage - armor_damage
 	local health_damage = damage < health_current and damage or health_current
 	local val = health_damage / health_max
-	play_color(DelayedDamage:child("Line"), Holo:GetColor("TextColors/HealthNeg") * val + Holo:GetColor("TextColors/Health") * (1 - val))
+	play_color(DelayedDamage:child("Line"), Holo:GetColor("Colors/SkillNeg") * val + Holo:GetColor("TextColors/Skill") * (1 - val))
 	DelayedDamage:child("Text"):set_text(string.format("%.0f", health_damage * 10))
 end)
 
@@ -450,8 +454,8 @@ function HUDTeammate:set_downed()
 		local Health = self._player_panel:child("Health")
 		local Armor = self._player_panel:child("Armor")
 		Health:child("Text"):set_text("0")
-		play_color(Health:child("Line"), Holo:GetColor("TextColors/HealthNeg"))
-		play_color(Armor:child("Line"), Holo:GetColor("TextColors/HealthNeg"))
+		play_color(Health:child("Line"), Holo:GetColor("Colors/HealthNeg"))
+		play_color(Armor:child("Line"), Holo:GetColor("Colors/ArmorNeg"))
 	end
 end
 
@@ -623,12 +627,12 @@ function HUDTeammate:_animate_update_absorb(o, radial_absorb_shield_name, radial
 	end
 end
 
-Holo:Post(HUDTeammate, "set_grenades_amount", function(self) self:layout_equipments() end)
-Holo:Post(HUDTeammate, "set_cable_ties_amount", function(self) self:layout_equipments() end)
-Holo:Post(HUDTeammate, "set_deployable_equipment_amount", function(self) self:layout_equipments() end)
-Holo:Post(HUDTeammate, "set_ai", function(self) self:set_avatar() end)
-Holo:Post(HUDTeammate, "set_peer_id", function(self) self:set_avatar()end)
-Holo:Post(HUDTeammate, "add_panel", function(self) self:UpdateHolo() end)
+Holo:Post(HUDTeammate, "set_grenades_amount", HUDTeammate.layout_equipments)
+Holo:Post(HUDTeammate, "set_cable_ties_amount", HUDTeammate.layout_equipments)
+Holo:Post(HUDTeammate, "set_deployable_equipment_amount", HUDTeammate.layout_equipments)
+Holo:Post(HUDTeammate, "set_ai", HUDTeammate.UpdateHolo)
+Holo:Post(HUDTeammate, "set_peer_id", HUDTeammate.UpdateHolo)
+Holo:Post(HUDTeammate, "add_panel", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "set_health", HUDTeammate.set_holo_health)
 Holo:Post(HUDTeammate, "set_custom_radial", HUDTeammate.set_holo_health)
 

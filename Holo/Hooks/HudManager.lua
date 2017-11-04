@@ -82,6 +82,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         local compact_ai = Holo.Options:GetValue("CompactAI")
         local compact_tm = Holo.Options:GetValue("CompactTeammate")
         local prev
+        local align_bag = main_tm
     
         local sorted = clone(self._teammate_panels)
         table.remove(sorted)
@@ -95,16 +96,16 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
 				avatar_enabled = avatar_enabled_tm
 			end
             local w = tm:GetNameWidth()
-            local compact = (tm._ai and compact_ai) or (not me and compact_tm)            
+            local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
             local pw = math.max(w, me and 124 or 72) + (avatar_enabled and 108 or 40)
-            local ph = me and 86 or compact and 36 or 64
+            local ph = compact and (me and 48 or 36) or (me and 86 or 64)
             tm._panel:set_size(pw, ph)
             tm._player_panel:set_size(pw, ph)
             if me then
-                tm._panel:set_leftbottom(0, tm._panel:parent():h())					
-                if me_align_method == "center" then --center
+                tm._panel:set_leftbottom(0, tm._panel:parent():h())
+                if me_align_method == "center" then
                     tm._panel:set_center_x(tm._panel:parent():w() / 2)
-                elseif me_align_method == "right" then --right
+                elseif me_align_method == "right" then
                     tm._panel:set_right(tm._panel:parent():w())
                 end
             else
@@ -135,6 +136,9 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
                         tm._panel:set_right(prev._panel:x() - 4)
                     end
                 end
+                if equal_pos and going_up then
+                    align_bag = false
+                end
                 prev = tm
             end
         end
@@ -142,34 +146,27 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         for i, tm in pairs(sorted) do
             align(tm, i)
         end
+        if self._hud_temp and self._hud_temp.SetPositionByTeammate then
+            self._hud_temp:SetPositionByTeammate(align_bag)
+        end
     end
     
     Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
         if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-            local panel = self._teammate_panels[panel_id]._player_panel
-            if alive(panel:child("Mainbg")) then
-                panel:child("Mainbg"):set_visible((not CompactHUD and not Fallout4hud))
-                panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("Mainbg"):h())
-                panel:parent():child("teammate_line"):set_right(panel:child("Mainbg"):left())
-                panel:parent():child("teammate_line"):set_bottom(panel:child("Mainbg"):bottom())                
-                if self._teammate_panels[panel_id].layout_equipments then
-                    self._teammate_panels[panel_id]:layout_equipments()
-                end
+            local tm = self._teammate_panels[panel_id]
+            if tm.UpdateHolo then
+                tm._forced_compact = false
+                tm:UpdateHolo()
             end
         end
     end)
 
     Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
         if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-            local panel = self._teammate_panels[panel_id]._player_panel
-            if alive(panel:child("Mainbg")) then
-                panel:child("Mainbg"):hide()
-                panel:parent():child("teammate_line"):set_h(panel:parent():child("name_bg"):h() + panel:child("Mainbg"):h())
-                panel:parent():child("teammate_line"):set_right(panel:child("Mainbg"):left())
-                panel:parent():child("teammate_line"):set_bottom(panel:child("Mainbg"):bottom())                
-                if self._teammate_panels[panel_id].layout_equipments then
-                    self._teammate_panels[panel_id]:layout_equipments()
-                end      
+            local tm = self._teammate_panels[panel_id]
+            if tm.UpdateHolo then
+                tm._forced_compact = true
+                tm:UpdateHolo()     
             end
         end
     end)

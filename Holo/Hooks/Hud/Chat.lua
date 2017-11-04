@@ -2,7 +2,7 @@ if not Holo:ShouldModify(nil, "Chat") then
 	return
 end
 HUDChat.max_lines = HUDChat.max_lines or 10
-HUDChat.line_height = HUDChat.line_height or 14
+HUDChat.line_h = HUDChat.line_h or 16
 HUDChat.lines_per_scroll = HUDChat.lines_per_scroll or 3
 
 HUDChat.orig_init = HUDChat.orig_init or HUDChat.init
@@ -10,7 +10,7 @@ function HUDChat:init(ws, hud)
 	local ws = managers.gui_data:create_fullscreen_workspace()	
 	self._mouse_id = managers.mouse_pointer:get_id()
 	self:orig_init(ws, {panel = ws:panel()})
-	self._panel_width = 350
+	self._panel_width = 250
 	self._links = {}
 	
 	self._panel:set_layer(-50)
@@ -28,7 +28,7 @@ function HUDChat:init(ws, hud)
         scroll_width = 6, 
         hide_shade = true, 
         color = Color.white,
-        scroll_speed = HUDChat.line_height * HUDChat.lines_per_scroll
+        scroll_speed = HUDChat.line_h * HUDChat.lines_per_scroll
 	})
 	self._canvas = self._scroll:canvas()
 	self:_layout_input_panel()
@@ -156,7 +156,7 @@ function HUDChat:_layout_output_panel()
 	end
 	local children = self._canvas:children()
 	local max_h = 0
-	output_panel:set_size(self._panel:w(), math.min(HUDChat.max_lines * HUDChat.line_height, h))
+	output_panel:set_size(self._panel:w(), math.min(HUDChat.max_lines * HUDChat.line_h, h))
 	output_panel:set_bottom(self._input_panel:top() - 2)
 	self._scroll:set_size(output_panel:w(), output_panel:h())
 	self._scroll:update_canvas_size()
@@ -234,7 +234,7 @@ function HUDChat:mouse_moved(o, x, y)
 			text:clear_range_color(s - 1, e)
 			if text:inside(x,y) then
 				if p > 0 and (p == s or p == e or (p > s and p < e)) then
-					text:set_range_color(s - 1, e, Color.purple)
+					text:set_range_color(s - 1, e, Color("0000EE"))
 				end
 			end
 		end
@@ -298,7 +298,7 @@ end
 function HUDChat:receive_message(name, message, color, icon)
 	local output_panel = self._panel:child("output_panel")
 	local len = utf8.len(name) + 1
-	local message_panel = self._canvas:panel({h = HUDChat.line_height,})
+	local message_panel = self._canvas:panel({h = HUDChat.line_h,})
 	local icon_bitmap = message_panel:rect({
 		name = "icon",
 		color = color,
@@ -308,7 +308,7 @@ function HUDChat:receive_message(name, message, color, icon)
 		name = "text",
 		text = string.format("%s: %s", name, message),
 		font = "fonts/font_large_mf",
-		font_size = HUDChat.line_height,
+		font_size = HUDChat.line_h,
 		w = message_panel:w() - 2,
 		x = icon_bitmap:right() + 2,
 		y = 2,
@@ -320,9 +320,9 @@ function HUDChat:receive_message(name, message, color, icon)
 	})
 	local _,_,_,h = line:text_rect()
 	line:set_h(h)
-	message_panel:set_h(line:h())
-	icon_bitmap:set_h(line:h() - 4)
-	icon_bitmap:set_center_y(line:center_y())
+	message_panel:set_h(line:h() + 2)
+	icon_bitmap:set_h(line:h() - 2)
+	icon_bitmap:set_center_y(line:center_y() - 1)
 	table.insert(self._lines, message_panel)
 	self:_layout_output_panel()
 	self:check_text(line:text())

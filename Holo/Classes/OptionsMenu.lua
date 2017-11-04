@@ -175,10 +175,18 @@ function self:CreateColorsMenu(menu)
         end},
         {name = "Tab", color = true, text = true},
         {name = "Teammate", background = true, text = true},
-        {name = "Health", text = true, custom = function(option, group, w)
-            self:ColorTextBox(group, "TextColors/HealthNeg", {w = w, text = "HealthNeg"})
+        {name = "Health", color = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "Colors/HealthNeg", {w = w, text = "HealthNeg"})
         end},
-        {name = "Armor", text = true},
+        {name = "Armor", color = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "Colors/ArmorNeg", {w = w, text = "ArmorNeg"})
+        end},
+        {name = "Skill", color = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "Colors/SkillNeg", {w = w, text = "Negative"})
+        end},
+        {name = "Interaction", color = true, text = true, ignore_custom = true, custom = function(option, group, w)
+            self:ColorTextBox(group, "Colors/InteractionRed", {w = w, text = "Invalid"})
+        end},
         {name = "Marker", color = true},
         {name = "Pickups", color = true},
         {name = "SelectedWeapon", color = true},
@@ -199,7 +207,7 @@ function self:CreateColorsMenu(menu)
         {name = "Captions", text = true},
     }
     for _, option in pairs(options) do
-        local i = table.size(option) - 1
+        local i = table.size(option) - 1 - (option.ignore_custom and 2 or 0)
         local group
         local text
         if i == 1 then
@@ -208,7 +216,7 @@ function self:CreateColorsMenu(menu)
         else
             group = menu:DivGroup({name = self:Loc(option.name), localized = true, align_method = "grid", index = other:Index()})
         end
-        local w = (group:ItemsWidth() - group:Offset()[1] * 2) / i
+        local w = group:ItemsWidth() / i - group:Offset()[1] * 2
         if option.color then
             self:ColorTextBox(group, "Colors/"..option.name, {w = w, text = text or "Color"})
         end

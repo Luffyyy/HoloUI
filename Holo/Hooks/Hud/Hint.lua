@@ -10,6 +10,7 @@ Holo:Post(HUDHint, "init", function(self, hud)
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	BeardLib:AddUpdater("HUDHintUpdate", callback(self, self, "update"))		
 end)
+
 function HUDHint:UpdateHolo()
 	self._hint_panel:set_h(38)
 	self._hint_panel:set_y(38)

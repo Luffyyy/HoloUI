@@ -35,8 +35,8 @@
       <hook source_file="lib/managers/hud/hudobjectives" file="HUD/Objectives.lua" />
       <hook source_file="lib/managers/hud/hudchat" file="HUD/Chat.lua" />
       <hook source_file="lib/managers/hud/hudteammate" file="HUD/Teammate.lua" />
-      <hook source_file="lib/managers/hud/hudtemp" file="HUD/Temp.lua" />
-      <hook source_file="lib/managers/hud/hudhint" file="HUD/HudHint.lua" />
+      <hook source_file="lib/managers/hud/hudtemp" file="HUD/Carry.lua" />
+      <hook source_file="lib/managers/hud/hudhint" file="HUD/Hint.lua" />
       <hook source_file="lib/managers/hud/hudpresenter" file="HUD/Presenter.lua" />
       <hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="HUD/SubtitlesPresenter.lua" />
       <!-- Menu Hooks -->
@@ -160,7 +160,7 @@
             <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
             <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
             <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Presenter" />
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Carrying" />
+            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Carrying" />
             <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Timer" />
         </option_group>
         <option_group name="Colors">
@@ -179,6 +179,14 @@
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="SelectedWeapon" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Pickups" />
             <option type="color" default_value="Color(0.15, 0.15, 0.15)" name="Menu" />
+            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Interaction" />
+            <option type="color" default_value="Color(1, 0, 0.1)" name="InteractionRed" />
+            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Health" />
+            <option type="color" default_value="Color(1, 0.1, 0)" name="HealthNeg" />
+            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Armor" />
+            <option type="color" default_value="Color(1, 0.1, 0)" name="ArmorNeg" />
+            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Skill" />
+            <option type="color" default_value="Color(1, 0.1, 0)" name="SkillNeg" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Tab" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Marker" />
             <option type="boolean" default_value="false" name="ColorizeTeammates" />
@@ -208,9 +216,7 @@
             <option type="color" default_value="Color(1, 1, 1)" name="Carrying" />
             <option type="color" default_value="Color(1, 1, 1)" name="Timer" />
             <option type="color" default_value="Color(1, 1, 1)" name="Chat" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Health" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Armor" />
-            <option type="color" default_value="Color(1, 0.1, 0)" name="HealthNeg" />
+            <option type="color" default_value="Color(1, 1, 1)" name="Interaction" />
             <option type="color" default_value="Color(1, 1, 1)" name="Teammate" />
             <option type="color" default_value="Color(1, 1, 1)" name="Tab" />
             <option type="color" default_value="Color(1, 1, 1)" name="Menu" />

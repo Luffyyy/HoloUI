@@ -16,13 +16,13 @@ if Holo.Options:GetValue("Hud") and (not restoration or not (restoration.Options
 		managers.hud:make_fine_text(self._hud.arrest_finished_text)
 		managers.hud:make_fine_text(self._hud.timer)
 
-		timer_msg:set_world_center_x(self._hud_panel:world_center_x())
+		timer_msg:set_world_center_x(self._hud_panel:world_center_x() - self._hud.timer:w())
 		self._hud.arrest_finished_text:world_center_x(timer_msg:world_center_x())	
 		self._hud.timer:set_world_center_x(self._hud_panel:world_center_x())
 		
 		timer_msg:set_world_y(managers.hud._hud_heist_timer._heist_timer_panel:world_bottom() + 1)
 		self._hud.arrest_finished_text:set_world_y(timer_msg:world_y())
-		self._hud.timer:set_y(self._hud.arrest_finished_text:bottom())
+		self._hud.timer:set_world_position(timer_msg:world_right(), timer_msg:world_y() + 1)
 	end
 	function HUDPlayerDowned:show_timer()
 		local downed_panel = self._hud_panel:child("downed_panel")

@@ -154,7 +154,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
         if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
             local tm = self._teammate_panels[panel_id]
-            if tm.UpdateHolo then
+            if tm.UpdateHolo and tm._forced_compact then
                 tm._forced_compact = false
                 tm:UpdateHolo()
             end
@@ -164,7 +164,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
         if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
             local tm = self._teammate_panels[panel_id]
-            if tm.UpdateHolo then
+            if tm.UpdateHolo and not tm._forced_compact then
                 tm._forced_compact = true
                 tm:UpdateHolo()     
             end

@@ -24,7 +24,7 @@ function HUDChat:init(ws, hud)
 	bg:set_alpha(Holo.Options:GetValue("HudAlpha"))
 	self._scroll = ScrollablePanelModified:new(output_panel, "Messages", {
         layer = 4, 
-        padding = 0.0001, 
+        padding = 0, 
         scroll_width = 6, 
         hide_shade = true, 
         color = Color.white,
@@ -46,7 +46,9 @@ Holo:Post(HUDChat, "_create_input_panel", function(self)
 	bg:set_alpha(Holo.Options:GetValue("HudAlpha"))
 
 	text:set_font_size(18)
+	text:set_h(self._input_panel:h())
 	text:set_selection_color(text:color():with_alpha(0.5))
+	self:update_caret(0)
 end)
 
 function HUDChat:enter_text(o, s)
@@ -182,27 +184,23 @@ end)
 
 function HUDChat:update_caret()
 	local text = self._input_panel:child("input_text")
+    local lines = math.max(1, text:number_of_lines())
+    local _,_,_,h = text:text_rect()
+    h = math.max(h, text:font_size())
+    local s, e = text:selection()
+	local x, y = text:character_rect(self._select_neg and s or e)
 	local caret = self._input_panel:child("caret")
-	local s, e = text:selection()
-	local x, y, w, h = text:selection_rect()
-	local selected_characters = s - e
-	if s == 0 and e == 0 then
-		if text:align() == "center" then
-			x = text:world_x() + text:w() / 2
-		else
-			x = text:world_x()
-		end
-		y = text:world_y()
+	
+    if s == 0 and e == 0 then
+		caret:set_world_x(text:world_x())
+		caret:set_center_y(self._input_panel:h() / 2)	
+	else
+		caret:set_world_position(x, y)
 	end
-	h = text:h()
-	if not self._focus then
-		w = 0
-		h = 0
-	end
-	caret:set_world_shape(x, y + 2, 2, h - 4)
-	self:set_blinking(s == e and self._focus)
-	local mid = x / self._input_panel:child("input_bg"):w()
-	caret:set_visible(self._focus and selected_characters == 0)
+    caret:set_size(2, h)
+    caret:set_alpha(1)
+    caret:set_visible(self._focus)
+    caret:set_color(text:color():with_alpha(1))
 end
 
 function HUDChat:mouse_released(o, button, x, y)
@@ -238,22 +236,20 @@ function HUDChat:mouse_moved(o, x, y)
 				end
 			end
 		end
-	end   	    
+	end
     if self._start_select and self._old_x then
-    	local i = text:point_to_index(x, y)
+        local i = text:point_to_index(x, y)
         local s, e = text:selection()
         local old = self._select_neg
-        if i > 0 then
-	        if self._select_neg == nil or (s == e) then
-	            self._select_neg = (x - self._old_x) < 0
-	        end
-	        if self._select_neg then
-	            text:set_selection(i - 1, self._start_select)
-	        else
-	            text:set_selection(self._start_select, i + 1)
-	        end
+        if self._select_neg == nil or (s == e) then
+            self._select_neg = (x - self._old_x) < 0
         end
-        self:update_caret()
+        if self._select_neg then
+            text:set_selection(i - 1, self._start_select)
+        else
+            text:set_selection(self._start_select, i + 1)
+		end
+		self:update_caret()
     end
     self._old_x = x
 end

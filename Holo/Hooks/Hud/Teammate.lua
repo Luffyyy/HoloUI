@@ -60,7 +60,7 @@ Holo:Post(HUDTeammate, "init", function(self)
 	})
 	self._panel:rect({name = "teammate_line", w = 2, layer = 5})
 	self:layout_equipments()
-	self:UpdateHolo()		
+	self:UpdateHolo()
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 end)
 
@@ -72,7 +72,7 @@ end)
 function HUDTeammate:set_avatar()
 	local peer = self._peer_id and managers.network:session():peer(self._peer_id) or nil
 	local steam_id = peer and peer:user_id() or self._main_player and Steam:userid() or nil
-	if steam_id then
+	if steam_id and not self._ai then
 		Steam:friend_avatar(Steam.LARGE_AVATAR, steam_id, function(texture)
 			self._player_panel:child("avatar"):animate(function()
 				wait(1)
@@ -281,7 +281,8 @@ function HUDTeammate:UpdateHolo()
 	}, {visible = false, alpha = 0})
 	name:set_color(text_color)
 	self._player_panel:child("radial_health_panel"):hide()
-	
+	self._player_panel:child("interact_panel"):set_alpha(0)
+
 	self:layout_equipments()
 	self:layout_special_equipments(true)
 	self:recreate_weapon_firemode()
@@ -388,7 +389,7 @@ Holo:Post(HUDTeammate, "set_ability_radial", function(self, data)
 end)
 
 Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
-	if not self._main_player then
+	if not self._main_player or not managers.player:player_unit() or not managers.player:player_unit():character_damage() then
 		return
 	end
 	local Skill = self._player_panel:child("Skill")
@@ -635,8 +636,18 @@ Holo:Post(HUDTeammate, "set_peer_id", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "add_panel", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "set_health", HUDTeammate.set_holo_health)
 Holo:Post(HUDTeammate, "set_custom_radial", HUDTeammate.set_holo_health)
+Holo:Post(HUDTeammate, "remove_panel", function(self)
+	if not self._main_player then --testing this, hopefully it won't break anything, but it should reset once the panel is removed.
+		self._peer_id = nil
+		self._player_panel:child("Armor"):set_alpha(0)
+		self:UpdateHolo()
+	end
+end)
+Holo:Post(HUDTeammate, "set_callsign", function(self, id)
+	self._panel:child("teammate_line"):set_color(tweak_data.chat_colors[id])
+	self:UpdateHolo()
+end)
 
 function HUDTeammate:_create_primary_weapon_firemode() self:_create_firemode() end
 function HUDTeammate:_create_secondary_weapon_firemode() self:_create_firemode(true) end
-function HUDTeammate:set_callsign(id) self._panel:child("teammate_line"):set_color(tweak_data.chat_colors[id]) end
 function HUDTeammate:set_state(state) self:UpdateHolo() end

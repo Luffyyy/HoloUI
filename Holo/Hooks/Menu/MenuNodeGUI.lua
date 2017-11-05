@@ -50,35 +50,35 @@ Holo:Post(MenuNodeGui, "_create_menu_item", function(self, row_item)
 	end
 end)
 
-local orig_fade = MenuNodeGui._fade_row_item
-function MenuNodeGui:_fade_row_item(row_item, ...)
+Holo:Replace(MenuNodeGui, "_fade_row_item", function(self, o, row_item, ...)
 	if not row_item then
 		return
 	end
 	local panel = row_item.gui_text or row_item.gui_panel
-	local color = panel and panel.color and panel:color()	
-	local ret = orig_fade(self, row_item, ...)
+	local color = panel and panel.color and panel:color()
+	local ret = o(self, row_item, ...)
+	local new_color = panel.color and panel:color()	
 	if color then
 		panel:set_color(color)
-		play_color(panel, Holo:GetColor("TextColors/Menu"))
+		play_color(panel, new_color, {time = 0.2})
 	end
 	return ret
-end
+end)
 
-local orig_highlight = MenuNodeGui._highlight_row_item
-function MenuNodeGui:_highlight_row_item(row_item, ...)
+Holo:Replace(MenuNodeGui, "_highlight_row_item", function(self, o, row_item, ...)
 	if not row_item then
 		return
 	end
 	local panel = row_item.gui_text or row_item.gui_panel
 	local color = panel.color and panel:color()	
-	local ret = orig_highlight(self, row_item, ...)
+	local ret = o(self, row_item, ...)
+	local new_color = panel.color and panel:color()	
 	if color then
 		panel:set_color(color)
-		play_color(panel, Holo:GetColor("TextColors/MenuHighlighted"), {time = 0.2})
+		play_color(panel, new_color, {time = 0.2})
 	end
-	return ret
-end
+	return ret	
+end)
 
 Holo:Pre(MenuNodeGui, "_align_marker", function(self, row_item)
 	self._old_center_y = self._marker_data.marker:world_center_y()

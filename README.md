@@ -1,7 +1,5 @@
  ## What is HoloUI? ##
-HoloUI is a UI mod that changes most of the UI design of the game to look more 'modern'.
-
-This mod also allows you to change bunch of stuff like colors, transparency values and more.
+HoloUI is a UI mod that changes most of the UI design of the game to look more modern, it's also highly customizable!
 
  ## Features ##
  - Changes the design of payday 2's UI almost entirely.

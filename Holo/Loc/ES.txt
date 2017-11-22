@@ -158,5 +158,8 @@
 	"Holo/Invalid" : "Invalid",
 	"Holo/Negative" : "Negative",
 	"Holo/Skill" : "Teammate panel skill",
-	"Holo/ArmorNeg" : "Low armor"
+	"Holo/ArmorNeg" : "Low armor",
+	"Holo/ChatPos" : "Chat $option position",
+	"Holo/X" : "X",
+	"Holo/Y" : "Y"
 }

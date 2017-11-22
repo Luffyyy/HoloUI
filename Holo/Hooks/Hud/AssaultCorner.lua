@@ -77,10 +77,10 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 		point_of_no_return_text:set_color(Holo:GetColor("TextColors/NoPointOfReturn"))
 		point_of_no_return_timer:set_color(Holo:GetColor("TextColors/NoPointOfReturn"))
 		num_hostages:set_color(Holo:GetColor("TextColors/Hostages"))
-		num_hostages:set_shape(0,0,num_hostages:parent():size())
+		num_hostages:set_shape(0, 0, num_hostages:parent():size())
 		if wave then
 			num_waves:set_color(Holo:GetColor("TextColors/WavesSurvived"))
-			num_waves:set_shape(0,0,num_waves:parent():size())
+			num_waves:set_shape(0, 0, num_waves:parent():size())
 		end
 		Holo.Utils:Apply({point_of_no_return_timer, point_of_no_return_text, num_hostages, num_waves}, {blend_mode = "normal", font = "fonts/font_medium_noshadow_mf", font_size = self._box_height - 6, y = -4})
 		num_hostages:set_y(-2)
@@ -195,10 +195,9 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") th
 			local point_of_no_return_timer = self._noreturn_bg_box:child("point_of_no_return_timer")
 			self._noreturn_bg_box:stop()
 			self._noreturn_bg_box:show()
-			self:left_grow(self._noreturn_bg_box, function()
-				point_of_no_return_text:show()
-				point_of_no_return_timer:show()
-			end)
+			point_of_no_return_text:show()
+			point_of_no_return_timer:show()
+			self:left_grow(self._noreturn_bg_box)
 		end
 	end)
 	function HUDAssaultCorner:flash_point_of_no_return_timer(beep)

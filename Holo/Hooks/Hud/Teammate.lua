@@ -41,6 +41,8 @@ Holo:Post(HUDTeammate, "init", function(self)
 		return
 	end
 
+	self._equipments_h = 0
+	
 	value_text(self._player_panel, "Health")
 	value_text(self._player_panel, "Armor")
 	value_text(self._player_panel, "ArmorAbsorb"):set_alpha(0)
@@ -60,7 +62,8 @@ Holo:Post(HUDTeammate, "init", function(self)
 	})
 	self._panel:rect({name = "teammate_line", w = 2, layer = 5})
 	self:layout_equipments()
-	self:UpdateHolo()
+	self:layout_special_equipments()
+	self:UpdateHolo(true)
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 end)
 
@@ -111,6 +114,7 @@ function HUDTeammate:UpdateHolo()
 	--end
 	self:set_avatar()
 	managers.hud:align_teammate_panels()
+	
 	local weapons_panel = self._player_panel:child("weapons_panel")
 	local secondary = weapons_panel:child("secondary_weapon_panel")
 	local primary = weapons_panel:child("primary_weapon_panel")
@@ -140,7 +144,7 @@ function HUDTeammate:UpdateHolo()
 	})
 	managers.hud:make_fine_text(name)
 	
-	bg:set_size(self._panel:size())
+	bg:set_size(self._panel:w(), self._panel:h() - self._equipments_h)
 	bg:set_rightbottom(self._panel:size())
 	avatar:set_size(avatar_enabled and bg:h() or 0, bg:h())
 	avatar:set_visible(avatar_enabled)
@@ -160,9 +164,10 @@ function HUDTeammate:UpdateHolo()
 		hp:set_position(name_bg:x(), name_bg:bottom() + 2)
 		ap:set_position(name_bg:x(), hp:bottom() + 2)
 		ddp:set_position(ap:position())
-		local has_duke_perk = managers.skilltree:get_specialization_value("current_specialization") == 19
+		local peer = self._peer_id and managers.network:session():peer(self._peer_id)
+		local has_duke_perk = peer and managers.skilltree:unpack_from_string(peer:skills()).specializations[1] == "19" or false
 		ddp:set_alpha(self._main_player and has_duke_perk and 1 or 0)		
-		ap:set_alpha(1 - ddp:alpha())
+		ap:set_alpha(has_duke_perk and 0 or 1)
 		sp:set_position(name_bg:right() + 2, hp:y())
 		abp:set_position(name_bg:right() + 2, ap:y())		
 	end
@@ -284,7 +289,6 @@ function HUDTeammate:UpdateHolo()
 	self._player_panel:child("interact_panel"):set_alpha(0)
 
 	self:layout_equipments()
-	self:layout_special_equipments(true)
 	self:recreate_weapon_firemode()
 end
 
@@ -345,8 +349,7 @@ function HUDTeammate:_set_weapon_selected(id, hud_icon)
 end
 
 function HUDTeammate:_set_amount_string(text, amount)
-	local zero = self._main_player and amount < 10 and "0" or ""
-	text:set_text(zero .. amount)
+	text:set_text(amount)
 	self:layout_equipments()
 end
 
@@ -492,7 +495,7 @@ Holo:Pre(HUDTeammate, "add_special_equipment", function(self, data)
 end)
 
 function HUDTeammate:layout_special_equipments(no_align_hud)
-	self._equipments_ground = nil
+	self._equipments_h = 0	
 	local w = self._panel:w()
 	local name = self._panel:child("name")
 	local teammate_line = self._panel:child("teammate_line")
@@ -503,6 +506,8 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 	local padding = 2
 	local rows = 1	
 	local prev
+	local h = 18
+	
 	for i, panel in pairs(self._special_equipment) do
 		panel:set_size(30, 16)
 		local amount = panel:child("amount")
@@ -529,6 +534,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 				x = -padding,
 				y = 0,			
 				w = panel:w(),
+				rotation = 0,
 				h = panel:h(),
 				visible = true,
 				color = text_color
@@ -537,6 +543,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 				texture = "units/white_df",
 				w = panel:w(),
 				h = panel:h(),
+				rotation = 0,
 				color = bg_color,
 				alpha = bg_alpha,
 				x = 0,
@@ -549,6 +556,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 			bitmap:configure({
 				color = text_color,
 				visible = true,
+				rotation = 0,
 				x = padding,
 				layer = 10,
 				y = 1,
@@ -557,21 +565,27 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 			})
 		end
 
-		panel:set_leftbottom(0, bg:y() - 3)
+		panel:set_position(0, 0)
 		if prev then
 			if (prev:right() + panel:w()) > (bg:w() - 2) then
-				panel:set_bottom(prev:y() - 2)
+				panel:set_y(prev:bottom() + 2)
+				h = h + (panel:h() + 2)
 			else
 				panel:set_position(prev:right() + 2, prev:y())
 			end
 		end
 		prev = panel
-		self._equipments_ground = self._panel:y() + panel:y()
+		self._equipments_h = h
 	end
-	if not no_align_hud then
-		managers.hud:align_teammate_panels()
-	end
+	self:UpdateHolo()
 end
+
+--Do it from menu instead, kthx
+Holo:Post(HUDTeammate, "set_waiting", function(self, waiting, peer)
+	self._wait_panel:hide()
+	self._panel:show()
+	self:UpdateHolo()
+end)
 
 --Don't like this method, but anyway with the rework any radial would not work without fix
 --From what I understand maniac's health absorb is more rare than the armor so I won't display it(tbh have no where to display it lol)

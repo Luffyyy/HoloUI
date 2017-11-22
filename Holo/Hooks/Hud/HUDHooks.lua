@@ -40,4 +40,13 @@ elseif F == "circleguiobject" and Holo:ShouldModify("Hud", "Interaction") then
     Holo:Post(CircleBitmapGuiObject, "init", function(self)
         self._circle:set_blend_mode("normal")
     end)
+elseif F == "hudwaitinglegend" and Holo:ShouldModify("Hud", "TeammateHud") then
+    Holo:Post(HUDWaitingLegend, "init", function(self)
+        self._panel:set_alpha(0)
+    end)
+    Holo:Post(HUDWaitingLegend, "show_on", function(self)
+        if self:is_set() then
+            managers.hud:show_hint({text = managers.localization:text("menu_waiting_peer_info")})
+        end
+    end)        
 end

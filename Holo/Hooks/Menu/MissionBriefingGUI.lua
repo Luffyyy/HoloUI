@@ -12,8 +12,15 @@ Holo:Post(MissionBriefingTabItem, "select", ClassClbk(Holo.Utils, "TabUpdate"))
 Holo:Post(MissionBriefingTabItem, "deselect", ClassClbk(Holo.Utils, "TabUpdate"))
 Holo:Post(MissionBriefingTabItem, "mouse_moved", ClassClbk(Holo.Utils, "TabUpdate"))
 Holo:Post(MissionBriefingTabItem, "update_tab_position", ClassClbk(Holo.Utils, "TabUpdate"))
-Holo:Post(MissionBriefingTabItem, "reduce_to_small_font", function(self)
-	self._panel:set_h(self._main_panel:h())
+Holo:Post(TeamLoadoutItem, "set_slot_outfit", function(self, slot, criminal_name, outfit)
+	local player_slot = self._player_slots[slot]
+	if not player_slot then
+		return
+	end
+
+	if player_slot.box then
+		player_slot.box:hide()
+	end
 end)
 
 Holo:Post(MissionBriefingGui, "init", function(self)

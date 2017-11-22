@@ -36,39 +36,10 @@ if Holo.Options:GetValue("Chat") then
 end
 
 if Holo:ShouldModify("Hud", "TeammateHud") then
-    function HUDManager:_create_teammates_panel(hud)
-        hud = hud or managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-        self._hud.teammate_panels_data = self._hud.teammate_panels_data or {}
-        self._teammate_panels = {}
-        if hud.panel:child("teammates_panel") then
-            hud.panel:remove(hud.panel:child("teammates_panel"))
-        end
-        local h = self:teampanels_height()
-        local teammates_panel = hud.panel:panel({
-            name = "teammates_panel",
-            halign = "grow",
-            valign = "bottom"
-        })
-        local teammate_w = 204
-        local player_gap = 240
-        local small_gap = (teammates_panel:w() - player_gap - teammate_w * 4) / 3
-        for i = 1, HUDManager.PLAYER_PANEL do
-            local is_player = i == HUDManager.PLAYER_PANEL
-            self._hud.teammate_panels_data[i] = {
-                taken = false,
-                special_equipments = {}
-            }
-            local pw = teammate_w + (is_player and 0 or 64)
-            local teammate = HUDTeammate:new(i, teammates_panel, is_player, pw)
-            local x = math.floor((pw + small_gap) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
-            teammate._panel:set_x(x)
-            table.insert(self._teammate_panels, teammate)
-            if is_player then
-                teammate:add_panel()
-            end
-        end
+    function HUDManager:teampanels_height()
+        return managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:h()
     end
-
+    
 	function HUDManager:align_teammate_panels()
         local main_tm = self._teammate_panels[HUDManager.PLAYER_PANEL]
         if not main_tm then
@@ -98,7 +69,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
             local w = tm:GetNameWidth()
             local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
             local pw = math.max(w, me and 124 or 72) + (avatar_enabled and 108 or 40)
-            local ph = compact and (me and 48 or 36) or (me and 86 or 64)
+            local ph = (compact and (me and 48 or 36) or (me and 86 or 64)) + tm._equipments_h
             tm._panel:set_size(pw, ph)
             tm._player_panel:set_size(pw, ph)
             if me then
@@ -128,8 +99,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
                 end
                 if prev then
                     if going_up then
-                        local prev_ground = prev._equipments_ground or prev._panel:y()
-                        tm._panel:set_bottom(prev_ground - 4)
+                        tm._panel:set_bottom(prev._panel:y() - 4)
                     elseif pos == "left" then
                         tm._panel:set_x(prev._panel:right() + 4)
                     else

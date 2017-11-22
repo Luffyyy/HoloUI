@@ -225,7 +225,7 @@ function self:CreateColorsMenu(menu)
         end
         if option.text then
             local enabled
-            if auto_textcolor and option.background then
+            if not auto_textcolor_value and option.background then
                 enabled = false
             end
             self:ColorTextBox(group, "TextColors/"..option.name, {w = w, text = text or "Text", enabled = enabled})

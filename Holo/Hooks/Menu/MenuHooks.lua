@@ -199,12 +199,11 @@ elseif F == "crimenetsidebargui" then
 	Holo:Post(CrimeNetSidebarItem, "set_pulse_color", function(self)
 		self._pulse_color = nil
 	end)
-	CrimeNetSidebarItem.create_glow_orig_holo = CrimeNetSidebarItem.create_glow_orig_holo or CrimeNetSidebarItem.create_glow
-	function CrimeNetSidebarItem:create_glow(...)
-		local p = self:create_glow_orig_holo(...)
+	Holo:Replace(CrimeNetSidebarItem, "create_glow", function(self, orig, ...)
+		local p = orig(self, ...)
 		p:hide()
 		return p
-	end
+	end)
 elseif F == "crimespreemissionsmenucomponent" then
 	Holo:Post(CrimeSpreeMissionButton, "init", function(self)
 		self._mission_image:configure({blend_mode = "normal"})
@@ -382,17 +381,18 @@ elseif F == "contractbrokerheistitem" then
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
 elseif F == "crimespreedetailsmenucomponent" then
-	CrimeSpreeDetailsMenuComponent.page_data_holo_orig = CrimeSpreeDetailsMenuComponent.page_data_holo_orig or CrimeSpreeDetailsMenuComponent._start_page_data
-	function CrimeSpreeDetailsMenuComponent:_start_page_data(...)
-		local data = self:page_data_holo_orig(...)
+	Holo:Replace(CrimeSpreeDetailsMenuComponent, "_start_page_data", function(self, orig, ...)
+		local data = orig(self, ...)
 		data.outline_data.sides = {0, 0, 0, 0}
 		return data
-	end
+	end)
 elseif F == "crimespreemodifiersmenucomponent" then
 	Holo:Post(CrimeSpreeButton, "init", function(self)
 		self._text:set_font_size(tweak_data.menu.pd2_medium_font_size)
-		self._highlight:hide()
-		self._panel:set_y(0)
+		self._panel:set_h(tweak_data.menu.pd2_medium_font_size)
+		self._text:set_h(self._panel:h())
+		self._text:set_blend_mode("normal")
+		self._highlight:set_alpha(0)
 	end)
 elseif F == "scrollablepanel" then
 	Holo:Post(ScrollablePanel, "init", function(self) --what's even the point of that shitty shade you can clearly see the scrollbar's height
@@ -400,5 +400,30 @@ elseif F == "scrollablepanel" then
 			self:panel():child("scroll_up_indicator_shade"):hide()
 			self:panel():child("scroll_down_indicator_shade"):hide()
 		end
+	end)
+elseif F == "crimespreemissionendoptions" then
+	Holo:Post(CrimeSpreeMissionEndOptions, "_setup", function(self)
+		local prev
+		for _, button in pairs(self._buttons) do
+			button:panel():set_rightbottom(self._button_panel:right(), self._button_panel:h())
+
+			if managers.menu:is_pc_controller() then
+				if prev then
+					button:panel():set_right(prev:panel():left())
+				end
+			elseif prev then
+				button:panel():set_bottom(prev:panel():y())
+			end
+
+			prev = button
+		end
+	end)
+elseif F == "lobbycharacterdata" then
+	Holo:Post(LobbyCharacterData, "init", function(self)
+		Holo.Utils:SetBlendMode(self._panel)
+	end)
+elseif F == "contractboxgui" then
+	Holo:Post(ContractBoxGui, "create_character_text", function(self)
+		Holo.Utils:SetBlendMode(self._panel)
 	end)
 end

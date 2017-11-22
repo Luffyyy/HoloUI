@@ -1,11 +1,12 @@
  ## What is HoloUI? ##
-HoloUI is a UI mod that changes most of the UI design of the game and has a lot of customization!
+HoloUI is a UI mod that changes most of the UI design of the game to look more 'modern'.
+This mod also allows you to change bunch of stuff like colors, transparency values and more.
 
- ## Features: ##
- - Changes the design of the Hud & menu almost completely.
- - Improved Chat: View old messages, you can copy & paste, select text with mouse and links work 
- - Hud Scaling & Spacing option!
- - The mod no longer removes anything from the core game but builds upon it meaning it will less likely to crash/break.
+ ## Features ##
+ - Changes the design of payday 2's UI almost entirely.
+ - A better chat with scrolling, copy pasting and site links support.
+ - HUD Scaling & Spacing option!
+ - The mod is built in a way that is less likely to break with each update.
  - Very customizable UI with a lot of options to play with!
 
 ## MWS link ##

@@ -1,4 +1,8 @@
 if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then 
+	Holo:Post(MenuSceneManager, "_set_up_templates", function(self)
+		self._scene_templates.standard.character_pos = Vector3(-48, 10.66, -137)
+	end)
+
 	function MenuSceneManager:HoloUpdate()
 		if self._camera_object then
 			local fixed_fov = math.min(50, self._new_fov)

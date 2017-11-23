@@ -13,12 +13,16 @@ function Utils:ModifyWallet()
 		local icon = panel:child(child .. "_icon")
 		local text = panel:child(child .. "_text")
 		if icon and icon:visible() then
-			icon:set_leftbottom(prev and prev:right() + 10 or 4, Global.wallet_panel:h() - 4)				
+			icon:set_leftbottom(prev and prev:right() + 10 or 4, Global.wallet_panel:h() - 2.5)
 			WalletGuiObject.make_fine_text(text)
-			text:set_left(icon:right() + 2)
-			text:set_y(math.round(icon:y() - 2))
-			icon:set_color(Holo:GetColor("TextColors/Menu"))	
-			text:set_color(Holo:GetColor("TextColors/Menu"))		
+			icon:set_color(Holo:GetColor("TextColors/Menu"))
+			text:configure({
+				font = tweak_data.menu.pd2_medium_font,
+				font_size = tweak_data.menu.pd2_small_font_size,
+				color = Holo:GetColor("TextColors/Menu"),
+				x = icon:right() + 2,
+				y = math.round(icon:y() - 1)
+			})
 			w = text:right() + 2
 			prev = text
 		end

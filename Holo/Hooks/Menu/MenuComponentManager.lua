@@ -15,6 +15,14 @@ end)
 Holo:Post(BLTNotificationsGui, "_setup", function(self)
     self._content_panel:child("background"):hide()
     self._content_panel:child(1):hide()
+    self._content_outline:hide()
+    self._content_panel:remove(self._content_panel:child("BoxGui"))
+    BoxGuiObject:new(self._content_panel, {sides = {
+        2,
+        0,
+        0,
+        0
+    }})
 end)
 
 Holo:Post(BLTNotificationsGui, "add_notification", function(self)

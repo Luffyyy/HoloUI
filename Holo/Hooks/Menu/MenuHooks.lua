@@ -170,14 +170,6 @@ elseif F == "menupauserenderer" then
 			color = Holo:GetColor("Colors/Menu"),
 			layer = -1
 		})
-	end)	
-elseif F == "playerprofileguiobject" then
-	Holo:Post(PlayerProfileGuiObject, "init", function(self)
-		for _, child in pairs(self._panel:children()) do
-			if child.texture_name and child:texture_name() == Idstring("guis/textures/pd2/crimenet_marker_glow") then
-				child:hide()
-			end
-		end
 	end)
 elseif F == "crimenetsidebargui" then
 	Holo:Post(CrimeNetSidebarItem, "init", function(self, sidebar, panel, parameters)
@@ -295,6 +287,12 @@ elseif F == "multiprofileitemgui" then
 	Holo:Post(MultiProfileItemGui, "init", function(self)
 		if alive(self._caret) then
 			self._caret:set_rotation(360)
+		end
+		--when will ovk stop not using names for stuff?
+		for _, child in pairs(table.list_add(self._profile_panel:children(), self._quick_select_panel:children())) do
+			if child and child.color and child:alpha() < 0.41 then
+				child:hide()
+			end
 		end
 	end)
 	Holo:Post(MultiProfileItemGui, "update", function(self)

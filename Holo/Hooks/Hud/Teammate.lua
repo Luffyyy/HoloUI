@@ -63,7 +63,7 @@ Holo:Post(HUDTeammate, "init", function(self)
 	self._panel:rect({name = "teammate_line", w = 2, layer = 5})
 	self:layout_equipments()
 	self:layout_special_equipments()
-	self:UpdateHolo(true)
+	self:UpdateHolo()
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 end)
 

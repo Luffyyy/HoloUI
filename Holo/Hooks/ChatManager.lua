@@ -46,7 +46,7 @@ function ChatGui:receive_message(name, message, color, icon)
 		name = "text",
 		text = string.format("%s: %s", name, message),
 		font = "fonts/font_large_mf",
-		font_size = HUDChat.line_h,
+		font_size = ChatGui.line_h
 		kerning = 0,
 		color = color,
 		x = icon_bitmap:right() + 2,

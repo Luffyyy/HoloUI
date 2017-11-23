@@ -52,6 +52,7 @@
 		<hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua" />
 		<hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua" />
 		<hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
+		<hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/PlayerProfileGUI.lua" />
 
 		<hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua" />
 		<hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuHooks.lua" />
@@ -75,7 +76,6 @@
 		<hook source_file="lib/managers/menu/walletguiobject" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/renderers/menunodebasegui" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/menupauserenderer" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/crimespreemissionendoptions" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua" />
@@ -185,7 +185,7 @@
             <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Teammate" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="SelectedWeapon" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Pickups" />
-            <option type="color" default_value="Color(0.15, 0.15, 0.15)" name="Menu" />
+            <option type="color" default_value="Color('262627')" name="Menu" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Interaction" />
             <option type="color" default_value="Color(1, 0, 0.1)" name="InteractionRed" />
             <option type="color" default_value="Color(0.2, 0.44, 1)" name="Health" />

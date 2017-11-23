@@ -171,7 +171,7 @@ if not Holo.Setup then
 end
 
 if Hooks then
-	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(menu_manager, nodes)			
+	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(self, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
 		Holo.Workspace = managers.gui_data:create_fullscreen_workspace()		
 		Holo.Panel = Holo.Workspace:panel()
@@ -182,7 +182,6 @@ if Hooks then
 			desc = "Holo/OptionsDesc",
 			callback = "OpenHoloMenu",
 			node = nodes.blt_options,
-			priority = -13,
 		})
 	end)
 end

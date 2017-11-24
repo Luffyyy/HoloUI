@@ -98,6 +98,10 @@ function Holo:ShouldModify(c, o)
 	if (CompactHUD or Fallout4hud or SAOHUD) and o == "TeammateHud" then
 		return false
 	end
+	if NepgearsyMM and o == "PlayerProfile" then
+		inform("Nepgearsy Main Menu")	
+		return false
+	end
 	if pdth_hud and pdth_hud.Options then
 		if pdth_hud.Options:GetValue("HUD/MainHud") and o == "TeammateHud" then
 			inform("PDTH Hud")	
@@ -143,7 +147,10 @@ function Holo:ShouldModify(c, o)
 	if o == "TeammateHud" and HUDTeammateCustom then
 		inform("CustomHud")
 	end
-	return self.Options:GetValue(o)
+	if o then
+		return self.Options:GetValue(o) 
+	end
+	return true
 end
 
 function Holo:Post(clss, func, after_orig)

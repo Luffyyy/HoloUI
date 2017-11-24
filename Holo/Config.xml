@@ -50,7 +50,6 @@
 		<hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua" />
 		<hook source_file="lib/managers/menu/menunodegui" file="Menu/MenuNodeGUI.lua" />
 		<hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua" />
-		<hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuItemMultiChoice.lua" />
 		<hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
 		<hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/PlayerProfileGUI.lua" />
 
@@ -125,6 +124,7 @@
         <option type="boolean" default_value="true" name="Carrying" menu="Enable"/>
         <option type="boolean" default_value="true" name="Interaction" menu="Enable"/>
         <option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
+		  
 
         <div name="Menu" />
         <option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />
@@ -133,8 +133,10 @@
         <option type="boolean" default_value="true" beforetext="Modified" name="Lobby" menu="Menu" />
         <option type="boolean" default_value="true" beforetext="Modified" name="Loading" menu="Menu"/>
         <option type="boolean" default_value="true" beforetext="Modified" name="BlackScreen" menu="Menu"/>
+        <option type="boolean" default_value="true" beforetext="Modified" name="PlayerProfile" menu="Menu"/>
         <option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>    
          
+			
         <option_group name="Positions" closed="true">
             <option type="number" default_value="1" menu_type="combo" items="MenuMainTMPositions" name="MainTeammatePanel" />
             <option type="number" default_value="6" menu_type="combo" items="MenuTMPositions" name="TeammatesPanel" />

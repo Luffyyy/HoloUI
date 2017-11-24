@@ -1,4 +1,4 @@
-if not Holo.Options:GetValue("Menu") then
+if not Holo:ShouldModify("Menu", "PlayerProfile") then
 	return
 end
 

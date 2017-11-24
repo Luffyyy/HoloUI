@@ -164,12 +164,17 @@ function HUDTeammate:UpdateHolo()
 		hp:set_position(name_bg:x(), name_bg:bottom() + 2)
 		ap:set_position(name_bg:x(), hp:bottom() + 2)
 		ddp:set_position(ap:position())
-		local peer = self._peer_id and managers.network:session():peer(self._peer_id)
-		local has_duke_perk = peer and managers.skilltree:unpack_from_string(peer:skills()).specializations[1] == "19" or false
+		local has_duke_perk
+		if self._main_player then
+			has_duke_perk = managers.skilltree:get_specialization_value("current_specialization") == 19
+		else
+			local peer = self._peer_id and managers.network:session():peer(self._peer_id)
+			has_duke_perk = peer and managers.skilltree:unpack_from_string(peer:skills()).specializations[1] == "19" or false
+		end
 		ddp:set_alpha(self._main_player and has_duke_perk and 1 or 0)		
 		ap:set_alpha(has_duke_perk and 0 or 1)
 		sp:set_position(name_bg:right() + 2, hp:y())
-		abp:set_position(name_bg:right() + 2, ap:y())		
+		abp:set_position(name_bg:right() + 2, ap:y())
 	end
 
 	name:set_position(name_bg:x() + 3, name_bg:y())
@@ -373,7 +378,7 @@ function HUDTeammate:set_holo_health(data)
 	local Health = self._player_panel:child("Health")
 	local val = data.current / data.total
 	play_color(Health:child("Line"), Holo:GetColor("Colors/Health") * val + Holo:GetColor("Colors/HealthNeg") * (1 - val))		
-	Health:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
+	Health:child("Text"):set_text(string.format("%i", data.current * tweak_data.gui.stats_present_multiplier))
 end
 
 Holo:Post(HUDTeammate, "set_stored_health_max", function(self, hp_ratio)
@@ -387,8 +392,27 @@ Holo:Post(HUDTeammate, "set_ability_radial", function(self, data)
 	local skill = self._player_panel:child("Skill")
 	local p = data.current / data.total
 	play_value(skill, "alpha", p > 0 and 1 or 0)
-	skill:child("Text"):set_text(string.format("%.0f%%", p * 100))
-	play_color(skill:child("Line"), Holo:GetColor("Colors/Skill") * p + Holo:GetColor("Colors/SkillNeg") * (1 - p))	
+	skill:child("Text"):set_text(string.format("%i%%", p * 100))
+	play_color(skill:child("Line"), Holo:GetColor("Colors/Skill") * p + Holo:GetColor("TextColors/Teammate") * (1 - p))	
+end)
+
+Holo:Post(HUDTeammate, "activate_ability_radial", function(self, time_left, time_total)
+	local p = time_left / time_total
+	local skill = self._player_panel:child("Skill")
+	local skill_color = Holo:GetColor("Colors/Skill")
+	local text_color = Holo:GetColor("TextColors/Teammate")
+	skill:stop()
+	skill:animate(function(o)
+		o:set_alpha(1)
+		local line = o:child("Line")
+		local text = o:child("Text")
+		over(time_left, function(t)
+			local val = (p * math.lerp(1, 0, t))
+			text:set_text(string.format("%i%%", tostring(val * 100)))
+			line:set_color(skill_color * val + text_color * (1 - val))
+		end)
+		o:set_alpha(0)
+	end)
 end)
 
 Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
@@ -399,7 +423,7 @@ Holo:Post(HUDTeammate, "set_stored_health", function(self, hp_ratio)
 	local val = math.min(hp_ratio, 1)
 	local curr = val * managers.player:player_unit():character_damage():_max_health()
 	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
-	Skill:child("Text"):set_text(string.format("%.0f", curr * tweak_data.gui.stats_present_multiplier))
+	Skill:child("Text"):set_text(string.format("%i", tostring(curr * tweak_data.gui.stats_present_multiplier)))
 end)
 
 Holo:Post(HUDTeammate, "set_info_meter", function(self, data)
@@ -409,7 +433,7 @@ Holo:Post(HUDTeammate, "set_info_meter", function(self, data)
 	local Skill = self._player_panel:child("Skill")
 	local val = math.clamp(data.current / data.max, 0, 1)
 	play_color(Skill:child("Line"), Holo:GetColor("Colors/Skill") * val + Holo:GetColor("TextColors/Teammate") * (1 - val))
-	Skill:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
+	Skill:child("Text"):set_text(string.format("%i", data.current * tweak_data.gui.stats_present_multiplier))
 end)
 
 Holo:Post(HUDTeammate, "set_armor", function(self, data)
@@ -417,7 +441,7 @@ Holo:Post(HUDTeammate, "set_armor", function(self, data)
 	Armor:set_alpha(data.total ~= 0 and 1 or 0)
 	local val = data.current / data.total
 	play_color(Armor:child("Line"), Holo:GetColor("Colors/Armor") * val + Holo:GetColor("Colors/ArmorNeg") * (1 - val))
-	Armor:child("Text"):set_text(string.format("%.0f", data.current * tweak_data.gui.stats_present_multiplier))
+	Armor:child("Text"):set_text(string.format("%i", data.current * tweak_data.gui.stats_present_multiplier))
 end)
 
 Holo:Post(HUDTeammate, "start_timer", function(self, data)
@@ -445,8 +469,8 @@ Holo:Post(HUDTeammate, "update_delayed_damage", function(self)
 	damage = damage - armor_damage
 	local health_damage = damage < health_current and damage or health_current
 	local val = health_damage / health_max
-	play_color(DelayedDamage:child("Line"), Holo:GetColor("Colors/SkillNeg") * val + Holo:GetColor("TextColors/Skill") * (1 - val))
-	DelayedDamage:child("Text"):set_text(string.format("%.0f", health_damage * tweak_data.gui.stats_present_multiplier))
+	play_color(DelayedDamage:child("Line"), Holo:GetColor("Colors/SkillNeg") * val + Holo:GetColor("Colors/Skill") * (1 - val))
+	DelayedDamage:child("Text"):set_text(string.format("%i", health_damage * tweak_data.gui.stats_present_multiplier))
 end)
 
 function HUDTeammate:set_talking(talking)
@@ -634,7 +658,7 @@ function HUDTeammate:_animate_update_absorb(o, radial_absorb_shield_name, radial
 			if update_absorb and current_absorb > 0 then
 				local shield_ratio = current_shield == 0 and 0 or math.min(current_absorb / current_shield, 1)
 				local shield = math.clamp(shield_ratio * radial_shield_rot, 0, 1)
-				local text = string.format("%.0f", shield * 100)
+				local text = string.format("%i", shield * 100)
 				armor:child("Text"):set_text(text.."%")
 				play_value(armor, "alpha", tonumber(text) > 0 and 1 or 0)
 			end

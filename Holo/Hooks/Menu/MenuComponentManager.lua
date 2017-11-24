@@ -1,3 +1,7 @@
+if not Holo.Options:GetValue("Menu") then
+	return
+end
+
 Holo:Post(MenuComponentManager, "register_component", function(self, name, component)
     Holo.Utils:FixBackButton(component)
 end)

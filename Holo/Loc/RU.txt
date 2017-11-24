@@ -161,5 +161,6 @@
 	"Holo/ArmorNeg" : "Low armor",
 	"Holo/ChatPos" : "Chat $option position",
 	"Holo/X" : "X",
-	"Holo/Y" : "Y"
+	"Holo/Y" : "Y",
+	"Holo/PlayerProfile" : "Player profile"
 }

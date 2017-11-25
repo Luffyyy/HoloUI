@@ -20,7 +20,10 @@ Holo:Post(BLTNotificationsGui, "_setup", function(self)
     self._content_panel:child("background"):hide()
     self._content_panel:child(1):hide()
     self._content_outline:hide()
-    self._content_panel:remove(self._content_panel:child("BoxGui"))
+    local box = self._content_panel:child("BoxGui")
+    if alive(box) then
+        self._content_panel:remove(box)
+    end
     BoxGuiObject:new(self._content_panel, {sides = {
         2,
         0,

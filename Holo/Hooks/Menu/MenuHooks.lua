@@ -407,7 +407,7 @@ elseif F == "crimespreemissionendoptions" then
 
 			if managers.menu:is_pc_controller() then
 				if prev then
-					button:panel():set_right(prev:panel():left())
+					button:panel():set_right(prev:panel():left() - 4)
 				end
 			elseif prev then
 				button:panel():set_bottom(prev:panel():y())

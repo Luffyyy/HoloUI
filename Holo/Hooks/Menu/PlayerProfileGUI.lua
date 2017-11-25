@@ -104,7 +104,10 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
     createText("Fugitive", tostring(fp), nil, icon)
             
     --Frame
-    self._panel:remove(self._panel:child("BoxGui"))		
+    local box = self._panel:child("BoxGui")
+    if alive(box) then
+        self._panel:remove(box)		
+    end
     BoxGuiObject:new(self._panel, {sides = {
         2,
         0,

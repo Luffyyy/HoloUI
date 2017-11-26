@@ -226,7 +226,7 @@ function HUDChat:_animate_input_bg(o)
 	local alpha = Holo.Options:GetValue("HudAlpha")
 	play_value(o, "alpha", alpha)
 	play_value(self._panel:child("output_panel"):child("output_bg"), "alpha", alpha)
-	play_value(self._scroll._scroll_bar, "alpha", alpha)
+	self._scroll._scroll_bar:set_alpha(1)
 	self._scroll:set_element_alpha_target("scroll_up_indicator_arrow", alpha, 100)
 	self._scroll:set_element_alpha_target("scroll_down_indicator_arrow", alpha, 100)
 end
@@ -234,7 +234,7 @@ end
 function HUDChat:_animate_hide_input(o)
 	play_value(o, "alpha", 0)
 	play_value(self._panel:child("output_panel"):child("output_bg"), "alpha", 0)
-	play_value(self._scroll._scroll_bar, "alpha", 0)
+	self._scroll._scroll_bar:set_alpha(0)
 	self._scroll:set_element_alpha_target("scroll_up_indicator_arrow", 0, 100)
 	self._scroll:set_element_alpha_target("scroll_down_indicator_arrow", 0, 100)
 end
@@ -345,7 +345,7 @@ function HUDChat:receive_message(name, message, color, icon)
 		color = color,
 		x = icon_bitmap:right() + 2,
 		y = 2,
-		w = message_panel:w() - 2,
+		w = message_panel:w() - 4,
 		halign = "left",
 		vertical = "top",
 		hvertical = "top",
@@ -360,11 +360,19 @@ function HUDChat:receive_message(name, message, color, icon)
 	table.insert(self._lines, message_panel)
 	self:_layout_output_panel()
 	self:check_text(line:text())
-	local briefing = managers.hud and managers.hud:get_mission_briefing_hud()
-	if briefing and briefing._backdrop and briefing._backdrop._panel:visible() then
+	local chatgui = managers.menu_component._game_chat_gui
+	if chatgui and chatgui:enabled() then
 		self._panel:child("output_panel"):set_alpha(0)
 		self._input_panel:set_alpha(0)
 		return
+	end
+
+	if not self._focus then
+		output_panel:child("output_bg"):set_alpha(0)
+		self._scroll._scroll_bar:set_alpha(0)
+		output_panel:stop()
+		output_panel:animate(callback(self, self, "_animate_show_component"), output_panel:alpha())
+		output_panel:animate(callback(self, self, "_animate_fade_output"))
 	end
 end
 

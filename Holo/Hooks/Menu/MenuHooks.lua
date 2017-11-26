@@ -424,4 +424,24 @@ elseif F == "contractboxgui" then
 	Holo:Post(ContractBoxGui, "create_character_text", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
+elseif F == "menuitemmultichoice" then
+	function MenuItemMultiChoice:holo_multi_choice_fix(node, row_item) -- makes it so the multi choice isn't confusing with how it changes the alpha.
+		if not row_item then
+			return
+		end	
+		if row_item.choice_text then
+			row_item.choice_text:set_color(not self._enabled and row_item.disabled_color or self:selected_option():parameters().color or tweak_data.screen_colors.button_stage_3)
+		end
+		if not self:left_arrow_visible() then
+			row_item.arrow_left:set_alpha(self._enabled and 0.5 or 0.25)
+		end
+		if not self:right_arrow_visible() then
+			row_item.arrow_right:set_alpha(self._enabled and 0.5 or 0.25)
+		end
+	end
+	Holo:Post(MenuItemMultiChoice, "highlight_row_item", MenuItemMultiChoice.holo_multi_choice_fix)
+	Holo:Post(MenuItemMultiChoice, "fade_row_item", MenuItemMultiChoice.holo_multi_choice_fix)
+	Holo:Post(MenuItemMultiChoice, "reload", function(self, row_item, node)
+		self:holo_multi_choice_fix(node, row_item)
+	end)
 end

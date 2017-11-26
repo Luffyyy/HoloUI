@@ -147,101 +147,77 @@ Holo:Post(HUDManager, "hide_mission_briefing_hud", function()
 end)
 
 if Holo:ShouldModify("Hud", "Waypoints") then
-    local o_add_waypoint = HUDManager.add_waypoint
-    function HUDManager:add_waypoint(id, data)
+    HUDManager.no_color_waypoints = {"wp_calling_in_hazard", "wp_calling_in"}
+    Holo:Replace(HUDManager, "add_waypoint", function(self, orig, id, data, ...)
         data.blend_mode = "normal"
-        data.icon = data.icon == "wp_suspicious" and "pd2_question" or data.icon == "wp_detected" and "pd2_generic_look" or data.icon
-        o_add_waypoint(self, id, data)
-        local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-        if not hud then
+        if Holo.Options:GetValue("ColorWaypoints") then
+            data.icon = data.icon == "wp_suspicious" and "pd2_question" or data.icon == "wp_detected" and "pd2_generic_look" or data.icon
+        end
+        orig(self, id, data, ...)
+        local waypoint = self._hud.waypoints[id]
+        if waypoint then
+            waypoint.icon = data.icon
+            self:holo_update_waypoint(waypoint, data.icon)
+        end
+    end)
+
+    function HUDManager:holo_update_waypoint(data, icon)
+        if not data or not alive(data.bitmap) then
             return
         end
+
+        local color = Holo.Options:GetValue("ColorWaypoints") and Holo:GetColor("Colors/Waypoints") or nil
+        local alpha = Holo.Options:GetValue("WaypointsAlpha")
+
+        data.alpha = alpha
         
-        local waypoint_panel = hud.panel
-        local arrow = waypoint_panel:child("arrow".. id)
-        local bitmap = waypoint_panel:child("bitmap".. id)
-        if data.distance then
-            local distance = waypoint_panel:child("distance".. id)
-            distance:set_color(Color(0.8,0.8,0.8))
-            distance:set_font(Idstring("fonts/font_large_mf"))
-            distance:set_font_size(32)
+        local distance = data.distance
+        local bitmap = data.bitmap
+        local arrow = data.arrow
+
+        if alive(distance) then
+            distance:configure({
+                color = color,
+                font = "fonts/font_large_mf",
+                font_size = 32
+            })
         end
 
-        self._nocoloring = {
-            "wp_calling_in_hazard",
-            "wp_calling_in"
-        }
-        local cancolor = true
-        for _,icon in pairs(self._nocoloring) do
-            if data.icon == icon then
-                cancolor = false
+        bitmap:set_alpha(alpha)
+        arrow:set_alpha(alpha)
+        for _, disallowed_icon in pairs(HUDManager.no_color_waypoints) do
+            if disallowed_icon == icon then
+                return
             end
         end
-        if cancolor then
-            bitmap:set_color(Holo:GetColor("Colors/Waypoints"))
-            arrow:set_color(Holo:GetColor("Colors/Waypoints"))
-
-        end
-        bitmap:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
-        arrow:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
+        if color then
+            bitmap:set_color(color)
+            arrow:set_color(color)
+        end 
     end
+
     function HUDManager:waypoints_update()
         for _, data in pairs(self._hud.waypoints) do
-            if data.bitmap then
-                local cancolor = true
-                for _,icon in pairs(self._nocoloring) do
-                    if data.icon == icon then
-                        cancolor = false
-                    end
-                end
-                if cancolor then
-                    data.bitmap:set_color(Holo:GetColor("Colors/Waypoints"))
-                    data.arrow:set_color(Holo:GetColor("Colors/Waypoints"))
-                else
-                    data.bitmap:set_color(Color.white)
-                    data.arrow:set_color(Color.white)
-                end
-                data.bitmap:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
-                data.arrow:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
-            end
+            self:holo_update_waypoint(data, data.icon)
         end
     end
-    function HUDManager:change_waypoint_icon(id, icon)
-        if not self._hud.waypoints[id] then
-            Application:error("[HUDManager:change_waypoint_icon] no waypoint with id", id)
-            return
-        end
-        icon = icon == "wp_suspicious" and "pd2_question" or icon == "wp_detected" and "pd2_generic_look" or icon
 
-        local data = self._hud.waypoints[id]
-        local texture, rect = tweak_data.hud_icons:get_icon_data(icon, {
-            0,
-            0,
-            32,
-            32
-        })
-        data.bitmap:set_image(texture, rect[1], rect[2], rect[3], rect[4])
-        data.bitmap:set_size(rect[3], rect[4])
-        data.size = Vector3(rect[3], rect[4])
-        local cancolor = true
-        for _,Icon in pairs(self._nocoloring) do
-            if icon == Icon then
-                cancolor = false
-            end
+    Holo:Replace(HUDManager, "change_waypoint_icon", function(self, orig, id, icon, ...)
+        if Holo.Options:GetValue("ColorWaypoints") then        
+            icon = icon == "wp_suspicious" and "pd2_question" or icon == "wp_detected" and "pd2_generic_look" or icon
         end
-        if cancolor then
-            data.bitmap:set_color(Holo:GetColor("Colors/Waypoints"))
-            data.arrow:set_color(Holo:GetColor("Colors/Waypoints"))
-        else
-            data.bitmap:set_color(Color.white)
-            data.arrow:set_color(Color.white)
+        orig(self, id, icon, ...)
+        local waypoint = self._hud.waypoints[id]
+        if waypoint then
+            waypoint.icon = icon
+            self:holo_update_waypoint(waypoint, icon)
         end
-        data.bitmap:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
-        data.arrow:set_alpha(Holo.Options:GetValue("WaypointsAlpha"))
-    end
+    end)
+
 	Holo:Post(HUDManager, "set_disabled", function(self)
         Holo.Panel:hide()
-	end)
+    end)
+    
 	Holo:Post(HUDManager, "set_enabled", function(self)
         if self._hud_mission_briefing and not self._hud_mission_briefing._backdrop._panel:visible() then
             Holo.Panel:show()

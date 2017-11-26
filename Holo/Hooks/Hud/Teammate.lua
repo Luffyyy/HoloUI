@@ -19,8 +19,8 @@ local function value_text(panel, name)
 	local p = panel:panel({name = name, layer = 5})
 	local l = p:rect({
 		name = "Line",
-		valign = "grow",
 		w = 2,
+		h = p:h() - 2,		
 		color = Holo:GetColor("TextColors/"..name)
 	})
 	local t = p:text({
@@ -134,11 +134,12 @@ function HUDTeammate:UpdateHolo()
 	local text_color = Holo:GetColor("TextColors/Teammate")
 	local avatar_enabled = Holo.Options:GetValue(me and "ShowAvatar" or "ShowTeammatesAvatar")
 	local show_all = me or Holo.Options:GetValue("ShowTeammateFullAmmo")
+	local large_tm = me and Holo.Options:GetValue("LargerTeammateInfo")
 	local compact = self._forced_compact or (self._ai or not self._main_player and Holo.Options:GetValue("CompactTeammate"))
-	local font_size = compact and (me and 28 or 24) or (me and 18 or 14)
+	local font_size = compact and (me and 28 or 24) or (me and (large_tm and 24 or 18) or 14)
 	
 	name:configure({
-		font_size = font_size,
+		font_size = large_tm and 0 or font_size,
 		vertical = "center",
 		font = "fonts/font_large_mf",
 	})
@@ -149,8 +150,8 @@ function HUDTeammate:UpdateHolo()
 	avatar:set_size(avatar_enabled and bg:h() or 0, bg:h())
 	avatar:set_visible(avatar_enabled)
 	avatar:set_leftbottom(bg:leftbottom())
-	name_bg:set_size(name:w() + 4, name:h())
-	name_bg:set_position(avatar:right() + 4, bg:top() + 3)
+	name_bg:set_size(large_tm and 0 or name:w() + 4, name:h())
+	name_bg:set_position(avatar:right() + (avatar_enabled and 4 or 6), bg:top() + 4)
 	
 	if compact then
 		name_bg:set_center_y(avatar:center_y())
@@ -173,12 +174,12 @@ function HUDTeammate:UpdateHolo()
 		end
 		ddp:set_alpha(self._main_player and has_duke_perk and 1 or 0)		
 		ap:set_alpha(has_duke_perk and 0 or 1)
-		sp:set_position(name_bg:right() + 2, hp:y())
-		abp:set_position(name_bg:right() + 2, ap:y())
+		sp:set_position(hp:right() + 2, hp:y())
+		abp:set_position(hp:right() + 2, ap:y())
 	end
 
 	name:set_position(name_bg:x() + 3, name_bg:y())
-	teammate_line:set_size(2, name:h() - 2)
+	teammate_line:set_size(large_tm and 0 or 2, name:h() - 2)
 	teammate_line:set_x(name_bg:x())
 	teammate_line:set_center_y(name:center_y() - 1)
 			

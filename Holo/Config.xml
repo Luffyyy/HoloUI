@@ -3,7 +3,6 @@
 		<class file="Utils.lua" />
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
-		<class file="HudVoice.lua" />
    </Classes>
    <AssetUpdates id="12501" version="3.0" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
@@ -97,8 +96,7 @@
    <Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt"> <!-- sorry :c -->
       <options>
         <div name="Base" />
-        <option type="string" default_value="f1" name="OptionsKey" menu="Base" />
-        <option type="string" default_value="q" name="VoiceKey" menu="Base" />
+        <option type="string" default_value="f2" name="OptionsKey" menu="Base" />
         <option type="boolean" default_value="true" name="Hud" menu="Base"/>
         <option type="boolean" default_value="true" name="Menu" menu="Base"/>
         <div name="Hud" />

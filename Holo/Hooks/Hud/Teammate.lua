@@ -2,7 +2,7 @@ if not Holo:ShouldModify("Hud", "TeammateHud") then
 	return
 end
 local Utils = Holo.Utils
-local function resize_value_text(p, font_size)
+function HUDTeammate:ResizeValueText(p, font_size)
 	local l = p:child("Line")
 	local t = p:child("Text")
 	local ot = t:text()
@@ -15,7 +15,7 @@ local function resize_value_text(p, font_size)
 	p:set_size(t:w() + l:w() + 2, t:h())
 end
 
-local function value_text(panel, name)
+function HUDTeammate:MakeValueText(panel, name)
 	local p = panel:panel({name = name, layer = 5})
 	local l = p:rect({
 		name = "Line",
@@ -32,9 +32,8 @@ local function value_text(panel, name)
 		vertical = "center",
 		font = "fonts/font_large_mf"
 	})
-	return p
+	return p	
 end
-
 Holo:Post(HUDTeammate, "init", function(self)
 	if not alive(self._player_panel) or not alive(self._player_panel:child("radial_health_panel")) then
 		Holo:log("[ERROR] Failed to modify hudteammate")
@@ -43,11 +42,11 @@ Holo:Post(HUDTeammate, "init", function(self)
 
 	self._equipments_h = 0
 	
-	value_text(self._player_panel, "Health")
-	value_text(self._player_panel, "Armor")
-	value_text(self._player_panel, "ArmorAbsorb"):set_alpha(0)
-	value_text(self._player_panel, "Skill"):set_alpha(0)
-	value_text(self._player_panel, "DelayedDamage"):set_alpha(0)
+	self:MakeValueText(self._player_panel, "Health")
+	self:MakeValueText(self._player_panel, "Armor")
+	self:MakeValueText(self._player_panel, "ArmorAbsorb"):set_alpha(0)
+	self:MakeValueText(self._player_panel, "Skill"):set_alpha(0)
+	self:MakeValueText(self._player_panel, "DelayedDamage"):set_alpha(0)
 
 	self._player_panel:rect({
 		name = "Mainbg",
@@ -135,7 +134,7 @@ function HUDTeammate:UpdateHolo()
 	local avatar_enabled = Holo.Options:GetValue(me and "ShowAvatar" or "ShowTeammatesAvatar")
 	local show_all = me or Holo.Options:GetValue("ShowTeammateFullAmmo")
 	local large_tm = me and Holo.Options:GetValue("LargerTeammateInfo")
-	local compact = self._forced_compact or (self._ai or not self._main_player and Holo.Options:GetValue("CompactTeammate"))
+	local compact = self._forced_compact or (self._ai or not me and Holo.Options:GetValue("CompactTeammate"))
 	local font_size = compact and (me and 28 or 24) or (me and (large_tm and 24 or 18) or 14)
 	
 	name:configure({
@@ -154,13 +153,13 @@ function HUDTeammate:UpdateHolo()
 	name_bg:set_position(avatar:right() + (avatar_enabled and 4 or 6), bg:top() + 4)
 	
 	if compact then
-		name_bg:set_center_y(avatar:center_y())
+		name_bg:set_center_y(avatar:center_y() + 1)
 	else
-		resize_value_text(hp, font_size)
-		resize_value_text(ap, font_size)
-		resize_value_text(sp, font_size)
-		resize_value_text(ddp, font_size)
-		resize_value_text(abp, font_size)
+		self:ResizeValueText(hp, font_size)
+		self:ResizeValueText(ap, font_size)
+		self:ResizeValueText(sp, font_size)
+		self:ResizeValueText(ddp, font_size)
+		self:ResizeValueText(abp, font_size)
 
 		hp:set_position(name_bg:x(), name_bg:bottom() + 2)
 		ap:set_position(name_bg:x(), hp:bottom() + 2)
@@ -264,7 +263,6 @@ function HUDTeammate:UpdateHolo()
 	end
 	nades:child("grenades_radial"):set_shape(nades_icon:shape())
 	nades:child("grenades_icon_ghost"):set_shape(nades_icon:shape())
-	--create_waiting_panel
 
 	local condition_icon = self._panel:child("condition_icon")
 	local condition_timer = self._panel:child("condition_timer")
@@ -284,8 +282,8 @@ function HUDTeammate:UpdateHolo()
 	--Equipments end
 	
 	--hide stuff that we don't need
-	Holo.Utils:Apply({hp, ap, abp, sp, ddp, dep, cable, nades, weapons_panel}, {visible = not compact})
-	Holo.Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HudAlpha")})
+	Utils:Apply({hp, ap, abp, sp, ddp, dep, cable, nades, weapons_panel}, {visible = not compact})
+	Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HudAlpha")})
 	Utils:Apply({
 		self._player_panel:child("carry_panel"), self._panel:child("name_bg"), primary:child("bg"), secondary:child("bg"),
 		self._panel:child("callsign_bg"), self._panel:child("callsign"), cable:child("bg"), dep:child("bg"), nades:child("bg"),

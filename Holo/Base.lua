@@ -169,10 +169,10 @@ function Holo:Replace(clss, func, new_func)
 end
 
 if not Holo.Setup then
-	if BeardLib.Version and BeardLib.Version >= 2.6 then
+	if BeardLib.Version and tonumber(BeardLib.Version) and BeardLib.Version >= 2.6 then
         Holo:Init()
     else
-        log("[ERROR] HoloUI requires at least version 2.6 of Beardlib installed!")
+        log("[ERROR] HoloUI requires at least version 2.6 of BeardLib installed!")
         return
     end
 end
@@ -180,8 +180,6 @@ end
 if Hooks then
 	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(self, nodes)			
 		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
-		Holo.Workspace = managers.gui_data:create_fullscreen_workspace()		
-		Holo.Panel = Holo.Workspace:panel()
 		Holo.Menu:Init()
 		MenuHelperPlus:AddButton({
 			id = "HoloOptions",

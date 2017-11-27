@@ -10,9 +10,6 @@ end)
 Holo:Post(HUDManager, "_setup_player_info_hud_pd2", function(self)
     local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)    
     hud.panel:panel({name = "chat_panel"})  
-    if Holo.Options:GetValue("Voice") then
-        Holo.Voice:Init()
-    end
 end)
 
 if Holo.Options:GetValue("Hud") then
@@ -122,8 +119,12 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     end
     
     Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
-        if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-            local tm = self._teammate_panels[panel_id]
+        local tm = self._teammate_panels[panel_id]        
+        if tm and alive(tm._player_panel) then
+            tm._player_panel:child("weapons_panel"):set_visible(false)
+            tm._player_panel:child("deployable_equipment_panel"):set_visible(false)
+            tm._player_panel:child("cable_ties_panel"):set_visible(false)
+            tm._player_panel:child("grenades_panel"):set_visible(false)    
             if tm.UpdateHolo and tm._forced_compact then
                 tm._forced_compact = false
                 tm:UpdateHolo()
@@ -132,8 +133,8 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     end)
 
     Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
-        if self._teammate_panels[panel_id] and self._teammate_panels[panel_id]._player_panel then
-            local tm = self._teammate_panels[panel_id]
+        local tm = self._teammate_panels[panel_id]        
+        if tm and alive(tm._player_panel) then
             if tm.UpdateHolo and not tm._forced_compact then
                 tm._forced_compact = true
                 tm:UpdateHolo()     
@@ -141,10 +142,6 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         end
     end)
 end
-
-Holo:Post(HUDManager, "hide_mission_briefing_hud", function()
-    Holo.Panel:show()
-end)
 
 if Holo:ShouldModify("Hud", "Waypoints") then
     HUDManager.no_color_waypoints = {"wp_calling_in_hazard", "wp_calling_in"}
@@ -213,14 +210,4 @@ if Holo:ShouldModify("Hud", "Waypoints") then
             self:holo_update_waypoint(waypoint, icon)
         end
     end)
-
-	Holo:Post(HUDManager, "set_disabled", function(self)
-        Holo.Panel:hide()
-    end)
-    
-	Holo:Post(HUDManager, "set_enabled", function(self)
-        if self._hud_mission_briefing and not self._hud_mission_briefing._backdrop._panel:visible() then
-            Holo.Panel:show()
-        end
-	end)
 end

@@ -11,6 +11,7 @@
       <loc file="GR.txt" language="german" />
       <loc file="FR.txt" language="french" />
       <loc file="ES.txt" language="spanish" />
+      <loc file="IT.txt" language="italian" />
    </Localization>
    <Hooks directory="Hooks">
 		<!-- Hooks -->

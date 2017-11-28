@@ -101,21 +101,21 @@
         <option type="boolean" default_value="true" name="Menu" menu="Base"/>
         <div name="HUD" />
         <option type="number" default_value="0.4" min="0" max="1" name="HUDAlpha" menu="HUD" />
-        <option type="number" default_value="0.95" min="0" max="1.5" name="HUDScale" menu="HUD" />
+        <option type="number" default_value="0.98" min="0" max="1.5" name="HUDScale" menu="HUD" />
         <option type="number" default_value="0.936" min="0.1" max="1" name="HUDSpacing"  menu="HUD"/>
         <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" menu="HUD" />
         <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle" menu="HUD" />
         <option type="boolean" default_value="true" name="TimerBackground" menu="HUD"/>
         <option type="boolean" default_value="false" name="ColorWaypoints" menu="HUD"/>
 
-        <div name="Teammate" menu="HUD"/>        
-        <option type="boolean" default_value="false" name="LargerTeammateInfo" menu="Teammate" />  
+        <div name="Teammate" menu="HUD"/>
+        <option type="boolean" default_value="true" name="LargerTeammateInfo" menu="Teammate" />
         <option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
         <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
-        <option type="boolean" default_value="true" name="ShowAvatar" menu="Teammate"/>    
-        <option type="boolean" default_value="true" name="ShowTeammatesAvatar" menu="Teammate"/>    
-        <option type="boolean" default_value="false" name="CompactTeammate" menu="Teammate"/>    
-        <option type="boolean" default_value="true" name="CompactAI" menu="Teammate"/>    
+        <option type="boolean" default_value="true" name="ShowAvatar" menu="Teammate"/>
+        <option type="boolean" default_value="true" name="ShowTeammatesAvatar" menu="Teammate"/>
+        <option type="boolean" default_value="false" name="CompactTeammate" menu="Teammate"/>
+        <option type="boolean" default_value="true" name="CompactAI" menu="Teammate"/>
         <option type="boolean" default_value="true" name="ShowTeammateFullAmmo" menu="Teammate"/>
 
         <div name="Enable" text="ShouldModify" menu="HUD" items_small="true"/>
@@ -133,7 +133,7 @@
         <option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />
         <option type="boolean" default_value="false" name="MenuColorGrading" menu="Menu" />
         <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" menu="Menu" />
-        <option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>    
+        <option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>
 
         <div name="EnableMenu" text="ShouldModify" menu="Menu" items_small="true"/>
         <option type="boolean" default_value="true" name="Lobby" menu="EnableMenu" />

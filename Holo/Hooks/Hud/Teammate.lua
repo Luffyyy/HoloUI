@@ -688,3 +688,4 @@ end)
 function HUDTeammate:_create_primary_weapon_firemode() self:_create_firemode() end
 function HUDTeammate:_create_secondary_weapon_firemode() self:_create_firemode(true) end
 function HUDTeammate:set_state(state) self:UpdateHolo() end
+function HUDTeammate:teammate_progress() end	

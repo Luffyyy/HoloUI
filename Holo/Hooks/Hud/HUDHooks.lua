@@ -1,4 +1,4 @@
-if not Holo.Options:GetValue("Hud") then
+if not Holo.Options:GetValue("HUD") then
 	return
 end
 --Like MenuHooks this contains code that is too short to be in a separated file
@@ -28,7 +28,7 @@ elseif F == "coresubtitlepresenter" then
     end
     Holo:Post(OverlayPresenter, "init", function(self) Holo:AddUpdateFunc(callback(self, self, "UpdateHolo")) end)
     Holo:Post(OverlayPresenter, "show_text", OverlayPresenter.UpdateHolo)
-elseif F == "hudpresenter" and Holo:ShouldModify("Hud", "Presenter") then
+elseif F == "hudpresenter" and Holo:ShouldModify("HUD", "Presenter") then
     Holo:Post(HUDPresenter, "init", function(self)
 		self._bg_box:hide()
 		self._bg_box:set_alpha(0)
@@ -36,11 +36,11 @@ elseif F == "hudpresenter" and Holo:ShouldModify("Hud", "Presenter") then
 	function HUDPresenter:_present_information(params)
 		managers.hud._hud_hint:show({text = string.format("%s\n%s", utf8.to_upper(params.title or "ERROR"), utf8.to_upper(params.text))})
     end
-elseif F == "circleguiobject" and Holo:ShouldModify("Hud", "Interaction") then
+elseif F == "circleguiobject" and Holo:ShouldModify("HUD", "Interaction") then
     Holo:Post(CircleBitmapGuiObject, "init", function(self)
         self._circle:set_blend_mode("normal")
     end)
-elseif F == "hudwaitinglegend" and Holo:ShouldModify("Hud", "TeammateHud") then
+elseif F == "hudwaitinglegend" and Holo:ShouldModify("HUD", "Teammate") then
     Holo:Post(HUDWaitingLegend, "init", function(self)
         self._panel:set_alpha(0)
     end)

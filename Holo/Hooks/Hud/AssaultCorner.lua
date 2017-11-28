@@ -1,4 +1,4 @@
-if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "HudAssault") then
+if Holo.Options:GetValue("TopHUD") and Holo:ShouldModify("HUD", "Assault") then
 	function HUDAssaultCorner:UpdateHolo()
 		if not alive(self._bg_box) then -- Try not to crash :c
 			Holo:log("[ERROR] Something went wrong when trying to modify HUDAssaultCorner")

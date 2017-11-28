@@ -10,14 +10,14 @@ function HUDBGBox_recreate(panel, config)
 		h = config.h,
 	})
 	if config.name then
-		config.alpha = Holo.Options:GetValue("HudAlpha") or 0.25
+		config.alpha = Holo.Options:GetValue("HUDAlpha") or 0.25
 		config.frame_style = Holo:GetFrameStyle(config.name)
 		config.frame_color = Holo:GetFrameColor(config.name)
 		config.color = Holo:GetColor("Colors/" .. config.name)
 	end
 	local color = config.color	
 	panel:child("bg"):configure({
-		alpha = config.alpha or Holo.Options:GetValue("HudAlpha"),
+		alpha = config.alpha or Holo.Options:GetValue("HUDAlpha"),
 		color = color or Color(0, 0, 0),
 	})
 	HUDBGBox_create_frame(panel, config.frame_color, config.frame_style)
@@ -101,7 +101,7 @@ function HUDBGBox_create_frame(box_panel, color, style)
 	right_top:set_right(box_panel:w())
 	left_bottom:set_bottom(box_panel:h())		
 end
-if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") then
+if Holo.Options:GetValue("TopHUD") and Holo:ShouldModify("HUD", "Objective") then
 	function HUDObjectives:UpdateHolo()
 		self.ObjPanel = self._panel or self._hud_panel:child("objectives_panel")
 		self.ObjText = self.ObjPanel:child("objective_text") or self._bg_box:child("objective_text")
@@ -153,7 +153,7 @@ if Holo.Options:GetValue("HudBox") and Holo:ShouldModify("Hud", "Objective") the
 			self.ObjPanel:stop()
 			self.ObjPanel:animate(callback(self, self, "_animate_activate_objective"))
 		end
-		self.ObjText:set_y(0)
+		self.ObjText:set_y(1)
 		self.ObjText:set_x(4)
 		self.ObjPanel:set_w(w + 8)
 		play_value(self.ObjText, "w", w)

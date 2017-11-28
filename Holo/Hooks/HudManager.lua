@@ -12,9 +12,9 @@ Holo:Post(HUDManager, "_setup_player_info_hud_pd2", function(self)
     hud.panel:panel({name = "chat_panel"})  
 end)
 
-if Holo.Options:GetValue("Hud") then
+if Holo.Options:GetValue("HUD") then
     function HUDManager:UpdateHolo()
-        managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HudScale"), Holo.Options:GetValue("HudSpacing"))
+        managers.gui_data:layout_scaled_fullscreen_workspace(managers.hud._saferect, Holo.Options:GetValue("HUDScale"), Holo.Options:GetValue("HUDSpacing"))
         if self.waypoints_update then
             self:waypoints_update()
         end
@@ -32,7 +32,7 @@ if Holo.Options:GetValue("Chat") then
     end
 end
 
-if Holo:ShouldModify("Hud", "TeammateHud") then
+if Holo:ShouldModify("HUD", "Teammate") then
     function HUDManager:teampanels_height()
         return managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:h()
     end
@@ -118,19 +118,16 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
         end
     end
     
-    Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
+    --fuck this, not gonna use hooks on this one
+    function HUDManager:show_player_gear(panel_id)
         local tm = self._teammate_panels[panel_id]        
         if tm and alive(tm._player_panel) then
-            tm._player_panel:child("weapons_panel"):set_visible(false)
-            tm._player_panel:child("deployable_equipment_panel"):set_visible(false)
-            tm._player_panel:child("cable_ties_panel"):set_visible(false)
-            tm._player_panel:child("grenades_panel"):set_visible(false)    
             if tm.UpdateHolo and tm._forced_compact then
                 tm._forced_compact = false
                 tm:UpdateHolo()
             end
         end
-    end)
+    end
 
     Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
         local tm = self._teammate_panels[panel_id]        
@@ -143,7 +140,7 @@ if Holo:ShouldModify("Hud", "TeammateHud") then
     end)
 end
 
-if Holo:ShouldModify("Hud", "Waypoints") then
+if Holo:ShouldModify("HUD", "Waypoints") then
     HUDManager.no_color_waypoints = {"wp_calling_in_hazard", "wp_calling_in"}
     Holo:Replace(HUDManager, "add_waypoint", function(self, orig, id, data, ...)
         data.blend_mode = "normal"

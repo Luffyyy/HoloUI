@@ -88,7 +88,7 @@ function self:CreateItem(upper, setting, menu)
     local type = setting.type
     local name = setting.name
     local opt = {
-        text = setting.beforetext and self:BeforeText(setting.beforetext, setting.text or name),
+        text = setting.beforetext and self:BeforeText(setting.beforetext, setting.text or name) or setting.text,
         localized = not setting.beforetext,
         items_small = setting.items_small,
         index = setting.index,
@@ -160,21 +160,10 @@ function self:CreateColorsMenu(menu)
     
     local other = menu:DivGroup({name = "Other", text = self:Loc("Other"), localized = true, align_method = "grid"})
     local options = {
-        {name = "Casing", background = true, text = true, frame = true},
-        {name = "Assault", background = true, text = true, frame = true},
-        {name = "NoPointOfReturn", background = true, text = true, frame = true},
-        {name = "Hostages", background = true, text = true, frame = true},
-        {name = "Objective", background = true, text = true, frame = true},
-        {name = "WavesSurvived", background = true, text = true, frame = true},
-        {name = "Presenter", background = true, text = true, frame = true},
-        {name = "Carrying", background = true, text = true, frame = true},
-        {name = "Timer", background = true, text = true, frame = true},
-        {name = "Chat", background = true, text = true},        
         {name = "Menu", background = true, text = true, custom = function(option, group, w)
             self:ColorTextBox(group, "TextColors/MenuHighlighted", {w = w, text = "Highlight"})
         end},
-        {name = "Tab", color = true, text = true},
-        {name = "Teammate", background = true, text = true},
+        {name = "Marker", color = true},
         {name = "Health", color = true, custom = function(option, group, w)
             self:ColorTextBox(group, "Colors/HealthNeg", {w = w, text = "HealthNeg"})
         end},
@@ -187,7 +176,19 @@ function self:CreateColorsMenu(menu)
         {name = "Interaction", color = true, text = true, ignore_custom = true, custom = function(option, group, w)
             self:ColorTextBox(group, "Colors/InteractionRed", {w = w, text = "Invalid"})
         end},
-        {name = "Marker", color = true},
+        {name = "Teammate", background = true, text = true},        
+        {name = "Casing", background = true, text = true, frame = true},
+        {name = "Assault", background = true, text = true, frame = true},
+        {name = "NoPointOfReturn", background = true, text = true, frame = true},
+        {name = "Hostages", background = true, text = true, frame = true},
+        {name = "Objective", background = true, text = true, frame = true},
+        {name = "WavesSurvived", background = true, text = true, frame = true},
+        {name = "Presenter", background = true, text = true, frame = true},
+        {name = "Carrying", background = true, text = true, frame = true},
+        {name = "Timer", background = true, text = true, frame = true},
+        {name = "Chat", background = true, text = true},        
+        {name = "Tab", color = true, text = true},
+        {name = "Captions", text = true},
         {name = "Pickups", color = true},
         {name = "Frame", color = true},
         {name = "TeammateHost", color = true},
@@ -203,7 +204,6 @@ function self:CreateColorsMenu(menu)
         {name = "DeployableActive", color = true},
         {name = "DeployableInteract", color = true},
         {name = "DeployableDisabled", color = true},
-        {name = "Captions", text = true},
     }
     for _, option in pairs(options) do
         local i = table.size(option) - 1 - (option.ignore_custom and 2 or 0)
@@ -420,7 +420,7 @@ function self:BasicItem(menu, name, opt)
         size_by_text = menu.align_method == "grid",
         value = Holo.Options:GetValue(name),
         callback = callback(self, self, "MainClbk"),        
-    }, opt)
+    }, clone(opt))
 end
 
 function self:Toggle(menu, name, opt)
@@ -448,7 +448,7 @@ function self:Button(menu, name, opt)
 end
 
 function self:DivGroup(menu, name, opt)
-    return menu:DivGroup(self:BasicItem(menu, name, table.merge(opt, {
+    return menu:DivGroup(self:BasicItem(menu, name, table.merge({
         align_method = opt.items_small and "grid",
         private = {
             foreground = Holo:GetColor("Colors/Marker"),
@@ -456,7 +456,7 @@ function self:DivGroup(menu, name, opt)
             last_y_offset = 0,
             items_size = 22
         },
-    })))
+    }, clone(opt))))
 end
 
 function self:ColorTextBox(menu, name, opt)

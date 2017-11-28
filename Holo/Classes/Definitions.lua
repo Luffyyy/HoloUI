@@ -1,4 +1,3 @@
-Holo.CustomTextures = {}
 Holo.Updaters = {}
 Holo.TextSizesStrings = {
 	"Holo/Small",

@@ -29,14 +29,26 @@ if Holo.Options:GetValue("Menu") then
 				should_change = side == 2
 			end
 		end
-		local left_side = config.sides and not should_change and config.sides[1] or 0
-		local right_side = config.sides and not should_change and config.sides[2] or 0
-		local top_side = config.sides and not should_change and config.sides[3] or 0
-		local bottom_side = config.sides and not should_change and config.sides[4] or 2
-		self:_create_side(self._panel, "left", left_side)
-		self:_create_side(self._panel, "right", right_side)
-		self:_create_side(self._panel, "top", top_side)
-		self:_create_side(self._panel, "bottom", bottom_side)
+		local style = Holo:GetFrameStyle("Menu")
+		if should_change then
+			if style == 2 then
+				config.sides = {0,0,0,2}
+			elseif style == 3 then
+				config.sides = {2,0,0,0}
+			elseif style == 4 then
+				config.sides = {0,2,0,0}
+			elseif style == 5 then
+				config.sides = {0,0,2,0}
+			elseif style == 6 then
+				config.sides = {2,2,2,2}
+			elseif style == 7 then
+				config.sides = {0,0,0,0}
+			end
+		end
+		self:_create_side(self._panel, "left", config.sides[1])
+		self:_create_side(self._panel, "right", config.sides[2])
+		self:_create_side(self._panel, "top", config.sides[3])
+		self:_create_side(self._panel, "bottom", config.sides[4])
 	end
 	function BoxGuiObject:set_color(color, rec_panel)
 		if not rec_panel or not rec_panel:children() then

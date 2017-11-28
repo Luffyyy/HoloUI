@@ -7,6 +7,7 @@ Holo = Holo or ModCore:new(ModPath .. "Config.xml", false, true)
 function Holo:Init()
 	self:init_modules()
 	self.Setup = true
+	self.RefusedScripts = {}
 	self.set_position_clbks = {}
 	self:CheckOtherMods()
 	self:UpdateSettings()
@@ -53,7 +54,7 @@ function Holo:GetFrameStyle(setting)
 end
 
 function Holo:GetAlpha(setting)
-	return self.Options:GetValue("HudAlpha")
+	return self.Options:GetValue("HUDAlpha")
 end
 
 function Holo:GetColor(setting, vec)
@@ -73,12 +74,12 @@ end
 
 function Holo:CheckOtherMods()
 	if pdth_hud and pdth_hud.Options then
-		if Holo.Options:GetValue("HudAssault") then
+		if Holo.Options:GetValue("Assault") then
 			pdth_hud.Options:SetValue("HUD/Assault", false)
 		end
 	end
 	if restoration and restoration.Options then
-		if Holo.Options:GetValue("TeammateHud") then
+		if Holo.Options:GetValue("Teammate") then
 			restoration.Options:SetValue("HUD/MainHud", false)  
 		end		
 		if Holo.Options:GetValue("Menu") then
@@ -91,11 +92,14 @@ function Holo:ShouldModify(c, o)
 	if not self.Setup then
 		return false
 	end
-	local function inform(a) self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a)) end
+	local function inform(a) 
+		self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a))
+		self.RefusedScripts[RequiredScript] = true
+	end
 	if c and not Holo.Options:GetValue("" .. c) then
 		return false
 	end 
-	if (CompactHUD or Fallout4hud or SAOHUD) and o == "TeammateHud" then
+	if (CompactHUD or Fallout4hud or SAOHUD) and o == "Teammate" then
 		return false
 	end
 	if NepgearsyMM and o == "PlayerProfile" then
@@ -103,7 +107,7 @@ function Holo:ShouldModify(c, o)
 		return false
 	end
 	if pdth_hud and pdth_hud.Options then
-		if pdth_hud.Options:GetValue("HUD/MainHud") and o == "TeammateHud" then
+		if pdth_hud.Options:GetValue("HUD/MainHud") and o == "Teammate" then
 			inform("PDTH Hud")	
 			return false
 		end
@@ -117,7 +121,7 @@ function Holo:ShouldModify(c, o)
 		end
 	end	
 	if restoration and restoration.Options then
-		if restoration.Options:GetValue("HUD/AssaultPanel") and o == "HudAssault" then
+		if restoration.Options:GetValue("HUD/AssaultPanel") and o == "Assault" then
 			inform("Resotration")
 			return false
 		end
@@ -135,22 +139,27 @@ function Holo:ShouldModify(c, o)
 		end
 	end
 	if WolfHUD then
-		if o == "TeammateHud" and WolfHUD:getSetting({"CustomHUD", "ENABLED"}) then
+		if o == "Teammate" and WolfHUD:getSetting({"CustomHUD", "ENABLED"}) then
 			inform("WolfHUD")
 			return false			
 		end
-		if o == "Chat" and HUDChat.WIDTH then --No actual option to disable it! GREAT
+		if o == "Chat" and HUDChat and HUDChat.WIDTH then --No actual option to disable it! GREAT
 			inform("WolfHUD")
 			return false	
 		end
 	end
-	if o == "TeammateHud" and HUDTeammateCustom then
-		inform("CustomHud")
+	if o == "Teammate" and HUDTeammateCustom then
+		inform("CustomHUD")
+		return false
 	end
+	local res = true
 	if o then
-		return self.Options:GetValue(o) 
+		res = self.Options:GetValue(o) 
 	end
-	return true
+	if not res then
+		self.RefusedScripts[RequiredScript] = true
+	end
+	return res
 end
 
 function Holo:Post(clss, func, after_orig)

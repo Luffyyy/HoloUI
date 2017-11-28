@@ -44,11 +44,11 @@ function HUDChat:UpdateHolo()
 	
 	bg:set_blend_mode("normal")
 	bg:set_gradient_points({0, color, 1, color})
-	bg:set_alpha(Holo.Options:GetValue("HudAlpha"))
+	bg:set_alpha(Holo.Options:GetValue("HUDAlpha"))
 
 	input_bg:set_blend_mode("normal")
 	input_bg:set_gradient_points({0, color, 1, color})
-	input_bg:set_alpha(Holo.Options:GetValue("HudAlpha"))
+	input_bg:set_alpha(Holo.Options:GetValue("HUDAlpha"))
 
 	text:configure({
 		wrap = true,
@@ -223,7 +223,7 @@ function HUDChat:update_caret()
 end
 
 function HUDChat:_animate_input_bg(o)
-	local alpha = Holo.Options:GetValue("HudAlpha")
+	local alpha = Holo.Options:GetValue("HUDAlpha")
 	play_value(o, "alpha", alpha)
 	play_value(self._panel:child("output_panel"):child("output_bg"), "alpha", alpha)
 	self._scroll._scroll_bar:set_alpha(1)

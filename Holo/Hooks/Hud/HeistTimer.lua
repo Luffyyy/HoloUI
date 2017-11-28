@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Hud", "HudBox") then
+if Holo:ShouldModify("HUD", "TopHUD") then
     Holo:Post(HUDHeistTimer, "init", function(self)
         self._bg_box = HUDBGBox_create(self._heist_timer_panel)
     	self:UpdateHolo()
@@ -25,10 +25,12 @@ if Holo:ShouldModify("Hud", "HudBox") then
         self._bg_box:set_world_center(self._heist_timer_panel:world_center())
         self._bg_box:set_visible(self._hud_panel == managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel and Holo.Options:GetValue("TimerBackground"))
         self._timer_text:configure({
-            font = "fonts/font_medium_noshadow_mf",
-            font_size = self._bg_box:h() - 1,
+            font = "fonts/font_large_mf",
+            font_size = self._bg_box:h() - 2,
+            vertical = "center",
             color = Holo:GetColor("TextColors/Timer")
         })
         self._timer_text:set_shape(self._bg_box:shape())
+        self._timer_text:move(0, 1)
     end
 end

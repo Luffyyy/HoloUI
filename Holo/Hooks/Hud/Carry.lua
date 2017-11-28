@@ -1,4 +1,4 @@
-if Holo:ShouldModify("Hud", "Carrying") then
+if Holo:ShouldModify("HUD", "Carrying") then
 	Holo:Post(HUDTemp, "init", function(self, ...)
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
@@ -45,7 +45,7 @@ if Holo:ShouldModify("Hud", "Carrying") then
 			h = 32,
 		})
 		local teammate_panel = managers.hud._teammate_panels[HUDManager.PLAYER_PANEL]._panel
-		if Holo:ShouldModify("Hud", "TeammateHud") then
+		if Holo:ShouldModify("HUD", "Teammate") then
 			self:SetPositionByTeammate()
 		else
 			bag_panel:set_world_rightbottom(teammate_panel:world_righttop())

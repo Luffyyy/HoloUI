@@ -11,14 +11,21 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
     --Avatar			
     local avatar = self._panel:bitmap({
         name = "Avatar",
+        texture = "guis/textures/pd2/none_icon",
         x = 4,
         y = 4,
         w = 86,
         h = 86,
     })
 
-    Steam:friend_avatar(Steam.LARGE_AVATAR, Steam:userid(), function(texture)
-        avatar:set_image(texture)
+    local steam_id = Steam:userid()
+    Steam:friend_avatar(Steam.LARGE_AVATAR, steam_id, function(texture)
+        avatar:animate(function()
+            wait(0.25)
+            Steam:friend_avatar(Steam.LARGE_AVATAR, steam_id, function(texture)
+                avatar:set_image(texture or "guis/textures/pd2/none_icon")
+            end)
+        end)
     end)
     local font = tweak_data.menu.pd2_large_font
     local font_size = tweak_data.menu.pd2_small_font_size

@@ -1,4 +1,4 @@
-if not Holo:ShouldModify("Hud", "Presenter") then
+if not Holo:ShouldModify("HUD", "Presenter") then
 	return
 end
 

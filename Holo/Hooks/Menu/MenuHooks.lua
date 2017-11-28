@@ -4,6 +4,8 @@ end
 
 local Lobby = Holo:ShouldModify("Menu", "Lobby")
 local BlackScreen = Holo:ShouldModify("Menu", "BlackScreen")
+local CrimeNet = Holo:ShouldModify("Menu", "CrimeNet")
+local Inventory = Holo:ShouldModify("Menu", "Inventory")
 
 local F = table.remove(string.split(RequiredScript, "/"))
 
@@ -112,11 +114,11 @@ elseif F == "coremenunode" then
 		end
 		return o_create_item(self, data_node, params)
 	end
-elseif F == "infamytreegui" then
+elseif F == "infamytreegui" and Inventory then
 	Holo:Post(InfamyTreeGui, "_setup", function(self)
 		Holo.Utils:FixBackButton(self)
 	end)
-elseif F == "menunodecrimenetgui" then
+elseif F == "menunodecrimenetgui" and CrimeNet then
 	MenuNodeCrimenetContactChillGui.HEIGHT = 270
 	function MenuNodeCrimenetContactInfoGui:_align_marker(row_item)
 		MenuNodeCrimenetContactInfoGui.super._align_marker(self, row_item)
@@ -171,7 +173,7 @@ elseif F == "menupauserenderer" then
 			layer = -1
 		})
 	end)
-elseif F == "crimenetsidebargui" then
+elseif F == "crimenetsidebargui" and CrimeNet then
 	Holo:Post(CrimeNetSidebarItem, "init", function(self, sidebar, panel, parameters)
 		self:set_color(Holo:GetColor("TextColors/Menu"))
 		self:set_highlight_color(Holo:GetColor("TextColors/MenuHighlighted"))
@@ -365,16 +367,16 @@ elseif F == "ingamewaitingforplayers" and BlackScreen then
 	        self._skip_data = {current = 1, total = 1}
 	    end
 	end)
-elseif F == "ingamecontractgui" then
+elseif F == "ingamecontractgui" and CrimeNet then
 	Holo:Post(IngameContractGui, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
-elseif F == "contractbrokergui" then
+elseif F == "contractbrokergui" and CrimeNet then
 	Holo:Post(ContractBrokerGui, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 		self._filter_selection_bg:set_w(0)
 	end)
-elseif F == "contractbrokerheistitem" then
+elseif F == "contractbrokerheistitem" and CrimeNet then
 	Holo:Post(ContractBrokerHeistItem, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
@@ -420,7 +422,7 @@ elseif F == "lobbycharacterdata" then
 	Holo:Post(LobbyCharacterData, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)
-elseif F == "contractboxgui" then
+elseif F == "contractboxgui" and CrimeNet then
 	Holo:Post(ContractBoxGui, "create_character_text", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
 	end)

@@ -1,6 +1,7 @@
-if not Holo.Options:GetValue("Menu") then
+if not Holo:ShouldModify("Menu", "Inventory") then
 	return
 end
+
 Holo:Post(PlayerInventoryGui, "init", function(self)
 	Holo.Utils:FixBackButton(self)
 	Holo.Utils:SetBlendMode(self._panel, "detection")

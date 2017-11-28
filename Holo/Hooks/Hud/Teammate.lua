@@ -1,4 +1,4 @@
-if not Holo:ShouldModify("Hud", "TeammateHud") then
+if not Holo:ShouldModify("HUD", "Teammate") then
 	return
 end
 local Utils = Holo.Utils
@@ -283,7 +283,7 @@ function HUDTeammate:UpdateHolo()
 	
 	--hide stuff that we don't need
 	Utils:Apply({hp, ap, abp, sp, ddp, dep, cable, nades, weapons_panel}, {visible = not compact})
-	Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HudAlpha")})
+	Utils:Apply({name_bg, bg}, {color = bg_color, alpha = Holo.Options:GetValue("HUDAlpha")})
 	Utils:Apply({
 		self._player_panel:child("carry_panel"), self._panel:child("name_bg"), primary:child("bg"), secondary:child("bg"),
 		self._panel:child("callsign_bg"), self._panel:child("callsign"), cable:child("bg"), dep:child("bg"), nades:child("bg"),
@@ -525,7 +525,7 @@ function HUDTeammate:layout_special_equipments(no_align_hud)
 	local bg = self._player_panel:child("Mainbg")
 	local text_color = Color.white
 	local bg_color = Holo:GetColor("Colors/Teammate")
-	local bg_alpha = Holo.Options:GetValue("HudAlpha")
+	local bg_alpha = Holo.Options:GetValue("HUDAlpha")
 	local padding = 2
 	local rows = 1	
 	local prev

@@ -365,9 +365,7 @@ function HUDChat:receive_message(name, message, color, icon)
 		self._panel:child("output_panel"):set_alpha(0)
 		self._input_panel:set_alpha(0)
 		return
-	end
-
-	if not self._focus then
+	elseif not self._focus then
 		output_panel:child("output_bg"):set_alpha(0)
 		self._scroll._scroll_bar:set_alpha(0)
 		output_panel:stop()

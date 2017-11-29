@@ -109,7 +109,7 @@
         <option type="boolean" default_value="false" name="ColorWaypoints" menu="HUD"/>
 
         <div name="Teammate" menu="HUD"/>
-        <option type="boolean" default_value="true" name="LargerTeammateInfo" menu="Teammate" />
+        <option type="boolean" default_value="false" name="LargerTeammateInfo" menu="Teammate" />
         <option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
         <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
         <option type="boolean" default_value="true" name="ShowAvatar" menu="Teammate"/>

@@ -58,17 +58,22 @@ if Holo:ShouldModify("HUD", "Teammate") then
             return (not a._ai and b._ai)
         end)
     
-        local function align(tm, i)
+		local function resize(tm, me)
 			local me = tm._id == HUDManager.PLAYER_PANEL
+			local avatar = avatar_enabled 
 			if not me then
-				avatar_enabled = avatar_enabled_tm
+				avatar = avatar_enabled_tm
 			end
-            local w = tm:GetNameWidth()
+			local w = tm:GetNameWidth()
             local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
-            local pw = math.max(w, me and 124 or 72) + (avatar_enabled and 108 or 40)
-            local ph = (compact and (me and 48 or 36) or (me and 86 or 64)) + tm._equipments_h
+			local ph = (compact and (me and 48 or 36) or (me and 86 or 70)) + tm._equipments_h
+			local pw = (avatar and (ph - tm._equipments_h) + 4 or 8) + math.max(w + 8, me and 132 or 106)
             tm._panel:set_size(pw, ph)
             tm._player_panel:set_size(pw, ph)
+		end
+		
+		local function align(tm)
+			local me = tm._id == HUDManager.PLAYER_PANEL
             if me then
                 tm._panel:set_leftbottom(0, tm._panel:parent():h())
                 if me_align_method == "center" then
@@ -108,11 +113,16 @@ if Holo:ShouldModify("HUD", "Teammate") then
                 end
                 prev = tm
             end
-        end
+		end
+		
+        resize(main_tm)
         align(main_tm)
-        for i, tm in pairs(sorted) do
-            align(tm, i)
-        end
+		for _, tm in pairs(sorted) do
+            resize(tm)
+		end
+		for _, tm in pairs(sorted) do
+            align(tm)
+		end
         if self._hud_temp and self._hud_temp.SetPositionByTeammate then
             self._hud_temp:SetPositionByTeammate(align_bag)
         end

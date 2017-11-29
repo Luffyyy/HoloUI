@@ -60,7 +60,6 @@ Holo:Post(HUDTeammate, "init", function(self)
 		layer = 10
 	})
 	self._panel:rect({name = "teammate_line", w = 2, layer = 5})
-	self:layout_equipments()
 	self:layout_special_equipments()
 	self:UpdateHolo()
 	Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
@@ -99,21 +98,19 @@ function HUDTeammate:DebugWithAI()
 	self:set_deployable_equipment({icon = "equipment_ammo_bag", amount = 2})
 	self:set_ammo_amount_by_type("primary", 100, 50, 50, 10)
 	self:set_ammo_amount_by_type("secondary", 100, 50, 50, 10)
-	self:set_avatar()
 end
 
-function HUDTeammate:GetNameWidth()
+function HUDTeammate:GetNameWidth()	
 	local _,_,w,_ = self._panel:child("name"):text_rect()
-	return w
+	return (self._main_player and Holo.Options:GetValue("LargerTeammateInfo")) and 0 or w
 end
 
 function HUDTeammate:UpdateHolo()
 	--if self._ai then
 	--	self:DebugWithAI()
 	--end
-	self:set_avatar()
-	managers.hud:align_teammate_panels()
 	
+	self:set_avatar()		
 	local weapons_panel = self._player_panel:child("weapons_panel")
 	local secondary = weapons_panel:child("secondary_weapon_panel")
 	local primary = weapons_panel:child("primary_weapon_panel")
@@ -143,14 +140,15 @@ function HUDTeammate:UpdateHolo()
 		font = "fonts/font_large_mf",
 	})
 	managers.hud:make_fine_text(name)
-	
+	managers.hud:align_teammate_panels()		
+
 	bg:set_size(self._panel:w(), self._panel:h() - self._equipments_h)
 	bg:set_rightbottom(self._panel:size())
 	avatar:set_size(avatar_enabled and bg:h() or 0, bg:h())
 	avatar:set_visible(avatar_enabled)
 	avatar:set_leftbottom(bg:leftbottom())
 	name_bg:set_size(large_tm and 0 or name:w() + 4, name:h())
-	name_bg:set_position(avatar:right() + (avatar_enabled and 4 or 6), bg:top() + 4)
+	name_bg:set_position(avatar:right() + (avatar_enabled and 4 or 8), bg:top() + 4)
 	
 	if compact then
 		name_bg:set_center_y(avatar:center_y() + 1)
@@ -234,32 +232,37 @@ function HUDTeammate:UpdateHolo()
 	local cable = self._player_panel:child("cable_ties_panel")
 	local nades = self._player_panel:child("grenades_panel")
 
-	dep:set_shape(0, 0, (weapons_panel:right() - teammate_line:x()) / 3, font_size)		
-	cable:set_shape(dep:shape())
-	nades:set_shape(dep:shape())
+	local padding = 8
+	local eq_w = (weapons_panel:right() - teammate_line:x() - padding * 2) / 3
+	
+	dep:set_shape(teammate_line:x(), avatar:bottom() - 4 - font_size, eq_w, font_size)		
+	cable:set_shape(dep:x() + eq_w + padding, dep:y(), dep:size())
+	nades:set_shape(cable:x() + eq_w + padding, dep:y(), dep:size())
+
+	local eq_size = dep:w() / 2
 
 	for _, v in pairs({dep, cable, nades}) do
 		v:child("amount"):configure({
 			font = "fonts/font_large_mf",
-			font_size = font_size,
+			font_size = v:h(),
 			color = text_color,
 			vertical = "center",
 			align = "right",
-			x = 0, y = 0, w = dep:w() - 2, h = dep:h()
+			x = eq_size, w = eq_size, h = v:h()
 		})
+		v:child("amount"):set_center_y(v:h() / 2)
 	end
-	local eq_size = dep:h() - 4
-	
+	 
 	--just call them icon we already know what these bitmaps are thanks to the panel.
 	local nades_icon = nades:child("grenades_icon")
 	for _, v in pairs({nades_icon, cable:child("cable_ties"), dep:child("equipment")}) do
 		v:configure({
-			w = eq_size,
-			h = eq_size,
+			w = eq_size - 2,
+			h = eq_size - 2,
 			x = 0,
-			y = 2,
 			color = text_color
 		})
+		v:set_center_y(v:parent():child("amount"):center_y())
 	end
 	nades:child("grenades_radial"):set_shape(nades_icon:shape())
 	nades:child("grenades_icon_ghost"):set_shape(nades_icon:shape())
@@ -291,8 +294,6 @@ function HUDTeammate:UpdateHolo()
 	name:set_color(text_color)
 	self._player_panel:child("radial_health_panel"):hide()
 	self._player_panel:child("interact_panel"):set_alpha(0)
-
-	self:layout_equipments()
 	self:recreate_weapon_firemode()
 end
 
@@ -330,20 +331,6 @@ function HUDTeammate:set_weapon_firemode(id, firemode)
 	if alive(firemode_text) then firemode_text:set_text(firemode == "single" and "." or ":") end
 end
 
-function HUDTeammate:layout_equipments()
-	local p = self._player_panel
-	local avatar = p:child("avatar")
-	local prev
-	for _, equip in pairs({p:child("deployable_equipment_panel"), p:child("grenades_panel"), p:child("cable_ties_panel")}) do
-		equip:set_leftbottom(avatar:right() + 6, avatar:bottom() - 2)
-		if prev then
-			equip:set_position(prev:righttop())
-		end
-		prev = equip
-	end
-	return prev
-end
-
 function HUDTeammate:_set_weapon_selected(id, hud_icon)
 	local is_secondary = id == 1
 	local wep_panel = self._player_panel:child("weapons_panel")
@@ -354,7 +341,7 @@ end
 
 function HUDTeammate:_set_amount_string(text, amount)
 	text:set_text(amount)
-	self:layout_equipments()
+	self:UpdateHolo()
 end
 
 Holo:Post(HUDTeammate, "_set_amount_string", function(self, text)
@@ -665,9 +652,9 @@ function HUDTeammate:_animate_update_absorb(o, radial_absorb_shield_name, radial
 	end
 end
 
-Holo:Post(HUDTeammate, "set_grenades_amount", HUDTeammate.layout_equipments)
-Holo:Post(HUDTeammate, "set_cable_ties_amount", HUDTeammate.layout_equipments)
-Holo:Post(HUDTeammate, "set_deployable_equipment_amount", HUDTeammate.layout_equipments)
+Holo:Post(HUDTeammate, "set_grenades_amount", HUDTeammate.UpdateHolo)
+Holo:Post(HUDTeammate, "set_cable_ties_amount", HUDTeammate.UpdateHolo)
+Holo:Post(HUDTeammate, "set_deployable_equipment_amount", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "set_ai", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "set_peer_id", HUDTeammate.UpdateHolo)
 Holo:Post(HUDTeammate, "add_panel", HUDTeammate.UpdateHolo)

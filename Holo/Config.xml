@@ -8,7 +8,7 @@
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />
-      <loc file="GR.txt" language="german" />
+      <loc file="DE.txt" language="german" />
       <loc file="FR.txt" language="french" />
       <loc file="ES.txt" language="spanish" />
       <loc file="IT.txt" language="italian" />

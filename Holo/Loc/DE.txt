@@ -163,5 +163,6 @@
 	"Holo/ColorWaypoints" : "Farbe der Wegpunkte ändern",
 	"Holo/Inventory" : "Inventar",
 	"Holo/TopHUD" : "Oberes HUD",
-	"Holo/ShouldModify" : "Mods aktivieren"
+	"Holo/ShouldModify" : "Mods aktivieren",
+	"Holo/PlayerDowned" : "Player downed"
 }

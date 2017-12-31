@@ -1,19 +1,16 @@
 function TweakData:UpdateHolo()
     if Holo.Options:GetValue("Colors/ColorizeTeammates") then
-        self.chat_colors = {
-            Holo:GetColor("Colors/TeammateHost"),
-            Holo:GetColor("Colors/Teammate2"),
-            Holo:GetColor("Colors/Teammate3"),
-            Holo:GetColor("Colors/Teammate4"),
-            Holo:GetColor("Colors/TeammateAI")
-        }
-        self.peer_vector_colors = {
-            Vector3(self.chat_colors[1]:unpack()),
-            Vector3(self.chat_colors[2]:unpack()),
-            Vector3(self.chat_colors[3]:unpack()),
-            Vector3(self.chat_colors[4]:unpack()),
-            Vector3(self.chat_colors[5]:unpack()),
-        }
+        self.chat_colors[1] = Holo:GetColor("Colors/TeammateHost")
+        self.chat_colors[2] = Holo:GetColor("Colors/Teammate2")
+        self.chat_colors[3] = Holo:GetColor("Colors/Teammate3")
+        self.chat_colors[4] = Holo:GetColor("Colors/Teammate4")
+        self.chat_colors[5] = Holo:GetColor("Colors/TeammateAI")
+        
+        self.peer_vector_colors[1] = Vector3(self.chat_colors[1]:unpack())
+        self.peer_vector_colors[2] = Vector3(self.chat_colors[2]:unpack())
+        self.peer_vector_colors[3] = Vector3(self.chat_colors[3]:unpack())
+        self.peer_vector_colors[4] = Vector3(self.chat_colors[4]:unpack())
+        self.peer_vector_colors[5] = Vector3(self.chat_colors[5]:unpack())
     end
     if Holo.Options:GetValue("Menu") then
         self.screen_colors.resource = Holo:GetColor("Colors/Marker")

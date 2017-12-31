@@ -18,11 +18,7 @@ function ChatGui:set_leftbottom(left, bottom)
 	self._panel:set_bottom(self._panel:parent():h() - bottom)
 end
 if BigLobbyGlobals then
-	ChatGui.PRESETS.default = {
-		right = true,
-		top = -150,
-		layer = 20
-	}
+	 
 else
 	ChatGui.PRESETS.default.bottom = 30
 end

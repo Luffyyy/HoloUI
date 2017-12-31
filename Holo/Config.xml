@@ -4,7 +4,7 @@
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
    </Classes>
-   <AssetUpdates id="12501" version="3.0.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+   <AssetUpdates id="12501" version="3.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />
@@ -128,6 +128,7 @@
         <option type="boolean" default_value="true" name="Carrying" menu="Enable"/>
         <option type="boolean" default_value="true" name="Interaction" menu="Enable"/>
         <option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
+        <option type="boolean" default_value="true" name="PlayerDowned" menu="Enable"/>
 
         <div name="Menu" />
         <option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />

@@ -162,5 +162,6 @@
 	"Holo/ColorWaypoints" : "Изменить цвет указателей",
 	"Holo/Inventory" : "Инвентарь",
 	"Holo/TopHUD" : "Верхний HUD",
-	"Holo/ShouldModify" : "Включить модификацию"
+	"Holo/ShouldModify" : "Включить модификацию",
+	"Holo/PlayerDowned" : "Player downed"
 }

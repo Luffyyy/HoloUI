@@ -163,5 +163,6 @@
 	"Holo/ColorWaypoints" : "Cambiar color de los marcadores",
 	"Holo/Inventory" : "Inventario",
 	"Holo/TopHUD" : "HUD Superior",
-	"Holo/ShouldModify" : "Permitir modificaciones"
+	"Holo/ShouldModify" : "Permitir modificaciones",
+	"Holo/PlayerDowned" : "Player downed"
 }

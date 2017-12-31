@@ -163,5 +163,6 @@
 	"Holo/ColorWaypoints" : "Change color of waypoints",
 	"Holo/Inventory" : "Inventory",
 	"Holo/TopHUD" : "Top HUD",
-	"Holo/ShouldModify" : "Enable modification"
+	"Holo/ShouldModify" : "Enable modification",
+	"Holo/PlayerDowned" : "Player downed"
 }

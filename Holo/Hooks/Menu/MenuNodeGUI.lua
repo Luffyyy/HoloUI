@@ -85,7 +85,7 @@ Holo:Pre(MenuNodeGui, "_align_marker", function(self, row_item)
 end)
 
 Holo:Post(MenuNodeGui, "_align_marker", function(self, row_item)
-	local panel = row_item.gui_text or row_item.gui_panel
+	local panel = row_item.gui_panel or row_item.gui_text
 	self._marker_data.gradient:set_rotation(360)
 	self._marker_data.marker:set_h(panel:h())
 	self._marker_data.gradient:set_h(panel:h())

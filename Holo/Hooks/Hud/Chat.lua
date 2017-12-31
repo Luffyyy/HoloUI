@@ -69,7 +69,7 @@ Holo:Post(HUDChat, "_create_input_panel", function(self)
 end)
 
 function HUDChat:enter_text(o, s)
-	if (managers.hud and managers.hud:showing_stats_screen()) or Input:keyboard():down(Idstring("left ctrl")) then
+	if (managers.hud and managers.hud:showing_stats_screen()) or ctrl() then
 		return
 	end
 	if self._skip_first then

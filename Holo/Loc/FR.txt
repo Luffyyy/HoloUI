@@ -162,5 +162,6 @@
 	"Holo/ColorWaypoints" : "Changer la couleur des marqueurs",
 	"Holo/Inventory" : "Inventaire",
 	"Holo/TopHUD" : "ATH au dessus",
-	"Holo/ShouldModify" : "Activer la modification"
+	"Holo/ShouldModify" : "Activer la modification",
+	"Holo/PlayerDowned" : "Player downed"
 }

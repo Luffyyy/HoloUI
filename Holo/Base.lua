@@ -74,15 +74,15 @@ end
 
 function Holo:CheckOtherMods()
 	if pdth_hud and pdth_hud.Options then
-		if Holo.Options:GetValue("Assault") then
+		if self.Options:GetValue("Assault") then
 			pdth_hud.Options:SetValue("HUD/Assault", false)
 		end
 	end
 	if restoration and restoration.Options then
-		if Holo.Options:GetValue("Teammate") then
-			restoration.Options:SetValue("HUD/MainHud", false)  
+		if self.Options:GetValue("Teammate") then
+			restoration.Options:SetValue("HUD/Teammate", false)  
 		end		
-		if Holo.Options:GetValue("Menu") then
+		if self.Options:GetValue("Menu") then
 			restoration.Options:SetValue("HUD/Loadouts", false)
 		end
 	end
@@ -96,7 +96,7 @@ function Holo:ShouldModify(c, o)
 		self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a))
 		self.RefusedScripts[RequiredScript] = true
 	end
-	if c and not Holo.Options:GetValue("" .. c) then
+	if c and not self.Options:GetValue("" .. c) then
 		return false
 	end 
 	if (CompactHUD or Fallout4hud or SAOHUD) and o == "Teammate" then
@@ -121,19 +121,14 @@ function Holo:ShouldModify(c, o)
 		end
 	end	
 	if restoration and restoration.Options then
-		if restoration.Options:GetValue("HUD/AssaultPanel") and o == "Assault" then
-			inform("Resotration")
-			return false
-		end
-		if restoration.Options:GetValue("HUD/Presenter") and o == "Presenter" then
-			inform("Resotration")
-			return false
-		end
-		if restoration.Options:GetValue("HUD/ObjectivesPanel") and o == "Objective" then
-			inform("Resotration")
-			return false
-		end		
-		if restoration.Options:GetValue("HUD/MainHud") and (o == "Hint" or o == "Carrying")  then
+		local hud = restoration.Options:GetValue("HUD/MainHUD")
+		local assault = restoration.Options:GetValue("HUD/AssaultPanel") and o == "Assault"
+		local presenter = restoration.Options:GetValue("HUD/Presenter") and o == "Presenter"
+		local objective = restoration.Options:GetValue("HUD/ObjectivesPanel") and o == "Objective"
+		local hint = restoration.Options:GetValue("HUD/Hint") and o == "Hint"
+		local carry = restoration.Options:GetValue("HUD/Carry") and o == "Carrying"
+		local down = restoration.Options:GetValue("HUD/Down") and o == "PlayerDowned"
+		if hud and (assault or presenter or objective or hint or carry or down) then
 			inform("Resotration")
 			return false
 		end

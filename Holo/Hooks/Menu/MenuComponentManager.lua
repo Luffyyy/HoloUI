@@ -17,9 +17,11 @@ Holo:Post(BLTModsGui, "_setup", function(self)
 end)
 
 Holo:Post(BLTNotificationsGui, "_setup", function(self)
-    self._content_panel:child("background"):hide()
-    self._content_panel:child(1):hide()
-    self._content_outline:hide()
+    if self._content_outline then
+        self._content_panel:child("background"):hide()
+        self._content_panel:child(1):hide()
+        self._content_outline:hide()
+    end
     local box =  self._content_panel:child("BoxGui")
     if alive(box) then
         self._content_panel:remove(box)

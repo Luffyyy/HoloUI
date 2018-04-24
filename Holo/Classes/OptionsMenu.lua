@@ -2,7 +2,7 @@ Holo.Menu = Holo.Menu or {}
 local self = Holo.Menu
 function self:Init()
     local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
-    local background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.5)
+    local background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.65)
     self._menu = MenuUI:new({
         accent_color = accent_color,
         foreground_highlight = accent_color,
@@ -12,7 +12,8 @@ function self:Init()
         mouse_release = callback(self, self, "MouseReleased"),
         offset = {16, 6},
         layer = 1000,
-        animate_toggle = true,
+		animate_toggle = true,
+		use_default_close_key = true,
         toggle_key = Holo.Options:GetValue("OptionsKey"),
         toggle_clbk = callback(self, self, "SetEnabled"),
     })
@@ -24,7 +25,8 @@ function self:Init()
         w = "half",
         items_size = 20,
         text_align = "center",
-        size_by_text = true,
+		size_by_text = true,
+		scrollbar = false,
         align_method = "grid"
     })
     self._menus = {
@@ -35,8 +37,7 @@ function self:Init()
     local close = self._tabs:Button({
         name = "Close",
         text = "Holo/Close",
-        ignore_align = true,
-        position = function(item) item:Panel():set_rightbottom(item:Panel():parent():rightbottom()) end,
+        position = "RightOffset-x",
         localized = true,
         callback = MenuCallbackHandler.OpenHoloMenu
     })
@@ -46,7 +47,7 @@ function self:Init()
     self._resize = self._menu._panel:panel({
         name = "resize_panel",
         w = 4,
-        x = self._menus.main.panel:right(),
+        x = self._menus.main.panel:right() + 1,
         layer = self._menu._panel:layer() + 1,
     })
     self._resize:rect({color = Holo:GetColor("Colors/Marker")})
@@ -57,16 +58,6 @@ function self:Init()
 end
 
 function self:SetEnabled(enabled)
-    local opened = BeardLib.managers.dialog:DialogOpened(self)
-    if enabled then
-        if not opened then
-            BeardLib.managers.dialog:ShowDialog(self)
-            self._menu:Enable()
-        end
-    elseif opened then
-        BeardLib.managers.dialog:CloseDialog(self)
-        self._menu:Disable()
-    end
     if managers.hud then
         managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
     end
@@ -343,7 +334,7 @@ function self:QuickOptBackgroundClbk(color)
     self:SetColorsByDefault("Colors", Color(0.1, 0.1, 0.1), color)
 end
 
-function self:OpenSetColorDialog(menu, item)
+function self:OpenSetColorDialog(item)
     local option = item.name    
     local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
     local background_color = Holo:GetColor("Colors/Menu")  
@@ -362,7 +353,7 @@ function self:OpenSetColorDialog(menu, item)
         create_items = function(menu)
             local m = menu:Menu({
                 name = "premadcolors",
-                align_method = "grid",
+                align_method = "centered_grid",
                 auto_height = true,
                 size_by_text = true
             })
@@ -477,7 +468,7 @@ function self:Menu(name)
         name = name,
         w = "half",
         items_size = 18,
-        background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.5),        
+        background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.65),        
         visible = not self._current_menu,
         h = self._menu._panel:h() - 35,
         position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},

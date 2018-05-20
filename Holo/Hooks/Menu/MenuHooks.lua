@@ -291,7 +291,7 @@ elseif F == "multiprofileitemgui" then
 			self._caret:set_rotation(360)
 		end
 		--when will ovk stop not using names for stuff?
-		for _, child in pairs(table.list_add(self._profile_panel:children(), self._quick_select_panel:children())) do
+		for _, child in pairs(table.list_add(self._profile_panel:children(), self._quick_select_panel and self._quick_select_panel:children())) do
 			if child and child.color and child:alpha() < 0.41 then
 				child:hide()
 			end

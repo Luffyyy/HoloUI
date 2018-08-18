@@ -7,6 +7,7 @@ local mvector_tr = Vector3()
 local mvector_bl = Vector3()
 local mvector_br = Vector3()
 function BoxGuiObject:create_sides(panel, config)
+	config = config or {}
 	if not alive(panel) then
 		Application:error("[BoxGuiObject:create_sides] Failed creating BoxGui. Parent panel not alive!")
 		Application:stack_dump()

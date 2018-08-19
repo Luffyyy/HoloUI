@@ -7,6 +7,7 @@ local mvector_tr = Vector3()
 local mvector_bl = Vector3()
 local mvector_br = Vector3()
 function BoxGuiObject:create_sides(panel, config)
+	config = config or {}
 	if not alive(panel) then
 		Application:error("[BoxGuiObject:create_sides] Failed creating BoxGui. Parent panel not alive!")
 		Application:stack_dump()
@@ -23,35 +24,40 @@ function BoxGuiObject:create_sides(panel, config)
 		layer = 1
 	})
 	self._color = Holo:GetColor("Colors/Marker")
+
 	local should_change
-	for _, side in pairs(config.sides) do
-		should_change = side == 1
-	end
-	if not should_change then
+	if config.sides then
 		for _, side in pairs(config.sides) do
-			should_change = side == 2
+			should_change = side == 1
+		end
+		if not should_change then
+			for _, side in pairs(config.sides) do
+				should_change = side == 2
+			end
 		end
 	end
+
 	local style = Holo:GetFrameStyle("Menu")
+	local sides = config.sides or {0,0,0,0}
 	if should_change then
 		if style == 2 then
-			config.sides = {0,0,0,2}
+			sides = {0,0,0,2}
 		elseif style == 3 then
-			config.sides = {2,0,0,0}
+			sides = {2,0,0,0}
 		elseif style == 4 then
-			config.sides = {0,2,0,0}
+			sides = {0,2,0,0}
 		elseif style == 5 then
-			config.sides = {0,0,2,0}
+			sides = {0,0,2,0}
 		elseif style == 6 then
-			config.sides = {2,2,2,2}
+			sides = {2,2,2,2}
 		elseif style == 7 then
-			config.sides = {0,0,0,0}
+			sides = {0,0,0,0}
 		end
 	end
-	self:_create_side(self._panel, "left", config.sides[1])
-	self:_create_side(self._panel, "right", config.sides[2])
-	self:_create_side(self._panel, "top", config.sides[3])
-	self:_create_side(self._panel, "bottom", config.sides[4])
+	self:_create_side(self._panel, "left", sides[1])
+	self:_create_side(self._panel, "right", sides[2])
+	self:_create_side(self._panel, "top", sides[3])
+	self:_create_side(self._panel, "bottom", sides[4])
 end
 function BoxGuiObject:set_color(color, rec_panel)
 	if not rec_panel or not rec_panel:children() then

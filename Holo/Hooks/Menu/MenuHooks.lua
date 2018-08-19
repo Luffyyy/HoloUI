@@ -11,7 +11,11 @@ local F = table.remove(string.split(RequiredScript, "/"))
 
 if F == "menunodejukeboxgui" and Lobby then
 	Holo:Post(MenuNodeJukeboxGui, "init", function(self)
-		self.item_panel:set_y(self.item_panel:parent():y() + 50)
+		if managers.skirmish:is_skirmish() then
+			self.item_panel:set_y(self.item_panel:parent():y() + 110)		
+		else
+			self.item_panel:set_y(self.item_panel:parent():y() + 50)
+		end
 	end)
 elseif F == "menumanager" then
 	MenuGuiTabItem.PAGE_PADDING = 2
@@ -379,6 +383,22 @@ elseif F == "contractbrokergui" and CrimeNet then
 elseif F == "contractbrokerheistitem" and CrimeNet then
 	Holo:Post(ContractBrokerHeistItem, "init", function(self)
 		Holo.Utils:SetBlendMode(self._panel)
+	end)
+elseif F == "crimespreecontractmenucomponent" then
+	Holo:Post(CrimeSpreeStartingLevelItem, "init", function(self)
+		self._highlight:set_blend_mode("normal")
+		self._level_bg:set_blend_mode("normal")
+		self._active_bg:set_blend_mode("normal")
+		self._highlight:set_layer(0)
+	end)
+	Holo:Post(CrimeSpreeStartingLevelItem, "refresh", function(self)
+		if managers.custom_safehouse:coins() < self._start_cost then
+			self._level_bg:set_color(tweak_data.screen_colors.important_1)
+		else
+			self._level_bg:set_color(tweak_data.screen_colors.button_stage_2)
+		end
+		self._highlight:set_color(tweak_data.screen_colors.button_stage_2)
+		self._active_bg:set_color(tweak_data.screen_colors.button_stage_2)
 	end)
 elseif F == "crimespreedetailsmenucomponent" then
 	Holo:Replace(CrimeSpreeDetailsMenuComponent, "_start_page_data", function(self, orig, ...)

@@ -68,6 +68,7 @@ if Holo.Options:GetValue("TopHUD") and Holo:ShouldModify("HUD", "Assault") then
 		self._hostages_bg_box:set_right(hostages_panel:w())
 		hostages_panel:child("hostages_icon"):set_right(self._hostages_bg_box:left())
 		if wave then
+			self._wave_bg_box:set_right(wave_panel:w())
 			local icon = wave_panel:child("hostages_icon") or wave_panel:child("waves_icon") --Who knows they decide to fix the typo xd
 			icon:set_right(self._wave_bg_box:left())
 		end
@@ -138,7 +139,7 @@ if Holo.Options:GetValue("TopHUD") and Holo:ShouldModify("HUD", "Assault") then
 	 	end
 	end)
 	Holo:Post(HUDAssaultCorner, "_end_assault", function(self)
-		if self:is_safehouse_raid() then		
+		if self:should_display_waves() then		
 			self._wave_bg_box:stop()
 			local waves = self._wave_bg_box:child("num_waves")
 			waves:stop()

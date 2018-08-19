@@ -1,19 +1,10 @@
-if not ModCore then
-	log("[ERROR][Holo] BeardLib is not installed!")
-	return
-end
-
-Holo = Holo or ModCore:new(ModPath .. "Config.xml", false, true)
 function Holo:Init()
-	self:init_modules()
-	self.Setup = true
 	self.RefusedScripts = {}
 	self.set_position_clbks = {}
 	self:CheckOtherMods()
 	self:UpdateSettings()
 	World:effect_manager():set_rendering_enabled(true)
 	self:LoadTextures()
-	self:log("Done Loading")	
 end
 
 function Holo:AddUpdateFunc(func)
@@ -89,9 +80,6 @@ function Holo:CheckOtherMods()
 end
 
 function Holo:ShouldModify(c, o)
-	if not self.Setup then
-		return false
-	end
 	local function inform(a) 
 		self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a))
 		self.RefusedScripts[RequiredScript] = true
@@ -170,15 +158,6 @@ function Holo:Replace(clss, func, new_func)
 	clss[func] = function(this, ...)
 		return new_func(this, clss["holo_orig_"..func], ...)
 	end
-end
-
-if not Holo.Setup then
-	if BeardLib.Version and tonumber(BeardLib.Version) and BeardLib.Version >= 2.6 then
-        Holo:Init()
-    else
-        log("[ERROR] HoloUI requires at least version 2.6 of BeardLib installed!")
-        return
-    end
 end
 
 if Hooks then

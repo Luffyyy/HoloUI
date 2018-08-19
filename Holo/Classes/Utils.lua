@@ -48,8 +48,19 @@ function Utils:FixBackButton(this, back_button)
 		else
 			back_button = this._panel:child("back_button")
 		end
+		if not back_button then
+			back_button = this._panel:child("BackButton")
+		end
 	end
 	
+	if type_name(back_button)  == "Panel" then
+		back_button = back_button:child("label")
+	end
+
+	if type_name(back_button) ~= "Text" then
+		return
+	end
+
 	local really_ugly_button = this._fullscreen_panel and this._fullscreen_panel:child("back_button")
 	if alive(really_ugly_button) then
 		really_ugly_button:hide()

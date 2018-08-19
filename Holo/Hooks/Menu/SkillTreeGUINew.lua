@@ -3,12 +3,22 @@ if not Holo:ShouldModify("Menu", "Inventory") then
 end
 
 Holo:Post(NewSkillTreeGui, "_setup", function(self)
-	Holo.Utils:FixBackButton(self)
 	self._skillset_panel:child("SkillSetText"):set_blend_mode("normal")
+	self._panel:child("InfoRootPanel"):move(0, 8)
+	self._panel:child("SkillsRootPanel"):child("PagePanel"):move(0, 8)
 end)
+
+Holo:Post(SkillTreeGui, "_setup", function(self)
+	Holo.Utils:FixBackButton(self)
+	if alive(self._spec_scroll_up_box) then
+		self._spec_scroll_up_box._panel:set_alpha(0)
+		self._spec_scroll_down_box._panel:set_alpha(0)
+	end
+end)
+
 Holo:Post(NewSkillTreeSkillItem, "refresh", function(self)
 	if alive(self._skill_panel) then		
-		local step = self._skilltree:next_skill_step(self._skill_id) 
+		local step = self._skilltree:next_skill_step(self._skill_id)
 		self._skill_panel:child("SkillIconPanel"):child("Icon"):set_alpha(step > 1 and 1 or 0.25)
 	end
 end)

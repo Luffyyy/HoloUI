@@ -57,19 +57,15 @@ function self:Init()
     self:SwitchMenu("Main")
 end
 
-function self:SetEnabled(enabled)
-    if managers.hud then
-        managers.hud._chatinput_changed_callback_handler:dispatch(enabled)
-    end
-end
-
-function self:should_close()
-    return self._menu:ShouldClose()
-end
-
-function self:hide()
-    self:SetEnabled(false)
-    return true
+function self:SetEnabled(menu, enabled)
+	if not game_state_machine then
+		return
+	end
+	if enabled and managers.player:player_unit() then
+		game_state_machine:current_state():set_controller_enabled(false)
+	else
+		game_state_machine:current_state():set_controller_enabled(true)
+	end
 end
 
 function self:CreateItem(upper, setting, menu)

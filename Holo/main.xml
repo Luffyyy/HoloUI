@@ -1,10 +1,10 @@
-<mod name="HoloUI" global_key="Holo">
+<mod name="HoloUI" global_key="Holo" core_class="Base.lua" min_lib_version="3.0">
    <Classes directory="Classes">
 		<class file="Utils.lua" />
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
    </Classes>
-   <AssetUpdates id="12501" version="3.1.3" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+   <AssetUpdates id="12501" version="3.2" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
    <Localization directory="Loc" default="EN.txt">
       <loc file="EN.txt" language="english" />
       <loc file="RU.txt" language="russian" />
@@ -63,7 +63,6 @@
 		<hook source_file="lib/managers/systemmenumanager" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menumanager" file="Menu/MenuHooks.lua" />
 
-
 		<hook source_file="lib/managers/menu/lobbycharacterdata" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/contractboxgui" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/multiprofileitemgui" file="Menu/MenuHooks.lua" />
@@ -92,6 +91,7 @@
 		<hook source_file="lib/managers/menu/items/contractbrokerheistitem" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/crimespreedetailsmenucomponent" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/crimespreemodifiersmenucomponent" file="Menu/MenuHooks.lua" />
+		<hook source_file="lib/managers/menu/crimespreecontractmenucomponent" file="Menu/MenuHooks.lua" />
    </Hooks>
    <Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt"> <!-- sorry :c -->
       <options>

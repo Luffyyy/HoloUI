@@ -9,8 +9,8 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 	local text_font_size = tweak_data.menu.pd2_small_font_size
 	local num_player_slots = BigLobbyGlobals and BigLobbyGlobals:num_player_slots() or 4
 
-	self._ready_slot_panel:set_h(text_font_size * (num_player_slots * 2))	    
-	self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() - 21)
+	self._ready_slot_panel:set_h((text_font_size + 16) * num_player_slots + 4)	    
+	self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() - 32)
 	if not BigLobbyGlobals then
 		self._ready_slot_panel:set_right(self._foreground_layer_one:w())
 	else
@@ -41,7 +41,7 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 		local prev
 		for i = 1, num_player_slots do
 			local slot = self._ready_slot_panel:child("slot_" .. tostring(i))
-			slot:set_h(32)
+			slot:set_h(text_font_size + 16)
 			if prev then
 				slot:set_y(prev:bottom() + 1)
 			else
@@ -83,9 +83,10 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 			name:set_center_y(center_y)
 			name:set_x(infamy:right())
 			status:set_blend_mode("normal")
+			status:set_w(128)
 			status:set_center_y(center_y)
 			status:set_right(slot:w() - 8)
-			detection:set_x(name:right() + 32)
+			detection:set_x(status:left() - 4)
 			detection:set_center_y(center_y)
 			detection:child("detection_left_bg"):set_blend_mode("normal")				
 			detection:child("detection_left"):set_blend_mode("normal")

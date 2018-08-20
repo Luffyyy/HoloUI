@@ -383,6 +383,7 @@ Holo:Post(HUDTeammate, "set_ability_radial", function(self, data)
 end)
 
 Holo:Post(HUDTeammate, "activate_ability_radial", function(self, time_left, time_total)
+	time_total = time_total or time_left
 	local p = time_left / time_total
 	local skill = self._player_panel:child("Skill")
 	local skill_color = Holo:GetColor("Colors/Skill")

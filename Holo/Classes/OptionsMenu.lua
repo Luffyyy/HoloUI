@@ -250,7 +250,16 @@ function self:MouseMoved(x, y)
     end
 end
 
+--TODO: Make a better quick dialog for beardlib. Current is a mess
 function self:ResetOptions(all, menu)   
+	QuickDialog({
+		title = self:LocF("AreYouSure"),
+		message = self:LocF("ResetWarn"),
+		no = false
+	}, {{self:LocF("Yes"), ClassClbk(self, "DoResetOptions", all, menu)}, {self:LocF("No")}})
+end
+
+function self:DoResetOptions(all, menu)   
     self:WorkValues(all, menu, function(item)
         local option = Holo.Options:GetOption(item.name)
         if option then
@@ -481,3 +490,4 @@ end
 function self:MousePressed(button, x, y) self._line_hold = button == Idstring("0") and self._resize:inside(x,y) end
 function self:MouseReleased() self._line_hold = nil end
 function self:Loc(s) return "Holo/" .. s end
+function self:LocF(s) return managers.localization:text(self:Loc(s)) end

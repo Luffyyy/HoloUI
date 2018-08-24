@@ -164,5 +164,9 @@
 	"Holo/Inventory" : "Inventario",
 	"Holo/TopHUD" : "HUD superiore",
 	"Holo/ShouldModify" : "Attiva modifiche",
-	"Holo/PlayerDowned" : "Player downed"
+	"Holo/PlayerDowned" : "Player downed",
+	"Holo/AreYouSure" : "Are you sure you want to continue?",
+	"Holo/ResetWarn" : "This will reset multiple options to their default value",
+	"Holo/Yes" : "Yes",
+	"Holo/No" : "No"
 }

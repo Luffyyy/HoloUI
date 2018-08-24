@@ -163,9 +163,9 @@
 	"Holo/Inventory" : "Inventaire",
 	"Holo/TopHUD" : "ATH au dessus",
 	"Holo/ShouldModify" : "Activer la modification",
-	"Holo/PlayerDowned" : "Player downed",
-	"Holo/AreYouSure" : "Are you sure you want to continue?",
-	"Holo/ResetWarn" : "This will reset multiple options to their default value",
-	"Holo/Yes" : "Yes",
-	"Holo/No" : "No"
+	"Holo/PlayerDowned" : "Joueur à terre",
+	"Holo/AreYouSure" : "Êtes vous sûr de vouloir continuer?",
+	"Holo/ResetWarn" : "Ceci va réinitialiser vos options à leur valeur par défaut.",
+	"Holo/Yes" : "Oui",
+	"Holo/No" : "Non"
 }

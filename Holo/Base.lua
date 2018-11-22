@@ -160,16 +160,15 @@ function Holo:Replace(clss, func, new_func)
 	end
 end
 
-if Hooks then
-	Hooks:Add("MenuManagerSetupCustomMenus", "HoloMenuInit", function(self, nodes)			
-		function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:toggle() end		
-		Holo.Menu:Init()
-		MenuHelperPlus:AddButton({
-			id = "HoloOptions",
-			title = "Holo/OptionsTitle",
-			desc = "Holo/OptionsDesc",
-			callback = "OpenHoloMenu",
-			node = nodes.blt_options,
-		})
-	end)
-end
+Hooks:Add("MenuManagerPopulateCustomMenus", "HoloMenuInit", function(self, nodes)
+	--Called more than once for some reason....
+	function MenuCallbackHandler:OpenHoloMenu() Holo.Menu._menu:Enable() end		
+	Holo.Menu:Init()
+	MenuHelperPlus:AddButton({
+		id = "HoloOptions",
+		title = "Holo/OptionsTitle",
+		desc = "Holo/OptionsDesc",
+		callback = "OpenHoloMenu",
+		node = nodes.blt_options,
+	})
+end)

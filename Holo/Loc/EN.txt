@@ -169,5 +169,6 @@
 	"Holo/ResetWarn" : "This will reset multiple options to their default value.",
 	"Holo/Yes" : "Yes",
 	"Holo/No" : "No",
-	"Holo/TeammateName" : "Teammate name background"
+	"Holo/TeammateName" : "Teammate name background",
+	"Holo/NameColored" : "Color teammate name with chat color"
 }

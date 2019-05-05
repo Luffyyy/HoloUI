@@ -172,3 +172,30 @@ Hooks:Add("MenuManagerPopulateCustomMenus", "HoloMenuInit", function(self, nodes
 		node = nodes.blt_options,
 	})
 end)
+ 
+Hooks:Add("GameSetupUpdate", "HoloUpdate", function(t, dt)
+	if not Holo._hooked_to_poco then
+		if PocoHud3Class and PocoHud3Class.TPocoHud3 then
+			Holo:Post(PocoHud3Class.TPocoHud3, "_updatePlayers", function(self, t)
+				for i=1,4 do
+					local cdata = managers.criminals:character_data_by_peer_id(i)
+					if cdata and self['pnl_'..i] then
+						local me = i==self.pid
+						local tm = managers.hud._teammate_panels[me and HUDManager.PLAYER_PANEL or cdata.panel_id]
+						if tm then
+							local x,y = managers.gui_data:safe_to_full(tm._player_panel:world_x(), 0) --Can't get this shit to convert properly
+							self['pnl_'..i]:set_world_x(x - 128)
+							if not self._updated_holo then
+								tm:UpdateHolo()
+								self._updated_holo = true
+							end
+						end
+					else
+						self._updated_holo = false
+					end
+				end
+			end)
+		end
+		Holo._hooked_to_poco = true
+	end
+end)

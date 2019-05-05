@@ -114,6 +114,7 @@
         <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
         <option type="boolean" default_value="true" name="ShowTeammateFullAmmo" menu="Teammate"/>
         <option type="boolean" default_value="true" name="MyName" menu="Teammate"/>
+        <option type="boolean" default_value="true" name="NameColored" menu="Teammate"/>
 
         <div name="Enable" text="ShouldModify" menu="HUD" items_small="true"/>
         <option type="boolean" default_value="true" name="TopHUD" menu="Enable" />  

@@ -62,7 +62,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		bg:set_center_y(radial_health_panel:center_y())
 	
 		name:configure({
-			color = text_color,
+			color = Holo.Options:GetValue("NameColored") and callsign:color() or text_color,
 			font_size = 20,
 			font = "fonts/font_medium_noshadow_mf",
 		})
@@ -175,15 +175,43 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		panel:set_size(radial_size,radial_size)
 		panel:set_leftbottom(0,self:calc_panel_height()-8)
 		for _, child in pairs(panel:children()) do
-			child:set_size(panel:size())
+			if child:name() ~= "arrow" then
+				child:set_size(panel:size())
+			end
 		end
 		
+		local full_size = {
+			"radial_bg",
+			"radial_health",
+			"radial_shield",
+			"damage_indicator",
+			"radial_custom",
+			"radial_ability",
+			"radial_delayed_damage",
+			"radial_rip",
+			"radial_rip_bg",
+			"radial_absorb_shield_active",
+			"radial_absorb_health_active",
+			"radial_info_meter",
+			"radial_info_meter_bg"
+		}
+
+		for _, name in pairs(full_size) do
+			local o = panel:child(name)
+			if alive(o) then
+				o:set_size(panel:size())
+			end
+		end
+
 		local radial_ability = panel:child("radial_ability")
 		local ability_meter = radial_ability:child("ability_meter")
 		local ability_icon = radial_ability:child("ability_icon")
-		ability_meter:set_size(radial_size, radial_size)
 		ability_icon:set_size(radial_size*0.5, radial_size*0.5)
 		ability_icon:set_center(radial_ability:center())
+
+		local delayed_damage = panel:child("radial_delayed_damage")
+		delayed_damage:child("radial_delayed_damage_armor"):set_size(panel:size())
+		delayed_damage:child("radial_delayed_damage_health"):set_size(panel:size())
 
 		local interact_panel = self._player_panel:child("interact_panel")
 		interact_panel:set_size(radial_size * 1.25, radial_size * 1.25)
@@ -199,6 +227,11 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			self._stamina_bar:set_world_center(panel:world_center())
 			self._stamina_line:set_size(panel:w() * 0.05, 2)
 			self._stamina_line:set_world_center(panel:world_center())
+		end
+
+		if self._standalone_stamina_circle then
+			self._standalone_stamina_circle:set_size(panel:w()*0.8, panel:h()*0.8)
+			self._standalone_stamina_circle:set_center(panel:center())
 		end
 	end	
 

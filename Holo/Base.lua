@@ -36,8 +36,8 @@ function Holo:UpdateSettings()
 	end
 end
 
-function Holo:GetFrameColor(setting)
-	return self.Options:GetValue("FrameColors/Enable") and self:GetColor("FrameColors/" .. setting) or self:GetColor("Colors/Frame")  
+function Holo:GetFrameColor(setting, can_return_null)
+	return self.Options:GetValue("FrameColors/Enable") and self:GetColor("FrameColors/" .. setting, nil, can_return_null) or not can_return_null and self:GetColor("Colors/Frame") or nil
 end
 
 function Holo:GetFrameStyle(setting)
@@ -48,8 +48,8 @@ function Holo:GetAlpha(setting)
 	return self.Options:GetValue("HUDAlpha")
 end
 
-function Holo:GetColor(setting, vec)
-	local color = self.Options:GetValue(setting) or Color.white
+function Holo:GetColor(setting, vec, can_return_null)
+	local color = self.Options:GetValue(setting) or not can_return_null and Color.white or nil
 	if setting:match("TextColors") then
 		local bgname = setting:gsub("TextColors", "Colors")
 		if self.Options:GetValue("TextColors/AutomaticTextColors") and self.Options:GetValue(bgname) and not Holo.NonContrastable[setting] then

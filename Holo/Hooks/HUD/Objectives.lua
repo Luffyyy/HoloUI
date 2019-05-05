@@ -12,7 +12,10 @@ function HUDBGBox_recreate(panel, config)
 	if config.name then
 		config.alpha = Holo.Options:GetValue("HUDAlpha") or 0.25
 		config.frame_style = Holo:GetFrameStyle(config.name)
-		config.frame_color = Holo:GetFrameColor(config.name)
+		local frame_color = Holo:GetFrameColor(config.name, true)
+		if frame_color then
+			config.frame_color = frame_color
+		end
 		config.color = Holo:GetColor("Colors/" .. config.name)
 	end
 	local color = config.color	

@@ -138,12 +138,12 @@
 	"Holo/QuickOption" : "Quick option - $option",
 	"Holo/QuickOptionHelp" : "Want a quicker way of setting certain options? Quick options are here to help! However, be careful; as this sets multiple options at once.",
 	"Holo/CompactTeammate" : "Compact teammates panels",
-	"Holo/ShowTeammateFullAmmo" : "Show teammate full ammo",
+	"Holo/ShowTeammatesFullAmmo" : "Show teammate's full ammo",
 	"Holo/ShowAvatar" : "Show my avatar",
 	"Holo/ShowTeammatesAvatar" : "Show teammate avatar",
 	"Holo/CompactAI" : "Compact AI panels",
-	"Holo/MainTeammatePanel" : "Main teammate panel",
-	"Holo/TeammatesPanel" : "Teammates panel",
+	"Holo/MyTeammatePan" : "Main teammate panel",
+	"Holo/TeammatesPan" : "Teammates panel",
 	"Holo/Left" : "Left",
 	"Holo/Right" : "Right",
 	"Holo/Left" : "Left",
@@ -170,5 +170,6 @@
 	"Holo/Yes" : "Yes",
 	"Holo/No" : "No",
 	"Holo/TeammateName" : "Teammate name background",
+	"Holo/MyName" : "Show my name",
 	"Holo/NameColored" : "Color teammate name with chat color"
 }

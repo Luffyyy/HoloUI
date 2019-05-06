@@ -2,7 +2,7 @@ if not Holo:ShouldModify("Menu", "Chat") then
 	return
 end
 
-ChatGui.max_lines = ChatGui.max_lines or 16
+ChatGui.max_lines = ChatGui.max_lines or BigLobbyGlobals and 12 or 16
 ChatGui.line_h = ChatGui.line_h or 16
 Holo:Post(ChatGui, "set_scroll_indicators", function(self)
 	self._scroll_indicator_box_class._panel:hide()
@@ -18,7 +18,8 @@ function ChatGui:set_leftbottom(left, bottom)
 	self._panel:set_bottom(self._panel:parent():h() - bottom)
 end
 if BigLobbyGlobals then
-	 
+	ChatGui.PRESETS.default.left = 600
+	ChatGui.PRESETS.default.bottom = 30
 else
 	ChatGui.PRESETS.default.bottom = 30
 end

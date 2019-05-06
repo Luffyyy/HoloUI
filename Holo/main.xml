@@ -1,4 +1,4 @@
-<mod name="HoloUI" global_key="Holo" core_class="Base.lua" min_lib_version="3.0">
+<mod name="HoloUI" global_key="Holo" core_class="Base.lua" min_lib_version="3.0" image="ui/holo/logo" color="Color(0.15,0.15,0.15)">
    <Classes directory="Classes">
 		<class file="Utils.lua" />
 		<class file="Definitions.lua" />
@@ -112,7 +112,7 @@
         <div name="Teammate" menu="HUD"/>
         <option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
         <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
-        <option type="boolean" default_value="true" name="ShowTeammateFullAmmo" menu="Teammate"/>
+        <option type="boolean" default_value="false" name="ShowTeammatesFullAmmo" menu="Teammate"/>
         <option type="boolean" default_value="true" name="MyName" menu="Teammate"/>
         <option type="boolean" default_value="true" name="NameColored" menu="Teammate"/>
 
@@ -143,8 +143,8 @@
         <option type="boolean" default_value="true" name="PlayerProfile" menu="EnableMenu"/>
          
         <option_group name="Positions" closed="true">
-            <option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="MainTeammatePanel" />
-            <option type="number" default_value="4" menu_type="combo" items="MenuTMPositions" name="TeammatesPanel" />
+            <option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="MyTeammatePan" />
+            <option type="number" default_value="1" menu_type="combo" items="MenuTMPositions" name="TeammatesPan" />
             <option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />
             <option type="number" default_value="3" menu_type="combo" items="Positions" name="Casing" />
             <option type="number" default_value="3" menu_type="combo" items="Positions" name="NoPointOfReturn" />

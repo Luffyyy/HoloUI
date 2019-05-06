@@ -6,15 +6,16 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 	if not alive(self._job_schedule_panel) then
 		return 
 	end
-	local text_font_size = tweak_data.menu.pd2_small_font_size
+	local text_font_size = tweak_data.menu.pd2_small_font_size - (BigLobbyGlobals and 3 or 0)
 	local num_player_slots = BigLobbyGlobals and BigLobbyGlobals:num_player_slots() or 4
 
-	self._ready_slot_panel:set_h((text_font_size + 16) * num_player_slots + 4)	    
-	self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() - 32)
+	self._ready_slot_panel:set_h((text_font_size + 16) * num_player_slots + 24)	    
 	if not BigLobbyGlobals then
 		self._ready_slot_panel:set_right(self._foreground_layer_one:w())
+		self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() - 12)
 	else
-		self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() + 90)
+		self._ready_slot_panel:set_x(0)
+		self._ready_slot_panel:set_bottom(self._foreground_layer_one:h() - 32)
 	end
 	if self._ready_slot_panel:child("BoxGui") then
 		self._ready_slot_panel:remove(self._ready_slot_panel:child("BoxGui"))

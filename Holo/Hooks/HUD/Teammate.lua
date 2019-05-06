@@ -13,7 +13,6 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		local secondary= weapons_panel:child("secondary_weapon_panel")
 		self._player_panel:child("carry_panel"):set_alpha(0)
 		self._panel:child("name"):set_font_size(24)
-		Holo.Utils:Apply({primary:child("bg"), secondary:child("bg")}, {texture = "ui/custom/holo_icons", rotation = 360, texture_rect = {4,4,32,32}})
 		Holo.Utils:Apply({
 			self._panel:child("name_bg"),
 			self._panel:child("callsign_bg"),
@@ -21,6 +20,8 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			cable:child("bg"),
 			dep:child("bg"),
 			nades:child("bg"),
+			primary:child("bg"), 
+			secondary:child("bg"),
 			primary:child("weapon_selection"):child("weapon_selection"),
 			secondary:child("weapon_selection"):child("weapon_selection")
 		},{visible = false})
@@ -29,13 +30,20 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
-
+	function HUDTeammate:DebugWithAI()
+		self._ai = false
+		self._player_panel:set_alpha(1)
+		self:set_deployable_equipment({icon = "equipment_ammo_bag", amount = 2})
+		self:set_ammo_amount_by_type("primary", 100, 50, 50, 10)
+		self:set_ammo_amount_by_type("secondary", 100, 50, 50, 10)
+	end
+	
 	function HUDTeammate:UpdateHolo()
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local deployable_panel = self._player_panel:child("deployable_equipment_panel")
 		local cableties_panel = self._player_panel:child("cable_ties_panel")
 		local grenades_panel = self._player_panel:child("grenades_panel")
-		local grenades = grenades_panel:child("grenades")
+		local grenades = grenades_panel:child("grenades_icon")
 		local cable_ties = cableties_panel:child("cable_ties")
 		local deployable = deployable_panel:child("equipment")
 		local weapons_panel = self._player_panel:child("weapons_panel")
@@ -52,10 +60,12 @@ if Holo:ShouldModify("HUD", "Teammate") then
 	
 		self:set_radials()
 	
+		local mightbeme = me or Holo.Options:GetValue("ShowTeammatesFullAmmo")
+	
 		HUDBGBox_recreate(bg, {
 			name = "Teammate",
-			w = me and 138 or 90,
-			h = self._ai and 0 or me and 76 or 72
+			w = mightbeme and 138 or 90,
+			h = self._ai and 0 or mightbeme and 76 or 72
 		})
 	
 		bg:set_leftbottom(radial_health_panel:right() + 8, self._panel:h())
@@ -89,7 +99,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		name:set_visible(Holo.Options:GetValue("MyName") or not self._main_player)
 	
 		--Weapons
-		weapons_panel:set_size(me and 84 or 36, 64)
+		weapons_panel:set_size(mightbeme and 84 or 36, 64)
 		weapons_panel:set_x(bg:x() + 5)
 		weapons_panel:set_center_y(bg:center_y())
 		
@@ -98,26 +108,16 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			local ammo_clip = panel:child("ammo_clip")
 			local weapon_selection = panel:child("weapon_selection")
 			panel:show()
-			panel:child("ammo_total"):set_font_size(22)
-			local icon = panel:child("bg")
-			icon:hide()
-			icon:configure({
-				w = 6, h = 6,
-				color = Holo:GetColor("Colors/SelectedWeapon"),
-				rotation = 360,
-				x = -8
-			})
-			icon:set_center_y(panel:h() / 2 + 1)
 			panel:set_shape(0,0, weapons_panel:w(), weapons_panel:h()/2)
 			ammo_clip:set_font_size(28)
-			ammo_total:set_font_size( 28)
-			if me then
+			ammo_total:set_font_size(28)
+			ammo_clip:set_visible(mightbeme)
+			if mightbeme then
 				ammo_clip:set_shape(0, 0, 38, panel:h())
 				ammo_total:set_shape(ammo_clip:right()+4, 0, 30, panel:h())
 				weapon_selection:set_shape(panel:w() - weapon_selection:w(), 0, 12, panel:h())
 			else
 				ammo_total:set_shape(0,1, panel:size())
-				icon:set_center_y(ammo_total:center_y() + 2)
 			end
 			if i == 2 then
 				panel:set_y(primary_weapon_panel:bottom())
@@ -161,7 +161,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		self:layout_special_equipments()
 		self:recreate_weapon_firemode()
 		managers.hud:align_teammate_panels()
-	end	
+	end
 
 	function HUDTeammate:calc_panel_height()
 		return self._player_panel:child("Mainbg"):h()+self._panel:child("Namebg"):h()+(self._ai and 22 or 30)
@@ -195,24 +195,25 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			"radial_info_meter",
 			"radial_info_meter_bg"
 		}
-
+	
 		for _, name in pairs(full_size) do
 			local o = panel:child(name)
 			if alive(o) then
 				o:set_size(panel:size())
 			end
 		end
-
+	
 		local radial_ability = panel:child("radial_ability")
 		local ability_meter = radial_ability:child("ability_meter")
 		local ability_icon = radial_ability:child("ability_icon")
+		ability_meter:set_size(panel:size())
 		ability_icon:set_size(radial_size*0.5, radial_size*0.5)
 		ability_icon:set_center(radial_ability:center())
-
+	
 		local delayed_damage = panel:child("radial_delayed_damage")
 		delayed_damage:child("radial_delayed_damage_armor"):set_size(panel:size())
 		delayed_damage:child("radial_delayed_damage_health"):set_size(panel:size())
-
+	
 		local interact_panel = self._player_panel:child("interact_panel")
 		interact_panel:set_size(radial_size * 1.25, radial_size * 1.25)
 		interact_panel:set_center(panel:center())
@@ -221,20 +222,20 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		local s = self._interact._radius*2
 		self._interact._circle:set_shape(4, 4, s, s)
 		self._interact._bg_circle:set_shape(4, 4, s,s)
-
+	
 		if self._stamina_bar and self._stamina_line then
 			self._stamina_bar:set_size(panel:w() * 0.37, panel:h() * 0.37)
 			self._stamina_bar:set_world_center(panel:world_center())
 			self._stamina_line:set_size(panel:w() * 0.05, 2)
 			self._stamina_line:set_world_center(panel:world_center())
 		end
-
+	
 		if self._standalone_stamina_circle then
 			self._standalone_stamina_circle:set_size(panel:w()*0.8, panel:h()*0.8)
-			self._standalone_stamina_circle:set_center(panel:center())
+			self._standalone_stamina_circle:set_world_center(panel:world_center())
 		end
 	end	
-
+	
 	function HUDTeammate:_create_firemode(is_secondary)
 		local weapon_panel = self._player_panel:child("weapons_panel"):child((is_secondary and "secondary" or "primary") .. "_weapon_panel")
 		local weapon_selection_panel = weapon_panel:child("weapon_selection")

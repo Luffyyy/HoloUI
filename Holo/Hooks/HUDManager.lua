@@ -88,8 +88,8 @@ if Holo:ShouldModify("HUD", "Teammate") then
             return
         end
     
-        local me_align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/MainTeammatePanel")]
-        local align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/TeammatesPanel")]
+        local me_align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/MyTeammatePan")]
+        local align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/TeammatesPan")]
         local avatar_enabled = Holo.Options:GetValue("ShowAvatar")
         local prev
         local align_bag = main_tm

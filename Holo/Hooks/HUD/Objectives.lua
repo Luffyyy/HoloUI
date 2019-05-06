@@ -78,10 +78,10 @@ function HUDBGBox_create_frame(box_panel, color, style)
 	opt.valign = "bottom"
 	local right_bottom = box_panel:bitmap(opt)
 	if style == 1 then
-	    right_bottom:set_image("ui/custom/frame", 8,8,8,8)
-	    left_bottom:set_image("ui/custom/frame", 0,8,8,8)
-	    left_top:set_image("ui/custom/frame", 0,0,8,8)
-	    right_top:set_image("ui/custom/frame", 8,0,8,8)
+	    right_bottom:set_image("ui/holo/frame", 8,8,8,8)
+	    left_bottom:set_image("ui/holo/frame", 0,8,8,8)
+	    left_top:set_image("ui/holo/frame", 0,0,8,8)
+	    right_top:set_image("ui/holo/frame", 8,0,8,8)
 		local s = 8
 	    right_bottom:set_size(s,s)
 	    left_bottom:set_size(s,s)

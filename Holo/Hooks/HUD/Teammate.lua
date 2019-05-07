@@ -30,15 +30,24 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		self:UpdateHolo()
 		Holo:AddUpdateFunc(callback(self, self, "UpdateHolo"))
 	end)
+
 	function HUDTeammate:DebugWithAI()
+		if not self._ai then
+			return
+		end
+	
+		self:set_health({current = 1, total = 1})
+		self:set_armor({current = 1, total = 1})
+	
 		self._ai = false
 		self._player_panel:set_alpha(1)
 		self:set_deployable_equipment({icon = "equipment_ammo_bag", amount = 2})
-		self:set_ammo_amount_by_type("primary", 100, 50, 50, 10)
-		self:set_ammo_amount_by_type("secondary", 100, 50, 50, 10)
+		self:set_ammo_amount_by_type("primary", 100, 999, 999, 10)
+		self:set_ammo_amount_by_type("secondary", 100, 999, 999, 10)
 	end
 	
 	function HUDTeammate:UpdateHolo()
+		--self:DebugWithAI()
 		local radial_health_panel = self._player_panel:child("radial_health_panel")
 		local deployable_panel = self._player_panel:child("deployable_equipment_panel")
 		local cableties_panel = self._player_panel:child("cable_ties_panel")
@@ -57,23 +66,40 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		local me = self._main_player
 		local bg_color = Holo:GetColor("Colors/Teammate")
 		local text_color = Holo:GetColor("TextColors/Teammate")
-	
-		self:set_radials()
-	
+		
+		
+		local minime = me and Holo.Options:GetValue("CompactPlayer")
+		local minitm = minime or not me and Holo.Options:GetValue("CompactTeammates")
 		local mightbeme = me or Holo.Options:GetValue("ShowTeammatesFullAmmo")
+	
+		local weap_w = minime and 68 or 80
+		local weap_h = minitm and 48 or 64
+		local radial_size = minitm and 48 or 64
+	
+		if not me then
+			if minitm then
+				if mightbeme then
+					weap_w = 56
+				else
+					weap_w = 26
+				end
+			elseif mightbeme then
+				weap_w = 68
+			else
+				weap_w = 36
+			end
+		end
 	
 		HUDBGBox_recreate(bg, {
 			name = "Teammate",
-			w = mightbeme and 138 or 90,
-			h = self._ai and 0 or mightbeme and 76 or 72
+			x = radial_size + 8,
+			w = weap_w + (minitm and 50 or 54),
+			h = self._ai and 0 or (weap_h + (minitm and 12 or 8))
 		})
-	
-		bg:set_leftbottom(radial_health_panel:right() + 8, self._panel:h())
-		bg:set_center_y(radial_health_panel:center_y())
-	
 		name:configure({
 			color = Holo.Options:GetValue("NameColored") and callsign:color() or text_color,
-			font_size = 20,
+			font_size = minitm and 16 or 20,
+			visible = Holo.Options:GetValue("MyName") or not self._main_player,
 			font = "fonts/font_medium_noshadow_mf",
 		})
 		local _,_,w,_ = name:text_rect()
@@ -84,23 +110,27 @@ if Holo:ShouldModify("HUD", "Teammate") then
 	
 		HUDBGBox_recreate(nbg, {
 			name = "TeammateName",
+			visible = name:visible(),
 			frame_color = callsign:color(),
 			x = radial_health_panel:x(),
 			y = self._ai and bg:bottom() - 2 or bg:top() - 4,
 			w = name:w() + 8,
-			h = name:h() + 8
+			h = name:visible() and name:h() + 8 or 0
 		})
-		if self._ai then 
+		bg:set_bottom(self:calc_panel_height())
+		if self._ai then
 			nbg:set_bottom(self:calc_panel_height())	
 		else
 			nbg:set_bottom(bg:y() - 4)
 		end
 		name:set_position(nbg:x() + 4, nbg:y() + 2)
-		name:set_visible(Holo.Options:GetValue("MyName") or not self._main_player)
+	
+		self:set_radials()
 	
 		--Weapons
-		weapons_panel:set_size(mightbeme and 84 or 36, 64)
-		weapons_panel:set_x(bg:x() + 5)
+	
+		weapons_panel:set_size(weap_w, weap_h)
+		weapons_panel:set_x(bg:x() + 7)
 		weapons_panel:set_center_y(bg:center_y())
 		
 		for i, panel in pairs({primary_weapon_panel, secondary_weapon_panel}) do
@@ -109,11 +139,11 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			local weapon_selection = panel:child("weapon_selection")
 			panel:show()
 			panel:set_shape(0,0, weapons_panel:w(), weapons_panel:h()/2)
-			ammo_clip:set_font_size(28)
-			ammo_total:set_font_size(28)
+			ammo_clip:set_font_size(minitm and 24 or 28)
+			ammo_total:set_font_size(minitm and 24 or 28)
 			ammo_clip:set_visible(mightbeme)
 			if mightbeme then
-				ammo_clip:set_shape(0, 0, 38, panel:h())
+				ammo_clip:set_shape(0, 0, weapons_panel:h()/2, panel:h())
 				ammo_total:set_shape(ammo_clip:right()+4, 0, 30, panel:h())
 				weapon_selection:set_shape(panel:w() - weapon_selection:w(), 0, 12, panel:h())
 			else
@@ -128,14 +158,14 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		--Weapons end
 	
 		--Equipments
-		deployable_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y() - 1, 36, 21.33)
+		deployable_panel:set_shape(weapons_panel:right() + 2, weapons_panel:y() - (minitm and 2 or -1), minitm and 32 or 36, minitm and 16 or 20)
 		local eq_size = deployable_panel:h() - 4
 		
 		deployable:set_color(text_color)
 		for _, v in pairs({deployable_panel, cableties_panel, grenades_panel}) do
 			v:child("amount"):configure({
 				font = "fonts/font_large_mf",
-				font_size = 20,
+				font_size = minitm and 16 or 18,
 				color = text_color,
 				x = 0, y = 2, w = deployable_panel:w(), h = deployable_panel:h()
 			})
@@ -168,12 +198,15 @@ if Holo:ShouldModify("HUD", "Teammate") then
 	end
 	
 	function HUDTeammate:set_radials()
+		local minime = self._main_player and Holo.Options:GetValue("CompactPlayer")
+		local minitm = minime or not self._main_player and Holo.Options:GetValue("CompactTeammates")
 		local panel = self._player_panel:child("radial_health_panel")
-		local radial_size = 64
+		local radial_size = minitm and 48 or 64
 		local bg = self._player_panel:child("Mainbg")
 		local nbg = self._panel:child("Namebg")
 		panel:set_size(radial_size,radial_size)
-		panel:set_leftbottom(0,self:calc_panel_height()-8)
+		panel:set_x(0)
+		panel:set_center_y(bg:center_y()+2)
 		for _, child in pairs(panel:children()) do
 			if child:name() ~= "arrow" then
 				child:set_size(panel:size())
@@ -234,7 +267,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
 			self._standalone_stamina_circle:set_size(panel:w()*0.8, panel:h()*0.8)
 			self._standalone_stamina_circle:set_world_center(panel:world_center())
 		end
-	end	
+	end
 	
 	function HUDTeammate:_create_firemode(is_secondary)
 		local weapon_panel = self._player_panel:child("weapons_panel"):child((is_secondary and "secondary" or "primary") .. "_weapon_panel")
@@ -322,9 +355,12 @@ if Holo:ShouldModify("HUD", "Teammate") then
 		local bg_alpha = Holo.Options:GetValue("HUDAlpha")
 		local rows = 1	
 		local prev
-		local h = 20
+		local minime = self._main_player and Holo.Options:GetValue("CompactPlayer")
+		local minitm = minime or not self._main_player and Holo.Options:GetValue("CompactTeammates")
+		local base_h = minitm and 16 or 20
+		local h = base_h
 		for i, panel in pairs(self._special_equipment) do
-			panel:set_size(31.5, 20)
+			panel:set_size(minitm and 26 or 31, base_h)
 			local amount = panel:child("amount")
 			local amount_bg = panel:child("amount_bg")
 			local bitmap = panel:child("bitmap")

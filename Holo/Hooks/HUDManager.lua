@@ -30,6 +30,19 @@ end
 if Holo.Options:GetValue("Chat") then
     function HUDManager._create_hud_chat_access()
     end
+    Holo:Post(HUDManager, "update", function(self)
+        local chatgui = managers.menu_component._game_chat_gui
+        local stage = self._hud_stage_endscreen
+        if (stage and stage._backdrop and alive(stage._backdrop._panel) and stage._backdrop._panel:visible()) or chatgui and chatgui:enabled() then
+            local chat = self._hud_chat_ingame
+            if alive(chat._panel) then
+                local output_panel = chat._panel:child("output_panel")
+                output_panel:stop()
+                output_panel:set_alpha(0)
+                chat._input_panel:set_alpha(0)
+            end
+        end
+    end)
 end
 
 if Holo:ShouldModify("HUD", "Teammate") then

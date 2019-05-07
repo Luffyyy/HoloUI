@@ -362,7 +362,8 @@ function HUDChat:receive_message(name, message, color, icon)
 	self:check_text(line:text())
 	local chatgui = managers.menu_component._game_chat_gui
 	if chatgui and chatgui:enabled() then
-		self._panel:child("output_panel"):set_alpha(0)
+		output_panel:stop()
+		output_panel:set_alpha(0)
 		self._input_panel:set_alpha(0)
 		return
 	elseif not self._focus then

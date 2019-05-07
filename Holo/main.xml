@@ -113,6 +113,8 @@
         <option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
         <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
         <option type="boolean" default_value="false" name="ShowTeammatesFullAmmo" menu="Teammate"/>
+        <option type="boolean" default_value="true" name="CompactTeammates" menu="Teammate"/>
+        <option type="boolean" default_value="false" name="CompactPlayer" menu="Teammate"/>
         <option type="boolean" default_value="true" name="MyName" menu="Teammate"/>
         <option type="boolean" default_value="true" name="NameColored" menu="Teammate"/>
 

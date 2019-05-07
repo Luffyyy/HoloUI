@@ -167,5 +167,10 @@
 	"Holo/AreYouSure" : "Are you sure you want to continue?",
 	"Holo/ResetWarn" : "This will reset multiple options to their default value",
 	"Holo/Yes" : "Yes",
-	"Holo/No" : "No"
+	"Holo/No" : "No",
+	"Holo/TeammateName" : "Teammate name background",
+	"Holo/MyName" : "Show my name",
+	"Holo/NameColored" : "Color teammate name with chat color",
+	"Holo/CompactPlayer" : "Compact player teammate panel",
+	"Holo/CompactTeammates" : "Compact teammate panels"
 }

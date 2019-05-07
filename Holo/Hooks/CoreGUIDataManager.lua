@@ -25,8 +25,11 @@ function GuiDataManager:layout_scaled_fullscreen_workspace(ws, scale, on_screen_
     ws:set_screen(data.w, data.h, data.x, data.y, math.min(data.sw, data.sh * (data.w / data.h)))
 end
 
---untested
-function GuiDataManager:scaled_to_full(x, y, ws)
+--doesn't work properly
+function GuiDataManager:scaled_to_full(ws, x, y)
     local data = self._ws_size_data[ws:key()]
+    if not data.convert_x then
+        return x,y
+    end
 	return data.convert_x + x, data.convert_y + y
 end

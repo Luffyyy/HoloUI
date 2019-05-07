@@ -101,7 +101,7 @@
 	"Holo/Teammate3" : "3rd teammate",
 	"Holo/Teammate4" : "4th teammate",
 	"Holo/TeammateAI" : "AI teammate",
-	"Holo/HUDSpacing" : "HUD spacing",
+	"Holo/HUDSpacing" : "HUD on-screen scale",
 	"Holo/DisableLobbyVideo" : "Contract video on lobby",
 	"Holo/Interaction" : "Interaction bar",
 	"Holo/Captions" : "Captions",
@@ -171,5 +171,7 @@
 	"Holo/No" : "No",
 	"Holo/TeammateName" : "Teammate name background",
 	"Holo/MyName" : "Show my name",
-	"Holo/NameColored" : "Color teammate name with chat color"
+	"Holo/NameColored" : "Color teammate name with chat color",
+	"Holo/CompactPlayer" : "Compact player teammate panel",
+	"Holo/CompactTeammates" : "Compact teammate panels"
 }

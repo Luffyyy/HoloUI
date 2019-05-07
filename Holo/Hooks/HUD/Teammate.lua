@@ -434,3 +434,10 @@ if Holo:ShouldModify("HUD", "Teammate") then
     function HUDTeammate:_create_primary_weapon_firemode() self:_create_firemode() end
     function HUDTeammate:_create_secondary_weapon_firemode() self:_create_firemode(true) end
 end
+
+--Do it from menu instead, kthx
+Holo:Post(HUDTeammate, "set_waiting", function(self, waiting, peer)
+	self._wait_panel:hide()
+	self._panel:show()
+	self:UpdateHolo()
+end)

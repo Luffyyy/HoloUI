@@ -100,6 +100,8 @@ function self:CreateItem(upper, setting, menu)
             end
         elseif type == "boolean" then
             self:Toggle(menu, name, opt)
+        elseif setting._meta == "text" then
+            return menu:Divider(self:BasicItem(menu, name, opt))
         elseif setting._meta == "div" then
             self:DivGroup(menu, name, opt)
         elseif type == "string" then

@@ -46,53 +46,76 @@ if Holo.Options:GetValue("Chat") then
 end
 
 if Holo:ShouldModify("HUD", "Teammate") then
-    Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
-        local tm = self._teammate_panels[panel_id]        
-        if tm and alive(tm._player_panel) then
-            tm._player_panel:child("Mainbg"):show()
-        end
-    end)   
 
-    Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
-        local tm = self._teammate_panels[panel_id]        
-        if tm and alive(tm._player_panel) then
-            tm._player_panel:child("Mainbg"):hide()
-        end
-    end) 
-    function HUDManager:teampanels_height()
-        return managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:h()
-    end
-    function HUDManager:_create_teammates_panel(hud)
-        hud = hud or managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2)
-        self._hud.teammate_panels_data = self._hud.teammate_panels_data or {}
-        self._teammate_panels = {}
-        if hud.panel:child("teammates_panel") then
-            hud.panel:remove(hud.panel:child("teammates_panel"))
-        end
-        local h = self:teampanels_height()
-        local teammates_panel = hud.panel:panel({
-            name = "teammates_panel",
-            halign = "grow",
-            valign = "bottom"
-        })
-        local teammate_w = 204
-        local player_gap = 240
-        local small_gap = (teammates_panel:w() - player_gap - teammate_w * 4) / 3
-        for i = 1, HUDManager.PLAYER_PANEL do
-            local is_player = i == HUDManager.PLAYER_PANEL
-            self._hud.teammate_panels_data[i] = {
-                taken = false,
-                special_equipments = {}
-            }
-            local pw = teammate_w + (is_player and 0 or 64)
-            local teammate = HUDTeammate:new(i, teammates_panel, is_player, pw)
-            local x = math.floor((pw + small_gap) * (i - 1) + (i == HUDManager.PLAYER_PANEL and player_gap or 0))
-            teammate._panel:set_x(x)
-            table.insert(self._teammate_panels, teammate)
-            if is_player then
-                teammate:add_panel()
+    if Holo.Options:GetValue("AltTeammate") then
+        function HUDManager:show_player_gear(panel_id)
+            local tm = self._teammate_panels[panel_id]        
+            if tm and alive(tm._player_panel) then
+                if tm.UpdateHolo and tm._forced_compact then
+                    tm._forced_compact = false
+                    tm:UpdateHolo()
+                end
             end
         end
+    
+        Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
+            local tm = self._teammate_panels[panel_id]        
+            if tm and alive(tm._player_panel) then
+                if tm.UpdateHolo and not tm._forced_compact then
+                    tm._forced_compact = true
+                    tm:UpdateHolo()     
+                end
+            end
+        end)
+
+        function HUDManager:align_teammate_panels_resize(tm, me)
+            local me = tm._id == HUDManager.PLAYER_PANEL
+            local avatar = Holo.Options:GetValue("ShowAvatar")
+            local compact_ai = Holo.Options:GetValue("CompactAI")
+            local compact_tm = Holo.Options:GetValue("CompactTeammate")
+        
+            if not me then
+                avatar = Holo.Options:GetValue("ShowTeammatesAvatar")
+            end
+            
+            local w = tm:GetNameWidth()
+            local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
+            local ph = (compact and (me and 48 or 36) or (me and 86 or tm._ai and 50 or 70)) + tm._equipments_h
+            local pw = (avatar and (ph - tm._equipments_h) + 4 or 8) + math.max(w + 8, me and 132 or 106)
+            tm._panel:set_size(pw, ph)
+            tm._player_panel:set_size(pw, ph)
+        end
+
+        HUDManager.TEAMMATE_PANELS_OFFSET = 4
+    else
+        Holo:Post(HUDManager, "show_player_gear", function(self, panel_id)
+            local tm = self._teammate_panels[panel_id]        
+            if tm and alive(tm._player_panel) then
+                tm._player_panel:child("Mainbg"):show()
+            end
+        end)   
+    
+        Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
+            local tm = self._teammate_panels[panel_id]        
+            if tm and alive(tm._player_panel) then
+                tm._player_panel:child("Mainbg"):hide()
+            end
+        end)
+
+        function HUDManager:align_teammate_panels_resize(tm, me)
+            local bg = tm._player_panel:child("Mainbg")
+            local name = tm._panel:child("Namebg")
+            local w = bg:right()
+            local h = tm:calc_panel_height()
+            tm._panel:set_size(w, h)
+            tm._player_panel:set_size(w, h)        
+        end
+
+        HUDManager.TEAMMATE_PANELS_OFFSET = 16
+    end
+
+    function HUDManager:teampanels_height()
+        return managers.hud:script(PlayerBase.PLAYER_INFO_HUD_PD2).panel:h()
     end
 
     function HUDManager:align_teammate_panels()
@@ -103,7 +126,6 @@ if Holo:ShouldModify("HUD", "Teammate") then
     
         local me_align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/MyTeammatePan")]
         local align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/TeammatesPan")]
-        local avatar_enabled = Holo.Options:GetValue("ShowAvatar")
         local prev
         local align_bag = main_tm
     
@@ -112,16 +134,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
         table.sort(sorted, function(a,b)
             return (not a._ai and b._ai)
         end)
-    
-        local function resize(tm, me)
-            local bg = tm._player_panel:child("Mainbg")
-            local name = tm._panel:child("Namebg")
-            local w = bg:right()
-            local h = tm:calc_panel_height()
-            tm._panel:set_size(w, h)
-            tm._player_panel:set_size(w, h)
-        end
-        
+
         local function align(tm)
             local me = tm._id == HUDManager.PLAYER_PANEL
             if me then
@@ -151,11 +164,11 @@ if Holo:ShouldModify("HUD", "Teammate") then
                 end
                 if prev then
                     if going_up then
-                        tm._panel:set_bottom(prev._panel:y() - 16)
+                        tm._panel:set_bottom(prev._panel:y() - HUDManager.TEAMMATE_PANELS_OFFSET)
                     elseif pos == "left" then
-                        tm._panel:set_x(prev._panel:right() + 16)
+                        tm._panel:set_x(prev._panel:right() + HUDManager.TEAMMATE_PANELS_OFFSET)
                     else
-                        tm._panel:set_right(prev._panel:x() - 16)
+                        tm._panel:set_right(prev._panel:x() - HUDManager.TEAMMATE_PANELS_OFFSET)
                     end
                 end
                 if equal_pos and going_up then
@@ -165,10 +178,10 @@ if Holo:ShouldModify("HUD", "Teammate") then
             end
         end
         
-        resize(main_tm)
+        self:align_teammate_panels_resize(main_tm)
         align(main_tm)
         for _, tm in pairs(sorted) do
-            resize(tm)
+            self:align_teammate_panels_resize(tm)
         end
         for _, tm in pairs(sorted) do
             align(tm)

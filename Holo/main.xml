@@ -1,19 +1,19 @@
 <mod name="HoloUI" global_key="Holo" core_class="Base.lua" min_lib_version="3.0" image="ui/holo/logo" color="Color(0.15,0.15,0.15)">
-   <Classes directory="Classes">
+	<Classes directory="Classes">
 		<class file="Utils.lua" />
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
-   </Classes>
-   <AssetUpdates id="12501" version="3.3" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
-   <Localization directory="Loc" default="EN.txt">
-      <loc file="EN.txt" language="english" />
-      <loc file="RU.txt" language="russian" />
-      <loc file="DE.txt" language="german" />
-      <loc file="FR.txt" language="french" />
-      <loc file="ES.txt" language="spanish" />
-      <loc file="IT.txt" language="italian" />
-   </Localization>
-   <Hooks directory="Hooks">
+	</Classes>
+	<AssetUpdates id="12501" version="3.4" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+	<Localization directory="Loc" default="EN.txt">
+		<loc file="EN.txt" language="english" />
+		<loc file="RU.txt" language="russian" />
+		<loc file="DE.txt" language="german" />
+		<loc file="FR.txt" language="french" />
+		<loc file="ES.txt" language="spanish" />
+		<loc file="IT.txt" language="italian" />
+	</Localization>
+	<Hooks directory="Hooks">
 		<!-- Hooks -->
 		<hook source_file="lib/setups/setup" file="Setup.lua" />
 		<hook source_file="core/lib/managers/coreguidatamanager" file="CoreGUIDataManager.lua" />
@@ -36,6 +36,7 @@
 		<hook source_file="lib/managers/hud/hudsuspicion" file="HUD/HUDHooks.lua" />
 		<hook source_file="lib/managers/hud/hudpresenter" file="HUD/HUDHooks.lua" />
 		<hook source_file="lib/managers/hud/hudteammate" file="HUD/Teammate.lua" />
+		<hook source_file="lib/managers/hud/hudteammate" file="HUD/AltTeammate.lua" />
 		<hook source_file="lib/units/props/timergui" file="HUD/HUDHooks.lua" />
 		<hook source_file="lib/managers/hud/hudchat" file="HUD/Chat.lua" />
 		<hook source_file="lib/managers/hud/hudtemp" file="HUD/Carry.lua" />
@@ -58,7 +59,7 @@
 		<hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuHooks.lua" />
 
 		<hook source_file="lib/states/ingamewaitingforplayers" file="Menu/MenuHooks.lua" />
-   
+
 		<hook source_file="lib/managers/hud/hudstageendscreen" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/hud/hudlootscreen" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/systemmenumanager" file="Menu/MenuHooks.lua" />
@@ -93,151 +94,158 @@
 		<hook source_file="lib/managers/menu/crimespreedetailsmenucomponent" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/crimespreemodifiersmenucomponent" file="Menu/MenuHooks.lua" />
 		<hook source_file="lib/managers/menu/crimespreecontractmenucomponent" file="Menu/MenuHooks.lua" />
-   </Hooks>
-   <Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt"> <!-- sorry :c -->
-      <options>
-        <div name="Base" />
-        <option type="string" default_value="f2" name="OptionsKey" menu="Base" />
-        <option type="boolean" default_value="true" name="HUD" menu="Base"/>
-        <option type="boolean" default_value="true" name="Menu" menu="Base"/>
-        <div name="HUD" />
-        <option type="number" default_value="0.4" min="0" max="1" name="HUDAlpha" menu="HUD" />
-        <option type="number" default_value="0.98" min="0" max="1.5" name="HUDScale" menu="HUD" />
-        <option type="number" default_value="0.936" min="0.1" max="1" name="HUDSpacing"  menu="HUD"/>
-        <option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" menu="HUD" />
-        <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle" menu="HUD" />
-        <option type="boolean" default_value="true" name="TimerBackground" menu="HUD"/>
-        <option type="boolean" default_value="false" name="ColorWaypoints" menu="HUD"/>
+	</Hooks>
+	<Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt">
+		<options>
+			<div name="Base" />
+			<option type="string" default_value="f2" name="OptionsKey" menu="Base" />
+			<option type="boolean" default_value="true" name="HUD" menu="Base"/>
+			<option type="boolean" default_value="true" name="Menu" menu="Base"/>
+			<div name="HUD" />
+			<option type="number" default_value="0.4" min="0" max="1" name="HUDAlpha" menu="HUD" />
+			<option type="number" default_value="0.98" min="0" max="1.5" name="HUDScale" menu="HUD" />
+			<option type="number" default_value="0.936" min="0.1" max="1" name="HUDSpacing"  menu="HUD"/>
+			<option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" menu="HUD" />
+			<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle" menu="HUD" />
+			<option type="boolean" default_value="true" name="TimerBackground" menu="HUD"/>
+			<option type="boolean" default_value="false" name="ColorWaypoints" menu="HUD"/>
 
-        <div name="Teammate" menu="HUD"/>
-        <option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
-        <option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
-        <option type="boolean" default_value="false" name="ShowTeammatesFullAmmo" menu="Teammate"/>
-        <option type="boolean" default_value="true" name="CompactTeammates" menu="Teammate"/>
-        <option type="boolean" default_value="false" name="CompactPlayer" menu="Teammate"/>
-        <option type="boolean" default_value="true" name="MyName" menu="Teammate"/>
-        <option type="boolean" default_value="true" name="NameColored" menu="Teammate"/>
+			<div name="Teammate" menu="HUD"/>
+			<option type="boolean" default_value="false" name="FixedAmmoTotal" menu="Teammate"/>
+			<option type="boolean" default_value="false" name="UpperCaseNames" menu="Teammate"/>
+			<option type="boolean" default_value="false" name="ShowTeammatesFullAmmo" menu="Teammate"/>
+			<option type="boolean" default_value="true" name="CompactTeammates" menu="Teammate"/>
+			<option type="boolean" default_value="false" name="CompactPlayer" menu="Teammate"/>
+			<option type="boolean" default_value="true" name="MyName" menu="Teammate"/>
+			<option type="boolean" default_value="true" name="NameColored" menu="Teammate"/>
+			<div name="AltTeammate" menu="Teammate"/>
+			<text name="AltTeammateDesc" menu="AltTeammate"/>
 
-        <div name="Enable" text="ShouldModify" menu="HUD" items_small="true"/>
-        <option type="boolean" default_value="true" name="TopHUD" menu="Enable" />  
-        <option type="boolean" default_value="true" name="Chat" menu="Enable"/>
-        <option type="boolean" default_value="true" name="Teammate" menu="Enable" />
-        <option type="boolean" default_value="true" name="Assault" text="AssaultFull" menu="Enable"/>
-        <option type="boolean" default_value="true" name="Objective" menu="Enable" />
-        <option type="boolean" default_value="true" name="Presenter" menu="Enable"/>
-        <option type="boolean" default_value="true" name="Carrying" menu="Enable"/>
-        <option type="boolean" default_value="true" name="Interaction" menu="Enable"/>
-        <option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
-        <option type="boolean" default_value="true" name="PlayerDowned" menu="Enable"/>
+			<option type="boolean" default_value="false" name="AltTeammate" menu="AltTeammate"/>
+			<option type="boolean" default_value="true" name="ShowAvatar" menu="AltTeammate"/>
+			<option type="boolean" default_value="true" name="ShowTeammatesAvatar" menu="AltTeammate"/>
+			<option type="boolean" default_value="true" name="CompactAI" menu="AltTeammate"/> 
 
-        <div name="Menu" />
-        <option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />
-        <option type="boolean" default_value="false" name="MenuColorGrading" menu="Menu" />
-        <option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" menu="Menu" />
-        <option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>
+			<div name="Enable" text="ShouldModify" menu="HUD" items_small="true"/>
+			<option type="boolean" default_value="true" name="TopHUD" menu="Enable" />  
+			<option type="boolean" default_value="true" name="Chat" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Teammate" menu="Enable" />
+			<option type="boolean" default_value="true" name="Assault" text="AssaultFull" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Objective" menu="Enable" />
+			<option type="boolean" default_value="true" name="Presenter" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Carrying" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Interaction" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
+			<option type="boolean" default_value="true" name="PlayerDowned" menu="Enable"/>
 
-        <div name="EnableMenu" text="ShouldModify" menu="Menu" items_small="true"/>
-        <option type="boolean" default_value="true" name="Lobby" menu="EnableMenu" />
-        <option type="boolean" default_value="true" name="CrimeNet" menu="EnableMenu"/>
-        <option type="boolean" default_value="true" name="Loading" menu="EnableMenu"/>
-        <option type="boolean" default_value="true" name="BlackScreen" menu="EnableMenu"/>
-        <option type="boolean" default_value="true" name="Inventory" menu="EnableMenu"/>
-        <option type="boolean" default_value="true" name="PlayerProfile" menu="EnableMenu"/>
-         
-        <option_group name="Positions" closed="true">
-            <option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="MyTeammatePan" />
-            <option type="number" default_value="1" menu_type="combo" items="MenuTMPositions" name="TeammatesPan" />
-            <option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />
-            <option type="number" default_value="3" menu_type="combo" items="Positions" name="Casing" />
-            <option type="number" default_value="3" menu_type="combo" items="Positions" name="NoPointOfReturn" />
-            <option type="number" default_value="1" menu_type="combo" items="Positions" name="Objective" />
-            <option type="number" default_value="2" menu_type="combo" items="Positions" name="Timer" />
-            <option type="number" default_value="40" menu_type="number" text="X" beforetext="ChatPos" name="ChatX" />
-            <option type="number" default_value="142" menu_type="number" text="Y" beforetext="ChatPos" name="ChatY" />
-        </option_group>
-        <option_group name="FrameColors" text="HUDBoxFrameColor" closed="true">
-            <option type="boolean" default_value="true" name="Enable"/>
-            <option type="color" default_value="Color(1, 0.8, 0.2)" name="Assault" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Casing" />
-            <option type="color" default_value="Color(1, 0, 0.2)" name="NoPointOfReturn" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Hostages" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="WavesSurvived" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Objective" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Presenter" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Carrying" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Timer" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Teammate" />
-        </option_group>
-        <option_group name="FrameStyles" text="HUDBoxFrameStyle" closed="true">
-            <option type="boolean" default_value="true" name="Enable"/>
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Assault" />
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Casing" />
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="NoPointOfReturn" />
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Hostages" />
-            <option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
-            <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
-            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Presenter" />
-            <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Carrying" />
-            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Timer" />
-            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Menu" />
-            <option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Teammate" />
-            <option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="TeammateName" />
-        </option_group>
-        <option_group name="Colors">
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Assault" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Casing" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="NoPointOfReturn" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Hostages" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="WavesSurvived" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Objective" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Presenter" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Carrying" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Timer" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Chat" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Frame" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Teammate" />
-            <option type="color" default_value="Color(0.1, 0.1, 0.1)" name="TeammateName" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Pickups" />
-            <option type="color" default_value="Color('26252e')" name="Menu" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Interaction" />
-            <option type="color" default_value="Color(1, 0, 0.1)" name="InteractionRed" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Tab" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Marker" />
-            <option type="boolean" default_value="true" name="ColorizeTeammates" />
-            <option type="color" default_value="Color('c2fc97')" name="TeammateHost" />
-            <option type="color" default_value="Color('437fd3')" name="Teammate2" />
-            <option type="color" default_value="Color('db492b')" name="Teammate3" />
-            <option type="color" default_value="Color('f2a84d')" name="Teammate4" />
-            <option type="color" default_value="Color('99ccd8')" name="TeammateAI" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Waypoints" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="Interactable" />
-            <option type="color" default_value="Color(1, 1, 1)" beforetext="Contour" name="InteractableSelected" />
-            <option type="color" default_value="Color(0, 0.9, 0.5)" beforetext="Contour" name="DeployableStandard" />
-            <option type="color" default_value="Color(1, 1, 1)" beforetext="Contour" name="DeployableSelected" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" beforetext="Contour" name="DeployableActive" />
-            <option type="color" default_value="Color(0, 1, 0.1)" beforetext="Contour" name="DeployableInteract" />
-            <option type="color" default_value="Color(0, 1, 0.1)" beforetext="Contour" name="DeployableDisabled" />
-         </option_group>
-         <option_group name="TextColors">
-            <option type="boolean" default_value="true" name="AutomaticTextColors" help="AutomaticTextColorsHelp" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Assault" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Casing" />
-            <option type="color" default_value="Color(1, 1, 1)" name="NoPointOfReturn" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Hostages" />
-            <option type="color" default_value="Color(1, 1, 1)" name="WavesSurvived" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Objective" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Presenter" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Carrying" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Timer" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Chat" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Interaction" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Teammate" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Tab" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Menu" />
-            <option type="color" default_value="Color(0.2, 0.44, 1)" name="MenuHighlighted" />
-            <option type="color" default_value="Color(1, 1, 1)" name="Captions"/>
-            <option type="color" default_value="Color(1, 1, 1)" name="TeammateName"/>
-         </option_group> 
-      </options>
-   </Options>
+			<div name="Menu" />
+			<option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />
+			<option type="boolean" default_value="false" name="MenuColorGrading" menu="Menu" />
+			<option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" menu="Menu" />
+			<option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>
+
+			<div name="EnableMenu" text="ShouldModify" menu="Menu" items_small="true"/>
+			<option type="boolean" default_value="true" name="Lobby" menu="EnableMenu" />
+			<option type="boolean" default_value="true" name="CrimeNet" menu="EnableMenu"/>
+			<option type="boolean" default_value="true" name="Loading" menu="EnableMenu"/>
+			<option type="boolean" default_value="true" name="BlackScreen" menu="EnableMenu"/>
+			<option type="boolean" default_value="true" name="Inventory" menu="EnableMenu"/>
+			<option type="boolean" default_value="true" name="PlayerProfile" menu="EnableMenu"/>
+			
+			<option_group name="Positions" closed="true">
+				<option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="MyTeammatePan" />
+				<option type="number" default_value="1" menu_type="combo" items="MenuTMPositions" name="TeammatesPan" />
+				<option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />
+				<option type="number" default_value="3" menu_type="combo" items="Positions" name="Casing" />
+				<option type="number" default_value="3" menu_type="combo" items="Positions" name="NoPointOfReturn" />
+				<option type="number" default_value="1" menu_type="combo" items="Positions" name="Objective" />
+				<option type="number" default_value="2" menu_type="combo" items="Positions" name="Timer" />
+				<option type="number" default_value="40" menu_type="number" text="X" beforetext="ChatPos" name="ChatX" />
+				<option type="number" default_value="142" menu_type="number" text="Y" beforetext="ChatPos" name="ChatY" />
+			</option_group>
+			<option_group name="FrameColors" text="HUDBoxFrameColor" closed="true">
+				<option type="boolean" default_value="true" name="Enable"/>
+				<option type="color" default_value="Color(1, 0.8, 0.2)" name="Assault" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Casing" />
+				<option type="color" default_value="Color(1, 0, 0.2)" name="NoPointOfReturn" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Hostages" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="WavesSurvived" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Objective" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Presenter" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Carrying" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Timer" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Teammate" />
+			</option_group>
+			<option_group name="FrameStyles" text="HUDBoxFrameStyle" closed="true">
+				<option type="boolean" default_value="true" name="Enable"/>
+				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Assault" />
+				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Casing" />
+				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="NoPointOfReturn" />
+				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="Hostages" />
+				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
+				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
+				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Presenter" />
+				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Carrying" />
+				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Timer" />
+				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Menu" />
+				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Teammate" />
+				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="TeammateName" />
+			</option_group>
+			<option_group name="Colors">
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Assault" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Casing" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="NoPointOfReturn" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Hostages" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="WavesSurvived" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Objective" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Presenter" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Carrying" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Timer" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Chat" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Frame" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Teammate" />
+				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="TeammateName" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Pickups" />
+				<option type="color" default_value="Color('26252e')" name="Menu" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Interaction" />
+				<option type="color" default_value="Color(1, 0, 0.1)" name="InteractionRed" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Tab" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Marker" />
+				<option type="boolean" default_value="true" name="ColorizeTeammates" />
+				<option type="color" default_value="Color('c2fc97')" name="TeammateHost" />
+				<option type="color" default_value="Color('437fd3')" name="Teammate2" />
+				<option type="color" default_value="Color('db492b')" name="Teammate3" />
+				<option type="color" default_value="Color('f2a84d')" name="Teammate4" />
+				<option type="color" default_value="Color('99ccd8')" name="TeammateAI" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Waypoints" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="Interactable" />
+				<option type="color" default_value="Color(1, 1, 1)" beforetext="Contour" name="InteractableSelected" />
+				<option type="color" default_value="Color(0, 0.9, 0.5)" beforetext="Contour" name="DeployableStandard" />
+				<option type="color" default_value="Color(1, 1, 1)" beforetext="Contour" name="DeployableSelected" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" beforetext="Contour" name="DeployableActive" />
+				<option type="color" default_value="Color(0, 1, 0.1)" beforetext="Contour" name="DeployableInteract" />
+				<option type="color" default_value="Color(0, 1, 0.1)" beforetext="Contour" name="DeployableDisabled" />
+			</option_group>
+			<option_group name="TextColors">
+				<option type="boolean" default_value="true" name="AutomaticTextColors" help="AutomaticTextColorsHelp" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Assault" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Casing" />
+				<option type="color" default_value="Color(1, 1, 1)" name="NoPointOfReturn" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Hostages" />
+				<option type="color" default_value="Color(1, 1, 1)" name="WavesSurvived" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Objective" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Presenter" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Carrying" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Timer" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Chat" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Interaction" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Teammate" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Tab" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Menu" />
+				<option type="color" default_value="Color(0.2, 0.44, 1)" name="MenuHighlighted" />
+				<option type="color" default_value="Color(1, 1, 1)" name="Captions"/>
+				<option type="color" default_value="Color(1, 1, 1)" name="TeammateName"/>
+			</option_group>
+		</options>
+	</Options>
 </mod>

@@ -159,7 +159,7 @@
 	"Holo/X" : "X",
 	"Holo/Y" : "Y",
 	"Holo/PlayerProfile" : "Player profile",
-	"Holo/LargerTeammateInfo" : "Larger teammate info",
+	"Holo/LargerTeammateInfo" : "Larger player info",
 	"Holo/ColorWaypoints" : "Change color of waypoints",
 	"Holo/Inventory" : "Inventory",
 	"Holo/TopHUD" : "Top HUD",
@@ -173,5 +173,7 @@
 	"Holo/MyName" : "Show my name",
 	"Holo/NameColored" : "Color teammate name with chat color",
 	"Holo/CompactPlayer" : "Compact player teammate panel",
-	"Holo/CompactTeammates" : "Compact teammate panels"
+	"Holo/CompactTeammates" : "Compact teammate panels",
+	"Holo/AltTeammate" : "Alternative Teammate panel",
+	"Holo/AltTeammateDesc" : "An alternative look to the teammate panel (Based on versions below 3.3) This look features an avatar and numerical values for the health and armor."
 }

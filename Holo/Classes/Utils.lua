@@ -1,10 +1,10 @@
 Holo.Utils = Holo.Utils or {}
 local Utils = Holo.Utils
 function Utils:ModifyWallet()
- 	local panel = Global.wallet_panel
- 	if not panel then
- 		return
- 	end
+	local panel = Global.wallet_panel
+	if not panel then
+		return
+	end
 	local w
 	local items = {"money", "level", "skillpoint", "coins"}
 	local prev
@@ -42,17 +42,21 @@ function Utils:ModifyWallet()
 end
 
 function Utils:FixBackButton(this, back_button)
-	if not back_button then
-		if type(this._back_button) == "table" then
-			back_button = this._back_button._text
-		else
-			back_button = this._panel:child("back_button")
-		end
+	if P3DHacker.settings.removeNewHeistsGui or andole_RSS.settings.removeNewHeistsGui then
+
+	else
 		if not back_button then
-			back_button = this._panel:child("BackButton")
+			if type(this._back_button) == "table" then
+				back_button = this._back_button._text
+			else
+				back_button = this._panel:child("back_button")
+			end
+			if not back_button then
+				back_button = this._panel:child("BackButton")
+			end
 		end
 	end
-	
+
 	if type_name(back_button)  == "Panel" then
 		back_button = back_button:child("label")
 	end
@@ -70,7 +74,7 @@ function Utils:FixBackButton(this, back_button)
 	if not managers.menu:is_pc_controller() or not alive(back_button) then
 		return
 	end
-	
+
 	this._fixed_back_button = back_button
 	back_button:configure({
 		color = Holo:GetColor("TextColors/Menu"),
@@ -99,7 +103,7 @@ function Utils:FixBackButton(this, back_button)
 end
 
 function Utils:FixDialog(dialog, info_area, button_list, focus_button, only_buttons)
-	local has_buttons = button_list and #button_list > 0		
+	local has_buttons = button_list and #button_list > 0
 	local buttons_panel = info_area:child("buttons_panel")
 	dialog._panel:child("title"):set_color(Holo:GetColor("TextColors/Menu"))
 	info_area:child("info_bg"):set_color(Holo:GetColor("Colors/Menu"))
@@ -110,38 +114,38 @@ function Utils:FixDialog(dialog, info_area, button_list, focus_button, only_butt
 			h = 20,
 			alpha = 1,
 			color = Holo:GetColor("Colors/Marker"),
-		})	
+		})
 		if button_list then
-			for _, child in pairs(buttons_panel:children()) do	
+			for _, child in pairs(buttons_panel:children()) do
 				if CoreClass.type_name(child) == "Panel" then
 					child:child("button_text"):configure({
 						blend_mode = "normal",
 						color = Holo:GetColor("TextColors/Menu")
-					})		
+					})
 				end
 			end
 		end
-		dialog:_set_button_selected(focus_button, true)	
+		dialog:_set_button_selected(focus_button, true)
 	end
 end
 
 function Utils:SetBlendMode(o, ...)
-    local ignore = {...}
-    local toignore 
-    if o.type_name == "Panel" then
-        for _, child in pairs(o:children()) do
-            self:SetBlendMode(child, ...)
-        end
-    else
-        for _, v in ipairs(ignore) do
-            if o:name():match(v) or o:parent():name():match(v) then
-                toignore = true
-            end
-        end
-        if not toignore or o.type_name == "Text" then
-            o:set_blend_mode("normal")
-        end
-    end
+	local ignore = {...}
+	local toignore 
+	if o.type_name == "Panel" then
+		for _, child in pairs(o:children()) do
+			self:SetBlendMode(child, ...)
+		end
+	else
+		for _, v in ipairs(ignore) do
+			if o:name():match(v) or o:parent():name():match(v) then
+				toignore = true
+			end
+		end
+		if not toignore or o.type_name == "Text" then
+			o:set_blend_mode("normal")
+		end
+	end
 end
 
 function Utils:Apply(tbl, config)

@@ -42,6 +42,9 @@ function Utils:ModifyWallet()
 end
 
 function Utils:FixBackButton(this, back_button)
+	if not alive(this._panel) then
+		return
+	end
 	if not back_button then
 		if type(this._back_button) == "table" then
 			back_button = this._back_button._text

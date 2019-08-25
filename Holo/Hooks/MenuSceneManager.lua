@@ -41,7 +41,9 @@ if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then
 			})
 			self._background_ws:set_billboard(Workspace.BILLBOARD_BOTH)
 			self._bg_unit:effect_spawner(Idstring("e_money")):set_enabled(false)
-			managers.environment_controller._vp:vp():set_post_processor_effect("World", Idstring("bloom_combine_post_processor"), Idstring("bloom_combine_empty"))
+			if managers.environment_controller._vp then
+				managers.environment_controller._vp:vp():set_post_processor_effect("World", Idstring("bloom_combine_post_processor"), Idstring("bloom_combine_empty"))
+			end
 			local unwanted = {
 				"units/menu/menu_scene/menu_cylinder",
 				"units/menu/menu_scene/menu_smokecylinder1",

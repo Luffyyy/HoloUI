@@ -1,10 +1,10 @@
-<mod name="HoloUI" global_key="Holo" author="Luffy" core_class="Base.lua" min_lib_version="3.0" image="ui/holo/logo" color="Color(0.15,0.15,0.15)">
+<mod name="HoloUI" global_key="Holo" priority="-1" author="Luffy" core_class="Base.lua" min_lib_version="3.0" image="ui/holo/logo" color="Color(0.15,0.15,0.15)">
 	<Classes directory="Classes">
 		<class file="Utils.lua" />
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
 	</Classes>
-	<AssetUpdates id="12501" version="3.5" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+	<AssetUpdates id="12501" version="3.5.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
 	<Localization directory="Loc" default="EN.txt">
 		<loc file="EN.txt" language="english" />
 		<loc file="RU.txt" language="russian" />

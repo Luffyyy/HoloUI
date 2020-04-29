@@ -4,7 +4,7 @@
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
 	</Classes>
-	<AssetUpdates id="12501" version="3.31" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+	<AssetUpdates id="12501" version="3.4" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
 	<Localization directory="Loc" default="EN.txt">
 		<loc file="EN.txt" language="english" />
 		<loc file="RU.txt" language="russian" />
@@ -155,6 +155,7 @@
 			<option_group name="Positions" closed="true">
 				<option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="MyTeammatePan" />
 				<option type="number" default_value="1" menu_type="combo" items="MenuTMPositions" name="TeammatesPan" />
+				<option type="number" default_value="3" menu_type="combo" items="MenuMainTMPositions" name="Carrying" />
 				<option type="number" default_value="3" menu_type="combo" items="Positions" name="Assault" />
 				<option type="number" default_value="3" menu_type="combo" items="Positions" name="Casing" />
 				<option type="number" default_value="3" menu_type="combo" items="Positions" name="NoPointOfReturn" />
@@ -185,7 +186,7 @@
 				<option type="number" default_value="4" menu_type="combo" items="FrameStyles" name="WavesSurvived" />
 				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Objective" />
 				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Presenter" />
-				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="Carrying" />
+				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Carrying" />
 				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Timer" />
 				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Menu" />
 				<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="Teammate" />

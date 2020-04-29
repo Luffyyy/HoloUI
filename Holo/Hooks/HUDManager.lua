@@ -57,7 +57,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
                 end
             end
         end
-    
+
         Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
             local tm = self._teammate_panels[panel_id]        
             if tm and alive(tm._player_panel) then
@@ -73,11 +73,11 @@ if Holo:ShouldModify("HUD", "Teammate") then
             local avatar = Holo.Options:GetValue("ShowAvatar")
             local compact_ai = Holo.Options:GetValue("CompactAI")
             local compact_tm = Holo.Options:GetValue("CompactTeammate")
-        
+
             if not me then
                 avatar = Holo.Options:GetValue("ShowTeammatesAvatar")
             end
-            
+
             local w = tm:GetNameWidth()
             local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
             local ph = (compact and (me and 48 or 36) or (me and 86 or tm._ai and 50 or 70)) + tm._equipments_h
@@ -93,8 +93,8 @@ if Holo:ShouldModify("HUD", "Teammate") then
             if tm and alive(tm._player_panel) then
                 tm._player_panel:child("Mainbg"):show()
             end
-        end)   
-    
+        end)
+
         Holo:Post(HUDManager, "hide_player_gear", function(self, panel_id)
             local tm = self._teammate_panels[panel_id]        
             if tm and alive(tm._player_panel) then
@@ -123,12 +123,11 @@ if Holo:ShouldModify("HUD", "Teammate") then
         if not main_tm then
             return
         end
-    
+
         local me_align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/MyTeammatePan")]
         local align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/TeammatesPan")]
         local prev
-        local align_bag = main_tm
-    
+
         local sorted = clone(self._teammate_panels)
         table.remove(sorted)
         table.sort(sorted, function(a,b)
@@ -150,7 +149,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
                 local going_up = way == "top"
                 local equal_pos = pos == me_align_method				
                 local w = tm._panel:parent():w()
-    
+
                 tm._panel:set_bottom(tm._panel:parent():h())
                 if pos == "left" then
                     tm._panel:set_x(0)
@@ -171,13 +170,10 @@ if Holo:ShouldModify("HUD", "Teammate") then
                         tm._panel:set_right(prev._panel:x() - HUDManager.TEAMMATE_PANELS_OFFSET)
                     end
                 end
-                if equal_pos and going_up then
-                    align_bag = false
-                end
                 prev = tm
             end
         end
-        
+
         self:align_teammate_panels_resize(main_tm)
         align(main_tm)
         for _, tm in pairs(sorted) do
@@ -187,7 +183,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
             align(tm)
         end
         if self._hud_temp and self._hud_temp.SetPositionByTeammate then
-            self._hud_temp:SetPositionByTeammate(align_bag)
+            self._hud_temp:SetPositionByTeammate()
         end
     end
 end
@@ -216,7 +212,7 @@ if Holo:ShouldModify("HUD", "Waypoints") then
         local alpha = Holo.Options:GetValue("WaypointsAlpha")
 
         data.alpha = alpha
-        
+
         local distance = data.distance
         local bitmap = data.bitmap
         local arrow = data.arrow

@@ -91,7 +91,7 @@ function Holo:ShouldModify(c, o)
 		return false
 	end
 	if NepgearsyMM and o == "PlayerProfile" then
-		inform("Nepgearsy Main Menu")	
+		inform("Nepgearsy Main Menu")
 		return false
 	end
 	if pdth_hud and pdth_hud.Options then
@@ -128,7 +128,7 @@ function Holo:ShouldModify(c, o)
 		end
 		if o == "Chat" and HUDChat and HUDChat.WIDTH then --No actual option to disable it! GREAT
 			inform("WolfHUD")
-			return false	
+			return false
 		end
 	end
 	if o == "Teammate" and HUDTeammateCustom then

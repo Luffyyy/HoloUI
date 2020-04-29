@@ -8,32 +8,37 @@ if Holo:ShouldModify("HUD", "Carrying") then
 		play_value(bag_panel, "alpha", 0)
 	end
 
-	function HUDTemp:SetPositionByTeammate(tm)
-		if tm == nil then
-			tm = self._last_tm
-		end
+	function HUDTemp:SetPositionByTeammate()
+		local tm, p
+		local pos = Holo.TMPositions[Holo.Options:GetValue("Positions/Carrying")]
+		local my_pos = Holo.TMPositions[Holo.Options:GetValue("Positions/MyTeammatePan")]
+		local tm_pos = string.split(Holo.TMPositions[Holo.Options:GetValue("Positions/TeammatesPan")], '_')
+		local tm_pos_x, tm_pos_y = tm_pos[1], tm_pos[2]
+		local panels = managers.hud._teammate_panels
+		local bag_panel = self._temp_panel:child("bag_panel")
 
-		local me_align_method = Holo.TMPositions[Holo.Options:GetValue("Positions/MainTeammatePanel")]
-		if not tm then
-			if me_align_method == "left" then
-				me_align_method = "right"
+		if pos == my_pos and (my_pos ~= tm_pos_x or tm_pos_y == nil) then
+			tm = panels[HUDManager.PLAYER_PANEL]
+		elseif pos == tm_pos_x then
+			if tm_pos_x == 'right' and tm_pos_y == nil then
+				tm = panels[1]
 			else
-				me_align_method = "left"
+				tm = panels[HUDManager.PLAYER_PANEL-1]
 			end
 		end
+		p = tm and tm._panel or self._temp_panel
 
-		local bag_panel = self._temp_panel:child("bag_panel")
-		
-		local p = tm and tm._panel or self._temp_panel
 		if tm then
 			bag_panel:set_world_leftbottom(p:world_x(), p:world_y() - 2)
 		else
 			bag_panel:set_leftbottom(0, p:h())
 		end
-		if me_align_method == "center" then
-			bag_panel:set_world_center_x(p:world_center_x())
-		elseif me_align_method == "right" then
+		if pos == "center" then
+			bag_panel:set_world_center_x(self._temp_panel:world_center_x())
+		elseif pos == "right" then
 			bag_panel:set_world_right(p:world_right())
+		else
+			bag_panel:set_world_x(0)
 		end
 		self._last_tm = tm
 	end
@@ -75,7 +80,7 @@ if Holo:ShouldModify("HUD", "Carrying") then
 		self:UpdateHolo()
 		bag_panel:set_alpha(0)
 		bag_panel:show()
-		
+
 		play_value(bag_panel, "alpha", 1)
 	end
 end

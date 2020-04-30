@@ -57,7 +57,7 @@ Holo:Replace(MenuNodeGui, "_fade_row_item", function(self, o, row_item, ...)
 	local panel = row_item.gui_text or row_item.gui_panel
 	local color = panel and panel.color and panel:color()
 	local ret = o(self, row_item, ...)
-	local new_color = panel.color and panel:color()	
+	local new_color = panel.color and panel:color()
 	if color then
 		panel:set_color(color)
 		play_color(panel, new_color, {time = 0.2})
@@ -92,8 +92,10 @@ Holo:Post(MenuNodeGui, "_align_marker", function(self, row_item)
 	self._marker_data.marker:set_w(2)
 	if row_item.align == "right" or row_item.item:parameters().pd2_corner then
 		self._marker_data.marker:set_world_x(panel:world_right() + 2)
+		self._marker_data.gradient:set_x(3)
 	else
 		self._marker_data.marker:set_world_x(panel:world_x() - 2)
+		self._marker_data.gradient:set_x(-2)
 	end
 	self._marker_data.marker:stop()
 	if self._old_center_y then

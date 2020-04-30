@@ -67,7 +67,7 @@ end)
 
 Holo:Post(MenuComponentManager, "play_transition", function(self, run_in_pause)
     if Holo.Options:GetValue("Menu") and Holo.Options:GetValue("ColoredBackground") then
-        self._transition_panel:child("fade1"):set_color(Holo:GetColor("Colors/Menu"))
+        self._transition_panel:child("fade1"):set_color(Color.transparent)
     end
 end)
 

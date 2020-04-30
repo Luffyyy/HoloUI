@@ -5,7 +5,7 @@ function TweakData:UpdateHolo()
         self.chat_colors[3] = Holo:GetColor("Colors/Teammate3")
         self.chat_colors[4] = Holo:GetColor("Colors/Teammate4")
         self.chat_colors[5] = Holo:GetColor("Colors/TeammateAI")
-        
+
         self.peer_vector_colors[1] = Vector3(self.chat_colors[1]:unpack())
         self.peer_vector_colors[2] = Vector3(self.chat_colors[2]:unpack())
         self.peer_vector_colors[3] = Vector3(self.chat_colors[3]:unpack())
@@ -43,7 +43,7 @@ function TweakData:UpdateHolo()
     self.contour.interactable_look_at.standard_color = Holo:GetColor("Colors/InteractableSelected", true)
     self.contour.interactable_look_at.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
     self.contour.interactable_look_at.standard_opacity = 1
- 
+
     local scale_multiplier = self.scale.default_font_multiplier
 	local small_scale_multiplier = self.scale.small_font_multiplier
     local font_size = Holo.Options:GetValue("FontSize")

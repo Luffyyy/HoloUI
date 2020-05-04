@@ -36,11 +36,9 @@ Holo:Post(MenuNodeGui, "_create_menu_item", function(self, row_item)
 		row_item.gui_text:configure({
 			color = Holo:GetColor("TextColors/Menu"),
 			blend_mode = "normal",
+			h = self.font_size,
 			font_size = self.font_size,
 		})
-		local _,_,_,h = row_item.gui_text:text_rect()
-		row_item.gui_text:set_h(h)
-		row_item.gui_panel:set_h(h)
 		if managers.menu:is_pc_controller() then
 			row_item.gui_panel:set_rightbottom(row_item.gui_pd2_panel:size())
 			if row_item.name == "spree_reroll" then
@@ -85,10 +83,10 @@ Holo:Pre(MenuNodeGui, "_align_marker", function(self, row_item)
 end)
 
 Holo:Post(MenuNodeGui, "_align_marker", function(self, row_item)
-	local panel = row_item.gui_panel or row_item.gui_text
+	local panel = row_item.gui_text or row_item.gui_panel
 	self._marker_data.gradient:set_rotation(360)
 	self._marker_data.marker:set_h(panel:h())
-	self._marker_data.gradient:set_h(panel:h())
+	self._marker_data.gradient:set_h(self._marker_data.marker:h())
 	self._marker_data.marker:set_w(2)
 	if row_item.align == "right" or row_item.item:parameters().pd2_corner then
 		self._marker_data.marker:set_world_x(panel:world_right() + 2)

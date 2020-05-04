@@ -143,6 +143,7 @@
 			<option type="boolean" default_value="false" name="MenuColorGrading" menu="Menu" />
 			<option type="boolean" default_value="true" beforetext="Disable" name="DisableLobbyVideo" menu="Menu" />
 			<option type="boolean" default_value="true" name="ColoredBackground" menu="Menu"/>
+			<option type="boolean" default_value="false" name="MenuFadeEffect" menu="Menu"/>
 
 			<div name="EnableMenu" text="ShouldModify" menu="Menu" items_small="true"/>
 			<option type="boolean" default_value="true" name="Lobby" menu="EnableMenu" />

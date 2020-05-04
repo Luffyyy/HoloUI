@@ -174,5 +174,6 @@
 	"Holo/CompactPlayer" : "Compact player teammate panel",
 	"Holo/CompactTeammates" : "Compact teammate panels",
 	"Holo/AltTeammate" : "Alternative Teammate panel",
-	"Holo/AltTeammateDesc" : "An alternative look to the teammate panel (Based on versions below 3.3) This look features an avatar and numerical values for the health and armor."
+	"Holo/AltTeammateDesc" : "An alternative look to the teammate panel (Based on versions below 3.3) This look features an avatar and numerical values for the health and armor.",
+	"Holo/MenuFadeEffect": "Menu fade effect"
 }

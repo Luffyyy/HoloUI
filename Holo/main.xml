@@ -4,7 +4,7 @@
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
 	</Classes>
-	<AssetUpdates id="12501" version="3.5.4" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+	<AssetUpdates id="12501" version="3.6.1" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
 	<Localization directory="Loc" default="EN.txt">
 		<loc file="EN.txt" language="english" />
 		<loc file="RU.txt" language="russian" />
@@ -24,76 +24,80 @@
 		<hook source_file="lib/managers/menu/menuscenemanager" file="MenuSceneManager.lua" />
 
 		<!-- HUD Hooks --> 
-		<hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="HUD/HUDHooks.lua" />
-		<hook source_file="lib/managers/hud/hudplayercustody" file="HUD/PlayerCustody.lua" />
-		<hook source_file="lib/managers/hud/hudassaultcorner" file="HUD/AssaultCorner.lua" />
-		<hook source_file="lib/managers/hud/hudplayerdowned" file="HUD/PlayerDowned.lua" />
-		<hook source_file="lib/managers/hud/hudinteraction" file="HUD/Interaction.lua" />
-		<hook source_file="lib/managers/hud/hudblackscreen" file="HUD/BlackScreen.lua" />
-		<hook source_file="lib/managers/menu/circleguiobject" file="HUD/HUDHooks.lua" />
-		<hook source_file="lib/managers/hud/hudheisttimer" file="HUD/HeistTimer.lua" />
-		<hook source_file="lib/managers/hud/hudobjectives" file="HUD/Objectives.lua" />
-		<hook source_file="lib/managers/hud/hudsuspicion" file="HUD/HUDHooks.lua" />
-		<hook source_file="lib/managers/hud/hudpresenter" file="HUD/HUDHooks.lua" />
-		<hook source_file="lib/managers/hud/hudteammate" file="HUD/Teammate.lua" />
-		<hook source_file="lib/managers/hud/hudteammate" file="HUD/AltTeammate.lua" />
-		<hook source_file="lib/units/props/timergui" file="HUD/HUDHooks.lua" />
-		<hook source_file="lib/managers/hud/hudchat" file="HUD/Chat.lua" />
-		<hook source_file="lib/managers/hud/hudtemp" file="HUD/Carry.lua" />
-		<hook source_file="lib/managers/hud/hudhint" file="HUD/Hint.lua" />
-		<hook source_file="lib/managers/hud/hudwaitinglegend" file="HUD/HUDHooks.lua" />
+		<hooks directory="HUD">
+			<hook source_file="core/lib/managers/subtitle/coresubtitlepresenter" file="HUDHooks.lua" />
+			<hook source_file="lib/managers/hud/hudplayercustody" file="PlayerCustody.lua" />
+			<hook source_file="lib/managers/hud/hudassaultcorner" file="AssaultCorner.lua" />
+			<hook source_file="lib/managers/hud/hudplayerdowned" file="PlayerDowned.lua" />
+			<hook source_file="lib/managers/hud/hudinteraction" file="Interaction.lua" />
+			<hook source_file="lib/managers/hud/hudblackscreen" file="BlackScreen.lua" />
+			<hook source_file="lib/managers/menu/circleguiobject" file="HUDHooks.lua" />
+			<hook source_file="lib/managers/hud/hudheisttimer" file="HeistTimer.lua" />
+			<hook source_file="lib/managers/hud/hudobjectives" file="Objectives.lua" />
+			<hook source_file="lib/managers/hud/hudsuspicion" file="HUDHooks.lua" />
+			<hook source_file="lib/managers/hud/hudpresenter" file="HUDHooks.lua" />
+			<hook source_file="lib/managers/hud/hudteammate" file="Teammate.lua" />
+			<hook source_file="lib/managers/hud/hudteammate" file="AltTeammate.lua" />
+			<hook source_file="lib/units/props/timergui" file="HUDHooks.lua" />
+			<hook source_file="lib/managers/hud/hudchat" file="Chat.lua" />
+			<hook source_file="lib/managers/hud/hudtemp" file="Carry.lua" />
+			<hook source_file="lib/managers/hud/hudhint" file="Hint.lua" />
+			<hook source_file="lib/managers/hud/hudwaitinglegend" file="HUDHooks.lua" />
+		</hooks>
 
 		<!-- Menu Hooks -->
-		<hook source_file="lib/managers/hud/hudmissionbriefing" file="Menu/MissionBriefing.lua" />
-		<hook source_file="lib/managers/menu/missionbriefinggui" file="Menu/MissionBriefingGUI.lua" />
-		<hook source_file="lib/managers/menu/blackmarketgui" file="Menu/BlackMarketGUI.lua" />
-		<hook source_file="lib/managers/menu/playerinventorygui" file="Menu/PlayerInventoryGUI.lua" />
-		<hook source_file="lib/managers/menu/stageendscreentabcrimespree" file="Menu/StageEndScreenGUI.lua" />
-		<hook source_file="lib/managers/menu/boxguiobject" file="Menu/BoxGUIObject.lua" />
-		<hook source_file="lib/managers/menu/menunodegui" file="Menu/MenuNodeGUI.lua" />
-		<hook source_file="lib/managers/menu/skilltreeguinew" file="Menu/SkillTreeGUINew.lua" />
-		<hook source_file="lib/managers/menu/menucomponentmanager" file="Menu/MenuComponentManager.lua" />
-		<hook source_file="lib/managers/menu/playerprofileguiobject" file="Menu/PlayerProfileGUI.lua" />
+		<hooks directory="Menu">
+			<hook source_file="lib/managers/hud/hudmissionbriefing" file="MissionBriefing.lua" />
+			<hook source_file="lib/managers/menu/missionbriefinggui" file="MissionBriefingGUI.lua" />
+			<hook source_file="lib/managers/menu/blackmarketgui" file="BlackMarketGUI.lua" />
+			<hook source_file="lib/managers/menu/playerinventorygui" file="PlayerInventoryGUI.lua" />
+			<hook source_file="lib/managers/menu/stageendscreentabcrimespree" file="StageEndScreenGUI.lua" />
+			<hook source_file="lib/managers/menu/boxguiobject" file="BoxGUIObject.lua" />
+			<hook source_file="lib/managers/menu/menunodegui" file="MenuNodeGUI.lua" />
+			<hook source_file="lib/managers/menu/skilltreeguinew" file="SkillTreeGUINew.lua" />
+			<hook source_file="lib/managers/menu/menucomponentmanager" file="MenuComponentManager.lua" />
+			<hook source_file="lib/managers/menu/playerprofileguiobject" file="PlayerProfileGUI.lua" />
 
-		<hook source_file="core/lib/managers/menu/coremenunode" file="Menu/MenuHooks.lua" />
-		<hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="Menu/MenuHooks.lua" />
+			<hook source_file="core/lib/managers/menu/coremenunode" file="MenuHooks.lua" />
+			<hook source_file="core/lib/managers/menu/items/coremenuitemslider" file="MenuHooks.lua" />
 
-		<hook source_file="lib/states/ingamewaitingforplayers" file="Menu/MenuHooks.lua" />
+			<hook source_file="lib/states/ingamewaitingforplayers" file="MenuHooks.lua" />
 
-		<hook source_file="lib/managers/hud/hudstageendscreen" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/hud/hudlootscreen" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/systemmenumanager" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menumanager" file="Menu/MenuHooks.lua" />
+			<hook source_file="lib/managers/hud/hudstageendscreen" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/hud/hudlootscreen" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/systemmenumanager" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menumanager" file="MenuHooks.lua" />
 
-		<hook source_file="lib/managers/menu/lobbycharacterdata" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/contractboxgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/multiprofileitemgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/menubackdropgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodejukeboxgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/lootdropscreengui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/buttonboxgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/textboxgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimespreemissionsmenucomponent" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/walletguiobject" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodebasegui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/menupauserenderer" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/infamytreegui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimespreemissionendoptions" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodepreplanninggui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/items/menuitemmultichoice" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimenetsidebargui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/menuguicomponentgeneric" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/ingamecontractgui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/contractbrokergui" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/scrollablepanel" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/items/contractbrokerheistitem" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimespreedetailsmenucomponent" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimespreemodifiersmenucomponent" file="Menu/MenuHooks.lua" />
-		<hook source_file="lib/managers/menu/crimespreecontractmenucomponent" file="Menu/MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/lobbycharacterdata" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/contractboxgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/multiprofileitemgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/menubackdropgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodejukeboxgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/lootdropscreengui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/buttonboxgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/textboxgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimespreemissionsmenucomponent" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/walletguiobject" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodebasegui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/menupauserenderer" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/infamytreegui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimespreemissionendoptions" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodecrimenetgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodepreplanninggui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/items/menuitemcustomizecontroller" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodeskillswitchgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/renderers/menunodeupdatesgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/items/menuitemmultichoice" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimenetsidebargui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/menuguicomponentgeneric" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/ingamecontractgui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/contractbrokergui" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/scrollablepanel" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/items/contractbrokerheistitem" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimespreedetailsmenucomponent" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimespreemodifiersmenucomponent" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/crimespreecontractmenucomponent" file="MenuHooks.lua" />
+		</hooks>
 	</Hooks>
 	<Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt">
 		<options>

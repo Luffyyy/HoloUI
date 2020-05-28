@@ -33,8 +33,12 @@ elseif F == "hudpresenter" and Holo:ShouldModify("HUD", "Presenter") then
 		self._bg_box:hide()
 		self._bg_box:set_alpha(0)
 	end)
-	function HUDPresenter:_present_information(params)
-		managers.hud._hud_hint:show({text = string.format("%s\n%s", utf8.to_upper(params.title or "ERROR"), utf8.to_upper(params.text))})
+    function HUDPresenter:_present_information(params)
+        if params.title then
+            managers.hud._hud_hint:show({text = string.format("%s\n%s", utf8.to_upper(params.title), utf8.to_upper(params.text))})
+        else
+            managers.hud._hud_hint:show({text = utf8.to_upper(params.text)})
+        end
     end
 elseif F == "circleguiobject" and Holo:ShouldModify("HUD", "Interaction") then
     Holo:Post(CircleBitmapGuiObject, "init", function(self)

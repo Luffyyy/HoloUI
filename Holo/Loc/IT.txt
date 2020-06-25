@@ -3,7 +3,7 @@
 	"Holo/OptionsDesc" : "Personalizza Holo UI!",
 	"Holo/OptionsKey" : "Pulsante opzioni",
 	"Holo/HUDScale" : "Dimensioni HUD",
-	"Holo/WaypointsAlpha" : "Opacità waypoint",
+	"Holo/WaypointsAlpha" : "Opacità meta",
 	"Holo/HUDAlpha" : "Opacità HUD",
 	"Holo/FrameStyle" : "Stile cornice",
 	"Holo/FrameStyles" : "Stili cornice",
@@ -13,7 +13,7 @@
 	"Holo/Base" : "Base",
 	"Holo/HUD" : "HUD",
 	"Holo/Chat" : "Chat",
-	"Holo/FixedAmmoTotal" : "Totale munizioni corretto",
+	"Holo/FixedAmmoTotal" : "Conteggio munizioni corretto",
 	"Holo/TimerBackground" : "Sfondo timer colpo",
 	"Holo/Timer" : "Timer colpo",
 	"Holo/Teammate" : "Compagno",
@@ -22,9 +22,9 @@
 	"Holo/Prefered" : "Preferiti",
 	"Holo/Colors" : "Colori",
 	"Holo/TextColors" : "Colori testo",
-	"Holo/Textures" : "Textures",
+	"Holo/Textures" : "Texture",
 	"Holo/Enable" : "Attiva",
-	"Holo/Disable" : "Diasattiva $option",
+	"Holo/Disable" : "Disattiva $option",
 	"Holo/TextColor" : "Colore testo $option",
 	"Holo/Color" : "Colore",
 	"Holo/Highlight" : "Highlight",
@@ -176,5 +176,5 @@
 	"Holo/CompactTeammates" : "Pannelli compatti per compagno di squadra",
 	"Holo/AltTeammate" : "Pannello compagno di squadra alternativo",
 	"Holo/AltTeammateDesc" : "Un look alternativo al pannello del tuo compagno di squadra (Basato sulla versione 3.3 in giù) Questo look presenta un avatar e valori numerici per salute e armatura.",
-	"Holo/MenuFadeEffect": "Menu fade effect"
+	"Holo/MenuFadeEffect": "Effetto dissolvenza menu"
 }

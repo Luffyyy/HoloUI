@@ -90,7 +90,6 @@ function BlackMarketGuiSlotItem:init(panel, data, ...)
 	end
 	self:_init(panel, data, ...)
 	if self._bitmap then
-		self._bitmap:set_color(Color.white)
 		self._bitmap:set_blend_mode("normal")
 	end	
 	if self._lock_bitmap then

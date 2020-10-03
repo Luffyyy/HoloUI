@@ -30,34 +30,58 @@ Holo:Post(PlayerInventoryGui, "mouse_moved", function(self, o, x, y)
 end)
 
 Holo:Post(PlayerInventoryGui, "setup_player_stats", function(self, panel, data)
-	self._player_stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
-	for i, stat in pairs(self._player_stats_shown) do
-		self._player_stats_texts[stat.name].skill:set_blend_mode("normal")
-		self._player_stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+	if self._player_stats_titles and alive(self._player_stats_titles.skill) then
+		self._player_stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
+	end
+	if self._player_stats_texts then
+		for i, stat in pairs(self._player_stats_shown) do
+			if self._player_stats_texts[stat.name] and alive(self._player_stats_texts[stat.name].skill) then
+				self._player_stats_texts[stat.name].skill:set_blend_mode("normal")
+				self._player_stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+			end
+		end
 	end
 end)
 
 Holo:Post(PlayerInventoryGui, "set_skilltree_stats", function(self, panel, data)
-	self._stats_titles.aced:set_color(Holo:GetColor("Colors/Marker"))
-	for i, stat in pairs(data) do
-		self._stats_texts[stat.name].aced:set_blend_mode("normal")
-		self._stats_texts[stat.name].aced:set_color(Holo:GetColor("Colors/Marker"))
+	if self._stats_titles and alive(self._stats_titles.aced) then
+		self._stats_titles.aced:set_color(Holo:GetColor("Colors/Marker"))
+	end
+	if self._stats_texts then
+		for i, stat in pairs(data) do
+			if self._stats_texts[stat.name] and alive(self._stats_texts[stat.name].aced) then
+				self._stats_texts[stat.name].aced:set_blend_mode("normal")
+				self._stats_texts[stat.name].aced:set_color(Holo:GetColor("Colors/Marker"))
+			end
+		end
 	end
 end)
 
 Holo:Post(PlayerInventoryGui, "set_weapon_stats", function(self, panel, data)
-	self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
-	for i, stat in pairs(data) do
-		self._stats_texts[stat.name].skill:set_blend_mode("normal")
-		self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+	if self._stats_titles and alive(self._stats_titles.skill) then
+		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
+	end
+	if self._stats_texts then
+		for i, stat in pairs(data) do
+			if self._stats_texts[stat.name] and alive(self._stats_texts[stat.name].skill) then
+				self._stats_texts[stat.name].skill:set_blend_mode("normal")
+				self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+			end
+		end
 	end
 end)
 
 Holo:Post(PlayerInventoryGui, "set_melee_stats", function(self, panel, data)
-	self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
-	for i, stat in pairs(data) do
-		self._stats_texts[stat.name].skill:set_blend_mode("normal")
-		self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+	if self._stats_titles and alive(self._stats_titles.skill) then
+		self._stats_titles.skill:set_color(Holo:GetColor("Colors/Marker"))
+	end
+	if self._stats_texts then
+		for i, stat in pairs(data) do
+			if self._stats_texts[stat.name] and alive(self._stats_texts[stat.name].skill) then
+				self._stats_texts[stat.name].skill:set_blend_mode("normal")
+				self._stats_texts[stat.name].skill:set_color(Holo:GetColor("Colors/Marker"))
+			end
+		end
 	end
 end)
 

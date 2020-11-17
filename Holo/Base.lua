@@ -121,6 +121,7 @@ function Holo:ShouldModify(c, o)
 			return false
 		end
 	end
+	local WolfHUD = WolfHUD or VHUDPlus
 	if WolfHUD then
 		if o == "Teammate" and WolfHUD:getSetting({"CustomHUD", "ENABLED"}) then
 			inform("WolfHUD")

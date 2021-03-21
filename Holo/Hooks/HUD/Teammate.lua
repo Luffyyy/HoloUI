@@ -145,7 +145,7 @@ function HUDTeammate:UpdateHolo()
 		ammo_clip:set_visible(mightbeme)
 		if mightbeme then
 			ammo_clip:set_shape(0, 0, weapons_panel:h()/2, panel:h())
-			ammo_total:set_shape(ammo_clip:right()+4, 0, 30, panel:h())
+			ammo_total:set_shape(ammo_clip:right()+4, 0, 32, panel:h())
 			weapon_selection:set_shape(panel:w() - weapon_selection:w(), 0, 12, panel:h())
 		else
 			ammo_total:set_shape(0,1, panel:size())

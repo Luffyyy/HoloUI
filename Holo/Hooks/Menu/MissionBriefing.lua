@@ -24,6 +24,17 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 		self._job_schedule_panel:child("day_" .. tostring(i)):hide()
 		self._job_schedule_panel:child("ghost_" .. tostring(i)):hide()
 	end
+
+	local tex1 = Idstring("guis/dlcs/rvd/textures/pd2/mission_briefing/day1")
+	local tex2 = Idstring("guis/dlcs/rvd/textures/pd2/mission_briefing/day2")
+	for _, child in pairs(self._job_schedule_panel:children()) do
+		if child.texture_name then
+			log(tostring(child:texture_name()))
+		end
+		if child.texture_name and (child:texture_name() == tex1 or child:texture_name() == tex2) then
+			child:hide()
+		end
+	end
 	for i = 1, managers.job:current_stage() or 0 do
 		self._job_schedule_panel:child("stage_done_" .. tostring(i)):hide()
 	end
@@ -79,7 +90,6 @@ Holo:Post(HUDMissionBriefing, "init", function(self)
 			voice:set_x(criminal:right() + 20)
 			infamy:set_center_y(center_y - 1)
 			infamy:set_x(voice:right() + 2)
-			infamy:show()
 			name:set_blend_mode("normal")
 			name:set_center_y(center_y)
 			name:set_x(infamy:right())

@@ -307,13 +307,16 @@ end
 
 function self:SetColorsByDefault(tblname, def_color, color)
     for _, option in pairs(Holo.Options._storage[tblname]) do
-        if type(option) == "table" and option.default_value == def_color then
-            self:Set(tblname.."/" .. option.name, color)
-            local item = self._menu:GetItem(tblname.."/"..option.name)
-            if item then
-                item:SetValue(color:to_hex())
-            else
-                Holo:log("Seems like an item is missing for the color %s", tostring(option.name))
+        if type(option) == "table" then
+            local default = Holo.Options:GetOptionDefaultValue(option)
+            if default == def_color then
+                self:Set(tblname.."/" .. option.name, color)
+                local item = self._menu:GetItem(tblname.."/"..option.name)
+                if item then
+                    item:SetValue(color:to_hex())
+                else
+                    Holo:log("Seems like an item is missing for the color %s", tostring(option.name))
+                end
             end
         end
     end

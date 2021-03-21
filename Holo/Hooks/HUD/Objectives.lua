@@ -158,9 +158,10 @@ if Holo.Options:GetValue("TopHUD") and Holo:ShouldModify("HUD", "Objective") the
 		end
 		self.ObjText:set_y(1)
 		self.ObjText:set_x(4)
-		self.ObjPanel:set_w(w + 8)
+		w = w + 10
+		self.ObjPanel:set_w(w)
 		play_value(self.ObjText, "w", w)
-		play_value(self._bg_box, "w", w + 8)
+		play_value(self._bg_box, "w", w)
 		self:PosObjectives()
 	end
 

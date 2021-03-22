@@ -88,13 +88,11 @@ function BlackMarketGuiSlotItem:init(panel, data, ...)
 	if data.lock_texture == true then
 		data.lock_texture = "guis/textures/pd2/skilltree/padlock"
 	end
+	data.bitmap_locked_blend_mode = "normal"
+	data.bitmap_locked_alpha = 0.4
 	self:_init(panel, data, ...)
-	if self._bitmap then
-		self._bitmap:set_color(Color.white)
-		self._bitmap:set_blend_mode("normal")
-	end	
 	if self._lock_bitmap then
-		self._lock_bitmap:set_size(16, 16)
+		self._lock_bitmap:set_size(24, 24)
 		self._lock_bitmap:set_leftbottom(4, self._panel:h() - 4)
 	end
 end

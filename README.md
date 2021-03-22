@@ -13,4 +13,4 @@ HoloUI is a UI mod that changes most of the UI design of the game to look more m
  - Very customizable UI with a lot of options to play with!
 
 ## MWS link ##
-https://modworkshop.net/mydownloads.php?action=view_down&did=12501
+https://modworkshop.net/mod/12501

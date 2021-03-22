@@ -100,5 +100,9 @@ Holo:Replace(PlayerInventoryGui, "create_box", function(self, orig, params, ...)
 	params.text_unselected_color = Holo:GetColor("TextColors/Menu")
 	params.box_selected_sides = {0, 0, 0, 2}
 	params.box_unselected_sides = {0, 0, 0, 0}
+	if params.name == "infamy_card_number" then
+		params.text_selected_color = Color.black
+		params.text_unselected_color = Color.black
+	end
 	return orig(self, params, ...)
 end)

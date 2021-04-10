@@ -14,13 +14,13 @@ end
 function Holo:LoadTextures()
 	local ids_strings = {}
 	local function LoadTextures(path)
-		for _, file in pairs(SystemFS:list(path)) do
+		for _, file in pairs(FileIO:GetFiles(path)) do
 			local file_path = BeardLib.Utils.Path:Combine(path, file)
 			local in_path = file_path:gsub("%.png", ""):gsub("%.texture", ""):gsub(self.ModPath, ""):gsub("Assets/", "")
 			table.insert(ids_strings, Idstring(in_path))
 			DB:create_entry(Idstring("texture"), Idstring(in_path), file_path)
 		end
-		for _, dir in pairs(SystemFS:list(path, true)) do
+		for _, dir in pairs(FileIO:GetFolders(path)) do
 			LoadTextures(BeardLib.Utils.Path:Combine(path, dir))
 		end
 	end

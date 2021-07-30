@@ -16,7 +16,7 @@ function LightLoadingScreenGuiScript:init(...)
             color = data.colored_background and data.background_color or nil,
 			w = self._panel:w(),
 			h = self._panel:h(),
-            layer = self._base_layer
+            layer = self._base_layer - 4
         })
         self._title_text:set_color(data.text_color or Color.white)
         self._indicator:set_color(data.text_color or Color.white)  

@@ -20,7 +20,7 @@ function LevelLoadingScreenGuiScript:init(scene_gui, res, progress, base_layer)
 		self._safe_rect_pixels = safe_rect_pixels
 		self._safe_rect = safe_rect
 		self._gui_data_manager = GuiDataManager:new(self._scene_gui, res, safe_rect_pixels, safe_rect, aspect_ratio)
-		self._back_drop_gui = MenuBackdropGUI:new(nil, self._gui_data_manager, true)		
+		self._back_drop_gui = MenuBackdropGUI:new(nil, self._gui_data_manager, true)
 		local base_panel = self._back_drop_gui:get_new_base_layer()		
 		base_panel:bitmap({
 			texture = not data.colored_background and self._gui_data.bg_texture,

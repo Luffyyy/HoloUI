@@ -4,7 +4,7 @@
 		<class file="Definitions.lua" />
 		<class file="OptionsMenu.lua" />
 	</Classes>
-	<AssetUpdates id="12501" version="3.5.9" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
+	<AssetUpdates id="12501" version="3.5.10" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
 	<Localization directory="Loc" default="EN.txt">
 		<loc file="EN.txt" language="english" />
 		<loc file="RU.txt" language="russian" />
@@ -97,6 +97,8 @@
 			<hook source_file="lib/managers/menu/crimespreedetailsmenucomponent" file="MenuHooks.lua" />
 			<hook source_file="lib/managers/menu/crimespreemodifiersmenucomponent" file="MenuHooks.lua" />
 			<hook source_file="lib/managers/menu/crimespreecontractmenucomponent" file="MenuHooks.lua" />
+			<hook source_file="lib/managers/menu/menurenderer" file="MenuHooks.lua"/>
+			
 		</hooks>
 	</Hooks>
 	<Options build_menu="false" auto_load="true" save_file="HoloUI3Config.txt">

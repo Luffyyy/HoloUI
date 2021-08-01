@@ -18,7 +18,10 @@ function LightLoadingScreenGuiScript:init(...)
 			h = self._panel:h(),
             layer = self._base_layer - 4
         })
-        self._title_text:set_color(data.text_color or Color.white)
-        self._indicator:set_color(data.text_color or Color.white)  
+        local color = data.text_color or Color.white
+        self._stonecold_small_logo:set_color(color)
+        self._title_text:set_color(color)
+        self._indicator:set_image("guis/textures/pd2/skilltree/drillgui_icon_restarter") -- Colors better
+        self._indicator:set_color(color)
     end
 end

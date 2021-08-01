@@ -102,10 +102,10 @@ function Utils:FixBackButton(this, back_button)
 end
 
 function Utils:FixDialog(dialog, info_area, button_list, focus_button, only_buttons)
-	local has_buttons = button_list and #button_list > 0		
+	local has_buttons = button_list and #button_list > 0
 	local buttons_panel = info_area:child("buttons_panel")
 	dialog._panel:child("title"):set_color(Holo:GetColor("TextColors/Menu"))
-	info_area:child("info_bg"):set_color(Holo:GetColor("Colors/Menu"))
+	info_area:child("info_bg"):set_color(Holo:GetColor("Colors/Menu"):with_alpha(0.75))
 	if has_buttons then
 		buttons_panel:child("selected"):configure({
 			blend_mode = "normal",
@@ -120,7 +120,7 @@ function Utils:FixDialog(dialog, info_area, button_list, focus_button, only_butt
 					child:child("button_text"):configure({
 						blend_mode = "normal",
 						color = Holo:GetColor("TextColors/Menu")
-					})		
+					})
 				end
 			end
 		end

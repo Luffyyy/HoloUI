@@ -8,7 +8,7 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
         child:hide()
     end
 
-    --Avatar			
+    --Avatar
     local avatar = self._panel:bitmap({
         name = "Avatar",
         texture = "guis/textures/pd2/none_icon",
@@ -40,6 +40,7 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
         if icon_data then
             icon = panel:bitmap({
                 name = "Icon",
+                color = Holo:GetColor("TextColors/Menu"),
                 texture = icon_data.texture,
                 texture_rect = icon_data.texture_rect,
                 w = icon_data.w or font_size,
@@ -49,7 +50,7 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
         local text = panel:text({
             name = "Text",
             text = text,
-            font = font,				
+            font = font,
             font_size = font_size,
             color = Holo:GetColor("TextColors/Menu"),
             x = icon and icon:right() + 2 or 0,
@@ -109,7 +110,7 @@ Holo:Post(PlayerProfileGuiObject, "init", function(self)
     createText("Ghost", tostring(gp), nil, icon)
     icon.texture_rect[1] = 96
     createText("Fugitive", tostring(fp), nil, icon)
-            
+
     --Frame
     local box = self._panel:child("BoxGui")
     if alive(box) then

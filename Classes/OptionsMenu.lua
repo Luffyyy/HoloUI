@@ -5,6 +5,7 @@ function self:Init()
     local background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.65)
     self._menu = MenuUI:new({
         name = "Holo",
+        foreground = Holo:GetColor("Colors/Menu"):contrast(),
         accent_color = accent_color,
         foreground_highlight = accent_color,
         highlight_color = false,
@@ -245,8 +246,7 @@ function self:MouseMoved(x, y)
     end
 end
 
---TODO: Make a better quick dialog for beardlib. Current is a mess
-function self:ResetOptions(all, menu)   
+function self:ResetOptions(all, menu)
 	QuickDialog({
 		title = self:LocF("AreYouSure"),
 		message = self:LocF("ResetWarn"),
@@ -260,7 +260,7 @@ function self:DoResetOptions(all, menu)
         if default_value then
             Holo.Options:SetValue(item.name, default_value)
             item:SetValue(default_value)
-        end        
+        end
     end)
 end
 
@@ -275,7 +275,7 @@ function self:WorkValues(all, menu, func)
             end
         end 
         Holo.Options:Save()
-        self:MainClbk()           
+        self:MainClbk()
     end
     if all then
         for _, optmenu in pairs(self._menus) do
@@ -287,7 +287,7 @@ function self:WorkValues(all, menu, func)
 end
 
 function self:Set(name, value)
-    Holo.Options:SetValue(name, value)        
+    Holo.Options:SetValue(name, value)
     Holo.Options:Save()
 end
 
@@ -338,7 +338,7 @@ function self:QuickOptBackgroundClbk(color)
 end
 
 function self:OpenSetColorDialog(item)
-    local option = item.name    
+    local option = item.name
     local accent_color = Holo:GetColor("TextColors/MenuHighlighted")
     local background_color = Holo:GetColor("Colors/Menu")  
     self._color_dialog = self._color_dialog or ColorDialog:new({highlight_color = accent_color, background_color = background_color, no_blur = true})
@@ -471,10 +471,10 @@ function self:Menu(name)
         name = name,
         w = "half",
         items_size = 18,
-        background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.65),        
+        background_color = Holo:GetColor("Colors/Menu"):with_alpha(0.65),
         visible = not self._current_menu,
         h = self._menu._panel:h() - 35,
-        position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()},
+        position = {self._tabs:Panel():left(), self._tabs:Panel():bottom()}
     })
     self._current_menu = self._current_menu or new
     return new
@@ -483,7 +483,7 @@ end
 --Short functions
 function self:BeforeText(beforetext, text, add)
     local loc = managers.localization
-    return loc:text(self:Loc(beforetext), {option = loc:text(self:Loc(text)) .. (add and loc:text(self:Loc(add)) or "")}) 
+    return loc:text(self:Loc(beforetext), {option = loc:text(self:Loc(text)) .. (add and loc:text(self:Loc(add)) or "")})
 end
 function self:MousePressed(button, x, y) self._line_hold = button == Idstring("0") and self._resize:inside(x,y) end
 function self:MouseReleased() self._line_hold = nil end

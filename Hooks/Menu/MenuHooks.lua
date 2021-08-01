@@ -466,4 +466,10 @@ elseif F == "menuitemmultichoice" then
 	Holo:Post(MenuItemMultiChoice, "reload", function(self, row_item, node)
 		self:holo_multi_choice_fix(node, row_item)
 	end)
+elseif F == "menurenderer" then
+	Holo:Post(MenuRenderer, "_create_bottom_text", function(self)
+		if alive(self._bottom_text) then
+			self._bottom_text:set_color(Holo:GetColor("TextColors/Menu"))
+		end
+	end)
 end

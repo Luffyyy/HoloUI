@@ -94,6 +94,14 @@ function Holo:ShouldModify(c, o)
 		inform("Nepgearsy Main Menu")
 		return false
 	end
+	
+	if VoidUI then
+		if c == "HUD" or o == "Chat" or o == "Blackscreen" then
+			inform("Void UI")	
+			return false
+		end
+	end
+
 	if pdth_hud and pdth_hud.Options then
 		if pdth_hud.Options:GetValue("HUD/MainHud") and o == "Teammate" then
 			inform("PDTH Hud")	

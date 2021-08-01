@@ -80,7 +80,7 @@ function Holo:CheckOtherMods()
 end
 
 function Holo:ShouldModify(c, o)
-	local function inform(a) 
+	local function inform(a)
 		self:log(string.format("[Info]Cannot modify %s because %s uses it", o, a))
 		self.RefusedScripts[RequiredScript] = true
 	end
@@ -93,13 +93,6 @@ function Holo:ShouldModify(c, o)
 	if NepgearsyMM and o == "PlayerProfile" then
 		inform("Nepgearsy Main Menu")
 		return false
-	end
-	
-	if VoidUI then
-		if c == "HUD" or o == "Chat" or o == "Blackscreen" then
-			inform("Void UI")	
-			return false
-		end
 	end
 
 	if pdth_hud and pdth_hud.Options then

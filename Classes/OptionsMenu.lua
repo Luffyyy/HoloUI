@@ -256,10 +256,10 @@ end
 
 function self:DoResetOptions(all, menu)   
     self:WorkValues(all, menu, function(item)
-        local option = Holo.Options:GetOption(item.name)
-        if option then
-            Holo.Options:SetValue(item.name, option.default_value)
-            item:SetValue(Holo.Options:GetValue(item.name))
+        local default_value = Holo.Options:GetDefaultValue(item.name)
+        if default_value then
+            Holo.Options:SetValue(item.name, default_value)
+            item:SetValue(default_value)
         end        
     end)
 end

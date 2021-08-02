@@ -1,4 +1,10 @@
 if not GameSetup and Holo:ShouldModify("Menu", "ColoredBackground") then
+	if Holo:ShouldModify("Menu", "PlayerProfile") then
+		Holo:Post(MenuSceneManager, "_set_up_templates", function(self)
+			self._scene_templates.standard.character_pos = Vector3(-32, 10.66, -137)
+		end)
+	end
+
 	function MenuSceneManager:HoloUpdate()
 		local cam = managers.viewport:get_current_camera()
 		if type(cam) == "boolean" then

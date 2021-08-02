@@ -45,6 +45,9 @@ Holo.MenuTMPositions = {
 	"Holo/CenterToTop",
 	"Holo/RightToTop",
 }
+Holo.ContrastOverride = {
+	["TextColors/Tab"] = "Colors/Menu"
+}
 Holo.NonContrastable = {
 	["TextColors/Health"] = true,
 	["TextColors/Armor"] = true,

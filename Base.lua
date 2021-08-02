@@ -51,7 +51,7 @@ end
 function Holo:GetColor(setting, vec, can_return_null)
 	local color = self.Options:GetValue(setting) or not can_return_null and Color.white or nil
 	if setting:match("TextColors") then
-		local bgname = setting:gsub("TextColors", "Colors")
+		local bgname = Holo.ContrastOverride[setting] or setting:gsub("TextColors", "Colors")
 		if self.Options:GetValue("TextColors/AutomaticTextColors") and self.Options:GetValue(bgname) and not Holo.NonContrastable[setting] then
 			color = self:GetColor(bgname):contrast()
 		end

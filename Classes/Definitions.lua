@@ -48,6 +48,5 @@ Holo.MenuTMPositions = {
 Holo.NonContrastable = {
 	["TextColors/Health"] = true,
 	["TextColors/Armor"] = true,
-	["TextColors/Tab"] = true,
 	["TextColors/Interaction"] = true,
 }

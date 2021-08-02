@@ -16,6 +16,13 @@ Holo:Post(BLTModsGui, "_setup", function(self)
     Holo.Utils:FixBackButton(self, self._back_button)
 end)
 
+Holo:Post(BLTNotificationsGui, "_update_bars", function(self)
+    self._bar:set_color(tweak_data.screen_colors.text)
+    for _, btn in pairs(self._buttons_panel:children()) do
+        btn:set_color(tweak_data.screen_colors.text)
+    end
+end)
+
 Holo:Post(BLTNotificationsGui, "_setup", function(self)
     if self._content_outline then
         self._content_panel:child("background"):hide()
@@ -38,7 +45,7 @@ Holo:Post(BLTNotificationsGui, "add_notification", function(self)
     for _, notif in ipairs(self._notifications) do
         if alive(notif.panel) then
             for _, child in pairs(notif.panel:children()) do
-                if type_name(child) == "Text" and child:color() == Color.white then
+                if child:color() == Color.white then
                     child:set_color(tweak_data.screen_colors.text)
                 end
             end
@@ -76,5 +83,13 @@ Holo:Post(BLTViewModGui, "_setup_buttons", function(self)
 end)
 
 Holo:Post(BLTDownloadControl, "init", function(self)
+    Holo.Utils:SetBlendMode(self._panel)
+end)
+
+Holo:Post(BLTModItem, "init", function(self)
+    Holo.Utils:SetBlendMode(self._panel)
+end)
+
+Holo:Post(BLTUIButton, "init", function(self)
     Holo.Utils:SetBlendMode(self._panel)
 end)

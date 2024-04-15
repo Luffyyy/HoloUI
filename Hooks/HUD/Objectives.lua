@@ -44,7 +44,7 @@ end
 function HUDBGBox_create_frame(box_panel, color, style)
 	color = color or Holo:GetColor("Colors/Frame")
 	style = style or Holo.Options:GetValue("FrameStyle")
-	local width = 1
+	local width = Holo.Options:GetValue("FrameSize")
 	if alive(box_panel:child("left_top")) then
 		box_panel:remove(box_panel:child("left_top"))
 	end

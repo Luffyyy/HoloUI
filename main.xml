@@ -113,6 +113,7 @@
 			<option type="number" default_value="0.936" min="0.1" max="1" name="HUDSpacing"  menu="HUD"/>
 			<option type="number" default_value="0.75" min="0" max="1" name="WaypointsAlpha" menu="HUD" />
 			<option type="number" default_value="2" menu_type="combo" items="FrameStyles" name="FrameStyle" menu="HUD" />
+			<option type="number" default_value="1" min="0" max="10" name="FrameSize" menu="HUD" />
 			<option type="boolean" default_value="true" name="TimerBackground" menu="HUD"/>
 			<option type="boolean" default_value="false" name="ColorWaypoints" menu="HUD"/>
 
@@ -143,6 +144,7 @@
 			<option type="boolean" default_value="true" name="Interaction" menu="Enable"/>
 			<option type="boolean" default_value="true" name="Waypoints" menu="Enable"/>
 			<option type="boolean" default_value="true" name="PlayerDowned" menu="Enable"/>
+			<option type="boolean" default_value="true" name="Timer" menu="Enable"/>
 
 			<div name="Menu" />
 			<option type="number" default_value="12" floats="0" name="FontSize" menu="Menu" />

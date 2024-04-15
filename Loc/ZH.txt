@@ -7,6 +7,7 @@
 	"Holo/HUDAlpha" : "HUD 不透明度",
 	"Holo/FrameStyle" : "边框样式",
 	"Holo/FrameStyles" : "边框样式",
+	"Holo/FrameSize" : "Frame size",
 	"Holo/Main" : "主选项",
 	"Holo/Extra" : "附加选项",
 	"Holo/Custom" : "自定义",

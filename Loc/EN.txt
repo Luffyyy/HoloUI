@@ -7,6 +7,7 @@
 	"Holo/HUDAlpha" : "HUD opacity",
 	"Holo/FrameStyle" : "Frame style",
 	"Holo/FrameStyles" : "Frame styles",
+	"Holo/FrameSize" : "Frame size",
 	"Holo/Main" : "Main",
 	"Holo/Extra" : "Extra",
 	"Holo/Custom" : "Custom",

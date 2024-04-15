@@ -7,6 +7,7 @@
 	"Holo/HUDAlpha" : "Opacidad del HUD",
 	"Holo/FrameStyle" : "Estilo de marco",
 	"Holo/FrameStyles" : "Estilos de marco",
+	"Holo/FrameSize" : "Frame size",
 	"Holo/Main" : "Principal",
 	"Holo/Extra" : "Extra",
 	"Holo/Custom" : "Personalizado",

@@ -7,6 +7,7 @@
 	"Holo/HUDAlpha" : "Opacité de l'ATH",
 	"Holo/FrameStyle" : "Style du cadre",
 	"Holo/FrameStyles" : "Frame Styles",
+	"Holo/FrameSize" : "Frame size",
 	"Holo/Main" : "Principale",
 	"Holo/Extra" : "Plus",
 	"Holo/Custom" : "Personnalisé",

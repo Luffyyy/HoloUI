@@ -76,6 +76,7 @@ function ChatGui:_layout_output_panel(force_update_scroll_indicators)
 	scroll_panel:set_w(self._output_width)
 	output_panel:set_w(self._output_width)
 	local max_lines = self._max_lines
+	local scroll_at_bottom = scroll_panel:bottom() == output_panel:h()
 	local lines = 0
 	local prev
 	for _, line in pairs(self._lines) do
@@ -89,6 +90,9 @@ function ChatGui:_layout_output_panel(force_update_scroll_indicators)
 	local h = prev and prev:bottom() + 2 or 0
 	output_panel:set_h(math.min((ChatGui.max_lines + 1) * ChatGui.line_h + 4, h))
 	scroll_panel:set_h(h)
+	if lines <= max_lines or scroll_at_bottom then
+		scroll_panel:set_bottom(output_panel:h())
+	end
 	output_panel:set_bottom(self._input_panel:top() - 2)
 	self:set_scroll_indicators(force_update_scroll_indicators)
 end

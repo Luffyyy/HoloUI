@@ -122,11 +122,22 @@ function Holo:ShouldModify(c, o)
 			return false
 		end
 	end
+
+	if VoidUI and VoidUI.options then
+		local objective = "Objective" and VoidUI.options.enable_objectives
+		local chat = "Chat" and VoidUI.options.enable_chat
+		local teammate = (o == "PlayerDowned" or o == "Teammate") and VoidUI.options.teammate_panels
+		if objective or chat or teammate then
+			inform("VoidUI")
+			return false
+		end
+	end
+
 	local WolfHUD = WolfHUD or VHUDPlus
 	if WolfHUD then
 		if o == "Teammate" and WolfHUD:getSetting({"CustomHUD", "ENABLED"}) then
 			inform("WolfHUD")
-			return false			
+			return false
 		end
 		if o == "Chat" and HUDChat and HUDChat.WIDTH then --No actual option to disable it! GREAT
 			inform("WolfHUD")

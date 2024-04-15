@@ -30,8 +30,10 @@ elseif F == "coresubtitlepresenter" then
     Holo:Post(OverlayPresenter, "show_text", OverlayPresenter.UpdateHolo)
 elseif F == "hudpresenter" and Holo:ShouldModify("HUD", "Presenter") then
     Holo:Post(HUDPresenter, "init", function(self)
-		self._bg_box:hide()
-		self._bg_box:set_alpha(0)
+        if self._bg_box then
+            self._bg_box:hide()
+            self._bg_box:set_alpha(0)
+        end
 	end)
     function HUDPresenter:_present_information(params)
         if params.title then

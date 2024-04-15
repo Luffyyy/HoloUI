@@ -245,6 +245,9 @@ function HUDChat:mouse_released(o, button, x, y)
 end
 
 function HUDChat:mouse_moved(o, x, y)
+	if not self._scroll then
+		return
+	end
 	local text = self._input_panel:child("input_text")
 	local output_panel = self._panel:child("output_panel")
 	local _, pointer = self._scroll:mouse_moved(nil, x, y) 

@@ -1,4 +1,4 @@
-if Holo:ShouldModify("HUD", "TopHUD") and Holo:ShouldModify(nil, "Timer") then
+if Holo:ShouldModify("HUD", "TopHUD") and Holo:ShouldModify("HUD", "Timer") then
     Holo:Post(HUDHeistTimer, "init", function(self)
         self._bg_box = HUDBGBox_create(self._heist_timer_panel)
     	self:UpdateHolo()

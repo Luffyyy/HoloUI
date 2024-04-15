@@ -160,25 +160,22 @@ function HUDChat:update_key_down(text, k)
   	end
 end
 
-function HUDChat:_layout_output_panel()
+function HUDChat:_layout_output_panel(force_update_scroll_indicators)
 	local output_panel = self._panel:child("output_panel")
 	if not alive(self._canvas) then
 		return
 	end
 	local prev
 	local h = 0
-	local text_color = Holo:GetColor("TextColors/Chat")
 	for _, line in pairs(self._lines) do
 		if prev then
-			line:set_y(prev:bottom() + 2)			
+			line:set_y(prev:bottom() + 2)
 		else
 			line:set_y(2)
 		end
 		prev = line
 		h = h + line:h() + 2
 	end
-	local children = self._canvas:children()
-	local max_h = 0
 	output_panel:set_size(self._panel:w(), math.min((HUDChat.max_lines + 1) * HUDChat.line_h + 4, h))
 	output_panel:set_bottom(self._input_panel:top() - 2)
 	self._scroll:set_size(output_panel:w(), output_panel:h())
@@ -188,6 +185,8 @@ function HUDChat:_layout_output_panel()
 		self._scroll:_set_scroll_indicator()
 		self._scroll:_check_scroll_indicator_states()
 	end
+
+	self:set_scroll_indicators(force_update_scroll_indicators)
 end
 
 Holo:Pre(HUDChat, "_on_focus", function(self)
@@ -209,7 +208,7 @@ function HUDChat:update_caret()
     local s, e = text:selection()
 	local x, y = text:character_rect(self._select_neg and s or e)
 	local caret = self._input_panel:child("caret")
-	
+
     if s == 0 and e == 0 then
 		caret:set_world_x(text:world_x())
 		caret:set_center_y(self._input_panel:h() / 2)	

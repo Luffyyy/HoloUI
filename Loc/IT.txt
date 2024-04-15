@@ -177,5 +177,7 @@
 	"Holo/CompactTeammates" : "Pannelli compatti per compagno di squadra",
 	"Holo/AltTeammate" : "Pannello compagno di squadra alternativo",
 	"Holo/AltTeammateDesc" : "Un look alternativo al pannello del tuo compagno di squadra (Basato sulla versione 3.3 in giù) Questo look presenta un avatar e valori numerici per salute e armatura.",
-	"Holo/MenuFadeEffect": "Effetto dissolvenza menu"
+	"Holo/MenuFadeEffect": "Effetto dissolvenza menu",
+	"Holo/ModifyContours" : "Modify Contours",
+	"Holo/ModifyContoursHelp" : "Whether or not to modify the colors of the contours. If you use other mods that modify this, you can use this option to disable the modification"
 }

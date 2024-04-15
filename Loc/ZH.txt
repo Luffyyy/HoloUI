@@ -177,5 +177,7 @@
 	"Holo/CompactTeammates" : "紧凑型队友面板",
 	"Holo/AltTeammate" : "备用队友面板",
 	"Holo/AltTeammateDesc" : "替换队友面板的外观(基于 3.3 以下的版本) 本外观可查看血量与护甲数值",
-	"Holo/MenuFadeEffect": "菜单淡入淡出效果"
+	"Holo/MenuFadeEffect": "菜单淡入淡出效果",
+	"Holo/ModifyContours" : "Modify Contours",
+	"Holo/ModifyContoursHelp" : "Whether or not to modify the colors of the contours. If you use other mods that modify this, you can use this option to disable the modification"
 }

@@ -30,19 +30,22 @@ function TweakData:UpdateHolo()
             self.overlay_effects.element_fade_in.color = Holo:GetColor("Colors/Menu")
             self.overlay_effects.element_fade_out.color = Holo:GetColor("Colors/Menu")
         end
-    end    
-    self.contour.deployable.standard_color = Holo:GetColor("Colors/DeployableStandard", true)   
-    self.contour.deployable.selected_color = Holo:GetColor("Colors/DeployableSelected", true) 
-    self.contour.deployable.active_color = Holo:GetColor("Colors/DeployableActive", true) 
-    self.contour.deployable.interact_color = Holo:GetColor("Colors/DeployableInteract", true) 
-    self.contour.deployable.disabled_color = Holo:GetColor("Colors/DeployableDisabled", true) 
-    self.contour.deployable.standard_opacity = 1
-    self.contour.interactable.standard_color = Holo:GetColor("Colors/Interactable", true)
-    self.contour.interactable.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
-    self.contour.interactable.standard_opacity = 1
-    self.contour.interactable_look_at.standard_color = Holo:GetColor("Colors/InteractableSelected", true)
-    self.contour.interactable_look_at.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
-    self.contour.interactable_look_at.standard_opacity = 1
+    end
+
+    if Holo.Options:GetValue("Colors/ModifyContours") then
+        self.contour.deployable.standard_color = Holo:GetColor("Colors/DeployableStandard", true)   
+        self.contour.deployable.selected_color = Holo:GetColor("Colors/DeployableSelected", true) 
+        self.contour.deployable.active_color = Holo:GetColor("Colors/DeployableActive", true) 
+        self.contour.deployable.interact_color = Holo:GetColor("Colors/DeployableInteract", true) 
+        self.contour.deployable.disabled_color = Holo:GetColor("Colors/DeployableDisabled", true) 
+        self.contour.deployable.standard_opacity = 1
+        self.contour.interactable.standard_color = Holo:GetColor("Colors/Interactable", true)
+        self.contour.interactable.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
+        self.contour.interactable.standard_opacity = 1
+        self.contour.interactable_look_at.standard_color = Holo:GetColor("Colors/InteractableSelected", true)
+        self.contour.interactable_look_at.selected_color = Holo:GetColor("Colors/InteractableSelected", true)
+        self.contour.interactable_look_at.standard_opacity = 1
+    end
 
     local scale_multiplier = self.scale.default_font_multiplier
 	local small_scale_multiplier = self.scale.small_font_multiplier

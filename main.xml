@@ -202,6 +202,7 @@
 				<option type="number" default_value="3" menu_type="combo" items="FrameStyles" name="TeammateName" />
 			</option_group>
 			<option_group name="Colors">
+				<option type="boolean" default_value="true" name="ModifyContours"/>
 				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Assault" />
 				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="Casing" />
 				<option type="color" default_value="Color(0.1, 0.1, 0.1)" name="NoPointOfReturn" />

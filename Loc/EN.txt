@@ -177,5 +177,7 @@
 	"Holo/CompactTeammates" : "Compact teammate panels",
 	"Holo/AltTeammate" : "Alternative Teammate panel",
 	"Holo/AltTeammateDesc" : "An alternative look to the teammate panel (Based on versions below 3.3) This look features an avatar and numerical values for the health and armor.",
-	"Holo/MenuFadeEffect": "Menu fade effect"
+	"Holo/MenuFadeEffect": "Menu fade effect",
+	"Holo/ModifyContours" : "Modify Contours",
+	"Holo/ModifyContoursHelp" : "Whether or not to modify the colors of the contours. If you use other mods that modify this, you can use this option to disable the modification"
 }

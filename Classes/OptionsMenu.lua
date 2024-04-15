@@ -148,7 +148,8 @@ function self:CreateColorsMenu(menu)
     quick_opt.help = "QuickOptionHelp"
     quick_opt.enabled = auto_textcolor_value
     self:Button(menu, self:BeforeText("QuickOption", "Foregrounds"), quick_opt)
-    
+    self:Toggle(menu, "Colors/ModifyContours", {text = "ModifyContours", help = "ModifyContoursHelp"})
+
     local other = menu:DivGroup({name = "Other", text = self:Loc("Other"), localized = true, align_method = "grid"})
     local options = {
         {name = "Menu", background = true, text = true, custom = function(option, group, w)

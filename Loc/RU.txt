@@ -176,5 +176,7 @@
 	"Holo/CompactTeammates" : "Компактные панели членов команды",
 	"Holo/AltTeammate" : "Другая панель члена команды",
 	"Holo/AltTeammateDesc" : "Альтернативный вид панели товарищей по команде (основан на версиях ниже 3.3) Этот вид включает аватар и числовые значения здоровья и брони.",
-	"Holo/MenuFadeEffect": "Эффект затухания в меню"
+	"Holo/MenuFadeEffect": "Эффект затухания в меню",
+	"Holo/ModifyContours" : "Modify Contours",
+	"Holo/ModifyContoursHelp" : "Whether or not to modify the colors of the contours. If you use other mods that modify this, you can use this option to disable the modification"
 }

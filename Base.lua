@@ -126,8 +126,9 @@ function Holo:ShouldModify(c, o)
 	if VoidUI and VoidUI.options then
 		local objective = "Objective" and VoidUI.options.enable_objectives
 		local chat = "Chat" and VoidUI.options.enable_chat
+		local blackscreen = "BlackScreen" and VoidUI.options.enable_blackscreen
 		local teammate = (o == "PlayerDowned" or o == "Teammate") and VoidUI.options.teammate_panels
-		if objective or chat or teammate then
+		if objective or chat or teammate or blackscreen then
 			inform("VoidUI")
 			return false
 		end

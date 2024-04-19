@@ -44,8 +44,8 @@ function HUDTeammate:DebugWithAI()
 	self._ai = false
 	self._player_panel:set_alpha(1)
 	self:set_deployable_equipment({icon = "equipment_ammo_bag", amount = 2})
-	self:set_ammo_amount_by_type("primary", 100, 999, 999, 10)
-	self:set_ammo_amount_by_type("secondary", 100, 999, 999, 10)
+	self:set_ammo_amount_by_type("primary", 100, 9999, 9999, 10)
+	self:set_ammo_amount_by_type("secondary", 100, 9999, 9999, 10)
 end
 
 function HUDTeammate:UpdateHolo()
@@ -73,23 +73,34 @@ function HUDTeammate:UpdateHolo()
 	local minitm = minime or not me and Holo.Options:GetValue("CompactTeammates")
 	local mightbeme = me or Holo.Options:GetValue("ShowTeammatesFullAmmo")
 
-	local weap_w = minime and 68 or 80
+	local weap_w = minime and 72 or 84
 	local weap_h = minitm and 48 or 64
 	local radial_size = minitm and 48 or 64
 
 	if not me then
-		if minitm then
-			if mightbeme then
-				weap_w = 56
-			else
-				weap_w = 26
-			end
-		elseif mightbeme then
-			weap_w = 68
-		else
-			weap_w = 36
-		end
+		if mightbeme then
+            weap_w = minitm and 72 or 84
+        else
+            weap_w = 34
+        end
 	end
+
+    if (not self._ai) then
+        for _, panel in pairs({primary_weapon_panel, secondary_weapon_panel}) do
+            local ammo_total = panel:child("ammo_total")
+            local ammo_clip = panel:child("ammo_clip")
+            ammo_clip:set_font_size(minitm and 24 or 28)
+            ammo_total:set_font_size(minitm and 24 or 28)
+
+            local _, _, w1, h1 = ammo_clip:text_rect()
+            ammo_clip:set_size(w1,h1)
+            local _, _, w2, h2 = ammo_total:text_rect()
+            ammo_clip:set_size(w2,h2)
+
+            local calc_weapon_w = ammo_clip:w() + (ammo_clip:visible() and ammo_clip:w() or 0)
+            weap_w = math.max(calc_weapon_w + 12, weap_w)
+        end
+    end
 
 	HUDBGBox_recreate(bg, {
 		name = "Teammate",
@@ -144,8 +155,8 @@ function HUDTeammate:UpdateHolo()
 		ammo_total:set_font_size(minitm and 24 or 28)
 		ammo_clip:set_visible(mightbeme)
 		if mightbeme then
-			ammo_clip:set_shape(0, 0, weapons_panel:h()/2, panel:h())
-			ammo_total:set_shape(ammo_clip:right()+4, 0, 32, panel:h())
+			ammo_clip:set_shape(0, 0, weapons_panel:w()/2 - (me and 12 or 2), panel:h())
+			ammo_total:set_shape(ammo_clip:right()+4, 0, ammo_clip:w(), panel:h())
 			weapon_selection:set_shape(panel:w() - weapon_selection:w(), 0, 12, panel:h())
 		else
 			ammo_total:set_shape(0,1, panel:size())

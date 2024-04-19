@@ -73,7 +73,7 @@ end)
 
 function HUDTeammate:set_avatar()
 	local peer = self._peer_id and managers.network:session():peer(self._peer_id) or nil
-	local steam_id = peer and peer:user_id() or self._main_player and Steam:userid() or nil
+	local steam_id = peer and peer:account_id() or self._main_player and Steam:userid() or nil
 	if steam_id and not self._ai then
 		Steam:friend_avatar(Steam.LARGE_AVATAR, steam_id, function(texture)
 			self._player_panel:child("avatar"):animate(function()

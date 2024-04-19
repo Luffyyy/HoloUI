@@ -124,7 +124,7 @@ Holo:Post(HUDMissionBriefing, "set_player_slot", function(self, nr, params)
 		return
 	end
 	local peer = managers.network:session():peer(nr) or nil
-	local steam_id = peer and peer:user_id() or nr == 1 and Steam:userid() or nil
+	local steam_id = peer and peer:account_id() or nr == 1 and Steam:userid() or nil
 	if steam_id then
 		--Make sure we have the texture loaded, lets choose large so it's loaded in cache
 		local avatar = slot:child("avatar")

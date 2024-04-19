@@ -101,7 +101,7 @@ function HUDTeammate:UpdateHolo()
 		color = Holo.Options:GetValue("NameColored") and callsign:color() or text_color,
 		font_size = minitm and 16 or 20,
 		visible = Holo.Options:GetValue("MyName") or not self._main_player,
-		font = "fonts/font_medium_noshadow_mf",
+		font = "fonts/font_large_mf",
 	})
 	local _,_,w,_ = name:text_rect()
 	local pw = bg:right()-8
@@ -114,17 +114,17 @@ function HUDTeammate:UpdateHolo()
 		visible = name:visible(),
 		frame_color = callsign:color(),
 		x = radial_health_panel:x(),
-		y = self._ai and bg:bottom() - 2 or bg:top() - 4,
+		y = bg:bottom() - 2,
 		w = name:w() + 8,
 		h = name:visible() and name:h() + 8 or 0
 	})
 	bg:set_bottom(self:calc_panel_height())
 	if self._ai then
-		nbg:set_bottom(self:calc_panel_height())	
+		nbg:set_bottom(self:calc_panel_height())
 	else
 		nbg:set_bottom(bg:y() - 4)
 	end
-	name:set_position(nbg:x() + 4, nbg:y() + 2)
+	name:set_position(nbg:x() + 4, nbg:y() + 5)
 
 	self:set_radials()
 

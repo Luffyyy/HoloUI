@@ -7,6 +7,7 @@
 	<AssetUpdates id="12501" version="3.6" provider="modworkshop" use_local_dir="true" use_local_path="true"/>
 	<Localization directory="Loc" default="EN.txt">
 		<loc file="EN.txt" language="english" />
+		<loc file="PT.txt" language="portuguese" />
 		<loc file="RU.txt" language="russian" />
 		<loc file="DE.txt" language="german" />
 		<loc file="FR.txt" language="french" />

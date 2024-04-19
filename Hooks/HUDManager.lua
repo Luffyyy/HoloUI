@@ -80,7 +80,7 @@ if Holo:ShouldModify("HUD", "Teammate") then
 
             local w = tm:GetNameWidth()
             local compact = tm._forced_compact or ((tm._ai and compact_ai) or (not me and compact_tm))
-            local ph = (compact and (me and 48 or 36) or (me and 86 or tm._ai and 50 or 70)) + tm._equipments_h
+            local ph = (compact and (me and 48 or 36) or (me and 86 or 70)) + tm._equipments_h
             local pw = (avatar and (ph - tm._equipments_h) + 4 or 8) + math.max(w + 8, me and 132 or 106)
             tm._panel:set_size(pw, ph)
             tm._player_panel:set_size(pw, ph)

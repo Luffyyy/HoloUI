@@ -68,7 +68,7 @@ function HUDTeammate:UpdateHolo()
 	local me = self._main_player
 	local bg_color = Holo:GetColor("Colors/Teammate")
 	local text_color = Holo:GetColor("TextColors/Teammate")
-	
+
 	local minime = me and Holo.Options:GetValue("CompactPlayer")
 	local minitm = minime or not me and Holo.Options:GetValue("CompactTeammates")
 	local mightbeme = me or Holo.Options:GetValue("ShowTeammatesFullAmmo")
@@ -133,7 +133,7 @@ function HUDTeammate:UpdateHolo()
 	weapons_panel:set_size(weap_w, weap_h)
 	weapons_panel:set_x(bg:x() + 7)
 	weapons_panel:set_center_y(bg:center_y())
-	
+
 	for i, panel in pairs({primary_weapon_panel, secondary_weapon_panel}) do
 		local ammo_total = panel:child("ammo_total")
 		local ammo_clip = panel:child("ammo_clip")
@@ -182,8 +182,22 @@ function HUDTeammate:UpdateHolo()
 	cableties_panel:set_shape(deployable_panel:shape())
 	grenades_panel:set_shape(cableties_panel:shape())
 
-	self._panel:child("condition_icon"):set_shape(radial_health_panel:shape())
-	self._panel:child("condition_timer"):set_shape(radial_health_panel:shape())
+    self._condition_icon:set_size(28, 28)
+    if (self._ai) then
+        self._condition_icon:set_position(name:right() + 6)
+        self._condition_icon:set_center_y(name:center_y() - 1)
+    else
+        self._condition_icon:set_center(radial_health_panel:center())
+    end
+    local condition_timer = self._panel:child("condition_timer")
+    condition_timer:set_shape(self._condition_icon:shape())
+    condition_timer:set_font_size(24)
+    condition_timer:move(0, 2)
+
+    local revive_panel = self._player_panel:child("revive_panel")
+    revive_panel:set_right(self._player_panel:right())
+    revive_panel:set_y(name:y() - 4)
+    revive_panel:child("revive_bg"):set_alpha(0)
 	--Equipments end
 	cableties_panel:set_top(deployable_panel:bottom())
 	grenades_panel:set_top(cableties_panel:bottom())

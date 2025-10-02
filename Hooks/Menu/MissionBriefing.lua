@@ -120,7 +120,7 @@ end)
 
 Holo:Post(HUDMissionBriefing, "set_player_slot", function(self, nr, params)
 	local slot = self._ready_slot_panel:child("slot_" .. tostring(nr))
-	if not slot or not alive(slot) then
+	if not slot or not alive(slot) or not Steam then
 		return
 	end
 	local peer = managers.network:session():peer(nr) or nil

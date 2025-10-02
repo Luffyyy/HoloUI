@@ -306,7 +306,7 @@ function HUDChat:mouse_pressed(o, button, x, y)
 		    	for _, link in pairs(self._links[i]) do
 		    		local s, e = unpack(link)
 		    		if p > 0 and (p == s or p == e or (p > s and p < e)) then
-		    			Steam:overlay_activate("url", text:text():sub(s,e))
+						managers.network.account:overlay_activate("url", text:text():sub(s,e))
 		    		end
 		    	end
 	    	end

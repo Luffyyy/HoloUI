@@ -72,6 +72,10 @@ Holo:Post(HUDTeammate, "set_name", function(self, teammate_name)
 end)
 
 function HUDTeammate:set_avatar()
+	if not Steam then
+		return
+	end
+
 	local peer = self._peer_id and managers.network:session():peer(self._peer_id) or nil
 	local steam_id = peer and peer:account_id() or self._main_player and Steam:userid() or nil
 	if steam_id and not self._ai then

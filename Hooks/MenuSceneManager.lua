@@ -60,7 +60,9 @@ if not GameSetup then
 
 		if Holo.Options:GetValue("ColoredBackground") then
 			self._bg_unit:set_visible(false)
-			self._menu_solid_bg:set_visible(false)
+			if self._menu_solid_bg then
+				self._menu_solid_bg:set_visible(false)
+			end
 		end
 	end)
 
